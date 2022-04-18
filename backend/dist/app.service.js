@@ -12,6 +12,17 @@ let AppService = class AppService {
     getHello() {
         return 'Hello World!';
     }
+    getAdventureTime() {
+        return "It's Adventure Time!";
+    }
+    getCaractere(name) {
+        if (name === 'Jack')
+            return "Jack the dog!";
+        else if (name === 'Fin')
+            return "Fin the Human!";
+        else
+            return "Adventure time!";
+    }
 };
 AppService = __decorate([
     (0, common_1.Injectable)()
