@@ -1,0 +1,75 @@
+version: '3.3'
+
+# ************************************************************
+# *                  VOLUMES                                 *
+# ************************************************************
+volumes:
+    api_volume:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: ${PWD}/backend/api
+    database:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: ${PWD}/backend/database/data
+
+
+# ************************************************************
+# *                  NETWORK                                 *
+# ************************************************************
+networks:
+    api_network:
+
+# ************************************************************
+# *                  SERVICES                                *
+# ************************************************************
+services:
+    # *******************API*******************
+    api:
+        container_name: api
+        image: api:latest
+        build:
+            context: ./backend
+            dockerfile: api.Dockerfile
+        restart: always
+        volumes:
+            - api_volume:/home/api
+        ports:
+            - "3000:3000"
+        networks:
+            - api_network
+        depends_on:
+            - database
+
+    # *******************DATABASE*******************
+    database:
+        container_name: postgres
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_DB: transcendence
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: root
+        ports:
+            - 5432:5432
+        volumes:
+            - database:/var/lib/postgresql/data
+            - ${PWD}/backend/database/init.sql://docker-entrypoint-initdb.d/init.sql
+        networks:
+            - api_network
+
+    # *******************ADMINER*******************
+    adminer:
+        container_name: adminer
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+        networks:
+            - api_network
+        depends_on:
+            - database
