@@ -6,7 +6,7 @@
 #    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/05/12 13:37:23 by robriard         ###   ########.fr        #
+#    Updated: 2022/05/24 00:54:52 by robriard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ UP     = \e[A
 C=api
 
 up:
+	@mkdir -p ${PWD}/backend/database/data
 	@docker-compose -f docker-compose.yaml up -d
 
 all: up
