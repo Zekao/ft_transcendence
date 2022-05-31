@@ -7,8 +7,8 @@ in team of 3 to 5 people
 
 # Table of contents
 1. [Installation](#installation)
-    1.1 [Homebrew🍺](#homebrew)
-    1.2 [Apt📦](#apt)
+    1 [Homebrew🍺](#homebrew)
+    1 [Apt📦](#apt)
 2. [Usage](#usage)
 3. [Authors](#authors)
 4. [License](#license)
