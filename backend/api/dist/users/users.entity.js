@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const users_status_enum_1 = require("./users-status.enum");
 let User = class User {
 };
 __decorate([
@@ -28,7 +29,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], User.prototype, "nick_name", void 0);
+], User.prototype, "user_name", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -36,7 +37,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], User.prototype, "password", void 0);
+], User.prototype, "status", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

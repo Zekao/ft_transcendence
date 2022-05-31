@@ -6,7 +6,7 @@
 #    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/05/12 13:37:23 by robriard         ###   ########.fr        #
+#    Updated: 2022/05/26 12:09:16 by robriard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,5 +44,8 @@ rm: down
 
 logs:
 	@docker logs ${C}
+
+exec:
+	@docker exec -it ${C} '/bin/sh'
 
 .PHONY:	all up down re ps rm logs

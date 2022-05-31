@@ -1,14 +1,10 @@
-import { User, UserStatus } from './users.model';
 import { createUserDTO } from './dto/create-user.dto';
-import { UsersFiltesDTO } from './dto/user-filter.dto';
+import { User } from './users.entity';
+import { Repository } from 'typeorm';
 export declare class UsersService {
-    private users;
-    getUsers(): User[];
-    getUserByFilter(filter: UsersFiltesDTO): User[];
-    getUserId(id: string): User;
-    getUserStatus(id: string): UserStatus;
-    createUser(createUser: createUserDTO): User;
-    addFriend(userId: string, friendId: string): User;
-    deleteUser(id: string): User;
-    patchStatus(id: string, status: UserStatus): User;
+    private UserRepository;
+    constructor(UserRepository: Repository<User>);
+    getUser(): Promise<User[]>;
+    getUserId(id: string): Promise<User>;
+    createUser(createUser: createUserDTO): Promise<User>;
 }
