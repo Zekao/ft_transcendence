@@ -5,11 +5,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const users_model_1 = require("./users.model");
-const uuid_1 = require("uuid");
+const users_status_enum_1 = require("./users-status.enum");
+const typeorm_1 = require("@nestjs/typeorm");
+const users_entity_1 = require("./users.entity");
+const typeorm_2 = require("typeorm");
 function setNickName(users, first, last) {
     let nick;
     let first_size = 1;
@@ -18,7 +26,7 @@ function setNickName(users, first, last) {
         cond = true;
         nick = `${first.slice(0, first_size)}${last}`;
         for (let i = 0; i < users.length; i++) {
-            if (users[i].nick_name === nick) {
+            if (users[i].user_name === nick) {
                 if (first_size < first.length)
                     first_size++;
                 cond = false;
@@ -29,74 +37,37 @@ function setNickName(users, first, last) {
     return nick;
 }
 let UsersService = class UsersService {
-    constructor() {
-        this.users = [];
+    constructor(UserRepository) {
+        this.UserRepository = UserRepository;
     }
-    getUsers() { return this.users; }
-    getUserByFilter(filter) {
-        const { status, search } = filter;
-        let users = this.getUsers();
-        if (status)
-            users = users.filter((user) => user.status === status);
-        if (search)
-            users = users.filter((user) => {
-                if (user.id.includes(search))
-                    return true;
-                if (user.first_name.includes(search))
-                    return true;
-                if (user.last_name.includes(search))
-                    return true;
-                if (user.nick_name.includes(search))
-                    return true;
-                if (user.email.includes(search))
-                    return true;
-            });
-        return users;
+    ;
+    async getUser() {
+        return this.UserRepository.find();
     }
-    getUserId(id) {
-        const found = this.users.find((user) => user.id === id);
+    async getUserId(id) {
+        const found = await this.UserRepository.findOne(id);
         if (!found)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found;
     }
-    getUserStatus(id) { return this.users.find(user => user.id === id).status; }
-    createUser(createUser) {
+    async createUser(createUser) {
         const { first_name, last_name } = createUser;
-        const user = {
-            id: (0, uuid_1.v4)(),
+        const username = setNickName(await this.getUser(), first_name, last_name);
+        const user = this.UserRepository.create({
             first_name,
             last_name,
-            nick_name: setNickName(this.users, first_name, last_name),
-            email: '',
-            password: '',
-            friends: [],
-            status: users_model_1.UserStatus.ONLINE,
-        };
-        this.users.push(user);
+            user_name: username,
+            email: `${username}@transcendence.com`,
+            status: users_status_enum_1.UserStatus.ONLINE
+        });
+        await this.UserRepository.save(user);
         return user;
-    }
-    addFriend(userId, friendId) {
-        let toAdd = this.users.find(user => user.id === friendId);
-        if (!toAdd)
-            throw new common_1.NotFoundException(`User \`${friendId}' not found`);
-        let user = this.users.find(user => user.id === userId);
-        if (!user)
-            throw new common_1.NotFoundException(`User \`${userId}' not found`);
-        user.friends.push(toAdd);
-        return toAdd;
-    }
-    deleteUser(id) {
-        let deleted = this.getUserId(id);
-        this.users = this.users.filter(user => user.id !== deleted.id);
-        return deleted;
-    }
-    patchStatus(id, status) {
-        this.users.find(user => user.id === id).status = status;
-        return this.users.find(user => user.id === id);
     }
 };
 UsersService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

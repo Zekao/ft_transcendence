@@ -6,9 +6,10 @@
 #    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/05/24 00:54:52 by robriard         ###   ########.fr        #
+#    Updated: 2022/05/31 23:07:06 by robriard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 # Define colors ################################################################
 BOLD   = \e[01m
@@ -45,5 +46,8 @@ rm: down
 
 logs:
 	@docker logs ${C}
+
+exec:
+	@docker exec -it ${C} '/bin/sh'
 
 .PHONY:	all up down re ps rm logs

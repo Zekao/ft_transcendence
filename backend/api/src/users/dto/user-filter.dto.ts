@@ -1,4 +1,4 @@
-import { User, UserStatus } from "../users.model";
+import { UserStatus } from "../users-status.enum";
 
 export class UsersFiltesDTO {
     status ?: UserStatus;
