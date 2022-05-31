@@ -46,10 +46,15 @@ Show logs of a containers (api by default)
 ```bash
 make logs C=<container name>
 ```
+Execute in front a container
+```bash
+make exec C=<container name>
+```
 Remove containers's images
 ```
 make rm
 ```
+
 
 ## Authors
 #### Lucas Sehairi
