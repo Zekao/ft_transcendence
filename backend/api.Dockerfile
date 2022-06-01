@@ -5,6 +5,8 @@ RUN         apk add bash npm \
             && npm install --global yarn \
             && yarn add @nestjs/cli
 
+COPY ./api/ /home/api/
+
 WORKDIR     /home/api/
 EXPOSE      3000
 

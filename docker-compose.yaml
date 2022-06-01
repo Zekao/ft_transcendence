@@ -9,13 +9,13 @@ volumes:
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: ${PWD}/backend/api
+            device: ${DIR}/backend/api
     database:
         driver: local
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: ${PWD}/backend/database/data
+            device: ${DIR}/backend/database/data
 
 
 # ************************************************************
@@ -61,7 +61,7 @@ services:
             - 5432:5432
         volumes:
             - database:/var/lib/postgresql/data
-            - ${PWD}/backend/database/init.sql://docker-entrypoint-initdb.d/init.sql
+            - ${DIR}/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
             - api_network
 

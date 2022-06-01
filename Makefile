@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
+#    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/05/31 23:07:06 by robriard         ###   ########.fr        #
+#    Updated: 2022/06/01 18:09:53 by nabentay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,13 @@ UP     = \e[A
 
 # rules ################################################################
 
+DIR=/home/trans/
+
 C=api
 
 up:
-	@mkdir -p ${PWD}/backend/database/data
+	@mkdir -p ${DIR}/backend/database/data
+	@mkdir -p ${DIR}/backend/api
 	@docker-compose -f docker-compose.yaml up -d
 
 all: up
