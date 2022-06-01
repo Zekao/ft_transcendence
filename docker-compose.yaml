@@ -46,6 +46,24 @@ services:
             - api_network
         depends_on:
             - database
+    # *******************FRONTEND*******************
+    frontend:
+        container_name: frontend
+        image: frontend:latest
+        build:
+            context: ./frontend
+        restart: always
+        volumes:
+          - ./frontend/:/usr/frontend/app
+          - /usr/frontend/app/node_modules
+        ports:
+            - ${SERVER_PORT_FRONT}:${SERVER_PORT_FRONT}
+        env_file:
+          - .env
+        networks:
+            - api_network
+        depends_on:
+            - api
 
     # *******************DATABASE*******************
     database:
