@@ -35,21 +35,26 @@ export class UsersService {
     async   getUser(): Promise<User[]> {
         return this.UserRepository.find();
     }
-    // getUsers() : User[] {return this.users;}
+    async getUsers() : Promise<User[]> {
+        const users = await this.UserRepository.find();
+        if (!users) throw new NotFoundException(`Users not found`);
+        return users;
+    }
 
-    // getUserByFilter(filter : UsersFiltesDTO) : User[] {
-    //     const { status, search } = filter;
-    //     let users = this.getUsers();
-    //     if (status) users = users.filter((user) => user.status === status);
-    //     if (search) users = users.filter((user) => {
-    //         if (user.id.includes(search)) return true;
-    //         if (user.first_name.includes(search)) return true;
-    //         if (user.last_name.includes(search)) return true;
-    //         if (user.nick_name.includes(search)) return true;
-    //         if (user.email.includes(search)) return true;
-    //     })
-    //     return users;
-    // }
+    async getUserByFilter(filter : UsersFiltesDTO) : Promise<User[]> {
+        const { status, search } = filter;
+        let users = await this.getUsers();
+        if (status) users = users.filter((user) => user.status === status);
+        if (search) users = users.filter((user) => {
+            if (user.id.includes(search)) return true;
+            if (user.first_name.includes(search)) return true;
+            if (user.last_name.includes(search)) return true;
+            if (user.user_name.includes(search)) return true;
+            if (user.email.includes(search)) return true;
+        })
+        if (!users) throw new NotFoundException(`Users not found`);
+        return users;
+    }
 
     async getUserId(id: string) : Promise<User> {
         const found = await this.UserRepository.findOne(id);
@@ -57,7 +62,11 @@ export class UsersService {
         return found;
     }
 
-    // getUserStatus(id : string) : UserStatus {return this.users.find(user => user.id === id).status;}
+    async getUserStatus(id : string) : Promise<UserStatus> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}' not found`);
+        return found.status;
+    }
 
 
 /* ************************************************************************** */
@@ -77,36 +86,22 @@ export class UsersService {
         return user;
     }
 
-    //     this.users.push(user);
-    //     return user;
-    // }
-
-    // addFriend(userId : string, friendId : string) : User {
-    //     let toAdd = this.users.find(user => user.id === friendId)
-    //     if (!toAdd)
-    //         throw new NotFoundException(`User \`${friendId}' not found`);
-    //     let user = this.users.find(user => user.id === userId);
-    //     if (!user)
-    //         throw new NotFoundException(`User \`${userId}' not found`);
-    //     user.friends.push(toAdd);
-    //     return toAdd;
-    // }
-
 /* ************************************************************************** */
 /*                   DELETE                                                   */
 /* ************************************************************************** */
-    // deleteUser(id : string) : User {
-    //     let deleted : User = this.getUserId(id);
-    //     this.users = this.users.filter(user => user.id !== deleted.id);
-    //     return deleted;
-    // }
+    async deleteUser(id : string) : Promise<void> {
+        const target = await this.UserRepository.delete(id)
+        if (target.affected === 0) throw new NotFoundException(`User \`${id}' not found`);
+    }
 
 
 /* ************************************************************************** */
 /*                   PATCH                                                    */
 /* ************************************************************************** */
-    // patchStatus(id : string, status : UserStatus) : User {
-    //     this.users.find(user => user.id === id).status = status;
-    //     return this.users.find(user => user.id === id);
-    // }
+    async patchStatus(id : string, status : UserStatus) : Promise<UserStatus> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}\` not found`);
+        found.status = status;
+        return found.status;
+    }
 }

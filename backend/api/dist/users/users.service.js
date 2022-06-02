@@ -44,11 +44,45 @@ let UsersService = class UsersService {
     async getUser() {
         return this.UserRepository.find();
     }
+    async getUsers() {
+        const users = await this.UserRepository.find();
+        if (!users)
+            throw new common_1.NotFoundException(`Users not found`);
+        return users;
+    }
+    async getUserByFilter(filter) {
+        const { status, search } = filter;
+        let users = await this.getUsers();
+        if (status)
+            users = users.filter((user) => user.status === status);
+        if (search)
+            users = users.filter((user) => {
+                if (user.id.includes(search))
+                    return true;
+                if (user.first_name.includes(search))
+                    return true;
+                if (user.last_name.includes(search))
+                    return true;
+                if (user.user_name.includes(search))
+                    return true;
+                if (user.email.includes(search))
+                    return true;
+            });
+        if (!users)
+            throw new common_1.NotFoundException(`Users not found`);
+        return users;
+    }
     async getUserId(id) {
         const found = await this.UserRepository.findOne(id);
         if (!found)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found;
+    }
+    async getUserStatus(id) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.status;
     }
     async createUser(createUser) {
         const { first_name, last_name } = createUser;
@@ -62,6 +96,18 @@ let UsersService = class UsersService {
         });
         await this.UserRepository.save(user);
         return user;
+    }
+    async deleteUser(id) {
+        const target = await this.UserRepository.delete(id);
+        if (target.affected === 0)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+    }
+    async patchStatus(id, status) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+        found.status = status;
+        return found.status;
     }
 };
 UsersService = __decorate([

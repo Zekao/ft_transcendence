@@ -12,22 +12,22 @@ export class UsersController {
 /* ************************************************************************** */
 /*                   GET                                                      */
 /* ************************************************************************** */
-    // @Get()
-    // getUsers(@Query() filters : UsersFiltesDTO) : User[] {
-    //     if (Object.keys(filters).length)
-    //         return this.UsersService.getUserByFilter(filters);
-    //     return this.UsersService.getUsers();
-    // }
+    @Get()
+    getUsers(@Query() filters : UsersFiltesDTO) : Promise<User[]> {
+        if (Object.keys(filters).length)
+            return this.UsersService.getUserByFilter(filters);
+        return this.UsersService.getUsers();
+    }
 
     @Get('/:id')
     getUserId(@Param('id') id : string) : Promise<User> {
         return this.UsersService.getUserId(id);
     }
 
-    // @Get('/:id/status')
-    // getUserStatus(@Param('id') id : string) : UserStatus {
-    //     return this.UsersService.getUserStatus(id)
-    // }
+    @Get('/:id/status')
+    getUserStatus(@Param('id') id : string) : Promise<UserStatus> {
+        return this.UsersService.getUserStatus(id)
+    }
     
 
 
@@ -39,27 +39,21 @@ export class UsersController {
         return this.UsersService.createUser(createUser);
     }
 
-    // @Post('/friends/:id')
-    // addFriend(@Param('id') id : string, @Query() query) : User {
-    //     return this.UsersService.addFriend(id, query.id);
-    // }
-
-
 /* ************************************************************************** */
 /*                   DELETE                                                   */
 /* ************************************************************************** */
-    // @Delete('/:id')
-    // deleteUser(@Param('id') id : string) {
-    //     return this.UsersService.deleteUser(id);
-    // }
+    @Delete('/:id')
+    deleteUser(@Param('id') id : string) {
+        return this.UsersService.deleteUser(id);
+    }
 
 
 /* ************************************************************************** */
 /*                   PATCH                                                    */
 /* ************************************************************************** */
 
-    // @Patch('/:id')
-    // patchStatus(@Param('id') id : string, @Query() query) {
-    //     return this.UsersService.patchStatus(id, query.status);
-    // }
+    @Patch('/:id')
+    patchStatus(@Param('id') id : string, @Query() query) : Promise<UserStatus> {
+        return this.UsersService.patchStatus(id, query.status);
+    }
 }
