@@ -18,15 +18,30 @@ export class UsersController {
             return this.UsersService.getUserByFilter(filters);
         return this.UsersService.getUsers();
     }
-
     @Get('/:id')
     getUserId(@Param('id') id : string) : Promise<User> {
         return this.UsersService.getUserId(id);
     }
 
+    @Get('/:id/firstname')
+    getFirstName(@Param('id') id : string) : Promise<string> {
+        return this.UsersService.getFirstName(id)
+    }
+    @Get('/:id/lastname')
+    getLastName(@Param('id') id : string) : Promise<string> {
+        return this.UsersService.getLastName(id)
+    }
+    @Get('/:id/username')
+    getUserName(@Param('id') id : string) : Promise<string> {
+        return this.UsersService.getUserName(id)
+    }
+    @Get('/:id/email')
+    getEmail(@Param('id') id : string) : Promise<string> {
+        return this.UsersService.getEmail(id)
+    }
     @Get('/:id/status')
-    getUserStatus(@Param('id') id : string) : Promise<UserStatus> {
-        return this.UsersService.getUserStatus(id)
+    getStatus(@Param('id') id : string) : Promise<UserStatus> {
+        return this.UsersService.getStatus(id)
     }
     
 
@@ -52,6 +67,22 @@ export class UsersController {
 /*                   PATCH                                                    */
 /* ************************************************************************** */
 
+    @Patch('/:id')
+    patchFirstName(@Param('id') id : string, @Query() query) : Promise<string> {
+        return this.UsersService.patchFirstName(id, query.status);
+    }
+    @Patch('/:id')
+    patchLastName(@Param('id') id : string, @Query() query) : Promise<string> {
+        return this.UsersService.patchLastName(id, query.status);
+    }
+    @Patch('/:id')
+    patchUserName(@Param('id') id : string, @Query() query) : Promise<string> {
+        return this.UsersService.patchUserName(id, query.status);
+    }
+    @Patch('/:id')
+    patchEmail(@Param('id') id : string, @Query() query) : Promise<string> {
+        return this.UsersService.patchEmail(id, query.status);
+    }
     @Patch('/:id')
     patchStatus(@Param('id') id : string, @Query() query) : Promise<UserStatus> {
         return this.UsersService.patchStatus(id, query.status);

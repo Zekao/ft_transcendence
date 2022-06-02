@@ -41,9 +41,6 @@ let UsersService = class UsersService {
         this.UserRepository = UserRepository;
     }
     ;
-    async getUser() {
-        return this.UserRepository.find();
-    }
     async getUsers() {
         const users = await this.UserRepository.find();
         if (!users)
@@ -78,7 +75,31 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found;
     }
-    async getUserStatus(id) {
+    async getFirstName(id) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.first_name;
+    }
+    async getLastName(id) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.last_name;
+    }
+    async getUserName(id) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.user_name;
+    }
+    async getEmail(id) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.email;
+    }
+    async getStatus(id) {
         const found = await this.UserRepository.findOne(id);
         if (!found)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
@@ -86,7 +107,7 @@ let UsersService = class UsersService {
     }
     async createUser(createUser) {
         const { first_name, last_name } = createUser;
-        const username = setNickName(await this.getUser(), first_name, last_name);
+        const username = setNickName(await this.getUsers(), first_name, last_name);
         const user = this.UserRepository.create({
             first_name,
             last_name,
@@ -101,6 +122,34 @@ let UsersService = class UsersService {
         const target = await this.UserRepository.delete(id);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
+    }
+    async patchFirstName(id, first_name) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+        found.first_name = first_name;
+        return found.first_name;
+    }
+    async patchLastName(id, last_name) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+        found.last_name = last_name;
+        return found.last_name;
+    }
+    async patchUserName(id, user_name) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+        found.user_name = user_name;
+        return found.user_name;
+    }
+    async patchEmail(id, email) {
+        const found = await this.UserRepository.findOne(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+        found.email = email;
+        return found.email;
     }
     async patchStatus(id, status) {
         const found = await this.UserRepository.findOne(id);

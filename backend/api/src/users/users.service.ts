@@ -32,15 +32,11 @@ export class UsersService {
 /* ************************************************************************** */
 /*                   GET                                                      */
 /* ************************************************************************** */
-    async   getUser(): Promise<User[]> {
-        return this.UserRepository.find();
-    }
     async getUsers() : Promise<User[]> {
         const users = await this.UserRepository.find();
         if (!users) throw new NotFoundException(`Users not found`);
         return users;
     }
-
     async getUserByFilter(filter : UsersFiltesDTO) : Promise<User[]> {
         const { status, search } = filter;
         let users = await this.getUsers();
@@ -55,14 +51,33 @@ export class UsersService {
         if (!users) throw new NotFoundException(`Users not found`);
         return users;
     }
-
     async getUserId(id: string) : Promise<User> {
         const found = await this.UserRepository.findOne(id);
         if (!found) throw new NotFoundException(`User \`${id}' not found`);
         return found;
     }
 
-    async getUserStatus(id : string) : Promise<UserStatus> {
+    async getFirstName(id : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}' not found`);
+        return found.first_name;
+    }
+    async getLastName(id : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}' not found`);
+        return found.last_name;
+    }
+    async getUserName(id : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}' not found`);
+        return found.user_name;
+    }
+    async getEmail(id : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}' not found`);
+        return found.email;
+    }
+    async getStatus(id : string) : Promise<UserStatus> {
         const found = await this.UserRepository.findOne(id);
         if (!found) throw new NotFoundException(`User \`${id}' not found`);
         return found.status;
@@ -74,7 +89,7 @@ export class UsersService {
 /* ************************************************************************** */
     async createUser(createUser : createUserDTO) : Promise<User> {
         const { first_name, last_name } = createUser;
-        const username = setNickName(await this.getUser(), first_name, last_name)
+        const username = setNickName(await this.getUsers(), first_name, last_name)
         const user = this.UserRepository.create({
             first_name,
             last_name,
@@ -98,6 +113,30 @@ export class UsersService {
 /* ************************************************************************** */
 /*                   PATCH                                                    */
 /* ************************************************************************** */
+    async patchFirstName(id : string, first_name : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}\` not found`);
+        found.first_name = first_name;
+        return found.first_name;
+    }
+    async patchLastName(id : string, last_name : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}\` not found`);
+        found.last_name = last_name;
+        return found.last_name;
+    }
+    async patchUserName(id : string, user_name : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}\` not found`);
+        found.user_name = user_name;
+        return found.user_name;
+    }
+    async patchEmail(id : string, email : string) : Promise<string> {
+        const found = await this.UserRepository.findOne(id);
+        if (!found) throw new NotFoundException(`User \`${id}\` not found`);
+        found.email = email;
+        return found.email;
+    }
     async patchStatus(id : string, status : UserStatus) : Promise<UserStatus> {
         const found = await this.UserRepository.findOne(id);
         if (!found) throw new NotFoundException(`User \`${id}\` not found`);

@@ -8,8 +8,16 @@ export declare class UsersController {
     constructor(UsersService: UsersService);
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string): Promise<User>;
-    getUserStatus(id: string): Promise<UserStatus>;
+    getFirstName(id: string): Promise<string>;
+    getLastName(id: string): Promise<string>;
+    getUserName(id: string): Promise<string>;
+    getEmail(id: string): Promise<string>;
+    getStatus(id: string): Promise<UserStatus>;
     createUser(createUser: createUserDTO): Promise<User>;
     deleteUser(id: string): Promise<void>;
+    patchFirstName(id: string, query: any): Promise<string>;
+    patchLastName(id: string, query: any): Promise<string>;
+    patchUserName(id: string, query: any): Promise<string>;
+    patchEmail(id: string, query: any): Promise<string>;
     patchStatus(id: string, query: any): Promise<UserStatus>;
 }
