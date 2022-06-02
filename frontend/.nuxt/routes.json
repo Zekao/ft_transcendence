@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Account",
+    "path": "/Account",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/Account.vue",
+    "chunkName": "pages/Account",
+    "_name": "_64dd30ae"
+  },
+  {
+    "name": "Chat",
+    "path": "/Chat",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/Chat.vue",
+    "chunkName": "pages/Chat",
+    "_name": "_7a2f6fb2"
+  },
+  {
+    "name": "Friends",
+    "path": "/Friends",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/Friends.vue",
+    "chunkName": "pages/Friends",
+    "_name": "_f5f207d4"
+  },
+  {
+    "name": "Game",
+    "path": "/Game",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/Game.vue",
+    "chunkName": "pages/Game",
+    "_name": "_03c823c1"
+  },
+  {
+    "name": "inspire",
+    "path": "/inspire",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/inspire.vue",
+    "chunkName": "pages/inspire",
+    "_name": "_5f1e52fb"
+  },
+  {
+    "name": "Podium",
+    "path": "/Podium",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/Podium.vue",
+    "chunkName": "pages/Podium",
+    "_name": "_ec4e352a"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/lucassehairi/42ft_transcendence/frontend/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_d6c7499a"
+  }
+]
