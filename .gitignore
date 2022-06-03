@@ -1,0 +1,7 @@
+# DATABASE
+./backend/database/data/**
+./backend/database/data
+
+# MODULES
+./backend/api/node_modules/**
+./backend/api/node_modules
