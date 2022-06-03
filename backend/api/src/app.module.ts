@@ -8,7 +8,7 @@ import { ChatGateway } from './chat/chat.gateway';
     UsersModule,
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: "postgres",
+      host: "localhost", // to modify postgres
       port: 5432,
       username: "postgres",
       password: "root",

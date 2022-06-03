@@ -58,7 +58,7 @@ services:
           - /usr/frontend/app/node_modules
         ports:
             - ${SERVER_PORT_FRONT}:${SERVER_PORT_FRONT}
-        command: npm run serve
+        command: npm run dev
         env_file:
           - .env
         networks:

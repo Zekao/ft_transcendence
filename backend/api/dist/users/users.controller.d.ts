@@ -1,8 +1,8 @@
-import { createUserDTO } from './dto/create-user.dto';
-import { UsersFiltesDTO } from './dto/user-filter.dto';
-import { UserStatus } from './users-status.enum';
-import { User } from './users.entity';
-import { UsersService } from './users.service';
+import { createUserDTO } from "./dto/create-user.dto";
+import { UsersFiltesDTO } from "./dto/user-filter.dto";
+import { UserStatus } from "./users-status.enum";
+import { User } from "./users.entity";
+import { UsersService } from "./users.service";
 export declare class UsersController {
     private UsersService;
     constructor(UsersService: UsersService);

@@ -1,8 +1,8 @@
-import { UserStatus } from './users-status.enum';
-import { createUserDTO } from './dto/create-user.dto';
-import { UsersFiltesDTO } from './dto/user-filter.dto';
-import { User } from './users.entity';
-import { Repository } from 'typeorm';
+import { UserStatus } from "./users-status.enum";
+import { createUserDTO } from "./dto/create-user.dto";
+import { UsersFiltesDTO } from "./dto/user-filter.dto";
+import { User } from "./users.entity";
+import { Repository } from "typeorm";
 export declare class UsersService {
     private UserRepository;
     constructor(UserRepository: Repository<User>);

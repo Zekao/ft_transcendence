@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Account",
+    "path": "/Account",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Account.vue",
+    "chunkName": "pages/Account",
+    "_name": "_43a422e5"
+  },
+  {
+    "name": "Chat",
+    "path": "/Chat",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Chat.vue",
+    "chunkName": "pages/Chat",
+    "_name": "_43a34d60"
+  },
+  {
+    "name": "Friends",
+    "path": "/Friends",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Friends.vue",
+    "chunkName": "pages/Friends",
+    "_name": "_63cdee4d"
+  },
+  {
+    "name": "Game",
+    "path": "/Game",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Game.vue",
+    "chunkName": "pages/Game",
+    "_name": "_1f0e34ea"
+  },
+  {
+    "name": "Image",
+    "path": "/Image",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Image.vue",
+    "chunkName": "pages/Image",
+    "_name": "_5554a313"
+  },
+  {
+    "name": "inspire",
+    "path": "/inspire",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/inspire.vue",
+    "chunkName": "pages/inspire",
+    "_name": "_3de54532"
+  },
+  {
+    "name": "Podium",
+    "path": "/Podium",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Podium.vue",
+    "chunkName": "pages/Podium",
+    "_name": "_28415f58"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_3bcf21ac"
+  }
+]

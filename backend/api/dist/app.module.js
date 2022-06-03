@@ -10,6 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
+const chat_gateway_1 = require("./chat/chat.gateway");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -17,16 +18,17 @@ AppModule = __decorate([
         imports: [
             users_module_1.UsersModule,
             typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: 'postgres',
+                type: "postgres",
+                host: "localhost",
                 port: 5432,
-                username: 'postgres',
-                password: 'root',
-                database: 'transcendence',
+                username: "postgres",
+                password: "root",
+                database: "transcendence",
                 autoLoadEntities: true,
-                synchronize: true
+                synchronize: true,
             }),
         ],
+        providers: [chat_gateway_1.ChatGateway],
     })
 ], AppModule);
 exports.AppModule = AppModule;

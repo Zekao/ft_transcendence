@@ -40,7 +40,6 @@ let UsersService = class UsersService {
     constructor(UserRepository) {
         this.UserRepository = UserRepository;
     }
-    ;
     async getUsers() {
         const users = await this.UserRepository.find();
         if (!users)
@@ -113,7 +112,7 @@ let UsersService = class UsersService {
             last_name,
             user_name: username,
             email: `${username}@transcendence.com`,
-            status: users_status_enum_1.UserStatus.ONLINE
+            status: users_status_enum_1.UserStatus.ONLINE,
         });
         await this.UserRepository.save(user);
         return user;

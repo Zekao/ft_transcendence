@@ -74,43 +74,43 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserId", null);
 __decorate([
-    (0, common_1.Get)('/:id/firstname'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id/firstname"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFirstName", null);
 __decorate([
-    (0, common_1.Get)('/:id/lastname'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id/lastname"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getLastName", null);
 __decorate([
-    (0, common_1.Get)('/:id/username'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id/username"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserName", null);
 __decorate([
-    (0, common_1.Get)('/:id/email'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id/email"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getEmail", null);
 __decorate([
-    (0, common_1.Get)('/:id/status'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)("/:id/status"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -123,54 +123,54 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.Delete)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deleteUser", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchFirstName", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchLastName", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUserName", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchEmail", null);
 __decorate([
-    (0, common_1.Patch)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Patch)("/:id"),
+    __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchStatus", null);
 UsersController = __decorate([
-    (0, common_1.Controller)('users'),
+    (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
 exports.UsersController = UsersController;
