@@ -1,25 +1,50 @@
-<template>
-  <div class="chat">
-    <h1 class="subheading grey--text">This is an chat page</h1>
-  <v-container class="my-5">
-   <v-layout row wrap justify-end>
-     <v-flex xs12 md5 >
-       
-       <v-btn outline block class="primary" >
-         <v-icon left> mdi-chat-plus-outline </v-icon> <span>Create channel </span>  
-        </v-btn>
-        
-        <v-btn outline block class="warning">
-         <v-icon left> mdi-incognito-off </v-icon> <span>Join Private Channel </span>  
-       </v-btn>
-     
-     </v-flex>
-   </v-layout>
-  </v-container>
-  </div>
-</template>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <title>Nestjs SocketIO</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app" class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-sm-12">
+                    <h1 class="text-center">{{ title }}</h1>
+                    <br>
+                    <div id="status"></div>
+                    <div id="chat">
+                        <input type="text" v-model="name" id="username" class="form-control" placeholder="Enter name...">
+                        <br>
+                        <div class="card">
+                            <div id="messages" class="card-block">
+                                <ul>
+                                    <li v-for="message of messages">{{ message.name }}: {{ message.text }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br>
+                        <textarea id="textarea" class="form-control" v-model="text" placeholder="Enter message..."></textarea>
+                        <br>
+                        <button id="send" class="btn" @click.prevent="sendMessage">Send</button>
+                    </div>
+                </div>
+            </div>
+    </div>
 
-<script>
-export default {
+<script src="main.js"></script>
+</body>
+</html>
+
+#messages{
+ height:300px;
+ overflow-y: scroll;
 }
-</script>
+
+#app {
+ margin-top: 2rem;
+}
