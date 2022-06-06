@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
-const common_1 = require("@nestjs/common");
+const common_1 = require("../../node_modules/@nestjs/common");
 const socket_io_1 = require("socket.io");
 let ChatGateway = class ChatGateway {
     constructor() {

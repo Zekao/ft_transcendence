@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
-const common_1 = require("@nestjs/common");
+const common_1 = require("../../node_modules/@nestjs/common");
 const users_status_enum_1 = require("./users-status.enum");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
@@ -68,40 +68,52 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Users not found`);
         return users;
     }
-    async getUserId(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getUserId(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found;
     }
-    async getFirstName(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getFirstName(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found.first_name;
     }
-    async getLastName(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getLastName(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found.last_name;
     }
-    async getUserName(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getUserName(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found.user_name;
     }
-    async getEmail(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getEmail(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found.email;
     }
-    async getStatus(id) {
-        const found = await this.UserRepository.findOne(id);
+    async getStatus(id_params) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}' not found`);
         return found.status;
     }
     async createUser(createUser) {
@@ -122,38 +134,48 @@ let UsersService = class UsersService {
         if (target.affected === 0)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
     }
-    async patchFirstName(id, first_name) {
-        const found = await this.UserRepository.findOne(id);
+    async patchFirstName(id_params, first_name) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}\` not found`);
         found.first_name = first_name;
         return found.first_name;
     }
-    async patchLastName(id, last_name) {
-        const found = await this.UserRepository.findOne(id);
+    async patchLastName(id_params, last_name) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}\` not found`);
         found.last_name = last_name;
         return found.last_name;
     }
-    async patchUserName(id, user_name) {
-        const found = await this.UserRepository.findOne(id);
+    async patchUserName(id_params, user_name) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}\` not found`);
         found.user_name = user_name;
         return found.user_name;
     }
-    async patchEmail(id, email) {
-        const found = await this.UserRepository.findOne(id);
+    async patchEmail(id_params, email) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}\` not found`);
         found.email = email;
         return found.email;
     }
-    async patchStatus(id, status) {
-        const found = await this.UserRepository.findOne(id);
+    async patchStatus(id_params, status) {
+        const found = await this.UserRepository.findOne({
+            where: { id: id_params },
+        });
         if (!found)
-            throw new common_1.NotFoundException(`User \`${id}\` not found`);
+            throw new common_1.NotFoundException(`User \`${id_params}\` not found`);
         found.status = status;
         return found.status;
     }

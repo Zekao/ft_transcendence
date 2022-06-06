@@ -1,7 +1,7 @@
-import { Module } from "node_modulessss/@nestjs/common";
-import { TypeOrmModule } from "node_modulessss/@nestjs/typeorm";
+import { Module } from "node_modules/@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "./users/users.module";
-import { ChatGateway } from './chat/chat.gateway';
+import { ChatGateway } from "./chat/chat.gateway";
 
 @Module({
   imports: [

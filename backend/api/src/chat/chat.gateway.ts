@@ -6,7 +6,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from "@nestjs/websockets";
-import { Logger } from "node_modulessss/@nestjs/common";
+import { Logger } from "node_modules/@nestjs/common";
 import { Socket, Server } from "socket.io";
 
 @WebSocketGateway({

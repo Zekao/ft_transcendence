@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
-const common_1 = require("@nestjs/common");
+const common_1 = require("../../node_modules/@nestjs/common");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
 const users_service_1 = require("./users.service");

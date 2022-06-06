@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "node_modulessss/typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "node_modules/typeorm";
 import { UserStatus } from "./users-status.enum";
 
 @Entity()
