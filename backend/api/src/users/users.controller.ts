@@ -7,10 +7,10 @@ import {
   Post,
   Delete,
   Patch,
-} from "node_modules/@nestjs/common";
+} from "@nestjs/common";
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { UserStatus } from "./users-status.enum";
+import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 
@@ -31,6 +31,7 @@ export class UsersController {
   getUserId(@Param("id") id: string): Promise<User> {
     return this.UsersService.getUserId(id);
   }
+
   @Get("/:id/firstname")
   getFirstName(@Param("id") id: string): Promise<string> {
     return this.UsersService.getFirstName(id);
@@ -39,20 +40,33 @@ export class UsersController {
   getLastName(@Param("id") id: string): Promise<string> {
     return this.UsersService.getLastName(id);
   }
-
   @Get("/:id/username")
   getUserName(@Param("id") id: string): Promise<string> {
     return this.UsersService.getUserName(id);
   }
-
   @Get("/:id/email")
   getEmail(@Param("id") id: string): Promise<string> {
     return this.UsersService.getEmail(id);
   }
-
   @Get("/:id/status")
   getStatus(@Param("id") id: string): Promise<UserStatus> {
     return this.UsersService.getStatus(id);
+  }
+  @Get("/:id/gameStatus")
+  getInGame(@Param("id") id: string): Promise<UserGameStatus> {
+    return this.UsersService.getGameStatus(id);
+  }
+  @Get("/:id/win")
+  getWin(@Param("id") id: string): Promise<number> {
+    return this.UsersService.getWin(id);
+  }
+  @Get("/:id/loose")
+  getLoose(@Param("id") id: string): Promise<number> {
+    return this.UsersService.getLoose(id);
+  }
+  @Get("/:id/rank")
+  getRank(@Param("id") id: string): Promise<number> {
+    return this.UsersService.getRank(id);
   }
 
   /* ************************************************************************** */
@@ -75,24 +89,60 @@ export class UsersController {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 
-  @Patch("/:id")
+  @Patch("/:id/firstname")
   patchFirstName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchFirstName(id, query.status);
+    return this.UsersService.patchFirstName(id, query.firstname);
   }
-  @Patch("/:id")
+  @Patch("/:id/lastname")
   patchLastName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchLastName(id, query.status);
+    return this.UsersService.patchLastName(id, query.lastname);
   }
-  @Patch("/:id")
+  @Patch("/:id/username")
   patchUserName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchUserName(id, query.status);
+    return this.UsersService.patchUserName(id, query.username);
   }
-  @Patch("/:id")
+  @Patch("/:id/email")
   patchEmail(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchEmail(id, query.status);
+    return this.UsersService.patchEmail(id, query.email);
   }
-  @Patch("/:id")
+  @Patch("/:id/status")
   patchStatus(@Param("id") id: string, @Query() query): Promise<UserStatus> {
     return this.UsersService.patchStatus(id, query.status);
+  }
+  @Patch("/:id/gameStatus")
+  patchGameStatus(
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<UserGameStatus> {
+    return this.UsersService.patchUserGameStatus(id, query.status);
+  }
+  @Patch("/:id/win")
+  patchWin(@Param("id") id: string, @Query() query): Promise<number> {
+    return this.UsersService.patchWin(id, query.status);
+  }
+  @Patch("/:id/win")
+  patchLoose(@Param("id") id: string, @Query() query): Promise<number> {
+    return this.UsersService.patchLoose(id, query.status);
+  }
+  @Patch("/:id/win")
+  patchRank(@Param("id") id: string, @Query() query): Promise<number> {
+    return this.UsersService.patchRank(id, query.status);
+  }
+
+  @Patch("/:id/addWin")
+  patchAddWin(@Param("id") id): Promise<number> {
+    return this.UsersService.patchAddWin(id);
+  }
+  @Patch("/:id/addLoose")
+  patchAddLoose(@Param("id") id): Promise<number> {
+    return this.UsersService.patchAddLoose(id);
+  }
+  @Patch("/:id/removeWin")
+  patchRemoveWin(@Param("id") id): Promise<number> {
+    return this.UsersService.patchRemoveWin(id);
+  }
+  @Patch("/:id/removeLoose")
+  patchRemoveLoose(@Param("id") id): Promise<number> {
+    return this.UsersService.patchRemoveLoose(id);
   }
 }

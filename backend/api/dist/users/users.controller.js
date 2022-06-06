@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
-const common_1 = require("../../node_modules/@nestjs/common");
+const common_1 = require("@nestjs/common");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
 const users_service_1 = require("./users.service");
@@ -44,6 +44,18 @@ let UsersController = class UsersController {
     getStatus(id) {
         return this.UsersService.getStatus(id);
     }
+    getInGame(id) {
+        return this.UsersService.getGameStatus(id);
+    }
+    getWin(id) {
+        return this.UsersService.getWin(id);
+    }
+    getLoose(id) {
+        return this.UsersService.getLoose(id);
+    }
+    getRank(id) {
+        return this.UsersService.getRank(id);
+    }
     createUser(createUser) {
         return this.UsersService.createUser(createUser);
     }
@@ -51,19 +63,43 @@ let UsersController = class UsersController {
         return this.UsersService.deleteUser(id);
     }
     patchFirstName(id, query) {
-        return this.UsersService.patchFirstName(id, query.status);
+        return this.UsersService.patchFirstName(id, query.firstname);
     }
     patchLastName(id, query) {
-        return this.UsersService.patchLastName(id, query.status);
+        return this.UsersService.patchLastName(id, query.lastname);
     }
     patchUserName(id, query) {
-        return this.UsersService.patchUserName(id, query.status);
+        return this.UsersService.patchUserName(id, query.username);
     }
     patchEmail(id, query) {
-        return this.UsersService.patchEmail(id, query.status);
+        return this.UsersService.patchEmail(id, query.email);
     }
     patchStatus(id, query) {
         return this.UsersService.patchStatus(id, query.status);
+    }
+    patchGameStatus(id, query) {
+        return this.UsersService.patchUserGameStatus(id, query.status);
+    }
+    patchWin(id, query) {
+        return this.UsersService.patchWin(id, query.status);
+    }
+    patchLoose(id, query) {
+        return this.UsersService.patchLoose(id, query.status);
+    }
+    patchRank(id, query) {
+        return this.UsersService.patchRank(id, query.status);
+    }
+    patchAddWin(id) {
+        return this.UsersService.patchAddWin(id);
+    }
+    patchAddLoose(id) {
+        return this.UsersService.patchAddLoose(id);
+    }
+    patchRemoveWin(id) {
+        return this.UsersService.patchRemoveWin(id);
+    }
+    patchRemoveLoose(id) {
+        return this.UsersService.patchRemoveLoose(id);
     }
 };
 __decorate([
@@ -116,6 +152,34 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getStatus", null);
 __decorate([
+    (0, common_1.Get)("/:id/gameStatus"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getInGame", null);
+__decorate([
+    (0, common_1.Get)("/:id/win"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getWin", null);
+__decorate([
+    (0, common_1.Get)("/:id/loose"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getLoose", null);
+__decorate([
+    (0, common_1.Get)("/:id/rank"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getRank", null);
+__decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -130,7 +194,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deleteUser", null);
 __decorate([
-    (0, common_1.Patch)("/:id"),
+    (0, common_1.Patch)("/:id/firstname"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -138,7 +202,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchFirstName", null);
 __decorate([
-    (0, common_1.Patch)("/:id"),
+    (0, common_1.Patch)("/:id/lastname"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -146,7 +210,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchLastName", null);
 __decorate([
-    (0, common_1.Patch)("/:id"),
+    (0, common_1.Patch)("/:id/username"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -154,7 +218,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUserName", null);
 __decorate([
-    (0, common_1.Patch)("/:id"),
+    (0, common_1.Patch)("/:id/email"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -162,13 +226,73 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchEmail", null);
 __decorate([
-    (0, common_1.Patch)("/:id"),
+    (0, common_1.Patch)("/:id/status"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchStatus", null);
+__decorate([
+    (0, common_1.Patch)("/:id/gameStatus"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchGameStatus", null);
+__decorate([
+    (0, common_1.Patch)("/:id/win"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchWin", null);
+__decorate([
+    (0, common_1.Patch)("/:id/win"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchLoose", null);
+__decorate([
+    (0, common_1.Patch)("/:id/win"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchRank", null);
+__decorate([
+    (0, common_1.Patch)("/:id/addWin"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchAddWin", null);
+__decorate([
+    (0, common_1.Patch)("/:id/addLoose"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchAddLoose", null);
+__decorate([
+    (0, common_1.Patch)("/:id/removeWin"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchRemoveWin", null);
+__decorate([
+    (0, common_1.Patch)("/:id/removeLoose"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchRemoveLoose", null);
 UsersController = __decorate([
     (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])

@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "node_modules/typeorm";
-import { UserStatus } from "./users-status.enum";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserStatus, UserGameStatus } from "./users-status.enum";
 
 @Entity()
 export class User {
@@ -16,4 +16,12 @@ export class User {
   email: string;
   @Column()
   status: UserStatus;
+  @Column()
+  in_game: UserGameStatus;
+  @Column()
+  win: number;
+  @Column()
+  loose: number;
+  @Column()
+  rank: number;
 }

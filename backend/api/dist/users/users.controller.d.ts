@@ -1,6 +1,6 @@
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { UserStatus } from "./users-status.enum";
+import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 export declare class UsersController {
@@ -13,6 +13,10 @@ export declare class UsersController {
     getUserName(id: string): Promise<string>;
     getEmail(id: string): Promise<string>;
     getStatus(id: string): Promise<UserStatus>;
+    getInGame(id: string): Promise<UserGameStatus>;
+    getWin(id: string): Promise<number>;
+    getLoose(id: string): Promise<number>;
+    getRank(id: string): Promise<number>;
     createUser(createUser: createUserDTO): Promise<User>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, query: any): Promise<string>;
@@ -20,4 +24,12 @@ export declare class UsersController {
     patchUserName(id: string, query: any): Promise<string>;
     patchEmail(id: string, query: any): Promise<string>;
     patchStatus(id: string, query: any): Promise<UserStatus>;
+    patchGameStatus(id: string, query: any): Promise<UserGameStatus>;
+    patchWin(id: string, query: any): Promise<number>;
+    patchLoose(id: string, query: any): Promise<number>;
+    patchRank(id: string, query: any): Promise<number>;
+    patchAddWin(id: any): Promise<number>;
+    patchAddLoose(id: any): Promise<number>;
+    patchRemoveWin(id: any): Promise<number>;
+    patchRemoveLoose(id: any): Promise<number>;
 }
