@@ -43,7 +43,7 @@ mdi-account-cancel
     <v-card flat >
 <v-card-text>
   <v-container>
-    <h3>Lusehair profil </h3>
+    <h3>{{info.first_name}} {{info.last_name}} profil </h3>
 
     <v-row>
     <!-- PROFIL PICTURE  -->
@@ -58,7 +58,10 @@ mdi-account-cancel
 
   <!-- PSEUDO ZONE  -->
     <v-col cols="3">
-  <h3>PSEUDO</h3>
+  <h3>PSEUDO : {{info.user_name}}</h3>
+  <h3>Email : {{info.email}}</h3><p></p>
+  <h3>Win Game : {{info.win}}</h3>
+  <h3>loose Game : {{info.loose}}</h3>
     </v-col>
 
       <v-col cols="3">
@@ -281,24 +284,13 @@ mdi-account-off
   </v-card>
 </template>
 
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
+  import axios from 'axios'
 
   export default {
     data () {
       return {
-
+        info: null,
         dialog: false,
 
         headers: [
@@ -366,6 +358,11 @@ mdi-account-off
         },
       ]
       }
+    },
+    mounted(){
+      axios
+      .get('http://localhost:3000/users/0eca1518-4fa1-4a7f-9d5f-74e68fdc32d2')
+      .then(response => (this.info = response.data));
     },
     methods: {
     deleteItem(item) {

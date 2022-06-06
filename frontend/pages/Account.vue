@@ -15,12 +15,6 @@
           </v-list-item-content>
         </v-list-item>
     </v-row>
-    <v-row style="margin:80%;position:absolute; top: 50px">
-      <v-btn
-        color="primary"
-        elevation="7"
-        ></v-btn>
-    </v-row>
   </v-card>
 </template>
 
