@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "node_modulessss/@nestjs/common";
 import { UserStatus } from "./users-status.enum";
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { InjectRepository } from "@nestjs/typeorm";
+import { InjectRepository } from "node_modulessss/@nestjs/typeorm";
 import { User } from "./users.entity";
-import { Repository } from "typeorm";
+import { Repository } from "node_modulessss/typeorm";
 
 function setNickName(users: User[], first: string, last: string): string {
   let nick: string;

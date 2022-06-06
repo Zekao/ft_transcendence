@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from 'node_modulessss/@nestjs/testing';
 import { ChatGateway } from './chat.gateway';
 
 describe('ChatGateway', () => {

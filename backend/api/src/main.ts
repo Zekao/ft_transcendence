@@ -1,6 +1,6 @@
-import { ValidationPipe } from "@nestjs/common";
-import { NestFactory } from "@nestjs/core";
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { ValidationPipe } from "node_modulessss/@nestjs/common";
+import { NestFactory } from "node_modulessss/@nestjs/core";
+import { NestExpressApplication } from 'node_modulessss/@nestjs/platform-express';
 import { AppModule } from "./app.module";
 import { join } from "path";
 
