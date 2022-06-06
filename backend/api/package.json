@@ -21,12 +21,17 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/jwt": "^8.0.1",
+    "@nestjs/passport": "^8.2.1",
+    "@nestjs/platform-express": "^8.4.6",
     "@nestjs/platform-socket.io": "^8.4.6",
     "@nestjs/typeorm": "^8.1.2",
     "@nestjs/websockets": "^8.4.6",
+    "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
