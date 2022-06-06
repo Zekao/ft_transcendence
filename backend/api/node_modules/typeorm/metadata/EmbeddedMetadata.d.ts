@@ -4,7 +4,7 @@ import { EntityMetadata } from "./EntityMetadata";
 import { EmbeddedMetadataArgs } from "../metadata-args/EmbeddedMetadataArgs";
 import { RelationIdMetadata } from "./RelationIdMetadata";
 import { RelationCountMetadata } from "./RelationCountMetadata";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { EntityListenerMetadata } from "./EntityListenerMetadata";
 import { IndexMetadata } from "./IndexMetadata";
 import { UniqueMetadata } from "./UniqueMetadata";
@@ -149,9 +149,9 @@ export declare class EmbeddedMetadata {
     create(options?: {
         fromDeserializer?: boolean;
     }): any;
-    build(connection: Connection): this;
+    build(connection: DataSource): this;
     protected buildPartialPrefix(): string[];
-    protected buildPrefix(connection: Connection): string;
+    protected buildPrefix(connection: DataSource): string;
     protected buildParentPropertyNames(): string[];
     protected buildParentPrefixes(): string[];
     protected buildEmbeddedMetadataTree(): EmbeddedMetadata[];

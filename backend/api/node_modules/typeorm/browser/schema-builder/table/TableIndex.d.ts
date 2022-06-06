@@ -4,6 +4,7 @@ import { TableIndexOptions } from "../options/TableIndexOptions";
  * Database's table index stored in this class.
  */
 export declare class TableIndex {
+    readonly "@instanceof": symbol;
     /**
      * Index name.
      */
@@ -26,6 +27,14 @@ export declare class TableIndex {
      * Works only in MySQL.
      */
     isFulltext: boolean;
+    /**
+     * NULL_FILTERED indexes are particularly useful for indexing sparse columns, where most rows contain a NULL value.
+     * In these cases, the NULL_FILTERED index can be considerably smaller and more efficient to maintain than
+     * a normal index that includes NULL values.
+     *
+     * Works only in Spanner.
+     */
+    isNullFiltered: boolean;
     /**
      * Fulltext parser.
      * Works only in MySQL.

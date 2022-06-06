@@ -4,11 +4,12 @@ exports.TableColumn = void 0;
 /**
  * Table's columns in the database represented in this class.
  */
-var TableColumn = /** @class */ (function () {
+class TableColumn {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function TableColumn(options) {
+    constructor(options) {
+        this["@instanceof"] = Symbol.for("TableColumn");
         /**
          * Indicates if column is NULL, or is NOT NULL in the database.
          */
@@ -53,7 +54,7 @@ var TableColumn = /** @class */ (function () {
             this.precision = options.precision;
             this.scale = options.scale;
             this.zerofill = options.zerofill || false;
-            this.unsigned = this.zerofill ? true : (options.unsigned || false);
+            this.unsigned = this.zerofill ? true : options.unsigned || false;
             this.default = options.default;
             this.onUpdate = options.onUpdate;
             this.isNullable = options.isNullable || false;
@@ -78,7 +79,7 @@ var TableColumn = /** @class */ (function () {
     /**
      * Clones this column to a new column with exact same properties as this column has.
      */
-    TableColumn.prototype.clone = function () {
+    clone() {
         return new TableColumn({
             name: this.name,
             type: this.type,
@@ -105,11 +106,10 @@ var TableColumn = /** @class */ (function () {
             isArray: this.isArray,
             comment: this.comment,
             spatialFeatureType: this.spatialFeatureType,
-            srid: this.srid
+            srid: this.srid,
         });
-    };
-    return TableColumn;
-}());
+    }
+}
 exports.TableColumn = TableColumn;
 
 //# sourceMappingURL=TableColumn.js.map

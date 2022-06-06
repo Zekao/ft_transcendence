@@ -1,7 +1,7 @@
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { ColumnMetadata } from "../metadata/ColumnMetadata";
 import { EntityMetadata } from "../metadata/EntityMetadata";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { SchemaBuilder } from "./SchemaBuilder";
 import { SqlInMemory } from "../driver/SqlInMemory";
 import { TableColumnOptions } from "./options/TableColumnOptions";
@@ -20,14 +20,15 @@ import { TableColumnOptions } from "./options/TableColumnOptions";
  * 9. create indices which are missing in db yet, and drops indices which exist in the db, but does not exist in the metadata anymore
  */
 export declare class RdbmsSchemaBuilder implements SchemaBuilder {
-    protected connection: Connection;
+    protected connection: DataSource;
+    readonly "@instanceof": symbol;
     /**
      * Used to execute schema creation queries in a single connection.
      */
     protected queryRunner: QueryRunner;
     private currentDatabase?;
     private currentSchema?;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Creates complete schemas for the given entity metadatas.
      */

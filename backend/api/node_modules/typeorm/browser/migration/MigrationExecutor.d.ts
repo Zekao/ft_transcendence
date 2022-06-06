@@ -1,11 +1,11 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { Migration } from "./Migration";
 import { QueryRunner } from "../query-runner/QueryRunner";
 /**
  * Executes migrations: runs pending and reverts previously executed migrations.
  */
 export declare class MigrationExecutor {
-    protected connection: Connection;
+    protected connection: DataSource;
     protected queryRunner?: QueryRunner | undefined;
     /**
      * Indicates how migrations should be run in transactions.
@@ -18,7 +18,7 @@ export declare class MigrationExecutor {
     private readonly migrationsSchema?;
     private readonly migrationsTable;
     private readonly migrationsTableName;
-    constructor(connection: Connection, queryRunner?: QueryRunner | undefined);
+    constructor(connection: DataSource, queryRunner?: QueryRunner | undefined);
     /**
      * Tries to execute a single migration given.
      */

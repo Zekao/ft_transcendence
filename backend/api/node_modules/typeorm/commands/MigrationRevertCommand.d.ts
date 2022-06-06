@@ -5,13 +5,10 @@ import * as yargs from "yargs";
 export declare class MigrationRevertCommand implements yargs.CommandModule {
     command: string;
     describe: string;
-    aliases: string;
     builder(args: yargs.Argv): yargs.Argv<{
-        c: string;
+        dataSource: unknown;
     } & {
         transaction: string;
-    } & {
-        f: string;
     }>;
     handler(args: yargs.Arguments): Promise<void>;
 }

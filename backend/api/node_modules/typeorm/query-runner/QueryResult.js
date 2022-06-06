@@ -4,15 +4,14 @@ exports.QueryResult = void 0;
 /**
  * Result object returned by UpdateQueryBuilder execution.
  */
-var QueryResult = /** @class */ (function () {
-    function QueryResult() {
+class QueryResult {
+    constructor() {
         /**
          * Rows
          */
         this.records = [];
     }
-    return QueryResult;
-}());
+}
 exports.QueryResult = QueryResult;
 
 //# sourceMappingURL=QueryResult.js.map

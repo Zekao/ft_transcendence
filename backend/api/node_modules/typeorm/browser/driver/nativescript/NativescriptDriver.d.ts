@@ -1,7 +1,7 @@
 import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
 import { NativescriptConnectionOptions } from "./NativescriptConnectionOptions";
 import { QueryRunner } from "../../query-runner/QueryRunner";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { ColumnType } from "../types/ColumnTypes";
 import { ReplicationMode } from "../types/ReplicationMode";
 /**
@@ -18,7 +18,7 @@ export declare class NativescriptDriver extends AbstractSqliteDriver {
      * but user can pass his own
      */
     driver: any;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Closes connection with database.
      */

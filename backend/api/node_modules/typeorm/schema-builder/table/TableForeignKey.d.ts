@@ -5,6 +5,7 @@ import { Driver } from "../../driver/Driver";
  * Foreign key from the database stored in this class.
  */
 export declare class TableForeignKey {
+    readonly "@instanceof": symbol;
     /**
      * Name of the foreign key constraint.
      */

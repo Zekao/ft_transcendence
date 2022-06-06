@@ -1,11 +1,11 @@
 import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
 import { ReactNativeConnectionOptions } from "./ReactNativeConnectionOptions";
 import { QueryRunner } from "../../query-runner/QueryRunner";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { ReplicationMode } from "../types/ReplicationMode";
 export declare class ReactNativeDriver extends AbstractSqliteDriver {
     options: ReactNativeConnectionOptions;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Closes connection with database.
      */

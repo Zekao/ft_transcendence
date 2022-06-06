@@ -1,8 +1,9 @@
 import { Driver, ReturningType } from "../Driver";
+import { CteCapabilities } from "../types/CteCapabilities";
 import { MysqlQueryRunner } from "./MysqlQueryRunner";
 import { ObjectLiteral } from "../../common/ObjectLiteral";
 import { ColumnMetadata } from "../../metadata/ColumnMetadata";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { RdbmsSchemaBuilder } from "../../schema-builder/RdbmsSchemaBuilder";
 import { MysqlConnectionOptions } from "./MysqlConnectionOptions";
 import { MappedColumnTypes } from "../types/MappedColumnTypes";
@@ -22,7 +23,7 @@ export declare class MysqlDriver implements Driver {
     /**
      * Connection used by driver.
      */
-    connection: Connection;
+    connection: DataSource;
     /**
      * Mysql underlying library.
      */
@@ -106,11 +107,12 @@ export declare class MysqlDriver implements Driver {
      * @see https://dev.mysql.com/doc/refman/5.5/en/identifiers.html
      */
     maxAliasLength: number;
+    cteCapabilities: CteCapabilities;
     /**
      * Supported returning types
      */
     private readonly _isReturningSqlSupported;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Performs connection to the database.
      */

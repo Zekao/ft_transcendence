@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrimaryGeneratedColumn = void 0;
-var globals_1 = require("../../globals");
+const globals_1 = require("../../globals");
+const ObjectUtils_1 = require("../../util/ObjectUtils");
 /**
  * Column decorator is used to mark a specific class property as a table column.
  * Only properties decorated with this decorator will be persisted to the database when entity be saved.
@@ -9,12 +10,12 @@ var globals_1 = require("../../globals");
  */
 function PrimaryGeneratedColumn(strategyOrOptions, maybeOptions) {
     // normalize parameters
-    var options = {};
-    var strategy;
+    const options = {};
+    let strategy;
     if (strategyOrOptions) {
         if (typeof strategyOrOptions === "string")
             strategy = strategyOrOptions;
-        if (strategyOrOptions instanceof Object) {
+        if (ObjectUtils_1.ObjectUtils.isObject(strategyOrOptions)) {
             strategy = "increment";
             Object.assign(options, strategyOrOptions);
         }
@@ -22,7 +23,7 @@ function PrimaryGeneratedColumn(strategyOrOptions, maybeOptions) {
     else {
         strategy = "increment";
     }
-    if (maybeOptions instanceof Object)
+    if (ObjectUtils_1.ObjectUtils.isObject(maybeOptions))
         Object.assign(options, maybeOptions);
     return function (object, propertyName) {
         // if column type is not explicitly set then determine it based on generation strategy
@@ -44,13 +45,13 @@ function PrimaryGeneratedColumn(strategyOrOptions, maybeOptions) {
             target: object.constructor,
             propertyName: propertyName,
             mode: "regular",
-            options: options
+            options: options,
         });
         // register generated metadata args
         (0, globals_1.getMetadataArgsStorage)().generations.push({
             target: object.constructor,
             propertyName: propertyName,
-            strategy: strategy
+            strategy: strategy,
         });
     };
 }

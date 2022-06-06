@@ -3,7 +3,7 @@ import { UniqueMetadata } from "../metadata/UniqueMetadata";
 import { ForeignKeyMetadata } from "../metadata/ForeignKeyMetadata";
 import { RelationMetadata } from "../metadata/RelationMetadata";
 import { JoinColumnMetadataArgs } from "../metadata-args/JoinColumnMetadataArgs";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 /**
  * Builds join column for the many-to-one and one-to-one owner relations.
  *
@@ -36,7 +36,7 @@ import { Connection } from "../connection/Connection";
  */
 export declare class RelationJoinColumnBuilder {
     private connection;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Builds a foreign key of the many-to-one or one-to-one owner relations.
      */

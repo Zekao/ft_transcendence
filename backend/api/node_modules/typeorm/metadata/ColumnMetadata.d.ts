@@ -4,12 +4,13 @@ import { EmbeddedMetadata } from "./EmbeddedMetadata";
 import { RelationMetadata } from "./RelationMetadata";
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { ColumnMetadataArgs } from "../metadata-args/ColumnMetadataArgs";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { ValueTransformer } from "../decorator/options/ValueTransformer";
 /**
  * This metadata contains all information about entity's column.
  */
 export declare class ColumnMetadata {
+    readonly "@instanceof": symbol;
     /**
      * Target class where column decorator is used.
      * This may not be always equal to entity metadata (for example embeds or inheritance cases).
@@ -249,7 +250,7 @@ export declare class ColumnMetadata {
      */
     srid?: number;
     constructor(options: {
-        connection: Connection;
+        connection: DataSource;
         entityMetadata: EntityMetadata;
         embeddedMetadata?: EmbeddedMetadata;
         referencedColumn?: ColumnMetadata;
@@ -283,8 +284,12 @@ export declare class ColumnMetadata {
      * Using of this method helps to set entity relation's value of the lazy and non-lazy relations.
      */
     setEntityValue(entity: ObjectLiteral, value: any): void;
-    build(connection: Connection): this;
+    /**
+     * Compares given entity's column value with a given value.
+     */
+    compareEntityValue(entity: any, valueToCompareWith: any): any;
+    build(connection: DataSource): this;
     protected buildPropertyPath(): string;
     protected buildDatabasePath(): string;
-    protected buildDatabaseName(connection: Connection): string;
+    protected buildDatabaseName(connection: DataSource): string;
 }

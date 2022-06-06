@@ -1,7 +1,6 @@
-import { Repository } from "./Repository";
-import { SelectQueryBuilder } from "../query-builder/SelectQueryBuilder";
 import { FindTreeOptions } from "../find-options/FindTreeOptions";
-import { FindTreesOptions } from "./FindTreesOptions";
+import { SelectQueryBuilder } from "../query-builder/SelectQueryBuilder";
+import { Repository } from "./Repository";
 /**
  * Repository with additional functions to work with trees.
  *
@@ -49,23 +48,7 @@ export declare class TreeRepository<Entity> extends Repository<Entity> {
      */
     createAncestorsQueryBuilder(alias: string, closureTableAlias: string, entity: Entity): SelectQueryBuilder<Entity>;
     /**
-     * Moves entity to the children of then given entity.
-     *
-    move(entity: Entity, to: Entity): Promise<void> {
-        return Promise.resolve();
-    } */
-    protected createRelationMaps(alias: string, rawResults: any[]): {
-        id: any;
-        parentId: any;
-    }[];
-    protected buildChildrenEntityTree(entity: any, entities: any[], relationMaps: {
-        id: any;
-        parentId: any;
-    }[], options: (FindTreesOptions & {
-        depth: number;
-    })): void;
-    protected buildParentEntityTree(entity: any, entities: any[], relationMaps: {
-        id: any;
-        parentId: any;
-    }[]): void;
+     * Extends tree repository with provided functions.
+     */
+    extend<CustomRepository>(custom: CustomRepository & ThisType<TreeRepository<Entity> & CustomRepository>): TreeRepository<Entity> & CustomRepository;
 }

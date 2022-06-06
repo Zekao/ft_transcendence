@@ -1,11 +1,11 @@
 import { QueryResultCache } from "./QueryResultCache";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 /**
  * Caches query result into Redis database.
  */
 export declare class QueryResultCacheFactory {
-    protected connection: Connection;
-    constructor(connection: Connection);
+    protected connection: DataSource;
+    constructor(connection: DataSource);
     /**
      * Creates a new query result cache based on connection options.
      */

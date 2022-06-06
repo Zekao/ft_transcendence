@@ -1,5 +1,5 @@
 import { ColumnMetadata } from "../metadata/ColumnMetadata";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { EntityMetadata } from "../metadata/EntityMetadata";
 import { JoinTableMetadataArgs } from "../metadata-args/JoinTableMetadataArgs";
 import { RelationMetadata } from "../metadata/RelationMetadata";
@@ -9,7 +9,7 @@ import { RelationMetadata } from "../metadata/RelationMetadata";
  */
 export declare class JunctionEntityMetadataBuilder {
     private connection;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Builds EntityMetadata for the junction of the given many-to-many relation.
      */

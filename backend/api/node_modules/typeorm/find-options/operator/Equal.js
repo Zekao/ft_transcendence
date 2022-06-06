@@ -1,13 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Equal = void 0;
-var FindOperator_1 = require("../FindOperator");
+const EqualOperator_1 = require("../EqualOperator");
 /**
  * Find Options Operator.
- * Example: { someField: Equal("value") }
+ * This operator is handy to provide object value for non-relational properties of the Entity.
+ *
+ * Examples:
+ *      { someField: Equal("value") }
+ *      { uuid: Equal(new UUID()) }
  */
 function Equal(value) {
-    return new FindOperator_1.FindOperator("equal", value);
+    return new EqualOperator_1.EqualOperator(value);
 }
 exports.Equal = Equal;
 

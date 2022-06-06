@@ -1,6 +1,6 @@
 import * as yargs from "yargs";
 /**
- * Executes an SQL query on the given connection.
+ * Executes an SQL query on the given dataSource.
  */
 export declare class QueryCommand implements yargs.CommandModule {
     command: string;
@@ -8,9 +8,7 @@ export declare class QueryCommand implements yargs.CommandModule {
     builder(args: yargs.Argv): yargs.Argv<{
         query: string | undefined;
     } & {
-        c: string;
-    } & {
-        f: string;
+        dataSource: unknown;
     }>;
     handler(args: yargs.Arguments): Promise<void>;
 }

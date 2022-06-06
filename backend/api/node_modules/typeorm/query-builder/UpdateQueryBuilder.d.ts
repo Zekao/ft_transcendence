@@ -1,6 +1,6 @@
 import { QueryBuilder } from "./QueryBuilder";
 import { ObjectLiteral } from "../common/ObjectLiteral";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { WhereExpressionBuilder } from "./WhereExpressionBuilder";
 import { Brackets } from "./Brackets";
@@ -11,7 +11,8 @@ import { QueryDeepPartialEntity } from "./QueryPartialEntity";
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export declare class UpdateQueryBuilder<Entity> extends QueryBuilder<Entity> implements WhereExpressionBuilder {
-    constructor(connectionOrQueryBuilder: Connection | QueryBuilder<any>, queryRunner?: QueryRunner);
+    readonly "@instanceof": symbol;
+    constructor(connectionOrQueryBuilder: DataSource | QueryBuilder<any>, queryRunner?: QueryRunner);
     /**
      * Gets generated SQL query without parameters being replaced.
      */

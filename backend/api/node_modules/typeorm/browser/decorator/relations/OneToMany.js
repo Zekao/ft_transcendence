@@ -9,10 +9,13 @@ export function OneToMany(typeFunctionOrTarget, inverseSide, options) {
         if (!options)
             options = {};
         // Now try to determine if it is a lazy relation.
-        var isLazy = options && options.lazy === true;
-        if (!isLazy && Reflect && Reflect.getMetadata) { // automatic determination
-            var reflectedType = Reflect.getMetadata("design:type", object, propertyName);
-            if (reflectedType && typeof reflectedType.name === "string" && reflectedType.name.toLowerCase() === "promise")
+        let isLazy = options && options.lazy === true;
+        if (!isLazy && Reflect && Reflect.getMetadata) {
+            // automatic determination
+            const reflectedType = Reflect.getMetadata("design:type", object, propertyName);
+            if (reflectedType &&
+                typeof reflectedType.name === "string" &&
+                reflectedType.name.toLowerCase() === "promise")
                 isLazy = true;
         }
         getMetadataArgsStorage().relations.push({
@@ -23,7 +26,7 @@ export function OneToMany(typeFunctionOrTarget, inverseSide, options) {
             relationType: "one-to-many",
             type: typeFunctionOrTarget,
             inverseSideProperty: inverseSide,
-            options: options
+            options: options,
         });
     };
 }

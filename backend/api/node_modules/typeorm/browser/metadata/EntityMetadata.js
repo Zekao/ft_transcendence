@@ -1,16 +1,17 @@
-import { __read, __spreadArray } from "tslib";
-import { EntityColumnNotFound } from "..";
 import { CannotCreateEntityIdMapError } from "../error/CannotCreateEntityIdMapError";
 import { OrmUtils } from "../util/OrmUtils";
+import { EntityPropertyNotFoundError } from "../error/EntityPropertyNotFoundError";
+import { ObjectUtils } from "../util/ObjectUtils";
 import { shorten } from "../util/StringUtils";
 /**
  * Contains all entity metadata.
  */
-var EntityMetadata = /** @class */ (function () {
+export class EntityMetadata {
     // ---------------------------------------------------------------------
     // Constructor
     // ---------------------------------------------------------------------
-    function EntityMetadata(options) {
+    constructor(options) {
+        this["@instanceof"] = Symbol.for("EntityMetadata");
         /**
          * Children entity metadatas. Used in inheritance patterns.
          */
@@ -244,7 +245,9 @@ var EntityMetadata = /** @class */ (function () {
         this.inheritanceTree = options.inheritanceTree || [];
         this.inheritancePattern = options.inheritancePattern;
         this.treeType = options.tableTree ? options.tableTree.type : undefined;
-        this.treeOptions = options.tableTree ? options.tableTree.options : undefined;
+        this.treeOptions = options.tableTree
+            ? options.tableTree.options
+            : undefined;
         this.parentClosureEntityMetadata = options.parentClosureEntityMetadata;
         this.tableMetadataArgs = options.args;
         this.target = this.tableMetadataArgs.target;
@@ -259,80 +262,86 @@ var EntityMetadata = /** @class */ (function () {
     /**
      * Creates a new entity.
      */
-    EntityMetadata.prototype.create = function (queryRunner, options) {
-        var _this = this;
+    create(queryRunner, options) {
+        const pojo = options && options.pojo === true ? true : false;
         // if target is set to a function (e.g. class) that can be created then create it
-        var ret;
-        if (this.target instanceof Function) {
+        let ret;
+        if (typeof this.target === "function" && !pojo) {
             if (!(options === null || options === void 0 ? void 0 : options.fromDeserializer) || this.isAlwaysUsingConstructor) {
                 ret = new this.target();
             }
             else {
                 ret = Object.create(this.target.prototype);
             }
-            this.lazyRelations.forEach(function (relation) { return _this.connection.relationLoader.enableLazyLoad(relation, ret, queryRunner); });
-            return ret;
         }
-        // otherwise simply return a new empty object
-        var newObject = {};
-        this.lazyRelations.forEach(function (relation) { return _this.connection.relationLoader.enableLazyLoad(relation, newObject, queryRunner); });
-        return newObject;
-    };
+        else {
+            // otherwise simply return a new empty object
+            ret = {};
+        }
+        // add "typename" property
+        if (this.connection.options.typename) {
+            ret[this.connection.options.typename] = this.targetName;
+        }
+        this.lazyRelations.forEach((relation) => this.connection.relationLoader.enableLazyLoad(relation, ret, queryRunner));
+        return ret;
+    }
     /**
      * Checks if given entity has an id.
      */
-    EntityMetadata.prototype.hasId = function (entity) {
+    hasId(entity) {
         if (!entity)
             return false;
-        return this.primaryColumns.every(function (primaryColumn) {
-            var value = primaryColumn.getEntityValue(entity);
+        return this.primaryColumns.every((primaryColumn) => {
+            const value = primaryColumn.getEntityValue(entity);
             return value !== null && value !== undefined && value !== "";
         });
-    };
+    }
     /**
      * Checks if given entity / object contains ALL primary keys entity must have.
      * Returns true if it contains all of them, false if at least one of them is not defined.
      */
-    EntityMetadata.prototype.hasAllPrimaryKeys = function (entity) {
-        return this.primaryColumns.every(function (primaryColumn) {
-            var value = primaryColumn.getEntityValue(entity);
+    hasAllPrimaryKeys(entity) {
+        return this.primaryColumns.every((primaryColumn) => {
+            const value = primaryColumn.getEntityValue(entity);
             return value !== null && value !== undefined;
         });
-    };
+    }
     /**
      * Ensures that given object is an entity id map.
      * If given id is an object then it means its already id map.
      * If given id isn't an object then it means its a value of the id column
      * and it creates a new id map with this value and name of the primary column.
      */
-    EntityMetadata.prototype.ensureEntityIdMap = function (id) {
-        if (id instanceof Object)
+    ensureEntityIdMap(id) {
+        if (ObjectUtils.isObject(id))
             return id;
         if (this.hasMultiplePrimaryKeys)
             throw new CannotCreateEntityIdMapError(this, id);
         return this.primaryColumns[0].createValueMap(id);
-    };
+    }
     /**
      * Gets primary keys of the entity and returns them in a literal object.
      * For example, for Post{ id: 1, title: "hello" } where id is primary it will return { id: 1 }
      * For multiple primary keys it returns multiple keys in object.
      * For primary keys inside embeds it returns complex object literal with keys in them.
      */
-    EntityMetadata.prototype.getEntityIdMap = function (entity) {
+    getEntityIdMap(entity) {
         if (!entity)
             return undefined;
-        return EntityMetadata.getValueMap(entity, this.primaryColumns, { skipNulls: true });
-    };
+        return EntityMetadata.getValueMap(entity, this.primaryColumns, {
+            skipNulls: true,
+        });
+    }
     /**
      * Creates a "mixed id map".
      * If entity has multiple primary keys (ids) then it will return just regular id map, like what getEntityIdMap returns.
      * But if entity has a single primary key then it will return just value of the id column of the entity, just value.
      * This is called mixed id map.
      */
-    EntityMetadata.prototype.getEntityIdMixedMap = function (entity) {
+    getEntityIdMixedMap(entity) {
         if (!entity)
             return entity;
-        var idMap = this.getEntityIdMap(entity);
+        const idMap = this.getEntityIdMap(entity);
         if (this.hasMultiplePrimaryKeys) {
             return idMap;
         }
@@ -340,129 +349,142 @@ var EntityMetadata = /** @class */ (function () {
             return this.primaryColumns[0].getEntityValue(idMap); // todo: what about parent primary column?
         }
         return idMap;
-    };
+    }
     /**
      * Compares two different entities by their ids.
      * Returns true if they match, false otherwise.
      */
-    EntityMetadata.prototype.compareEntities = function (firstEntity, secondEntity) {
-        var firstEntityIdMap = this.getEntityIdMap(firstEntity);
+    compareEntities(firstEntity, secondEntity) {
+        const firstEntityIdMap = this.getEntityIdMap(firstEntity);
         if (!firstEntityIdMap)
             return false;
-        var secondEntityIdMap = this.getEntityIdMap(secondEntity);
+        const secondEntityIdMap = this.getEntityIdMap(secondEntity);
         if (!secondEntityIdMap)
             return false;
         return OrmUtils.compareIds(firstEntityIdMap, secondEntityIdMap);
-    };
+    }
     /**
      * Finds column with a given property name.
      */
-    EntityMetadata.prototype.findColumnWithPropertyName = function (propertyName) {
-        return this.columns.find(function (column) { return column.propertyName === propertyName; });
-    };
+    findColumnWithPropertyName(propertyName) {
+        return this.columns.find((column) => column.propertyName === propertyName);
+    }
     /**
      * Finds column with a given database name.
      */
-    EntityMetadata.prototype.findColumnWithDatabaseName = function (databaseName) {
-        return this.columns.find(function (column) { return column.databaseName === databaseName; });
-    };
+    findColumnWithDatabaseName(databaseName) {
+        return this.columns.find((column) => column.databaseName === databaseName);
+    }
     /**
      * Checks if there is a column or relationship with a given property path.
      */
-    EntityMetadata.prototype.hasColumnWithPropertyPath = function (propertyPath) {
-        var hasColumn = this.columns.some(function (column) { return column.propertyPath === propertyPath; });
+    hasColumnWithPropertyPath(propertyPath) {
+        const hasColumn = this.columns.some((column) => column.propertyPath === propertyPath);
         return hasColumn || this.hasRelationWithPropertyPath(propertyPath);
-    };
+    }
     /**
      * Finds column with a given property path.
      */
-    EntityMetadata.prototype.findColumnWithPropertyPath = function (propertyPath) {
-        var column = this.columns.find(function (column) { return column.propertyPath === propertyPath; });
+    findColumnWithPropertyPath(propertyPath) {
+        const column = this.columns.find((column) => column.propertyPath === propertyPath);
         if (column)
             return column;
         // in the case if column with property path was not found, try to find a relation with such property path
         // if we find relation and it has a single join column then its the column user was seeking
-        var relation = this.relations.find(function (relation) { return relation.propertyPath === propertyPath; });
+        const relation = this.relations.find((relation) => relation.propertyPath === propertyPath);
         if (relation && relation.joinColumns.length === 1)
             return relation.joinColumns[0];
         return undefined;
-    };
+    }
+    /**
+     * Finds column with a given property path.
+     * Does not search in relation unlike findColumnWithPropertyPath.
+     */
+    findColumnWithPropertyPathStrict(propertyPath) {
+        return this.columns.find((column) => column.propertyPath === propertyPath);
+    }
     /**
      * Finds columns with a given property path.
      * Property path can match a relation, and relations can contain multiple columns.
      */
-    EntityMetadata.prototype.findColumnsWithPropertyPath = function (propertyPath) {
-        var column = this.columns.find(function (column) { return column.propertyPath === propertyPath; });
+    findColumnsWithPropertyPath(propertyPath) {
+        const column = this.columns.find((column) => column.propertyPath === propertyPath);
         if (column)
             return [column];
         // in the case if column with property path was not found, try to find a relation with such property path
         // if we find relation and it has a single join column then its the column user was seeking
-        var relation = this.findRelationWithPropertyPath(propertyPath);
+        const relation = this.findRelationWithPropertyPath(propertyPath);
         if (relation && relation.joinColumns)
             return relation.joinColumns;
         return [];
-    };
+    }
     /**
      * Checks if there is a relation with the given property path.
      */
-    EntityMetadata.prototype.hasRelationWithPropertyPath = function (propertyPath) {
-        return this.relations.some(function (relation) { return relation.propertyPath === propertyPath; });
-    };
+    hasRelationWithPropertyPath(propertyPath) {
+        return this.relations.some((relation) => relation.propertyPath === propertyPath);
+    }
     /**
      * Finds relation with the given property path.
      */
-    EntityMetadata.prototype.findRelationWithPropertyPath = function (propertyPath) {
-        return this.relations.find(function (relation) { return relation.propertyPath === propertyPath; });
-    };
+    findRelationWithPropertyPath(propertyPath) {
+        return this.relations.find((relation) => relation.propertyPath === propertyPath);
+    }
     /**
      * Checks if there is an embedded with a given property path.
      */
-    EntityMetadata.prototype.hasEmbeddedWithPropertyPath = function (propertyPath) {
-        return this.allEmbeddeds.some(function (embedded) { return embedded.propertyPath === propertyPath; });
-    };
+    hasEmbeddedWithPropertyPath(propertyPath) {
+        return this.allEmbeddeds.some((embedded) => embedded.propertyPath === propertyPath);
+    }
     /**
      * Finds embedded with a given property path.
      */
-    EntityMetadata.prototype.findEmbeddedWithPropertyPath = function (propertyPath) {
-        return this.allEmbeddeds.find(function (embedded) { return embedded.propertyPath === propertyPath; });
-    };
+    findEmbeddedWithPropertyPath(propertyPath) {
+        return this.allEmbeddeds.find((embedded) => embedded.propertyPath === propertyPath);
+    }
     /**
      * Returns an array of databaseNames mapped from provided propertyPaths
      */
-    EntityMetadata.prototype.mapPropertyPathsToColumns = function (propertyPaths) {
-        var _this = this;
-        return propertyPaths.map(function (propertyPath) {
-            var column = _this.findColumnWithPropertyPath(propertyPath);
+    mapPropertyPathsToColumns(propertyPaths) {
+        return propertyPaths.map((propertyPath) => {
+            const column = this.findColumnWithPropertyPath(propertyPath);
             if (column == null) {
-                throw new EntityColumnNotFound(propertyPath);
+                throw new EntityPropertyNotFoundError(propertyPath, this);
             }
             return column;
         });
-    };
+    }
     /**
      * Iterates through entity and finds and extracts all values from relations in the entity.
      * If relation value is an array its being flattened.
      */
-    EntityMetadata.prototype.extractRelationValuesFromEntity = function (entity, relations) {
-        var _this = this;
-        var relationsAndValues = [];
-        relations.forEach(function (relation) {
-            var value = relation.getEntityValue(entity);
+    extractRelationValuesFromEntity(entity, relations) {
+        const relationsAndValues = [];
+        relations.forEach((relation) => {
+            const value = relation.getEntityValue(entity);
             if (Array.isArray(value)) {
-                value.forEach(function (subValue) { return relationsAndValues.push([relation, subValue, _this.getInverseEntityMetadata(subValue, relation)]); });
+                value.forEach((subValue) => relationsAndValues.push([
+                    relation,
+                    subValue,
+                    this.getInverseEntityMetadata(subValue, relation),
+                ]));
             }
             else if (value) {
-                relationsAndValues.push([relation, value, _this.getInverseEntityMetadata(value, relation)]);
+                relationsAndValues.push([
+                    relation,
+                    value,
+                    this.getInverseEntityMetadata(value, relation),
+                ]);
             }
         });
         return relationsAndValues;
-    };
-    EntityMetadata.prototype.getInverseEntityMetadata = function (value, relation) {
-        var childEntityMetadata = relation.inverseEntityMetadata.childEntityMetadatas.find(function (metadata) {
-            return metadata.target === value.constructor;
-        });
-        return childEntityMetadata ? childEntityMetadata : relation.inverseEntityMetadata;
-    };
+    }
+    getInverseEntityMetadata(value, relation) {
+        const childEntityMetadata = relation.inverseEntityMetadata.childEntityMetadatas.find((metadata) => metadata.target === value.constructor);
+        return childEntityMetadata
+            ? childEntityMetadata
+            : relation.inverseEntityMetadata;
+    }
     // -------------------------------------------------------------------------
     // Public Static Methods
     // -------------------------------------------------------------------------
@@ -471,109 +493,139 @@ var EntityMetadata = /** @class */ (function () {
      *
      * @deprecated
      */
-    EntityMetadata.createPropertyPath = function (metadata, entity, prefix) {
-        var _this = this;
-        if (prefix === void 0) { prefix = ""; }
-        var paths = [];
-        Object.keys(entity).forEach(function (key) {
+    static createPropertyPath(metadata, entity, prefix = "") {
+        const paths = [];
+        Object.keys(entity).forEach((key) => {
             // check for function is needed in the cases when createPropertyPath used on values containg a function as a value
             // example: .update().set({ name: () => `SUBSTR('', 1, 2)` })
-            var parentPath = prefix ? prefix + "." + key : key;
+            const parentPath = prefix ? prefix + "." + key : key;
             if (metadata.hasEmbeddedWithPropertyPath(parentPath)) {
-                var subPaths = _this.createPropertyPath(metadata, entity[key], parentPath);
-                paths.push.apply(paths, __spreadArray([], __read(subPaths), false));
+                const subPaths = this.createPropertyPath(metadata, entity[key], parentPath);
+                paths.push(...subPaths);
             }
             else {
-                var path = prefix ? prefix + "." + key : key;
+                const path = prefix ? prefix + "." + key : key;
                 paths.push(path);
             }
         });
         return paths;
-    };
+    }
     /**
      * Finds difference between two entity id maps.
      * Returns items that exist in the first array and absent in the second array.
      */
-    EntityMetadata.difference = function (firstIdMaps, secondIdMaps) {
-        return firstIdMaps.filter(function (firstIdMap) {
-            return !secondIdMaps.find(function (secondIdMap) { return OrmUtils.compareIds(firstIdMap, secondIdMap); });
+    static difference(firstIdMaps, secondIdMaps) {
+        return firstIdMaps.filter((firstIdMap) => {
+            return !secondIdMaps.find((secondIdMap) => OrmUtils.compareIds(firstIdMap, secondIdMap));
         });
-    };
+    }
     /**
      * Creates value map from the given values and columns.
      * Examples of usages are primary columns map and join columns map.
      */
-    EntityMetadata.getValueMap = function (entity, columns, options) {
-        return columns.reduce(function (map, column) {
-            var value = column.getEntityValueMap(entity, options);
+    static getValueMap(entity, columns, options) {
+        return columns.reduce((map, column) => {
+            const value = column.getEntityValueMap(entity, options);
             // make sure that none of the values of the columns are not missing
             if (map === undefined || value === null || value === undefined)
                 return undefined;
             return OrmUtils.mergeDeep(map, value);
         }, {});
-    };
+    }
     // ---------------------------------------------------------------------
     // Public Builder Methods
     // ---------------------------------------------------------------------
-    EntityMetadata.prototype.build = function () {
+    build() {
         var _a;
-        var namingStrategy = this.connection.namingStrategy;
-        var entityPrefix = this.connection.options.entityPrefix;
-        var entitySkipConstructor = this.connection.options.entitySkipConstructor;
+        const namingStrategy = this.connection.namingStrategy;
+        const entityPrefix = this.connection.options.entityPrefix;
+        const entitySkipConstructor = this.connection.options.entitySkipConstructor;
         this.engine = this.tableMetadataArgs.engine;
-        this.database = this.tableMetadataArgs.type === "entity-child" && this.parentEntityMetadata ? this.parentEntityMetadata.database : this.tableMetadataArgs.database;
+        this.database =
+            this.tableMetadataArgs.type === "entity-child" &&
+                this.parentEntityMetadata
+                ? this.parentEntityMetadata.database
+                : this.tableMetadataArgs.database;
         if (this.tableMetadataArgs.schema) {
             this.schema = this.tableMetadataArgs.schema;
         }
-        else if ((this.tableMetadataArgs.type === "entity-child") && this.parentEntityMetadata) {
+        else if (this.tableMetadataArgs.type === "entity-child" &&
+            this.parentEntityMetadata) {
             this.schema = this.parentEntityMetadata.schema;
         }
         else if ((_a = this.connection.options) === null || _a === void 0 ? void 0 : _a.hasOwnProperty("schema")) {
             this.schema = this.connection.options.schema;
         }
-        this.givenTableName = this.tableMetadataArgs.type === "entity-child" && this.parentEntityMetadata ? this.parentEntityMetadata.givenTableName : this.tableMetadataArgs.name;
-        this.synchronize = this.tableMetadataArgs.synchronize === false ? false : true;
-        this.targetName = this.tableMetadataArgs.target instanceof Function ? this.tableMetadataArgs.target.name : this.tableMetadataArgs.target;
+        this.givenTableName =
+            this.tableMetadataArgs.type === "entity-child" &&
+                this.parentEntityMetadata
+                ? this.parentEntityMetadata.givenTableName
+                : this.tableMetadataArgs.name;
+        this.synchronize =
+            this.tableMetadataArgs.synchronize === false ? false : true;
+        this.targetName =
+            typeof this.tableMetadataArgs.target === "function"
+                ? this.tableMetadataArgs.target.name
+                : this.tableMetadataArgs.target;
         if (this.tableMetadataArgs.type === "closure-junction") {
-            this.tableNameWithoutPrefix = namingStrategy.closureJunctionTableName(this.givenTableName);
+            this.tableNameWithoutPrefix =
+                namingStrategy.closureJunctionTableName(this.givenTableName);
         }
-        else if (this.tableMetadataArgs.type === "entity-child" && this.parentEntityMetadata) {
+        else if (this.tableMetadataArgs.type === "entity-child" &&
+            this.parentEntityMetadata) {
             this.tableNameWithoutPrefix = namingStrategy.tableName(this.parentEntityMetadata.targetName, this.parentEntityMetadata.givenTableName);
         }
         else {
             this.tableNameWithoutPrefix = namingStrategy.tableName(this.targetName, this.givenTableName);
-            if (this.connection.driver.maxAliasLength && this.connection.driver.maxAliasLength > 0 && this.tableNameWithoutPrefix.length > this.connection.driver.maxAliasLength) {
+            if (this.tableMetadataArgs.type === "junction" &&
+                this.connection.driver.maxAliasLength &&
+                this.connection.driver.maxAliasLength > 0 &&
+                this.tableNameWithoutPrefix.length >
+                    this.connection.driver.maxAliasLength) {
+                // note: we are not using DriverUtils.buildAlias here because we would like to avoid
+                // hashed table names. However, current algorithm also isn't perfect, but we cannot
+                // change it, since it's a big breaking change. Planned to 0.4.0
                 this.tableNameWithoutPrefix = shorten(this.tableNameWithoutPrefix, { separator: "_", segmentLength: 3 });
             }
         }
-        this.tableName = entityPrefix ? namingStrategy.prefixTableName(entityPrefix, this.tableNameWithoutPrefix) : this.tableNameWithoutPrefix;
+        this.tableName = entityPrefix
+            ? namingStrategy.prefixTableName(entityPrefix, this.tableNameWithoutPrefix)
+            : this.tableNameWithoutPrefix;
         this.target = this.target ? this.target : this.tableName;
         this.name = this.targetName ? this.targetName : this.tableName;
         this.expression = this.tableMetadataArgs.expression;
-        this.withoutRowid = this.tableMetadataArgs.withoutRowid === true ? true : false;
+        this.withoutRowid =
+            this.tableMetadataArgs.withoutRowid === true ? true : false;
         this.tablePath = this.connection.driver.buildTableName(this.tableName, this.schema, this.database);
-        this.orderBy = (this.tableMetadataArgs.orderBy instanceof Function) ? this.tableMetadataArgs.orderBy(this.propertiesMap) : this.tableMetadataArgs.orderBy; // todo: is propertiesMap available here? Looks like its not
+        this.orderBy =
+            typeof this.tableMetadataArgs.orderBy === "function"
+                ? this.tableMetadataArgs.orderBy(this.propertiesMap)
+                : this.tableMetadataArgs.orderBy; // todo: is propertiesMap available here? Looks like its not
         if (entitySkipConstructor !== undefined) {
             this.isAlwaysUsingConstructor = !entitySkipConstructor;
         }
-        this.isJunction = this.tableMetadataArgs.type === "closure-junction" || this.tableMetadataArgs.type === "junction";
-        this.isClosureJunction = this.tableMetadataArgs.type === "closure-junction";
-    };
+        this.isJunction =
+            this.tableMetadataArgs.type === "closure-junction" ||
+                this.tableMetadataArgs.type === "junction";
+        this.isClosureJunction =
+            this.tableMetadataArgs.type === "closure-junction";
+    }
     /**
      * Registers a new column in the entity and recomputes all depend properties.
      */
-    EntityMetadata.prototype.registerColumn = function (column) {
+    registerColumn(column) {
         if (this.ownColumns.indexOf(column) !== -1)
             return;
         this.ownColumns.push(column);
-        this.columns = this.embeddeds.reduce(function (columns, embedded) { return columns.concat(embedded.columnsFromTree); }, this.ownColumns);
-        this.primaryColumns = this.columns.filter(function (column) { return column.isPrimary; });
+        this.columns = this.embeddeds.reduce((columns, embedded) => columns.concat(embedded.columnsFromTree), this.ownColumns);
+        this.primaryColumns = this.columns.filter((column) => column.isPrimary);
         this.hasMultiplePrimaryKeys = this.primaryColumns.length > 1;
-        this.hasUUIDGeneratedColumns = this.columns.filter(function (column) { return column.isGenerated || column.generationStrategy === "uuid"; }).length > 0;
+        this.hasUUIDGeneratedColumns =
+            this.columns.filter((column) => column.isGenerated || column.generationStrategy === "uuid").length > 0;
         this.propertiesMap = this.createPropertiesMap();
         if (this.childEntityMetadatas)
-            this.childEntityMetadatas.forEach(function (entityMetadata) { return entityMetadata.registerColumn(column); });
-    };
+            this.childEntityMetadatas.forEach((entityMetadata) => entityMetadata.registerColumn(column));
+    }
     /**
      * Creates a special object - all columns and relations of the object (plus columns and relations from embeds)
      * in a special format - { propertyName: propertyName }.
@@ -582,14 +634,28 @@ var EntityMetadata = /** @class */ (function () {
      * This method will create following object:
      * { id: "id", counterEmbed: { count: "counterEmbed.count" }, category: "category" }
      */
-    EntityMetadata.prototype.createPropertiesMap = function () {
-        var map = {};
-        this.columns.forEach(function (column) { return OrmUtils.mergeDeep(map, column.createValueMap(column.propertyPath)); });
-        this.relations.forEach(function (relation) { return OrmUtils.mergeDeep(map, relation.createValueMap(relation.propertyPath)); });
+    createPropertiesMap() {
+        const map = {};
+        this.columns.forEach((column) => OrmUtils.mergeDeep(map, column.createValueMap(column.propertyPath)));
+        this.relations.forEach((relation) => OrmUtils.mergeDeep(map, relation.createValueMap(relation.propertyPath)));
         return map;
-    };
-    return EntityMetadata;
-}());
-export { EntityMetadata };
+    }
+    /**
+     * Checks if entity has any column which rely on returning data,
+     * e.g. columns with auto generated value, DEFAULT values considered as dependant of returning data.
+     * For example, if we need to have RETURNING after INSERT (or we need returned id for DBs not supporting RETURNING),
+     * it means we cannot execute bulk inserts in some cases.
+     */
+    getInsertionReturningColumns() {
+        return this.columns.filter((column) => {
+            return (column.default !== undefined ||
+                column.isGenerated ||
+                column.isCreateDate ||
+                column.isUpdateDate ||
+                column.isDeleteDate ||
+                column.isVersion);
+        });
+    }
+}
 
 //# sourceMappingURL=EntityMetadata.js.map

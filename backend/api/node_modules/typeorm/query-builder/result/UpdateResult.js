@@ -4,8 +4,8 @@ exports.UpdateResult = void 0;
 /**
  * Result object returned by UpdateQueryBuilder execution.
  */
-var UpdateResult = /** @class */ (function () {
-    function UpdateResult() {
+class UpdateResult {
+    constructor() {
         /**
          * Contains inserted entity id.
          * Has entity-like structure (not just column database name and values).
@@ -17,14 +17,13 @@ var UpdateResult = /** @class */ (function () {
          */
         this.generatedMaps = [];
     }
-    UpdateResult.from = function (queryResult) {
-        var result = new this();
+    static from(queryResult) {
+        const result = new this();
         result.raw = queryResult.records;
         result.affected = queryResult.affected;
         return result;
-    };
-    return UpdateResult;
-}());
+    }
+}
 exports.UpdateResult = UpdateResult;
 
 //# sourceMappingURL=UpdateResult.js.map

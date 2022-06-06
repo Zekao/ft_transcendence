@@ -1,7 +1,7 @@
 import { QueryBuilder } from "./QueryBuilder";
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { EntityTarget } from "../common/EntityTarget";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { WhereExpressionBuilder } from "./WhereExpressionBuilder";
 import { Brackets } from "./Brackets";
@@ -11,7 +11,8 @@ import { OrderByCondition } from "../find-options/OrderByCondition";
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export declare class SoftDeleteQueryBuilder<Entity> extends QueryBuilder<Entity> implements WhereExpressionBuilder {
-    constructor(connectionOrQueryBuilder: Connection | QueryBuilder<any>, queryRunner?: QueryRunner);
+    readonly "@instanceof": symbol;
+    constructor(connectionOrQueryBuilder: DataSource | QueryBuilder<any>, queryRunner?: QueryRunner);
     /**
      * Gets generated SQL query without parameters being replaced.
      */

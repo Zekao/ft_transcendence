@@ -1,28 +1,19 @@
-import { __extends } from "tslib";
-var TypeORMError = /** @class */ (function (_super) {
-    __extends(TypeORMError, _super);
-    function TypeORMError(message) {
-        var _newTarget = this.constructor;
-        var _this = _super.call(this, message) || this;
+export class TypeORMError extends Error {
+    get name() {
+        return this.constructor.name;
+    }
+    constructor(message) {
+        super(message);
         // restore prototype chain because the base `Error` type
         // will break the prototype chain a little
         if (Object.setPrototypeOf) {
-            Object.setPrototypeOf(_this, _newTarget.prototype);
+            Object.setPrototypeOf(this, new.target.prototype);
         }
         else {
-            _this.__proto__ = _newTarget.prototype;
+            ;
+            this.__proto__ = new.target.prototype;
         }
-        return _this;
     }
-    Object.defineProperty(TypeORMError.prototype, "name", {
-        get: function () {
-            return this.constructor.name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TypeORMError;
-}(Error));
-export { TypeORMError };
+}
 
 //# sourceMappingURL=TypeORMError.js.map

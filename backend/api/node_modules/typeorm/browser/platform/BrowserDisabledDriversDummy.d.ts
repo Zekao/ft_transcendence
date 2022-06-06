@@ -40,7 +40,7 @@ export declare class PostgresDriver {
  * DO NOT IMPORT THIS CLASS -
  * This is a dummy class for replacement via `package.json` in browser builds
  */
-export declare class AuroraDataApiDriver {
+export declare class AuroraMysqlDriver {
 }
 /**
  * DO NOT IMPORT THIS CLASS -
@@ -52,7 +52,7 @@ export declare class CockroachDriver {
  * DO NOT IMPORT THIS CLASS -
  * This is a dummy class for replacement via `package.json` in browser builds
  */
-export declare class AuroraDataApiPostgresDriver {
+export declare class AuroraPostgresDriver {
 }
 /**
  * DO NOT IMPORT THIS CLASS -

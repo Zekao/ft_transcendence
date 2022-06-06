@@ -6,6 +6,7 @@
 export declare class MssqlParameter {
     value: any;
     type: string;
+    readonly "@instanceof": symbol;
     params: any[];
     constructor(value: any, type: "bit");
     constructor(value: any, type: "bigint");

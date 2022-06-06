@@ -5,6 +5,7 @@ declare type SqlGeneratorType = (aliasPath: string) => string;
  * Find Operator used in Find Conditions.
  */
 export declare class FindOperator<T> {
+    readonly "@instanceof": symbol;
     /**
      * Operator type.
      */

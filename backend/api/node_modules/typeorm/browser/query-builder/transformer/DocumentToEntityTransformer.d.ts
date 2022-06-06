@@ -6,8 +6,7 @@ import { ObjectLiteral } from "../../common/ObjectLiteral";
  */
 export declare class DocumentToEntityTransformer {
     private enableRelationIdValues;
-    constructor(// private selectionMap: AliasMap,
-    enableRelationIdValues?: boolean);
+    constructor(enableRelationIdValues?: boolean);
     transformAll(documents: ObjectLiteral[], metadata: EntityMetadata): any[];
     transform(document: any, metadata: EntityMetadata): any;
 }

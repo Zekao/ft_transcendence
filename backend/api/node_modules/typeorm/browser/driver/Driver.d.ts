@@ -2,10 +2,11 @@ import { QueryRunner } from "../query-runner/QueryRunner";
 import { ColumnMetadata } from "../metadata/ColumnMetadata";
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { ColumnType } from "./types/ColumnTypes";
+import { CteCapabilities } from "./types/CteCapabilities";
 import { MappedColumnTypes } from "./types/MappedColumnTypes";
 import { SchemaBuilder } from "../schema-builder/SchemaBuilder";
 import { DataTypeDefaults } from "./types/DataTypeDefaults";
-import { BaseConnectionOptions } from "../connection/BaseConnectionOptions";
+import { BaseDataSourceOptions } from "../data-source/BaseDataSourceOptions";
 import { TableColumn } from "../schema-builder/table/TableColumn";
 import { EntityMetadata } from "../metadata/EntityMetadata";
 import { ReplicationMode } from "./types/ReplicationMode";
@@ -21,7 +22,7 @@ export interface Driver {
     /**
      * Connection options.
      */
-    options: BaseConnectionOptions;
+    options: BaseDataSourceOptions;
     /**
      * Database name used to perform all write queries.
      *
@@ -82,6 +83,7 @@ export interface Driver {
      * Max length allowed by the DBMS for aliases (execution of queries).
      */
     maxAliasLength?: number;
+    cteCapabilities: CteCapabilities;
     /**
      * Performs connection to the database.
      * Depend on driver type it may create a connection pool.

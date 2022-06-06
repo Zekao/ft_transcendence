@@ -1,5 +1,5 @@
 import { ObjectLiteral } from "../../common/ObjectLiteral";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { ColumnMetadata } from "../../metadata/ColumnMetadata";
 import { EntityMetadata } from "../../metadata/EntityMetadata";
 import { QueryRunner } from "../../query-runner/QueryRunner";
@@ -7,6 +7,7 @@ import { RdbmsSchemaBuilder } from "../../schema-builder/RdbmsSchemaBuilder";
 import { TableColumn } from "../../schema-builder/table/TableColumn";
 import { Driver } from "../Driver";
 import { ColumnType } from "../types/ColumnTypes";
+import { CteCapabilities } from "../types/CteCapabilities";
 import { DataTypeDefaults } from "../types/DataTypeDefaults";
 import { MappedColumnTypes } from "../types/MappedColumnTypes";
 import { ReplicationMode } from "../types/ReplicationMode";
@@ -22,7 +23,7 @@ export declare class PostgresDriver implements Driver {
     /**
      * Connection used by driver.
      */
-    connection: Connection;
+    connection: DataSource;
     /**
      * Postgres underlying library.
      */
@@ -116,7 +117,8 @@ export declare class PostgresDriver implements Driver {
      */
     maxAliasLength: number;
     isGeneratedColumnsSupported: boolean;
-    constructor(connection?: Connection);
+    cteCapabilities: CteCapabilities;
+    constructor(connection?: DataSource);
     /**
      * Performs connection to the database.
      * Based on pooling options, it can either create connection immediately,

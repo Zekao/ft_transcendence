@@ -1,8 +1,4 @@
-var EntitySchemaEmbeddedColumnOptions = /** @class */ (function () {
-    function EntitySchemaEmbeddedColumnOptions() {
-    }
-    return EntitySchemaEmbeddedColumnOptions;
-}());
-export { EntitySchemaEmbeddedColumnOptions };
+export class EntitySchemaEmbeddedColumnOptions {
+}
 
 //# sourceMappingURL=EntitySchemaEmbeddedColumnOptions.js.map

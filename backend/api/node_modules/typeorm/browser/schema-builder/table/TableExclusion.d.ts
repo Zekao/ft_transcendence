@@ -4,6 +4,7 @@ import { ExclusionMetadata } from "../../metadata/ExclusionMetadata";
  * Database's table exclusion constraint stored in this class.
  */
 export declare class TableExclusion {
+    readonly "@instanceof": symbol;
     /**
      * Constraint name.
      */

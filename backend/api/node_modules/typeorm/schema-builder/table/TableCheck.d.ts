@@ -4,6 +4,7 @@ import { CheckMetadata } from "../../metadata/CheckMetadata";
  * Database's table check constraint stored in this class.
  */
 export declare class TableCheck {
+    readonly "@instanceof": symbol;
     /**
      * Constraint name.
      */

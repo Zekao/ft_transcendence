@@ -1,14 +1,15 @@
 import { Driver } from "../Driver";
 import { ObjectLiteral } from "../../common/ObjectLiteral";
 import { ColumnMetadata } from "../../metadata/ColumnMetadata";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { RdbmsSchemaBuilder } from "../../schema-builder/RdbmsSchemaBuilder";
+import { CteCapabilities } from "../types/CteCapabilities";
 import { MappedColumnTypes } from "../types/MappedColumnTypes";
 import { ColumnType } from "../types/ColumnTypes";
 import { QueryRunner } from "../../query-runner/QueryRunner";
 import { DataTypeDefaults } from "../types/DataTypeDefaults";
 import { TableColumn } from "../../schema-builder/table/TableColumn";
-import { BaseConnectionOptions } from "../../connection/BaseConnectionOptions";
+import { BaseDataSourceOptions } from "../../data-source/BaseDataSourceOptions";
 import { EntityMetadata } from "../../metadata/EntityMetadata";
 import { ReplicationMode } from "../types/ReplicationMode";
 import { Table } from "../../schema-builder/table/Table";
@@ -26,7 +27,7 @@ export declare abstract class AbstractSqliteDriver implements Driver {
     /**
      * Connection used by driver.
      */
-    connection: Connection;
+    connection: DataSource;
     /**
      * Sqlite has a single QueryRunner because it works on a single database connection.
      */
@@ -38,7 +39,7 @@ export declare abstract class AbstractSqliteDriver implements Driver {
     /**
      * Connection options.
      */
-    options: BaseConnectionOptions;
+    options: BaseDataSourceOptions;
     /**
      * Master database used to perform all write queries.
      */
@@ -101,11 +102,12 @@ export declare abstract class AbstractSqliteDriver implements Driver {
      * for SQLite.
      */
     maxAliasLength?: number;
+    cteCapabilities: CteCapabilities;
     /**
      * Any attached databases (excepting default 'main')
      */
     attachedDatabases: DatabasesMap;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Creates a query runner used to execute database queries.
      */

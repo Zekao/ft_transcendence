@@ -1,6 +1,7 @@
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { QueryRunner } from "../query-runner/QueryRunner";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
+import { QueryBuilderCteOptions } from "./QueryBuilderCte";
 import { QueryExpressionMap } from "./QueryExpressionMap";
 import { SelectQueryBuilder } from "./SelectQueryBuilder";
 import { UpdateQueryBuilder } from "./UpdateQueryBuilder";
@@ -21,10 +22,11 @@ import { ReturningType } from "../driver/Driver";
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export declare abstract class QueryBuilder<Entity> {
+    readonly "@instanceof": symbol;
     /**
      * Connection on which QueryBuilder was created.
      */
-    readonly connection: Connection;
+    readonly connection: DataSource;
     /**
      * Contains all properties of the QueryBuilder that needs to be build a final query.
      */
@@ -48,7 +50,7 @@ export declare abstract class QueryBuilder<Entity> {
     /**
      * QueryBuilder can be initialized from given Connection and QueryRunner objects or from given other QueryBuilder.
      */
-    constructor(connection: Connection, queryRunner?: QueryRunner);
+    constructor(connection: DataSource, queryRunner?: QueryRunner);
     /**
      * Gets generated SQL query without parameters being replaced.
      */
@@ -202,6 +204,10 @@ export declare abstract class QueryBuilder<Entity> {
      */
     useTransaction(enabled: boolean): this;
     /**
+     * Adds CTE to query
+     */
+    addCommonTableExpression(queryBuilder: QueryBuilder<any> | string, alias: string, options?: QueryBuilderCteOptions): this;
+    /**
      * Gets escaped table name with schema name if SqlServer driver used with custom
      * schema name, otherwise returns escaped table name.
      */
@@ -238,6 +244,7 @@ export declare abstract class QueryBuilder<Entity> {
      * Computes given where argument - transforms to a where string all forms it can take.
      */
     protected createWhereConditionExpression(condition: WhereClauseCondition, alwaysWrap?: boolean): string;
+    protected createCteExpression(): string;
     /**
      * Creates "WHERE" condition for an in-ids condition.
      */
@@ -254,4 +261,5 @@ export declare abstract class QueryBuilder<Entity> {
      * Creates a query builder used to execute sql queries inside this query builder.
      */
     protected obtainQueryRunner(): QueryRunner;
+    protected hasCommonTableExpressions(): boolean;
 }

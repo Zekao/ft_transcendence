@@ -9,8 +9,11 @@ import { PrimaryColumnCannotBeNullableError } from "../../error/PrimaryColumnCan
 export function PrimaryColumn(typeOrOptions, options) {
     return function (object, propertyName) {
         // normalize parameters
-        var type;
-        if (typeof typeOrOptions === "string") {
+        let type;
+        if (typeof typeOrOptions === "string" ||
+            typeOrOptions === String ||
+            typeOrOptions === Boolean ||
+            typeOrOptions === Number) {
             type = typeOrOptions;
         }
         else {
@@ -19,7 +22,9 @@ export function PrimaryColumn(typeOrOptions, options) {
         if (!options)
             options = {};
         // if type is not given explicitly then try to guess it
-        var reflectMetadataType = Reflect && Reflect.getMetadata ? Reflect.getMetadata("design:type", object, propertyName) : undefined;
+        const reflectMetadataType = Reflect && Reflect.getMetadata
+            ? Reflect.getMetadata("design:type", object, propertyName)
+            : undefined;
         if (!type && reflectMetadataType)
             type = reflectMetadataType;
         // check if there is no type in column options then set type from first function argument, or guessed one
@@ -38,13 +43,15 @@ export function PrimaryColumn(typeOrOptions, options) {
             target: object.constructor,
             propertyName: propertyName,
             mode: "regular",
-            options: options
+            options: options,
         });
         if (options.generated) {
             getMetadataArgsStorage().generations.push({
                 target: object.constructor,
                 propertyName: propertyName,
-                strategy: typeof options.generated === "string" ? options.generated : "increment"
+                strategy: typeof options.generated === "string"
+                    ? options.generated
+                    : "increment",
             });
         }
     };

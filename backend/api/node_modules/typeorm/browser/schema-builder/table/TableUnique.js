@@ -1,12 +1,12 @@
-import { __read, __spreadArray } from "tslib";
 /**
  * Database's table unique constraint stored in this class.
  */
-var TableUnique = /** @class */ (function () {
+export class TableUnique {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function TableUnique(options) {
+    constructor(options) {
+        this["@instanceof"] = Symbol.for("TableUnique");
         /**
          * Columns that contains this constraint.
          */
@@ -21,28 +21,26 @@ var TableUnique = /** @class */ (function () {
     /**
      * Creates a new copy of this constraint with exactly same properties.
      */
-    TableUnique.prototype.clone = function () {
+    clone() {
         return new TableUnique({
             name: this.name,
-            columnNames: __spreadArray([], __read(this.columnNames), false),
+            columnNames: [...this.columnNames],
             deferrable: this.deferrable,
         });
-    };
+    }
     // -------------------------------------------------------------------------
     // Static Methods
     // -------------------------------------------------------------------------
     /**
      * Creates unique from the unique metadata object.
      */
-    TableUnique.create = function (uniqueMetadata) {
+    static create(uniqueMetadata) {
         return new TableUnique({
             name: uniqueMetadata.name,
-            columnNames: uniqueMetadata.columns.map(function (column) { return column.databaseName; }),
+            columnNames: uniqueMetadata.columns.map((column) => column.databaseName),
             deferrable: uniqueMetadata.deferrable,
         });
-    };
-    return TableUnique;
-}());
-export { TableUnique };
+    }
+}
 
 //# sourceMappingURL=TableUnique.js.map

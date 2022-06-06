@@ -11,22 +11,21 @@ import { SqljsDriver } from "./sqljs/SqljsDriver";
 import { MysqlDriver } from "./mysql/MysqlDriver";
 import { PostgresDriver } from "./postgres/PostgresDriver";
 import { ExpoDriver } from "./expo/ExpoDriver";
-import { AuroraDataApiDriver } from "./aurora-data-api/AuroraDataApiDriver";
-import { AuroraDataApiPostgresDriver } from "./aurora-data-api-pg/AuroraDataApiPostgresDriver";
+import { AuroraMysqlDriver } from "./aurora-mysql/AuroraMysqlDriver";
+import { AuroraPostgresDriver } from "./aurora-postgres/AuroraPostgresDriver";
 import { SapDriver } from "./sap/SapDriver";
 import { BetterSqlite3Driver } from "./better-sqlite3/BetterSqlite3Driver";
 import { CapacitorDriver } from "./capacitor/CapacitorDriver";
+import { SpannerDriver } from "./spanner/SpannerDriver";
 /**
  * Helps to create drivers.
  */
-var DriverFactory = /** @class */ (function () {
-    function DriverFactory() {
-    }
+export class DriverFactory {
     /**
      * Creates a new driver depend on a given connection's driver type.
      */
-    DriverFactory.prototype.create = function (connection) {
-        var type = connection.options.type;
+    create(connection) {
+        const { type } = connection.options;
         switch (type) {
             case "mysql":
                 return new MysqlDriver(connection);
@@ -58,16 +57,18 @@ var DriverFactory = /** @class */ (function () {
                 return new MongoDriver(connection);
             case "expo":
                 return new ExpoDriver(connection);
-            case "aurora-data-api":
-                return new AuroraDataApiDriver(connection);
-            case "aurora-data-api-pg":
-                return new AuroraDataApiPostgresDriver(connection);
+            case "aurora-mysql":
+                return new AuroraMysqlDriver(connection);
+            case "aurora-postgres":
+                return new AuroraPostgresDriver(connection);
             case "capacitor":
                 return new CapacitorDriver(connection);
+            case "spanner":
+                return new SpannerDriver(connection);
             default:
                 throw new MissingDriverError(type, [
-                    "aurora-data-api",
-                    "aurora-data-api-pg",
+                    "aurora-mysql",
+                    "aurora-postgres",
                     "better-sqlite3",
                     "capacitor",
                     "cockroachdb",
@@ -84,11 +85,10 @@ var DriverFactory = /** @class */ (function () {
                     "sap",
                     "sqlite",
                     "sqljs",
+                    "spanner",
                 ]);
         }
-    };
-    return DriverFactory;
-}());
-export { DriverFactory };
+    }
+}
 
 //# sourceMappingURL=DriverFactory.js.map

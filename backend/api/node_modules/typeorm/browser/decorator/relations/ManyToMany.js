@@ -1,4 +1,5 @@
 import { getMetadataArgsStorage } from "../../globals";
+import { ObjectUtils } from "../../util/ObjectUtils";
 /**
  * Many-to-many is a type of relationship when Entity1 can have multiple instances of Entity2, and Entity2 can have
  * multiple instances of Entity1. To achieve it, this type of relation creates a junction table, where it storage
@@ -6,8 +7,8 @@ import { getMetadataArgsStorage } from "../../globals";
  */
 export function ManyToMany(typeFunctionOrTarget, inverseSideOrOptions, options) {
     // normalize parameters
-    var inverseSideProperty;
-    if (typeof inverseSideOrOptions === "object") {
+    let inverseSideProperty;
+    if (ObjectUtils.isObject(inverseSideOrOptions)) {
         options = inverseSideOrOptions;
     }
     else {
@@ -17,10 +18,13 @@ export function ManyToMany(typeFunctionOrTarget, inverseSideOrOptions, options) 
         if (!options)
             options = {};
         // now try to determine it its lazy relation
-        var isLazy = options.lazy === true;
-        if (!isLazy && Reflect && Reflect.getMetadata) { // automatic determination
-            var reflectedType = Reflect.getMetadata("design:type", object, propertyName);
-            if (reflectedType && typeof reflectedType.name === "string" && reflectedType.name.toLowerCase() === "promise")
+        let isLazy = options.lazy === true;
+        if (!isLazy && Reflect && Reflect.getMetadata) {
+            // automatic determination
+            const reflectedType = Reflect.getMetadata("design:type", object, propertyName);
+            if (reflectedType &&
+                typeof reflectedType.name === "string" &&
+                reflectedType.name.toLowerCase() === "promise")
                 isLazy = true;
         }
         getMetadataArgsStorage().relations.push({
@@ -31,7 +35,7 @@ export function ManyToMany(typeFunctionOrTarget, inverseSideOrOptions, options) 
             isLazy: isLazy,
             type: typeFunctionOrTarget,
             inverseSideProperty: inverseSideProperty,
-            options: options
+            options: options,
         });
     };
 }

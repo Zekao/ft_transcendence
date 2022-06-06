@@ -1,12 +1,12 @@
-import { __read, __spreadArray } from "tslib";
 /**
  * Foreign key from the database stored in this class.
  */
-var TableForeignKey = /** @class */ (function () {
+export class TableForeignKey {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function TableForeignKey(options) {
+    constructor(options) {
+        this["@instanceof"] = Symbol.for("TableForeignKey");
         /**
          * Column names which included by this foreign key.
          */
@@ -31,11 +31,11 @@ var TableForeignKey = /** @class */ (function () {
     /**
      * Creates a new copy of this foreign key with exactly same properties.
      */
-    TableForeignKey.prototype.clone = function () {
+    clone() {
         return new TableForeignKey({
             name: this.name,
-            columnNames: __spreadArray([], __read(this.columnNames), false),
-            referencedColumnNames: __spreadArray([], __read(this.referencedColumnNames), false),
+            columnNames: [...this.columnNames],
+            referencedColumnNames: [...this.referencedColumnNames],
             referencedDatabase: this.referencedDatabase,
             referencedSchema: this.referencedSchema,
             referencedTableName: this.referencedTableName,
@@ -43,14 +43,14 @@ var TableForeignKey = /** @class */ (function () {
             onUpdate: this.onUpdate,
             deferrable: this.deferrable,
         });
-    };
+    }
     // -------------------------------------------------------------------------
     // Static Methods
     // -------------------------------------------------------------------------
     /**
      * Creates a new table foreign key from the given foreign key metadata.
      */
-    TableForeignKey.create = function (metadata, driver) {
+    static create(metadata, driver) {
         return new TableForeignKey({
             name: metadata.name,
             columnNames: metadata.columnNames,
@@ -62,9 +62,7 @@ var TableForeignKey = /** @class */ (function () {
             onUpdate: metadata.onUpdate,
             deferrable: metadata.deferrable,
         });
-    };
-    return TableForeignKey;
-}());
-export { TableForeignKey };
+    }
+}
 
 //# sourceMappingURL=TableForeignKey.js.map

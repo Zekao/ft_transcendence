@@ -1,11 +1,11 @@
 import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
 import { CordovaConnectionOptions } from "./CordovaConnectionOptions";
 import { QueryRunner } from "../../query-runner/QueryRunner";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { ReplicationMode } from "../types/ReplicationMode";
 export declare class CordovaDriver extends AbstractSqliteDriver {
     options: CordovaConnectionOptions;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Closes connection with database.
      */

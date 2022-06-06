@@ -1,4 +1,4 @@
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { ColumnType } from "../types/ColumnTypes";
 import { QueryRunner } from "../../query-runner/QueryRunner";
 import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
@@ -16,7 +16,7 @@ export declare class BetterSqlite3Driver extends AbstractSqliteDriver {
      * SQLite underlying library.
      */
     sqlite: any;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Closes connection with database.
      */

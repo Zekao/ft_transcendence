@@ -11,6 +11,7 @@ import { TableExclusion } from "./TableExclusion";
  * Table in the database represented in this class.
  */
 export declare class Table {
+    readonly "@instanceof": symbol;
     /**
      * Database name that this table resides in if it applies.
      */

@@ -4,5 +4,6 @@
 export declare class Query {
     query: string;
     parameters?: any[] | undefined;
+    readonly "@instanceof": symbol;
     constructor(query: string, parameters?: any[] | undefined);
 }

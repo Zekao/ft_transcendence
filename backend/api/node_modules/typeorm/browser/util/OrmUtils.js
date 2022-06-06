@@ -1,28 +1,25 @@
-import { __values } from "tslib";
-var OrmUtils = /** @class */ (function () {
-    function OrmUtils() {
-    }
+export class OrmUtils {
     // -------------------------------------------------------------------------
     // Public methods
     // -------------------------------------------------------------------------
     /**
      * Chunks array into pieces.
      */
-    OrmUtils.chunk = function (array, size) {
-        return Array.from(Array(Math.ceil(array.length / size)), function (_, i) {
+    static chunk(array, size) {
+        return Array.from(Array(Math.ceil(array.length / size)), (_, i) => {
             return array.slice(i * size, i * size + size);
         });
-    };
-    OrmUtils.splitClassesAndStrings = function (clsesAndStrings) {
+    }
+    static splitClassesAndStrings(clsesAndStrings) {
         return [
-            (clsesAndStrings).filter(function (cls) { return typeof cls !== "string"; }),
-            (clsesAndStrings).filter(function (str) { return typeof str === "string"; }),
+            clsesAndStrings.filter((cls) => typeof cls !== "string"),
+            clsesAndStrings.filter((str) => typeof str === "string"),
         ];
-    };
-    OrmUtils.groupBy = function (array, propertyCallback) {
-        return array.reduce(function (groupedArray, value) {
-            var key = propertyCallback(value);
-            var grouped = groupedArray.find(function (i) { return i.id === key; });
+    }
+    static groupBy(array, propertyCallback) {
+        return array.reduce((groupedArray, value) => {
+            const key = propertyCallback(value);
+            let grouped = groupedArray.find((i) => i.id === key);
             if (!grouped) {
                 grouped = { id: key, items: [] };
                 groupedArray.push(grouped);
@@ -30,16 +27,17 @@ var OrmUtils = /** @class */ (function () {
             grouped.items.push(value);
             return groupedArray;
         }, []);
-    };
-    OrmUtils.uniq = function (array, criteriaOrProperty) {
-        return array.reduce(function (uniqueArray, item) {
-            var found = false;
-            if (criteriaOrProperty instanceof Function) {
-                var itemValue_1 = criteriaOrProperty(item);
-                found = !!uniqueArray.find(function (uniqueItem) { return criteriaOrProperty(uniqueItem) === itemValue_1; });
+    }
+    static uniq(array, criteriaOrProperty) {
+        return array.reduce((uniqueArray, item) => {
+            let found = false;
+            if (typeof criteriaOrProperty === "function") {
+                const itemValue = criteriaOrProperty(item);
+                found = !!uniqueArray.find((uniqueItem) => criteriaOrProperty(uniqueItem) === itemValue);
             }
             else if (typeof criteriaOrProperty === "string") {
-                found = !!uniqueArray.find(function (uniqueItem) { return uniqueItem[criteriaOrProperty] === item[criteriaOrProperty]; });
+                found = !!uniqueArray.find((uniqueItem) => uniqueItem[criteriaOrProperty] ===
+                    item[criteriaOrProperty]);
             }
             else {
                 found = uniqueArray.indexOf(item) !== -1;
@@ -48,15 +46,15 @@ var OrmUtils = /** @class */ (function () {
                 uniqueArray.push(item);
             return uniqueArray;
         }, []);
-    };
+    }
     // Checks if it's an object made by Object.create(null), {} or new Object()
-    OrmUtils.isPlainObject = function (item) {
+    static isPlainObject(item) {
         if (item === null || item === undefined) {
             return false;
         }
         return !item.constructor || item.constructor === Object;
-    };
-    OrmUtils.mergeArrayKey = function (target, key, value, memo) {
+    }
+    static mergeArrayKey(target, key, value, memo) {
         // Have we seen this before?  Prevent infinite recursion.
         if (memo.has(value)) {
             target[key] = memo.get(value);
@@ -79,12 +77,11 @@ var OrmUtils = /** @class */ (function () {
         memo.set(value, target[key]);
         this.merge(target[key], value, memo);
         memo.delete(value);
-    };
-    OrmUtils.mergeObjectKey = function (target, key, value, memo) {
-        var _a, _b, _c;
+    }
+    static mergeObjectKey(target, key, value, memo) {
         // Have we seen this before?  Prevent infinite recursion.
         if (memo.has(value)) {
-            Object.assign(target, (_a = {}, _a[key] = memo.get(value), _a));
+            Object.assign(target, { [key]: memo.get(value) });
             return;
         }
         if (value instanceof Promise) {
@@ -95,78 +92,47 @@ var OrmUtils = /** @class */ (function () {
             return;
         }
         if (!this.isPlainObject(value) && !Array.isArray(value)) {
-            Object.assign(target, (_b = {}, _b[key] = value, _b));
+            Object.assign(target, { [key]: value });
             return;
         }
         if (!target[key]) {
-            Object.assign(target, (_c = {}, _c[key] = Array.isArray(value) ? [] : {}, _c));
+            Object.assign(target, { [key]: Array.isArray(value) ? [] : {} });
         }
         memo.set(value, target[key]);
         this.merge(target[key], value, memo);
         memo.delete(value);
-    };
-    OrmUtils.merge = function (target, source, memo) {
-        var e_1, _a;
-        if (memo === void 0) { memo = new Map(); }
+    }
+    static merge(target, source, memo = new Map()) {
         if (this.isPlainObject(target) && this.isPlainObject(source)) {
-            try {
-                for (var _b = __values(Object.keys(source)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var key = _c.value;
-                    this.mergeObjectKey(target, key, source[key], memo);
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                }
-                finally { if (e_1) throw e_1.error; }
+            for (const key of Object.keys(source)) {
+                this.mergeObjectKey(target, key, source[key], memo);
             }
         }
         if (Array.isArray(target) && Array.isArray(source)) {
-            for (var key = 0; key < source.length; key++) {
+            for (let key = 0; key < source.length; key++) {
                 this.mergeArrayKey(target, key, source[key], memo);
             }
         }
-    };
+    }
     /**
      * Deep Object.assign.
      */
-    OrmUtils.mergeDeep = function (target) {
-        var e_2, _a;
-        var sources = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            sources[_i - 1] = arguments[_i];
-        }
+    static mergeDeep(target, ...sources) {
         if (!sources.length) {
             return target;
         }
-        try {
-            for (var sources_1 = __values(sources), sources_1_1 = sources_1.next(); !sources_1_1.done; sources_1_1 = sources_1.next()) {
-                var source = sources_1_1.value;
-                OrmUtils.merge(target, source);
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (sources_1_1 && !sources_1_1.done && (_a = sources_1.return)) _a.call(sources_1);
-            }
-            finally { if (e_2) throw e_2.error; }
+        for (const source of sources) {
+            OrmUtils.merge(target, source);
         }
         return target;
-    };
+    }
     /**
      * Deep compare objects.
      *
      * @see http://stackoverflow.com/a/1144249
      */
-    OrmUtils.deepCompare = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        var i, l, leftChain, rightChain;
+    static deepCompare(...args) {
+        let i, l, leftChain, rightChain;
         if (arguments.length < 1) {
             return true; // Die silently? Don't know how to handle such case, please help...
             // throw "Need two or more arguments to compare";
@@ -179,26 +145,82 @@ var OrmUtils = /** @class */ (function () {
             }
         }
         return true;
-    };
+    }
+    /**
+     * Gets deeper value of object.
+     */
+    static deepValue(obj, path) {
+        const segments = path.split(".");
+        for (let i = 0, len = segments.length; i < len; i++) {
+            obj = obj[segments[i]];
+        }
+        return obj;
+    }
+    static replaceEmptyObjectsWithBooleans(obj) {
+        for (let key in obj) {
+            if (obj[key] && typeof obj[key] === "object") {
+                if (Object.keys(obj[key]).length === 0) {
+                    obj[key] = true;
+                }
+                else {
+                    this.replaceEmptyObjectsWithBooleans(obj[key]);
+                }
+            }
+        }
+    }
+    static propertyPathsToTruthyObject(paths) {
+        let obj = {};
+        for (let path of paths) {
+            const props = path.split(".");
+            if (!props.length)
+                continue;
+            if (!obj[props[0]] || obj[props[0]] === true) {
+                obj[props[0]] = {};
+            }
+            let recursiveChild = obj[props[0]];
+            for (let [key, prop] of props.entries()) {
+                if (key === 0)
+                    continue;
+                if (recursiveChild[prop]) {
+                    recursiveChild = recursiveChild[prop];
+                }
+                else if (key === props.length - 1) {
+                    recursiveChild[prop] = {};
+                    recursiveChild = null;
+                }
+                else {
+                    recursiveChild[prop] = {};
+                    recursiveChild = recursiveChild[prop];
+                }
+            }
+        }
+        this.replaceEmptyObjectsWithBooleans(obj);
+        return obj;
+    }
     /**
      * Check if two entity-id-maps are the same
      */
-    OrmUtils.compareIds = function (firstId, secondId) {
-        if (firstId === undefined || firstId === null || secondId === undefined || secondId === null)
+    static compareIds(firstId, secondId) {
+        if (firstId === undefined ||
+            firstId === null ||
+            secondId === undefined ||
+            secondId === null)
             return false;
         // Optimized version for the common case
-        if (((typeof firstId.id === "string" && typeof secondId.id === "string") ||
-            (typeof firstId.id === "number" && typeof secondId.id === "number")) &&
+        if (((typeof firstId.id === "string" &&
+            typeof secondId.id === "string") ||
+            (typeof firstId.id === "number" &&
+                typeof secondId.id === "number")) &&
             Object.keys(firstId).length === 1 &&
             Object.keys(secondId).length === 1) {
             return firstId.id === secondId.id;
         }
         return OrmUtils.deepCompare(firstId, secondId);
-    };
+    }
     /**
      * Transforms given value into boolean value.
      */
-    OrmUtils.toBoolean = function (value) {
+    static toBoolean(value) {
         if (typeof value === "boolean")
             return value;
         if (typeof value === "string")
@@ -206,42 +228,38 @@ var OrmUtils = /** @class */ (function () {
         if (typeof value === "number")
             return value > 0;
         return false;
-    };
+    }
     /**
      * Composes an object from the given array of keys and values.
      */
-    OrmUtils.zipObject = function (keys, values) {
-        return keys.reduce(function (object, column, index) {
+    static zipObject(keys, values) {
+        return keys.reduce((object, column, index) => {
             object[column] = values[index];
             return object;
         }, {});
-    };
+    }
     /**
      * Compares two arrays.
      */
-    OrmUtils.isArraysEqual = function (arr1, arr2) {
+    static isArraysEqual(arr1, arr2) {
         if (arr1.length !== arr2.length)
             return false;
-        return arr1.every(function (element) {
+        return arr1.every((element) => {
             return arr2.indexOf(element) !== -1;
         });
-    };
-    OrmUtils.areMutuallyExclusive = function () {
-        var lists = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            lists[_i] = arguments[_i];
-        }
-        var haveSharedObjects = lists.some(function (list) {
-            var otherLists = lists.filter(function (otherList) { return otherList !== list; });
-            return list.some(function (item) { return otherLists.some(function (otherList) { return otherList.includes(item); }); });
+    }
+    static areMutuallyExclusive(...lists) {
+        const haveSharedObjects = lists.some((list) => {
+            const otherLists = lists.filter((otherList) => otherList !== list);
+            return list.some((item) => otherLists.some((otherList) => otherList.includes(item)));
         });
         return !haveSharedObjects;
-    };
+    }
     // -------------------------------------------------------------------------
     // Private methods
     // -------------------------------------------------------------------------
-    OrmUtils.compare2Objects = function (leftChain, rightChain, x, y) {
-        var p;
+    static compare2Objects(leftChain, rightChain, x, y) {
+        let p;
         // remember that NaN === NaN returns false
         // and isNaN(undefined) returns true
         if (Number.isNaN(x) && Number.isNaN(y))
@@ -257,7 +275,9 @@ var OrmUtils = /** @class */ (function () {
             return false;
         // Fix the buffer compare bug.
         // See: https://github.com/typeorm/typeorm/issues/3654
-        if ((typeof x.equals === "function" || x.equals instanceof Function) && x.equals(y))
+        if ((typeof x.equals === "function" ||
+            typeof x.equals === "function") &&
+            x.equals(y))
             return true;
         // Works in case when functions are created in constructor.
         // Comparing dates is a common scenario. Another built-ins?
@@ -265,11 +285,11 @@ var OrmUtils = /** @class */ (function () {
         if ((typeof x === "function" && typeof y === "function") ||
             (x instanceof Date && y instanceof Date) ||
             (x instanceof RegExp && y instanceof RegExp) ||
-            (x instanceof String && y instanceof String) ||
-            (x instanceof Number && y instanceof Number))
+            (typeof x === "string" && typeof y === "string") ||
+            (typeof x === "number" && typeof y === "number"))
             return x.toString() === y.toString();
         // At last checking prototypes as good as we can
-        if (!(x instanceof Object && y instanceof Object))
+        if (!(typeof x === "object" && typeof y === "object"))
             return false;
         if (x.isPrototypeOf(y) || y.isPrototypeOf(x))
             return false;
@@ -297,7 +317,7 @@ var OrmUtils = /** @class */ (function () {
             else if (typeof y[p] !== typeof x[p]) {
                 return false;
             }
-            switch (typeof (x[p])) {
+            switch (typeof x[p]) {
                 case "object":
                 case "function":
                     leftChain.push(x);
@@ -316,9 +336,7 @@ var OrmUtils = /** @class */ (function () {
             }
         }
         return true;
-    };
-    return OrmUtils;
-}());
-export { OrmUtils };
+    }
+}
 
 //# sourceMappingURL=OrmUtils.js.map

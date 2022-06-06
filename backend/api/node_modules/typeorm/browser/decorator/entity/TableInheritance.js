@@ -7,7 +7,11 @@ export function TableInheritance(options) {
         getMetadataArgsStorage().inheritances.push({
             target: target,
             pattern: options && options.pattern ? options.pattern : "STI",
-            column: options && options.column ? typeof options.column === "string" ? { name: options.column } : options.column : undefined
+            column: options && options.column
+                ? typeof options.column === "string"
+                    ? { name: options.column }
+                    : options.column
+                : undefined,
         });
     };
 }

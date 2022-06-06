@@ -5,6 +5,7 @@ import { QueryBuilder } from "./QueryBuilder";
  * todo: add transactions everywhere
  */
 export declare class RelationQueryBuilder<Entity> extends QueryBuilder<Entity> {
+    readonly "@instanceof": symbol;
     /**
      * Gets generated SQL query without parameters being replaced.
      */

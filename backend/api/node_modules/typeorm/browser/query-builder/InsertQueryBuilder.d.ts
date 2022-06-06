@@ -9,6 +9,7 @@ import { InsertOrUpdateOptions } from "./InsertOrUpdateOptions";
  * Allows to build complex sql queries in a fashion way and execute those queries.
  */
 export declare class InsertQueryBuilder<Entity> extends QueryBuilder<Entity> {
+    readonly "@instanceof": symbol;
     /**
      * Gets generated SQL query without parameters being replaced.
      */
@@ -71,6 +72,15 @@ export declare class InsertQueryBuilder<Entity> extends QueryBuilder<Entity> {
     orIgnore(statement?: string | boolean): this;
     /**
      * @deprecated
+     *
+     * `.orUpdate({ columns: [ "is_updated" ] }).setParameter("is_updated", value)`
+     *
+     * is now `.orUpdate(["is_updated"])`
+     *
+     * `.orUpdate({ conflict_target: ['date'], overwrite: ['title'] })`
+     *
+     * is now `.orUpdate(['title'], ['date'])`
+     *
      */
     orUpdate(statement?: {
         columns?: string[];

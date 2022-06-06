@@ -1,12 +1,12 @@
 import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
 import { SqljsConnectionOptions } from "./SqljsConnectionOptions";
 import { QueryRunner } from "../../query-runner/QueryRunner";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { EntityMetadata } from "../../metadata/EntityMetadata";
 import { ReplicationMode } from "../types/ReplicationMode";
 export declare class SqljsDriver extends AbstractSqliteDriver {
     options: SqljsConnectionOptions;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Performs connection to the database.
      */

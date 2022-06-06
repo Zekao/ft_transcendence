@@ -1,4 +1,4 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { EntityManager } from "./EntityManager";
 /**
@@ -6,8 +6,9 @@ import { EntityManager } from "./EntityManager";
  * that are unique to Sql.js.
  */
 export declare class SqljsEntityManager extends EntityManager {
+    readonly "@instanceof": symbol;
     private driver;
-    constructor(connection: Connection, queryRunner?: QueryRunner);
+    constructor(connection: DataSource, queryRunner?: QueryRunner);
     /**
      * Loads either the definition from a file (Node.js) or localstorage (browser)
      * or uses the given definition to open a new database.

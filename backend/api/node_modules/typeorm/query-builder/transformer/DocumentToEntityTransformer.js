@@ -5,40 +5,47 @@ exports.DocumentToEntityTransformer = void 0;
  * Transforms raw document into entity object.
  * Entity is constructed based on its entity metadata.
  */
-var DocumentToEntityTransformer = /** @class */ (function () {
+class DocumentToEntityTransformer {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function DocumentToEntityTransformer(// private selectionMap: AliasMap,
+    constructor(
+    // private selectionMap: AliasMap,
     // private joinMappings: JoinMapping[],
     // private relationCountMetas: RelationCountAttribute[],
-    enableRelationIdValues) {
-        if (enableRelationIdValues === void 0) { enableRelationIdValues = false; }
+    enableRelationIdValues = false) {
         this.enableRelationIdValues = enableRelationIdValues;
     }
     // -------------------------------------------------------------------------
     // Public Methods
     // -------------------------------------------------------------------------
-    DocumentToEntityTransformer.prototype.transformAll = function (documents, metadata) {
-        var _this = this;
-        return documents.map(function (document) { return _this.transform(document, metadata); });
-    };
-    DocumentToEntityTransformer.prototype.transform = function (document, metadata) {
-        var entity = metadata.create(undefined, { fromDeserializer: true });
-        var hasData = false;
+    transformAll(documents, metadata) {
+        return documents.map((document) => this.transform(document, metadata));
+    }
+    transform(document, metadata) {
+        const entity = metadata.create(undefined, {
+            fromDeserializer: true,
+        });
+        let hasData = false;
         // handle _id property the special way
-        if (metadata.objectIdColumn && document[metadata.objectIdColumn.databaseNameWithoutPrefixes]) {
+        if (metadata.objectIdColumn &&
+            document[metadata.objectIdColumn.databaseNameWithoutPrefixes]) {
             // todo: we can't use driver in this class
             // do we really need prepare hydrated value here? If no then no problem. If yes then think maybe prepareHydratedValue process should be extracted out of driver class?
             // entity[metadata.objectIdColumn.propertyName] = this.driver.prepareHydratedValue(document[metadata.objectIdColumn.name"], metadata.objectIdColumn);
-            entity[metadata.objectIdColumn.propertyName] = document[metadata.objectIdColumn.databaseNameWithoutPrefixes];
+            entity[metadata.objectIdColumn.propertyName] =
+                document[metadata.objectIdColumn.databaseNameWithoutPrefixes];
             hasData = true;
         }
         // add special columns that contains relation ids
         if (this.enableRelationIdValues) {
-            metadata.columns.filter(function (column) { return !!column.relationMetadata; }).forEach(function (column) {
-                var valueInObject = document[column.databaseNameWithoutPrefixes];
-                if (valueInObject !== undefined && valueInObject !== null && column.propertyName) {
+            metadata.columns
+                .filter((column) => !!column.relationMetadata)
+                .forEach((column) => {
+                const valueInObject = document[column.databaseNameWithoutPrefixes];
+                if (valueInObject !== undefined &&
+                    valueInObject !== null &&
+                    column.propertyName) {
                     // todo: we can't use driver in this class
                     // const value = this.driver.prepareHydratedValue(valueInObject, column);
                     entity[column.propertyName] = valueInObject;
@@ -59,8 +66,8 @@ var DocumentToEntityTransformer = /** @class */ (function () {
                 }
             });*/
         // get value from columns selections and put them into object
-        metadata.ownColumns.forEach(function (column) {
-            var valueInObject = document[column.databaseNameWithoutPrefixes];
+        metadata.ownColumns.forEach((column) => {
+            const valueInObject = document[column.databaseNameWithoutPrefixes];
             if (valueInObject !== undefined &&
                 column.propertyName &&
                 !column.isVirtual) {
@@ -69,30 +76,39 @@ var DocumentToEntityTransformer = /** @class */ (function () {
                 hasData = true;
             }
         });
-        var addEmbeddedValuesRecursively = function (entity, document, embeddeds) {
-            embeddeds.forEach(function (embedded) {
+        const addEmbeddedValuesRecursively = (entity, document, embeddeds) => {
+            embeddeds.forEach((embedded) => {
                 if (!document[embedded.prefix])
                     return;
                 if (embedded.isArray) {
-                    entity[embedded.propertyName] = document[embedded.prefix].map(function (subValue, index) {
-                        var newItem = embedded.create({ fromDeserializer: true });
-                        embedded.columns.forEach(function (column) {
-                            newItem[column.propertyName] = subValue[column.databaseNameWithoutPrefixes];
+                    entity[embedded.propertyName] = document[embedded.prefix].map((subValue, index) => {
+                        const newItem = embedded.create({
+                            fromDeserializer: true,
+                        });
+                        embedded.columns.forEach((column) => {
+                            newItem[column.propertyName] =
+                                subValue[column.databaseNameWithoutPrefixes];
                         });
                         addEmbeddedValuesRecursively(newItem, document[embedded.prefix][index], embedded.embeddeds);
                         return newItem;
                     });
                 }
                 else {
-                    if (embedded.embeddeds.length && !entity[embedded.propertyName])
-                        entity[embedded.propertyName] = embedded.create({ fromDeserializer: true });
-                    embedded.columns.forEach(function (column) {
-                        var value = document[embedded.prefix][column.databaseNameWithoutPrefixes];
+                    if (embedded.embeddeds.length &&
+                        !entity[embedded.propertyName])
+                        entity[embedded.propertyName] = embedded.create({
+                            fromDeserializer: true,
+                        });
+                    embedded.columns.forEach((column) => {
+                        const value = document[embedded.prefix][column.databaseNameWithoutPrefixes];
                         if (value === undefined)
                             return;
                         if (!entity[embedded.propertyName])
-                            entity[embedded.propertyName] = embedded.create({ fromDeserializer: true });
-                        entity[embedded.propertyName][column.propertyName] = value;
+                            entity[embedded.propertyName] = embedded.create({
+                                fromDeserializer: true,
+                            });
+                        entity[embedded.propertyName][column.propertyName] =
+                            value;
                     });
                 }
                 addEmbeddedValuesRecursively(entity[embedded.propertyName], document[embedded.prefix], embedded.embeddeds);
@@ -166,9 +182,8 @@ var DocumentToEntityTransformer = /** @class */ (function () {
             });
         });*/
         return hasData ? entity : null;
-    };
-    return DocumentToEntityTransformer;
-}());
+    }
+}
 exports.DocumentToEntityTransformer = DocumentToEntityTransformer;
 
 //# sourceMappingURL=DocumentToEntityTransformer.js.map

@@ -4,11 +4,12 @@ exports.View = void 0;
 /**
  * View in the database represented in this class.
  */
-var View = /** @class */ (function () {
+class View {
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
-    function View(options) {
+    constructor(options) {
+        this["@instanceof"] = Symbol.for("View");
         if (options) {
             this.database = options.database;
             this.schema = options.schema;
@@ -23,7 +24,7 @@ var View = /** @class */ (function () {
     /**
      * Clones this table to a new table with all properties cloned.
      */
-    View.prototype.clone = function () {
+    clone() {
         return new View({
             database: this.database,
             schema: this.schema,
@@ -31,25 +32,24 @@ var View = /** @class */ (function () {
             expression: this.expression,
             materialized: this.materialized,
         });
-    };
+    }
     // -------------------------------------------------------------------------
     // Static Methods
     // -------------------------------------------------------------------------
     /**
      * Creates view from a given entity metadata.
      */
-    View.create = function (entityMetadata, driver) {
-        var options = {
+    static create(entityMetadata, driver) {
+        const options = {
             database: entityMetadata.database,
             schema: entityMetadata.schema,
             name: driver.buildTableName(entityMetadata.tableName, entityMetadata.schema, entityMetadata.database),
             expression: entityMetadata.expression,
-            materialized: entityMetadata.tableMetadataArgs.materialized
+            materialized: entityMetadata.tableMetadataArgs.materialized,
         };
         return new View(options);
-    };
-    return View;
-}());
+    }
+}
 exports.View = View;
 
 //# sourceMappingURL=View.js.map

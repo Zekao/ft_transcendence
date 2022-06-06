@@ -6,9 +6,7 @@ export declare class SchemaLogCommand implements yargs.CommandModule {
     command: string;
     describe: string;
     builder(args: yargs.Argv): yargs.Argv<{
-        c: string;
-    } & {
-        f: string;
+        dataSource: unknown;
     }>;
     handler(args: yargs.Arguments): Promise<void>;
 }

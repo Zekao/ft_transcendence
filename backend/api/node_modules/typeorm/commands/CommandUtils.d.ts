@@ -1,7 +1,9 @@
+import { DataSource } from "../data-source";
 /**
  * Command line utils functions.
  */
 export declare class CommandUtils {
+    static loadDataSource(dataSourceFilePath: string): Promise<DataSource>;
     /**
      * Creates directories recursively.
      */

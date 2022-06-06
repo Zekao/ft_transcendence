@@ -6,8 +6,6 @@ export declare class InitCommand implements yargs.CommandModule {
     command: string;
     describe: string;
     builder(args: yargs.Argv): yargs.Argv<{
-        c: string;
-    } & {
         n: unknown;
     } & {
         db: unknown;
@@ -25,7 +23,7 @@ export declare class InitCommand implements yargs.CommandModule {
     /**
      * Gets contents of the ormconfig file.
      */
-    protected static getOrmConfigTemplate(database: string): string;
+    protected static getAppDataSourceTemplate(isEsm: boolean, database: string): string;
     /**
      * Gets contents of the ormconfig file.
      */

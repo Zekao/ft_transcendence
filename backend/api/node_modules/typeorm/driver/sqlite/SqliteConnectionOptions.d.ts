@@ -1,8 +1,8 @@
-import { BaseConnectionOptions } from "../../connection/BaseConnectionOptions";
+import { BaseDataSourceOptions } from "../../data-source/BaseDataSourceOptions";
 /**
  * Sqlite-specific connection options.
  */
-export interface SqliteConnectionOptions extends BaseConnectionOptions {
+export interface SqliteConnectionOptions extends BaseDataSourceOptions {
     /**
      * Database type.
      */

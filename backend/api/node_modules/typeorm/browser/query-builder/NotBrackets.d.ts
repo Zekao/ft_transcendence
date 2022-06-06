@@ -4,4 +4,5 @@ import { Brackets } from "./Brackets";
  * Allows to use negate brackets in WHERE expressions for better syntax.
  */
 export declare class NotBrackets extends Brackets {
+    readonly "@instanceof": symbol;
 }

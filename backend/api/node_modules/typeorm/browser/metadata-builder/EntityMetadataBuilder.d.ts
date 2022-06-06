@@ -6,7 +6,7 @@ import { TableMetadataArgs } from "../metadata-args/TableMetadataArgs";
 import { JunctionEntityMetadataBuilder } from "./JunctionEntityMetadataBuilder";
 import { ClosureJunctionEntityMetadataBuilder } from "./ClosureJunctionEntityMetadataBuilder";
 import { RelationJoinColumnBuilder } from "./RelationJoinColumnBuilder";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 /**
  * Builds EntityMetadata objects and all its sub-metadatas.
  */
@@ -25,7 +25,7 @@ export declare class EntityMetadataBuilder {
      * Used to build join columns of the relations.
      */
     protected relationJoinColumnBuilder: RelationJoinColumnBuilder;
-    constructor(connection: Connection, metadataArgsStorage: MetadataArgsStorage);
+    constructor(connection: DataSource, metadataArgsStorage: MetadataArgsStorage);
     /**
      * Builds a complete entity metadatas for the given entity classes.
      */

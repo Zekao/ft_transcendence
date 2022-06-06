@@ -1,11 +1,11 @@
-import { BaseConnectionOptions } from "../../connection/BaseConnectionOptions";
+import { BaseDataSourceOptions } from "../../data-source/BaseDataSourceOptions";
 import { MysqlConnectionCredentialsOptions } from "./MysqlConnectionCredentialsOptions";
 /**
  * MySQL specific connection options.
  *
  * @see https://github.com/mysqljs/mysql#connection-options
  */
-export interface MysqlConnectionOptions extends BaseConnectionOptions, MysqlConnectionCredentialsOptions {
+export interface MysqlConnectionOptions extends BaseDataSourceOptions, MysqlConnectionCredentialsOptions {
     /**
      * Database type.
      */
@@ -84,6 +84,11 @@ export interface MysqlConnectionOptions extends BaseConnectionOptions, MysqlConn
      * For more information, check https://github.com/mysqljs/mysql#connection-flags.
      */
     readonly flags?: string[];
+    /**
+     * TypeORM will automatically use package found in your node_modules, prioritizing mysql over mysql2,
+     * but you can specify it manually
+     */
+    readonly connectorPackage?: "mysql" | "mysql2";
     /**
      * Replication setup.
      */

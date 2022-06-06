@@ -30,11 +30,6 @@ export interface RelationOptions {
      */
     deferrable?: DeferrableType;
     /**
-     * Indicates if this relation will be a primary key.
-     * Can be used only for many-to-one and owner one-to-one relations.
-     */
-    primary?: boolean;
-    /**
      * Indicates whether foreign key constraints will be created for join columns.
      * Can be used only for many-to-one and owner one-to-one relations.
      * Defaults to true.

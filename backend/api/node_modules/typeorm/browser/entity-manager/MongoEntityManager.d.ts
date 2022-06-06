@@ -1,18 +1,18 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { EntityManager } from "./EntityManager";
 import { EntityTarget } from "../common/EntityTarget";
 import { AggregationCursor, BulkWriteOpResultObject, ChangeStream, ChangeStreamOptions, Code, Collection, CollectionAggregationOptions, CollectionBulkWriteOptions, CollectionInsertManyOptions, CollectionInsertOneOptions, CollectionOptions, CollStats, CommandCursor, Cursor, DeleteWriteOpResultObject, FindAndModifyWriteOpResultObject, FindOneAndReplaceOption, GeoHaystackSearchOptions, GeoNearOptions, InsertOneWriteOpResult, InsertWriteOpResult, MapReduceOptions, MongoCountPreferences, MongodbIndexOptions, ObjectID, OrderedBulkOperation, ParallelCollectionScanOptions, ReadPreference, ReplaceOneOptions, UnorderedBulkOperation, UpdateWriteOpResult } from "../driver/mongodb/typings";
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { MongoQueryRunner } from "../driver/mongodb/MongoQueryRunner";
-import { FindManyOptions } from "../find-options/FindManyOptions";
-import { FindOneOptions } from "../find-options/FindOneOptions";
-import { DeepPartial } from "../common/DeepPartial";
 import { QueryDeepPartialEntity } from "../query-builder/QueryPartialEntity";
 import { InsertResult } from "../query-builder/result/InsertResult";
 import { UpdateResult } from "../query-builder/result/UpdateResult";
 import { DeleteResult } from "../query-builder/result/DeleteResult";
 import { EntityMetadata } from "../metadata/EntityMetadata";
-import { FindConditions } from "../find-options/FindConditions";
+import { FindOptionsWhere } from "../find-options/FindOptionsWhere";
+import { FindOptionsSelect, FindOptionsSelectByString } from "../find-options/FindOptionsSelect";
+import { MongoFindManyOptions } from "../find-options/mongodb/MongoFindManyOptions";
+import { MongoFindOneOptions } from "../find-options/mongodb/MongoFindOneOptions";
 import { ColumnMetadata } from "../metadata/ColumnMetadata";
 /**
  * Entity manager supposed to work with any entity, automatically find its repository and call its methods,
@@ -21,27 +21,50 @@ import { ColumnMetadata } from "../metadata/ColumnMetadata";
  * This implementation is used for MongoDB driver which has some specifics in its EntityManager.
  */
 export declare class MongoEntityManager extends EntityManager {
+    readonly "@instanceof": symbol;
     get mongoQueryRunner(): MongoQueryRunner;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
-     * Finds entities that match given find options or conditions.
+     * Finds entities that match given find options.
      */
-    find<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: FindManyOptions<Entity> | Partial<Entity>): Promise<Entity[]>;
+    find<Entity>(entityClassOrName: EntityTarget<Entity>, options?: MongoFindManyOptions<Entity>): Promise<Entity[]>;
     /**
-     * Finds entities that match given find options or conditions.
-     * Also counts all entities that match given conditions,
-     * but ignores pagination settings (from and take options).
+     * Finds entities that match given conditions.
      */
-    findAndCount<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: FindManyOptions<Entity> | Partial<Entity>): Promise<[Entity[], number]>;
+    findBy<Entity>(entityClassOrName: EntityTarget<Entity>, where: any): Promise<Entity[]>;
+    /**
+     * Finds entities that match given find options.
+     */
+    findAndCount<Entity>(entityClassOrName: EntityTarget<Entity>, options?: MongoFindManyOptions<Entity>): Promise<[Entity[], number]>;
+    /**
+     * Finds entities that match given where conditions.
+     */
+    findAndCountBy<Entity>(entityClassOrName: EntityTarget<Entity>, where: any): Promise<[Entity[], number]>;
     /**
      * Finds entities by ids.
      * Optionally find options can be applied.
+     *
+     * @deprecated use `findBy` method instead.
      */
-    findByIds<Entity>(entityClassOrName: EntityTarget<Entity>, ids: any[], optionsOrConditions?: FindManyOptions<Entity> | Partial<Entity>): Promise<Entity[]>;
+    findByIds<Entity>(entityClassOrName: EntityTarget<Entity>, ids: any[], optionsOrConditions?: any): Promise<Entity[]>;
     /**
-     * Finds first entity that matches given conditions and/or find options.
+     * Finds first entity that matches given find options.
      */
-    findOne<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOneOptions<Entity> | DeepPartial<Entity>, maybeOptions?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+    findOne<Entity>(entityClassOrName: EntityTarget<Entity>, options: MongoFindOneOptions<Entity>): Promise<Entity | null>;
+    /**
+     * Finds first entity that matches given WHERE conditions.
+     */
+    findOneBy<Entity>(entityClassOrName: EntityTarget<Entity>, where: any): Promise<Entity | null>;
+    /**
+     * Finds entity that matches given id.
+     *
+     * @deprecated use `findOneBy` method instead in conjunction with `In` operator, for example:
+     *
+     * .findOneBy({
+     *     id: 1 // where "id" is your primary column name
+     * })
+     */
+    findOneById<Entity>(entityClassOrName: EntityTarget<Entity>, id: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[]): Promise<Entity | null>;
     /**
      * Inserts a given entity into the database.
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
@@ -56,14 +79,14 @@ export declare class MongoEntityManager extends EntityManager {
      * Executes fast and efficient UPDATE query.
      * Does not check if entity exist in the database.
      */
-    update<Entity>(target: EntityTarget<Entity>, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>, partialEntity: QueryDeepPartialEntity<Entity>): Promise<UpdateResult>;
+    update<Entity>(target: EntityTarget<Entity>, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>, partialEntity: QueryDeepPartialEntity<Entity>): Promise<UpdateResult>;
     /**
      * Deletes entities by a given conditions.
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
      * Executes fast and efficient DELETE query.
      * Does not check if entity exist in the database.
      */
-    delete<Entity>(target: EntityTarget<Entity>, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindConditions<Entity>): Promise<DeleteResult>;
+    delete<Entity>(target: EntityTarget<Entity>, criteria: string | string[] | number | number[] | Date | Date[] | ObjectID | ObjectID[] | FindOptionsWhere<Entity>): Promise<DeleteResult>;
     /**
      * Creates a cursor for a query that can be used to iterate over results from MongoDB.
      */
@@ -90,6 +113,10 @@ export declare class MongoEntityManager extends EntityManager {
      * Count number of matching documents in the db to a query.
      */
     count<Entity>(entityClassOrName: EntityTarget<Entity>, query?: ObjectLiteral, options?: MongoCountPreferences): Promise<number>;
+    /**
+     * Count number of matching documents in the db to a query.
+     */
+    countBy<Entity>(entityClassOrName: EntityTarget<Entity>, query?: ObjectLiteral, options?: MongoCountPreferences): Promise<number>;
     /**
      * Creates an index on the db and collection.
      */
@@ -239,11 +266,11 @@ export declare class MongoEntityManager extends EntityManager {
     /**
      * Converts FindManyOptions to mongodb query.
      */
-    protected convertFindManyOptionsOrConditionsToMongodbQuery<Entity>(optionsOrConditions: FindManyOptions<Entity> | Partial<Entity> | undefined): ObjectLiteral | undefined;
+    protected convertFindManyOptionsOrConditionsToMongodbQuery<Entity>(optionsOrConditions: MongoFindManyOptions<Entity> | Partial<Entity> | any[] | undefined): ObjectLiteral | undefined;
     /**
      * Converts FindOneOptions to mongodb query.
      */
-    protected convertFindOneOptionsOrConditionsToMongodbQuery<Entity>(optionsOrConditions: FindOneOptions<Entity> | Partial<Entity> | undefined): ObjectLiteral | undefined;
+    protected convertFindOneOptionsOrConditionsToMongodbQuery<Entity>(optionsOrConditions: MongoFindOneOptions<Entity> | Partial<Entity> | undefined): ObjectLiteral | undefined;
     /**
      * Converts FindOptions into mongodb order by criteria.
      */
@@ -251,7 +278,7 @@ export declare class MongoEntityManager extends EntityManager {
     /**
      * Converts FindOptions into mongodb select by criteria.
      */
-    protected convertFindOptionsSelectToProjectCriteria(selects: (keyof any)[]): any;
+    protected convertFindOptionsSelectToProjectCriteria(selects: FindOptionsSelect<any> | FindOptionsSelectByString<any>): any;
     /**
      * Ensures given id is an id for query.
      */
@@ -261,4 +288,13 @@ export declare class MongoEntityManager extends EntityManager {
      */
     protected applyEntityTransformationToCursor<Entity>(metadata: EntityMetadata, cursor: Cursor<Entity> | AggregationCursor<Entity>): void;
     protected filterSoftDeleted<Entity>(cursor: Cursor<Entity>, deleteDateColumn: ColumnMetadata): void;
+    /**
+     * Finds first entity that matches given conditions and/or find options.
+     */
+    protected executeFindOne<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: any, maybeOptions?: MongoFindOneOptions<Entity>): Promise<Entity | null>;
+    protected executeFind<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: MongoFindManyOptions<Entity> | Partial<Entity> | any[]): Promise<Entity[]>;
+    /**
+     * Finds entities that match given find options or conditions.
+     */
+    executeFindAndCount<Entity>(entityClassOrName: EntityTarget<Entity>, optionsOrConditions?: MongoFindManyOptions<Entity> | Partial<Entity>): Promise<[Entity[], number]>;
 }

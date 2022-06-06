@@ -5,15 +5,6 @@ import * as yargs from "yargs";
 export declare class EntityCreateCommand implements yargs.CommandModule {
     command: string;
     describe: string;
-    builder(args: yargs.Argv): yargs.Argv<{
-        c: string;
-    } & {
-        n: unknown;
-    } & {
-        d: unknown;
-    } & {
-        f: string;
-    }>;
     handler(args: yargs.Arguments): Promise<void>;
     /**
      * Gets contents of the entity file.

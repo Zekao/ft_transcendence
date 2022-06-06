@@ -2,7 +2,7 @@ import { ColumnMetadata } from "../../metadata/ColumnMetadata";
 import { RelationMetadata } from "../../metadata/RelationMetadata";
 import { EntityManager } from "../../entity-manager/EntityManager";
 import { QueryRunner } from "../../query-runner/QueryRunner";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { EntityMetadata } from "../../metadata/EntityMetadata";
 import { ObjectLiteral } from "../../common/ObjectLiteral";
 /**
@@ -12,7 +12,7 @@ export interface UpdateEvent<Entity> {
     /**
      * Connection used in the event.
      */
-    connection: Connection;
+    connection: DataSource;
     /**
      * QueryRunner used in the event transaction.
      * All database operations in the subscribed event listener should be performed using this query runner instance.

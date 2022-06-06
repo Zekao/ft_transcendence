@@ -1,14 +1,16 @@
-import { ConnectionOptions } from "../ConnectionOptions";
+import { DataSourceOptions } from "../../data-source/DataSourceOptions";
 /**
  * Reads connection options from environment variables.
  * Environment variables can have only a single connection.
  * Its strongly required to define TYPEORM_CONNECTION env variable.
+ *
+ * @deprecated
  */
 export declare class ConnectionOptionsEnvReader {
     /**
      * Reads connection options from environment variables.
      */
-    read(): Promise<ConnectionOptions[]>;
+    read(): Promise<DataSourceOptions[]>;
     /**
      * Transforms logging string into real logging value connection requires.
      */

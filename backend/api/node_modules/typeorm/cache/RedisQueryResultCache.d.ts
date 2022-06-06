@@ -1,12 +1,12 @@
 import { QueryResultCache } from "./QueryResultCache";
 import { QueryResultCacheOptions } from "./QueryResultCacheOptions";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { QueryRunner } from "../query-runner/QueryRunner";
 /**
  * Caches query result into Redis database.
  */
 export declare class RedisQueryResultCache implements QueryResultCache {
-    protected connection: Connection;
+    protected connection: DataSource;
     /**
      * Redis module instance loaded dynamically.
      */
@@ -19,7 +19,7 @@ export declare class RedisQueryResultCache implements QueryResultCache {
      * Type of the Redis Client (redis or ioredis).
      */
     protected clientType: "redis" | "ioredis" | "ioredis/cluster";
-    constructor(connection: Connection, clientType: "redis" | "ioredis" | "ioredis/cluster");
+    constructor(connection: DataSource, clientType: "redis" | "ioredis" | "ioredis/cluster");
     /**
      * Creates a connection with given cache provider.
      */

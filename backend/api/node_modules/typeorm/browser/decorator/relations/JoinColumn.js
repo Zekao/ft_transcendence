@@ -6,13 +6,15 @@ import { getMetadataArgsStorage } from "../../globals";
  */
 export function JoinColumn(optionsOrOptionsArray) {
     return function (object, propertyName) {
-        var options = Array.isArray(optionsOrOptionsArray) ? optionsOrOptionsArray : [optionsOrOptionsArray || {}];
-        options.forEach(function (options) {
+        const options = Array.isArray(optionsOrOptionsArray)
+            ? optionsOrOptionsArray
+            : [optionsOrOptionsArray || {}];
+        options.forEach((options) => {
             getMetadataArgsStorage().joinColumns.push({
                 target: object.constructor,
                 propertyName: propertyName,
                 name: options.name,
-                referencedColumnName: options.referencedColumnName
+                referencedColumnName: options.referencedColumnName,
             });
         });
     };

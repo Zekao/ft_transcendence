@@ -20,10 +20,6 @@ export declare class ReturningResultsEntityUpdator {
      */
     insert(insertResult: InsertResult, entities: ObjectLiteral[]): Promise<void>;
     /**
-     * Columns we need to be returned from the database when we insert entity.
-     */
-    getInsertionReturningColumns(): ColumnMetadata[];
-    /**
      * Columns we need to be returned from the database when we update entity.
      */
     getUpdationReturningColumns(): ColumnMetadata[];

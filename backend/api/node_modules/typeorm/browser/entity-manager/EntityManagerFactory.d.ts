@@ -1,4 +1,4 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { EntityManager } from "./EntityManager";
 import { QueryRunner } from "../query-runner/QueryRunner";
 /**
@@ -8,5 +8,5 @@ export declare class EntityManagerFactory {
     /**
      * Creates a new entity manager depend on a given connection's driver.
      */
-    create(connection: Connection, queryRunner?: QueryRunner): EntityManager;
+    create(connection: DataSource, queryRunner?: QueryRunner): EntityManager;
 }

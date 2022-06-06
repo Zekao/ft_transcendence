@@ -1,15 +1,13 @@
 /**
  * Result object returned by UpdateQueryBuilder execution.
  */
-var QueryResult = /** @class */ (function () {
-    function QueryResult() {
+export class QueryResult {
+    constructor() {
         /**
          * Rows
          */
         this.records = [];
     }
-    return QueryResult;
-}());
-export { QueryResult };
+}
 
 //# sourceMappingURL=QueryResult.js.map

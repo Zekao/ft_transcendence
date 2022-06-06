@@ -5,11 +5,12 @@ import { DeferrableType } from "../metadata/types/DeferrableType";
 import { OnDeleteType } from "../metadata/types/OnDeleteType";
 import { OnUpdateType } from "../metadata/types/OnUpdateType";
 import { JoinTableOptions } from "../decorator/options/JoinTableOptions";
+import { EntityTarget } from "../common/EntityTarget";
 export interface EntitySchemaRelationOptions {
     /**
      * Indicates with which entity this relation is made.
      */
-    target: Function | string;
+    target: EntityTarget<any>;
     /**
      * Type of relation. Can be one of the value of the RelationTypes class.
      */

@@ -4,11 +4,11 @@ exports.EntityListenerMetadata = void 0;
 /**
  * This metadata contains all information about entity's listeners.
  */
-var EntityListenerMetadata = /** @class */ (function () {
+class EntityListenerMetadata {
     // ---------------------------------------------------------------------
     // Constructor
     // ---------------------------------------------------------------------
-    function EntityListenerMetadata(options) {
+    constructor(options) {
         this.entityMetadata = options.entityMetadata;
         this.embeddedMetadata = options.embeddedMetadata;
         this.target = options.args.target;
@@ -21,32 +21,34 @@ var EntityListenerMetadata = /** @class */ (function () {
     /**
      * Checks if entity listener is allowed to be executed on the given entity.
      */
-    EntityListenerMetadata.prototype.isAllowed = function (entity) {
-        return this.entityMetadata.target === entity.constructor || // todo: .constructor won't work for entity schemas, but there are no entity listeners in schemas since there are no objects, right?
-            (this.entityMetadata.target instanceof Function && entity.constructor.prototype instanceof this.entityMetadata.target); // todo: also need to implement entity schema inheritance
-    };
+    isAllowed(entity) {
+        // todo: create in entity metadata method like isInherited?
+        return (this.entityMetadata.target === entity.constructor || // todo: .constructor won't work for entity schemas, but there are no entity listeners in schemas since there are no objects, right?
+            (typeof this.entityMetadata.target === "function" &&
+                entity.constructor.prototype instanceof
+                    this.entityMetadata.target)); // todo: also need to implement entity schema inheritance
+    }
     /**
      * Executes listener method of the given entity.
      */
-    EntityListenerMetadata.prototype.execute = function (entity) {
+    execute(entity) {
         if (!this.embeddedMetadata)
             return entity[this.propertyName]();
         this.callEntityEmbeddedMethod(entity, this.embeddedMetadata.propertyPath.split("."));
-    };
+    }
     // ---------------------------------------------------------------------
     // Protected Methods
     // ---------------------------------------------------------------------
     /**
      * Calls embedded entity listener method no matter how nested it is.
      */
-    EntityListenerMetadata.prototype.callEntityEmbeddedMethod = function (entity, propertyPaths) {
-        var _this = this;
-        var propertyPath = propertyPaths.shift();
+    callEntityEmbeddedMethod(entity, propertyPaths) {
+        const propertyPath = propertyPaths.shift();
         if (!propertyPath || !entity[propertyPath])
             return;
         if (propertyPaths.length === 0) {
-            if (entity[propertyPath] instanceof Array) {
-                entity[propertyPath].map(function (embedded) { return embedded[_this.propertyName](); });
+            if (Array.isArray(entity[propertyPath])) {
+                entity[propertyPath].map((embedded) => embedded[this.propertyName]());
             }
             else {
                 entity[propertyPath][this.propertyName]();
@@ -56,9 +58,8 @@ var EntityListenerMetadata = /** @class */ (function () {
             if (entity[propertyPath])
                 this.callEntityEmbeddedMethod(entity[propertyPath], propertyPaths);
         }
-    };
-    return EntityListenerMetadata;
-}());
+    }
+}
 exports.EntityListenerMetadata = EntityListenerMetadata;
 
 //# sourceMappingURL=EntityListenerMetadata.js.map

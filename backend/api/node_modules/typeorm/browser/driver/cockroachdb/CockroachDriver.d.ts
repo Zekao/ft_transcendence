@@ -1,9 +1,10 @@
 import { Driver } from "../Driver";
 import { ObjectLiteral } from "../../common/ObjectLiteral";
 import { ColumnMetadata } from "../../metadata/ColumnMetadata";
+import { CteCapabilities } from "../types/CteCapabilities";
 import { CockroachConnectionCredentialsOptions } from "./CockroachConnectionCredentialsOptions";
 import { CockroachConnectionOptions } from "./CockroachConnectionOptions";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { RdbmsSchemaBuilder } from "../../schema-builder/RdbmsSchemaBuilder";
 import { MappedColumnTypes } from "../types/MappedColumnTypes";
 import { ColumnType } from "../types/ColumnTypes";
@@ -23,7 +24,7 @@ export declare class CockroachDriver implements Driver {
     /**
      * Connection used by driver.
      */
-    connection: Connection;
+    connection: DataSource;
     /**
      * Cockroach underlying library.
      */
@@ -115,7 +116,8 @@ export declare class CockroachDriver implements Driver {
      * for CockroarchDb.
      */
     maxAliasLength?: number;
-    constructor(connection: Connection);
+    cteCapabilities: CteCapabilities;
+    constructor(connection: DataSource);
     /**
      * Performs connection to the database.
      * Based on pooling options, it can either create connection immediately,

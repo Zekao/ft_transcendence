@@ -1,15 +1,16 @@
 import { Driver } from "../Driver";
+import { CteCapabilities } from "../types/CteCapabilities";
 import { MongoQueryRunner } from "./MongoQueryRunner";
 import { ObjectLiteral } from "../../common/ObjectLiteral";
 import { ColumnMetadata } from "../../metadata/ColumnMetadata";
-import { Connection } from "../../connection/Connection";
+import { DataSource } from "../../data-source/DataSource";
 import { MongoConnectionOptions } from "./MongoConnectionOptions";
 import { MappedColumnTypes } from "../types/MappedColumnTypes";
 import { ColumnType } from "../types/ColumnTypes";
 import { MongoSchemaBuilder } from "../../schema-builder/MongoSchemaBuilder";
 import { DataTypeDefaults } from "../types/DataTypeDefaults";
 import { TableColumn } from "../../schema-builder/table/TableColumn";
-import { ConnectionOptions } from "../../connection/ConnectionOptions";
+import { DataSourceOptions } from "../../data-source/DataSourceOptions";
 import { EntityMetadata } from "../../metadata/EntityMetadata";
 import { ReplicationMode } from "../types/ReplicationMode";
 import { Table } from "../../schema-builder/table/Table";
@@ -19,7 +20,7 @@ import { TableForeignKey } from "../../schema-builder/table/TableForeignKey";
  * Organizes communication with MongoDB.
  */
 export declare class MongoDriver implements Driver {
-    protected connection: Connection;
+    protected connection: DataSource;
     /**
      * Underlying mongodb library.
      */
@@ -89,7 +90,8 @@ export declare class MongoDriver implements Driver {
      * Sync with http://mongodb.github.io/node-mongodb-native/3.5/api/MongoClient.html
      */
     protected validOptionNames: string[];
-    constructor(connection: Connection);
+    cteCapabilities: CteCapabilities;
+    constructor(connection: DataSource);
     /**
      * Performs connection to the database.
      */
@@ -202,7 +204,7 @@ export declare class MongoDriver implements Driver {
     /**
      * Validate driver options to make sure everything is correct and driver will be able to establish connection.
      */
-    protected validateOptions(options: ConnectionOptions): void;
+    protected validateOptions(options: DataSourceOptions): void;
     /**
      * Loads all driver dependencies.
      */

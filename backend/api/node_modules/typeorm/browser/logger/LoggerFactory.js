@@ -2,17 +2,16 @@ import { SimpleConsoleLogger } from "./SimpleConsoleLogger";
 import { AdvancedConsoleLogger } from "./AdvancedConsoleLogger";
 import { FileLogger } from "./FileLogger";
 import { DebugLogger } from "./DebugLogger";
+import { ObjectUtils } from "../util/ObjectUtils";
 /**
  * Helps to create logger instances.
  */
-var LoggerFactory = /** @class */ (function () {
-    function LoggerFactory() {
-    }
+export class LoggerFactory {
     /**
      * Creates a new logger depend on a given connection's driver.
      */
-    LoggerFactory.prototype.create = function (logger, options) {
-        if (logger instanceof Object)
+    create(logger, options) {
+        if (ObjectUtils.isObject(logger))
             return logger;
         if (logger) {
             switch (logger) {
@@ -27,9 +26,7 @@ var LoggerFactory = /** @class */ (function () {
             }
         }
         return new AdvancedConsoleLogger(options);
-    };
-    return LoggerFactory;
-}());
-export { LoggerFactory };
+    }
+}
 
 //# sourceMappingURL=LoggerFactory.js.map

@@ -1,4 +1,4 @@
-import { ConnectionOptions } from "./ConnectionOptions";
+import { DataSourceOptions } from "../data-source/DataSourceOptions";
 /**
  * Reads connection options from the ormconfig.
  * Can read from multiple file extensions including env, json, js, xml and yml.
@@ -29,12 +29,12 @@ export declare class ConnectionOptionsReader {
     /**
      * Returns all connection options read from the ormconfig.
      */
-    all(): Promise<ConnectionOptions[]>;
+    all(): Promise<DataSourceOptions[]>;
     /**
      * Gets a connection with a given name read from ormconfig.
      * If connection with such name would not be found then it throw error.
      */
-    get(name: string): Promise<ConnectionOptions>;
+    get(name: string): Promise<DataSourceOptions>;
     /**
      * Checks if there is a TypeORM configuration file.
      */
@@ -44,11 +44,11 @@ export declare class ConnectionOptionsReader {
      *
      * todo: get in count NODE_ENV somehow
      */
-    protected load(): Promise<ConnectionOptions[] | undefined>;
+    protected load(): Promise<DataSourceOptions[] | undefined>;
     /**
      * Normalize connection options.
      */
-    protected normalizeConnectionOptions(connectionOptions: ConnectionOptions | ConnectionOptions[]): ConnectionOptions[];
+    protected normalizeConnectionOptions(connectionOptions: DataSourceOptions | DataSourceOptions[]): DataSourceOptions[];
     /**
      * Gets directory where configuration file should be located and configuration file name.
      */

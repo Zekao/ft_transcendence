@@ -2,9 +2,11 @@ import { Alias } from "./Alias";
 import { ObjectLiteral } from "../common/ObjectLiteral";
 import { OrderByCondition } from "../find-options/OrderByCondition";
 import { JoinAttribute } from "./JoinAttribute";
+import { QueryBuilder } from "./QueryBuilder";
+import { QueryBuilderCteOptions } from "./QueryBuilderCte";
 import { RelationIdAttribute } from "./relation-id/RelationIdAttribute";
 import { RelationCountAttribute } from "./relation-count/RelationCountAttribute";
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { EntityMetadata } from "../metadata/EntityMetadata";
 import { SelectQuery } from "./SelectQuery";
 import { ColumnMetadata } from "../metadata/ColumnMetadata";
@@ -15,7 +17,11 @@ import { WhereClause } from "./WhereClause";
  * Contains all properties of the QueryBuilder that needs to be build a final query.
  */
 export declare class QueryExpressionMap {
-    protected connection: Connection;
+    protected connection: DataSource;
+    /**
+     * Strategy to load relations.
+     */
+    relationLoadStrategy: "join" | "query";
     /**
      * Indicates if QueryBuilder used to select entities and not a raw results.
      */
@@ -137,7 +143,7 @@ export declare class QueryExpressionMap {
     /**
      * Locking mode.
      */
-    lockMode?: "optimistic" | "pessimistic_read" | "pessimistic_write" | "dirty_read" | "pessimistic_partial_write" | "pessimistic_write_or_fail" | "for_no_key_update";
+    lockMode?: "optimistic" | "pessimistic_read" | "pessimistic_write" | "dirty_read" | "pessimistic_partial_write" | "pessimistic_write_or_fail" | "for_no_key_update" | "for_key_share";
     /**
      * Current version of the entity, used for locking.
      */
@@ -249,7 +255,12 @@ export declare class QueryExpressionMap {
     locallyGenerated: {
         [key: number]: ObjectLiteral;
     };
-    constructor(connection: Connection);
+    commonTableExpressions: {
+        queryBuilder: QueryBuilder<any> | string;
+        alias: string;
+        options: QueryBuilderCteOptions;
+    }[];
+    constructor(connection: DataSource);
     /**
      * Get all ORDER BY queries - if order by is specified by user then it uses them,
      * otherwise it uses default entity order by if it was set.

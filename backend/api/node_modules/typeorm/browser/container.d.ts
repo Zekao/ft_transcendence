@@ -1,5 +1,7 @@
 /**
  * Container options.
+ *
+ * @deprecated
  */
 export interface UseContainerOptions {
     /**
@@ -11,17 +13,27 @@ export interface UseContainerOptions {
      */
     fallbackOnErrors?: boolean;
 }
+/**
+ * @deprecated
+ */
 export declare type ContainedType<T> = {
     new (...args: any[]): T;
 } | Function;
+/**
+ * @deprecated
+ */
 export interface ContainerInterface {
     get<T>(someClass: ContainedType<T>): T;
 }
 /**
  * Sets container to be used by this library.
+ *
+ * @deprecated
  */
 export declare function useContainer(iocContainer: ContainerInterface, options?: UseContainerOptions): void;
 /**
  * Gets the IOC container used by this library.
+ *
+ * @deprecated
  */
 export declare function getFromContainer<T>(someClass: ContainedType<T>): T;

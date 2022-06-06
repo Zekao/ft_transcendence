@@ -3,6 +3,7 @@ import { TableColumnOptions } from "../options/TableColumnOptions";
  * Table's columns in the database represented in this class.
  */
 export declare class TableColumn {
+    readonly "@instanceof": symbol;
     /**
      * Column name.
      */

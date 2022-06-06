@@ -1,4 +1,4 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { FindManyOptions } from "../find-options/FindManyOptions";
 import { EntityTarget } from "../common/EntityTarget";
 import { ObjectType } from "../common/ObjectType";
@@ -17,7 +17,7 @@ import { ObjectID } from "../driver/mongodb/typings";
 import { InsertResult } from "../query-builder/result/InsertResult";
 import { UpdateResult } from "../query-builder/result/UpdateResult";
 import { DeleteResult } from "../query-builder/result/DeleteResult";
-import { FindConditions } from "../find-options/FindConditions";
+import { FindOptionsWhere } from "../find-options/FindOptionsWhere";
 import { IsolationLevel } from "../driver/types/IsolationLevel";
 import { UpsertOptions } from "../repository/UpsertOptions";
 /**
@@ -25,24 +25,29 @@ import { UpsertOptions } from "../repository/UpsertOptions";
  * whatever entity type are you passing.
  */
 export declare class EntityManager {
+    readonly "@instanceof": symbol;
     /**
      * Connection used by this entity manager.
      */
-    readonly connection: Connection;
+    readonly connection: DataSource;
     /**
      * Custom query runner to be used for operations in this entity manager.
      * Used only in non-global entity manager.
      */
     readonly queryRunner?: QueryRunner;
     /**
-     * Once created and then reused by en repositories.
+     * Once created and then reused by repositories.
      */
     protected repositories: Repository<any>[];
+    /**
+     * Once created and then reused by repositories.
+     */
+    protected treeRepositories: TreeRepository<any>[];
     /**
      * Plain to object transformer used in create and merge operations.
      */
     protected plainObjectToEntityTransformer: PlainObjectToNewEntityTransformer;
-    constructor(connection: Connection, queryRunner?: QueryRunner);
+    constructor(connection: DataSource, queryRunner?: QueryRunner);
     /**
      * Wraps given function execution (and all operations made there) in a transaction.
      * All database operations must be executed using provided entity manager.
@@ -191,8 +196,8 @@ export declare class EntityManager {
      * Does not check if entity exist in the database, so query will fail if duplicate entity is being inserted.
      * You can execute bulk inserts using this method.
      */
-    insert<Entity>(target: EntityTarget<Entity>, entity: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[])): Promise<InsertResult>;
-    upsert<Entity>(target: EntityTarget<Entity>, entityOrEntities: QueryDeepPartialEntity<Entity> | (QueryDeepPartialEntity<Entity>[]), conflictPathsOrOptions: string[] | UpsertOptions<Entity>): Promise<InsertResult>;
+    insert<Entity>(target: EntityTarget<Entity>, entity: QueryDeepPartialEntity<Entity> | QueryDeepPartialEntity<Entity>[]): Promise<InsertResult>;
+    upsert<Entity>(target: EntityTarget<Entity>, entityOrEntities: QueryDeepPartialEntity<Entity> | QueryDeepPartialEntity<Entity>[], conflictPathsOrOptions: string[] | UpsertOptions<Entity>): Promise<InsertResult>;
     /**
      * Updates entity partially. Entity can be found by a given condition(s).
      * Unlike save method executes a primitive operation without cascades, relations and other operations included.
@@ -229,25 +234,20 @@ export declare class EntityManager {
      * Counts entities that match given options.
      * Useful for pagination.
      */
-    count<Entity>(entityClass: EntityTarget<Entity>, options?: FindOneOptions<Entity>): Promise<number>;
-    /**
-     * Counts entities that match given options.
-     * Useful for pagination.
-     */
     count<Entity>(entityClass: EntityTarget<Entity>, options?: FindManyOptions<Entity>): Promise<number>;
     /**
      * Counts entities that match given conditions.
      * Useful for pagination.
      */
-    count<Entity>(entityClass: EntityTarget<Entity>, conditions?: FindConditions<Entity>): Promise<number>;
+    countBy<Entity>(entityClass: EntityTarget<Entity>, where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<number>;
     /**
-     * Finds entities that match given options.
+     * Finds entities that match given find options.
      */
     find<Entity>(entityClass: EntityTarget<Entity>, options?: FindManyOptions<Entity>): Promise<Entity[]>;
     /**
-     * Finds entities that match given conditions.
+     * Finds entities that match given find options.
      */
-    find<Entity>(entityClass: EntityTarget<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
+    findBy<Entity>(entityClass: EntityTarget<Entity>, where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity[]>;
     /**
      * Finds entities that match given find options.
      * Also counts all entities that match given conditions,
@@ -255,45 +255,53 @@ export declare class EntityManager {
      */
     findAndCount<Entity>(entityClass: EntityTarget<Entity>, options?: FindManyOptions<Entity>): Promise<[Entity[], number]>;
     /**
-     * Finds entities that match given conditions.
+     * Finds entities that match given WHERE conditions.
      * Also counts all entities that match given conditions,
      * but ignores pagination settings (from and take options).
      */
-    findAndCount<Entity>(entityClass: EntityTarget<Entity>, conditions?: FindConditions<Entity>): Promise<[Entity[], number]>;
+    findAndCountBy<Entity>(entityClass: EntityTarget<Entity>, where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<[Entity[], number]>;
     /**
      * Finds entities with ids.
-     * Optionally find options can be applied.
+     * Optionally find options or conditions can be applied.
+     *
+     * @deprecated use `findBy` method instead in conjunction with `In` operator, for example:
+     *
+     * .findBy({
+     *     id: In([1, 2, 3])
+     * })
      */
-    findByIds<Entity>(entityClass: EntityTarget<Entity>, ids: any[], options?: FindManyOptions<Entity>): Promise<Entity[]>;
+    findByIds<Entity>(entityClass: EntityTarget<Entity>, ids: any[]): Promise<Entity[]>;
     /**
-     * Finds entities with ids.
-     * Optionally conditions can be applied.
+     * Finds first entity by a given find options.
+     * If entity was not found in the database - returns null.
      */
-    findByIds<Entity>(entityClass: EntityTarget<Entity>, ids: any[], conditions?: FindConditions<Entity>): Promise<Entity[]>;
+    findOne<Entity>(entityClass: EntityTarget<Entity>, options: FindOneOptions<Entity>): Promise<Entity | null>;
     /**
-     * Finds first entity that matches given find options.
+     * Finds first entity that matches given where condition.
+     * If entity was not found in the database - returns null.
      */
-    findOne<Entity>(entityClass: EntityTarget<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+    findOneBy<Entity>(entityClass: EntityTarget<Entity>, where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity | null>;
     /**
-     * Finds first entity that matches given find options.
+     * Finds first entity that matches given id.
+     * If entity was not found in the database - returns null.
+     *
+     * @deprecated use `findOneBy` method instead in conjunction with `In` operator, for example:
+     *
+     * .findOneBy({
+     *     id: 1 // where "id" is your primary column name
+     * })
      */
-    findOne<Entity>(entityClass: EntityTarget<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+    findOneById<Entity>(entityClass: EntityTarget<Entity>, id: number | string | Date | ObjectID): Promise<Entity | null>;
     /**
-     * Finds first entity that matches given conditions.
+     * Finds first entity by a given find options.
+     * If entity was not found in the database - rejects with error.
      */
-    findOne<Entity>(entityClass: EntityTarget<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+    findOneOrFail<Entity>(entityClass: EntityTarget<Entity>, options: FindOneOptions<Entity>): Promise<Entity>;
     /**
-     * Finds first entity that matches given find options or rejects the returned promise on error.
+     * Finds first entity that matches given where condition.
+     * If entity was not found in the database - rejects with error.
      */
-    findOneOrFail<Entity>(entityClass: EntityTarget<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity>;
-    /**
-     * Finds first entity that matches given find options or rejects the returned promise on error.
-     */
-    findOneOrFail<Entity>(entityClass: EntityTarget<Entity>, options?: FindOneOptions<Entity>): Promise<Entity>;
-    /**
-     * Finds first entity that matches given conditions or rejects the returned promise on error.
-     */
-    findOneOrFail<Entity>(entityClass: EntityTarget<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity>;
+    findOneByOrFail<Entity>(entityClass: EntityTarget<Entity>, where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): Promise<Entity>;
     /**
      * Clears all the data from the given table (truncates/drops it).
      *
@@ -328,7 +336,15 @@ export declare class EntityManager {
      */
     getMongoRepository<Entity>(target: EntityTarget<Entity>): MongoRepository<Entity>;
     /**
+     * Creates a new repository instance out of a given Repository and
+     * sets current EntityManager instance to it. Used to work with custom repositories
+     * in transactions.
+     */
+    withRepository<Entity, R extends Repository<Entity>>(repository: R): R;
+    /**
      * Gets custom entity repository marked with @EntityRepository decorator.
+     *
+     * @deprecated use Repository.extend to create custom repositories
      */
     getCustomRepository<T>(customRepository: ObjectType<T>): T;
     /**

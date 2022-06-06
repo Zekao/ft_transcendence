@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateDateColumn = void 0;
-var globals_1 = require("../../globals");
+const globals_1 = require("../../globals");
 /**
  * This column will store a creation date of the inserted object.
  * Creation date is generated and inserted only once,
@@ -13,7 +13,7 @@ function CreateDateColumn(options) {
             target: object.constructor,
             propertyName: propertyName,
             mode: "createDate",
-            options: options || {}
+            options: options || {},
         });
     };
 }

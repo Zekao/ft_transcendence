@@ -6,9 +6,7 @@ export declare class CacheClearCommand implements yargs.CommandModule {
     command: string;
     describe: string;
     builder(args: yargs.Argv): yargs.Argv<{
-        connection: string;
-    } & {
-        config: string;
+        dataSource: unknown;
     }>;
     handler(args: yargs.Arguments): Promise<void>;
 }

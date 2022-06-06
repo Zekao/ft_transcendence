@@ -1,15 +1,11 @@
-import { __extends } from "tslib";
 import { TypeORMError } from "./TypeORMError";
 /**
  * Thrown when an optimistic lock cannot be used in query builder.
  */
-var OptimisticLockCanNotBeUsedError = /** @class */ (function (_super) {
-    __extends(OptimisticLockCanNotBeUsedError, _super);
-    function OptimisticLockCanNotBeUsedError() {
-        return _super.call(this, "The optimistic lock can be used only with getOne() method.") || this;
+export class OptimisticLockCanNotBeUsedError extends TypeORMError {
+    constructor() {
+        super(`The optimistic lock can be used only with getOne() method.`);
     }
-    return OptimisticLockCanNotBeUsedError;
-}(TypeORMError));
-export { OptimisticLockCanNotBeUsedError };
+}
 
 //# sourceMappingURL=OptimisticLockCanNotBeUsedError.js.map

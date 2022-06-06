@@ -14,6 +14,7 @@ import { ColumnMetadata } from "../metadata/ColumnMetadata";
  * Having this collection of subjects we can perform database queries.
  */
 export declare class Subject {
+    readonly "@instanceof": symbol;
     /**
      * Entity metadata of the subject entity.
      */

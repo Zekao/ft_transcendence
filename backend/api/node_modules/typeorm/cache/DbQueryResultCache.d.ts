@@ -1,4 +1,4 @@
-import { Connection } from "../connection/Connection";
+import { DataSource } from "../data-source/DataSource";
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { QueryResultCache } from "./QueryResultCache";
 import { QueryResultCacheOptions } from "./QueryResultCacheOptions";
@@ -6,11 +6,11 @@ import { QueryResultCacheOptions } from "./QueryResultCacheOptions";
  * Caches query result into current database, into separate table called "query-result-cache".
  */
 export declare class DbQueryResultCache implements QueryResultCache {
-    protected connection: Connection;
+    protected connection: DataSource;
     private queryResultCacheTable;
     private queryResultCacheDatabase?;
     private queryResultCacheSchema?;
-    constructor(connection: Connection);
+    constructor(connection: DataSource);
     /**
      * Creates a connection with given cache provider.
      */

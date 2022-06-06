@@ -1,4 +1,4 @@
-import { LoggerOptions, FileLoggerOptions } from "./LoggerOptions";
+import { FileLoggerOptions, LoggerOptions } from "./LoggerOptions";
 import { QueryRunner } from "../query-runner/QueryRunner";
 import { Logger } from "./Logger";
 /**
