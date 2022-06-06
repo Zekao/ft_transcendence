@@ -20,9 +20,12 @@
     "msgdown": "^1.0.2",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
+    "vue-property-decorator": "^9.1.2",
     "vue-server-renderer": "^2.6.14",
+    "vue-socket.io": "^3.0.10",
     "vue-template-compiler": "^2.6.14",
     "vuetify": "^2.6.1",
+    "vuex-class": "^0.3.2",
     "webpack": "^4.46.0"
   },
   "devDependencies": {

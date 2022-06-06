@@ -1,41 +1,79 @@
 <template>
-  <div>
-    <p v-if="isConnected">We're connected to the server!</p>
-    <p>Message from server: "{{socketMessage}}"</p>
-    <button @click="pingServer()">Ping Server</button>
-  </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <title>Nestjs SocketIO</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="app" class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3 col-sm-12">
+                    <h1 class="text-center">{{ title }}</h1>
+                    <br>
+                    <div id="status"></div>
+                    <div id="chat">
+                        <input type="text" v-model="name" id="username" class="form-control" placeholder="Enter name...">
+                        <br>
+                        <div class="card">
+                            <div id="messages" class="card-block">
+                                <ul>
+                                    <li v-for="message of messages">{{ message.name }}: {{ message.text }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br>
+                        <textarea id="textarea" class="form-control" v-model="text" placeholder="Enter message..."></textarea>
+                        <br>
+                        <button id="send" class="btn" @click.prevent="sendMessage">Send</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+</body>
+</html>
 </template>
 
 <script>
+
 export default {
-  data() {
-    return {
-      isConnected: false,
-      socketMessage: ''
-    }
-  },
-
-  sockets: {
-    connect() {
-      // Fired when the socket connects.
-      this.isConnected = true;
+    data() {
+        return {
+        title: 'Nestjs Websockets Chat',
+        name: '',
+        text: '',
+        messages: [],
+        socket: null
+        }
     },
-
-    disconnect() {
-      this.isConnected = false;
-    },
-
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel(data) {
-      this.socketMessage = data
-    }
-  },
-
-  methods: {
-    pingServer() {
-      // Send the "pingServer" event to the server.
-      this.$socket.emit('pingServer', 'PING!')
-    }
+ methods: {
+  sendMessage() {
+   if(this.validateInput()) {
+    const message = {
+    name: this.name,
+    text: this.text
+   }
+   this.socket.emit('msgToServer', message)
+   this.text = ''
   }
+ },
+ receivedMessage(message) {
+  this.messages.push(message)
+ },
+ validateInput() {
+  return this.name.length > 0 && this.text.length > 0
+ }
+},
+ created() {
+  this.socket = io('http://localhost:3000')
+  this.socket.on('msgToClient', (message) => {
+   this.receivedMessage(message)
+  })
+ },
 }
 </script>

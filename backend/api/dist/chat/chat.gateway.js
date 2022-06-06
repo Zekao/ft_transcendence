@@ -15,13 +15,13 @@ const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
 let ChatGateway = class ChatGateway {
     constructor() {
-        this.logger = new common_1.Logger('ChatGateway');
+        this.logger = new common_1.Logger("ChatGateway");
     }
     handleMessage(client, payload) {
-        this.server.emit('msgToClient', payload);
+        this.server.emit("msgToClient", payload);
     }
     afterInit(server) {
-        this.logger.log('Init');
+        this.logger.log("Init");
     }
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], ChatGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)('msgToServer'),
+    (0, websockets_1.SubscribeMessage)("msgToServer"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", void 0)
@@ -43,7 +43,7 @@ __decorate([
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({
         cors: {
-            origin: '*',
+            origin: "*",
         },
     })
 ], ChatGateway);
