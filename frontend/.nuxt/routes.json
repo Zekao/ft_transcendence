@@ -2,71 +2,71 @@
   {
     "name": "Account",
     "path": "/Account",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Account.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Account.vue",
     "chunkName": "pages/Account",
-    "_name": "_2bff9940"
+    "_name": "_908dee36"
   },
   {
     "name": "Chat",
     "path": "/Chat",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Chat.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Chat.vue",
     "chunkName": "pages/Chat",
-    "_name": "_400992b5"
+    "_name": "_62999960"
   },
   {
     "name": "Friends",
     "path": "/Friends",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Friends.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Friends.vue",
     "chunkName": "pages/Friends",
-    "_name": "_0a29fec8"
+    "_name": "_503a5766"
   },
   {
     "name": "Game",
     "path": "/Game",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Game.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Game.vue",
     "chunkName": "pages/Game",
-    "_name": "_fe2d2362"
+    "_name": "_0f930eea"
   },
   {
     "name": "Image",
     "path": "/Image",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Image.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Image.vue",
     "chunkName": "pages/Image",
-    "_name": "_2ee0964e"
+    "_name": "_756b0913"
   },
   {
     "name": "inspire",
     "path": "/inspire",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/inspire.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/inspire.vue",
     "chunkName": "pages/inspire",
-    "_name": "_377d54a6"
+    "_name": "_9c0ba99c"
   },
   {
     "name": "Podium",
     "path": "/Podium",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Podium.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Podium.vue",
     "chunkName": "pages/Podium",
-    "_name": "_43d1c479"
+    "_name": "_62d4ab58"
   },
   {
     "name": "Test",
     "path": "/Test",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/Test.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/Test.vue",
     "chunkName": "pages/Test",
-    "_name": "_b3fbd222"
+    "_name": "_34abb78a"
   },
   {
     "name": "test2",
     "path": "/test2",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/test2.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/test2.vue",
     "chunkName": "pages/test2",
-    "_name": "_ba335f1a"
+    "_name": "_2d1e7990"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "/home/ubuntu/transcendence/ft_trans/frontend/pages/index.vue",
+    "component": "/home/ubuntu/transcendence/ft_transs/frontend/pages/index.vue",
     "chunkName": "pages/index",
-    "_name": "_88b73b36"
+    "_name": "_022ed52a"
   }
 ]

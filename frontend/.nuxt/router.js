@@ -4,16 +4,16 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _2bff9940 = () => interopDefault(import('../pages/Account.vue' /* webpackChunkName: "pages/Account" */))
-const _400992b5 = () => interopDefault(import('../pages/Chat.vue' /* webpackChunkName: "pages/Chat" */))
-const _0a29fec8 = () => interopDefault(import('../pages/Friends.vue' /* webpackChunkName: "pages/Friends" */))
-const _fe2d2362 = () => interopDefault(import('../pages/Game.vue' /* webpackChunkName: "pages/Game" */))
-const _2ee0964e = () => interopDefault(import('../pages/Image.vue' /* webpackChunkName: "pages/Image" */))
-const _377d54a6 = () => interopDefault(import('../pages/inspire.vue' /* webpackChunkName: "pages/inspire" */))
-const _43d1c479 = () => interopDefault(import('../pages/Podium.vue' /* webpackChunkName: "pages/Podium" */))
-const _b3fbd222 = () => interopDefault(import('../pages/Test.vue' /* webpackChunkName: "pages/Test" */))
-const _ba335f1a = () => interopDefault(import('../pages/test2.vue' /* webpackChunkName: "pages/test2" */))
-const _88b73b36 = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _908dee36 = () => interopDefault(import('../pages/Account.vue' /* webpackChunkName: "pages/Account" */))
+const _62999960 = () => interopDefault(import('../pages/Chat.vue' /* webpackChunkName: "pages/Chat" */))
+const _503a5766 = () => interopDefault(import('../pages/Friends.vue' /* webpackChunkName: "pages/Friends" */))
+const _0f930eea = () => interopDefault(import('../pages/Game.vue' /* webpackChunkName: "pages/Game" */))
+const _756b0913 = () => interopDefault(import('../pages/Image.vue' /* webpackChunkName: "pages/Image" */))
+const _9c0ba99c = () => interopDefault(import('../pages/inspire.vue' /* webpackChunkName: "pages/inspire" */))
+const _62d4ab58 = () => interopDefault(import('../pages/Podium.vue' /* webpackChunkName: "pages/Podium" */))
+const _34abb78a = () => interopDefault(import('../pages/Test.vue' /* webpackChunkName: "pages/Test" */))
+const _2d1e7990 = () => interopDefault(import('../pages/test2.vue' /* webpackChunkName: "pages/test2" */))
+const _022ed52a = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -28,43 +28,43 @@ export const routerOptions = {
 
   routes: [{
     path: "/Account",
-    component: _2bff9940,
+    component: _908dee36,
     name: "Account"
   }, {
     path: "/Chat",
-    component: _400992b5,
+    component: _62999960,
     name: "Chat"
   }, {
     path: "/Friends",
-    component: _0a29fec8,
+    component: _503a5766,
     name: "Friends"
   }, {
     path: "/Game",
-    component: _fe2d2362,
+    component: _0f930eea,
     name: "Game"
   }, {
     path: "/Image",
-    component: _2ee0964e,
+    component: _756b0913,
     name: "Image"
   }, {
     path: "/inspire",
-    component: _377d54a6,
+    component: _9c0ba99c,
     name: "inspire"
   }, {
     path: "/Podium",
-    component: _43d1c479,
+    component: _62d4ab58,
     name: "Podium"
   }, {
     path: "/Test",
-    component: _b3fbd222,
+    component: _34abb78a,
     name: "Test"
   }, {
     path: "/test2",
-    component: _ba335f1a,
+    component: _2d1e7990,
     name: "test2"
   }, {
     path: "/",
-    component: _88b73b36,
+    component: _022ed52a,
     name: "index"
   }],
 
