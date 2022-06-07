@@ -8,21 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersRepository = void 0;
 const common_1 = require("@nestjs/common");
+const users_status_enum_1 = require("../users/users-status.enum");
+const users_status_enum_2 = require("../users/users-status.enum");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const bcrypt = require("bcrypt");
 let UsersRepository = class UsersRepository extends typeorm_1.Repository {
     async createUser(authCredentialsDto) {
         const { user_name, password } = authCredentialsDto;
+        const stat = users_status_enum_1.UserStatus.ONLINE;
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
         const user = this.create({
+            status: stat,
+            in_game: users_status_enum_2.UserGameStatus.IN_GAME,
             user_name,
             password: hashedPassword,
             email: user_name + "@transcendence.com",
             first_name: "",
             last_name: "",
-            status: "",
+            win: 0,
+            loose: 0,
+            rank: 0,
         });
         console.log("salt value : ", salt);
         console.log(user.user_name, user.password, user.email);

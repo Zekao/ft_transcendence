@@ -1,3 +1,4 @@
+import { UserStatus, UserGameStatus } from "./../users/users-status.enum";
 export declare class User {
     id: string;
     user_name: string;
@@ -5,5 +6,9 @@ export declare class User {
     email: string;
     first_name: string;
     last_name: string;
-    status: string;
+    status: UserStatus;
+    in_game: UserGameStatus;
+    win: number;
+    loose: number;
+    rank: number;
 }
