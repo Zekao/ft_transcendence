@@ -87,13 +87,13 @@ let UsersController = class UsersController {
         return this.UsersService.patchUserGameStatus(id, query.status);
     }
     patchWin(id, query) {
-        return this.UsersService.patchWin(id, query.status);
+        return this.UsersService.patchWin(id, query);
     }
     patchLoose(id, query) {
-        return this.UsersService.patchLoose(id, query.status);
+        return this.UsersService.patchLoose(id, query);
     }
     patchRank(id, query) {
-        return this.UsersService.patchRank(id, query.status);
+        return this.UsersService.patchRank(id, query);
     }
     patchAddWin(id) {
         return this.UsersService.patchAddWin(id);
@@ -266,25 +266,25 @@ __decorate([
 __decorate([
     (0, common_1.Patch)("/:id/win"),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)("win")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchWin", null);
 __decorate([
-    (0, common_1.Patch)("/:id/win"),
+    (0, common_1.Patch)("/:id/loose"),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)("loose")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchLoose", null);
 __decorate([
-    (0, common_1.Patch)("/:id/win"),
+    (0, common_1.Patch)("/:id/rank"),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)("rank")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchRank", null);
 __decorate([

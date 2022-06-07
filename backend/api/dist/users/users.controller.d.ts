@@ -27,9 +27,9 @@ export declare class UsersController {
     patchEmail(id: string, query: any): Promise<string>;
     patchStatus(id: string, query: any): Promise<UserStatus>;
     patchGameStatus(id: string, query: any): Promise<UserGameStatus>;
-    patchWin(id: string, query: any): Promise<number>;
-    patchLoose(id: string, query: any): Promise<number>;
-    patchRank(id: string, query: any): Promise<number>;
+    patchWin(id: string, query: number): Promise<number>;
+    patchLoose(id: string, query: number): Promise<number>;
+    patchRank(id: string, query: number): Promise<number>;
     patchAddWin(id: any): Promise<number>;
     patchAddLoose(id: any): Promise<number>;
     patchRemoveWin(id: any): Promise<number>;

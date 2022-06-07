@@ -125,16 +125,25 @@ export class UsersController {
     return this.UsersService.patchUserGameStatus(id, query.status);
   }
   @Patch("/:id/win")
-  patchWin(@Param("id") id: string, @Query() query): Promise<number> {
-    return this.UsersService.patchWin(id, query.status);
+  patchWin(
+    @Param("id") id: string,
+    @Query("win") query: number
+  ): Promise<number> {
+    return this.UsersService.patchWin(id, query);
   }
-  @Patch("/:id/win")
-  patchLoose(@Param("id") id: string, @Query() query): Promise<number> {
-    return this.UsersService.patchLoose(id, query.status);
+  @Patch("/:id/loose")
+  patchLoose(
+    @Param("id") id: string,
+    @Query("loose") query: number
+  ): Promise<number> {
+    return this.UsersService.patchLoose(id, query);
   }
-  @Patch("/:id/win")
-  patchRank(@Param("id") id: string, @Query() query): Promise<number> {
-    return this.UsersService.patchRank(id, query.status);
+  @Patch("/:id/rank")
+  patchRank(
+    @Param("id") id: string,
+    @Query("rank") query: number
+  ): Promise<number> {
+    return this.UsersService.patchRank(id, query);
   }
 
   @Patch("/:id/addWin")
