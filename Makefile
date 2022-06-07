@@ -6,7 +6,7 @@
 #    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/07 13:18:23 by nabentay         ###   ########.fr        #
+#    Updated: 2022/06/07 13:22:58 by nabentay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ re: rm up
 
 devb:
 	@docker-compose up -d database
-	@npm i --prefix ./backend/api --legacy-peer-deps
+	@npm i --prefix ./backend/api -f
 	@npm run start:dev --prefix ./backend/api --legacy-peer-deps
 
 devf:

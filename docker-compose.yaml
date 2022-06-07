@@ -90,7 +90,7 @@ services:
         image: adminer
         restart: always
         ports:
-            - 8080:${ADMINER_PORT}
+            - ${ADMINER_PORT}:8080
         networks:
             - api_network
         depends_on:

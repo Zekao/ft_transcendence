@@ -16,12 +16,12 @@ export class User {
   email: string;
   @Column()
   status: UserStatus;
-  @Column()
+  @Column({ nullable: true })
   in_game: UserGameStatus;
-  @Column()
+  @Column({ nullable: true })
   win: number;
-  @Column()
+  @Column({ nullable: true })
   loose: number;
-  @Column()
+  @Column({ nullable: true })
   rank: number;
 }
