@@ -87,5 +87,3 @@ contact: robriard@student.42.fr
 
 🚧 In progress
 
-
-{ "data": [ { "id": "0eca1518-4fa1-4a7f-9d5f-74e68fdc32d2", "first_name": "naofel", "last_name": "ben", "user_name": "nben", "email": "nben@transcendence.com", "status": "ONLINE", "in_game": "OUT_GAME", "win": 0, "loose": 0, "rank": 0 } ], "status": 200, "statusText": "OK", "headers": { "content-length": "205", "content-type": "application/json; charset=utf-8" }, "config": { "url": "http://localhost:3000/users", "method": "get", "headers": { "Accept": "application/json, text/plain, */*" }, "transformRequest": [ null ], "transformResponse": [ null ], "timeout": 0, "xsrfCookieName": "XSRF-TOKEN", "xsrfHeaderName": "X-XSRF-TOKEN", "maxContentLength": -1, "maxBodyLength": -1, "transitional": { "silentJSONParsing": true, "forcedJSONParsing": true, "clarifyTimeoutError": false } }, "request": {} }
