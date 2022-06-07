@@ -9,6 +9,7 @@ export declare class UsersService {
     getUsers(): Promise<User[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string): Promise<User>;
+    getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;
     getUserName(id: string): Promise<string>;

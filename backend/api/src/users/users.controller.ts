@@ -27,6 +27,10 @@ export class UsersController {
       return this.UsersService.getUserByFilter(filters);
     return this.UsersService.getUsers();
   }
+  @Get("/ranklist")
+  getRankedUsers(): Promise<User[]> {
+    return this.UsersService.getRankedUsers();
+  }
   @Get("/:id")
   getUserId(@Param("id") id: string): Promise<User> {
     return this.UsersService.getUserId(id);

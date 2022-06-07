@@ -82,6 +82,15 @@ export class UsersService {
     return found;
   }
 
+  async getRankedUsers(): Promise<User[]> {
+    const users = await this.UserRepository.find({
+      order: { ratio: "DESC" },
+      take: 10,
+    });
+    if (!users) throw new NotFoundException(`Users not found`);
+    return users;
+  }
+
   async getFirstName(id: string): Promise<string> {
     const found = await this.getUserId(id);
     if (!found) throw new NotFoundException(`User \`${id}' not found`);

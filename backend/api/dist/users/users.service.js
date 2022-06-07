@@ -90,6 +90,15 @@ let UsersService = class UsersService {
                 throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found;
     }
+    async getRankedUsers() {
+        const users = await this.UserRepository.find({
+            order: { ratio: "DESC" },
+            take: 10,
+        });
+        if (!users)
+            throw new common_1.NotFoundException(`Users not found`);
+        return users;
+    }
     async getFirstName(id) {
         const found = await this.getUserId(id);
         if (!found)

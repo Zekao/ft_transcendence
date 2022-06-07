@@ -61,7 +61,7 @@ export default {
   },
   mounted(){
     axios
-    .get('http://localhost:3000/users')
+    .get('http://localhost:3000/users/ranklist')
     .then(response => (this.ranks = response.data));
   },
 }

@@ -7,6 +7,7 @@ export declare class UsersController {
     private UsersService;
     constructor(UsersService: UsersService);
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
+    getRankedUsers(): Promise<User[]>;
     getUserId(id: string): Promise<User>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;

@@ -26,6 +26,9 @@ let UsersController = class UsersController {
             return this.UsersService.getUserByFilter(filters);
         return this.UsersService.getUsers();
     }
+    getRankedUsers() {
+        return this.UsersService.getRankedUsers();
+    }
     getUserId(id) {
         return this.UsersService.getUserId(id);
     }
@@ -115,6 +118,12 @@ __decorate([
     __metadata("design:paramtypes", [user_filter_dto_1.UsersFiltesDTO]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
+__decorate([
+    (0, common_1.Get)("/ranklist"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getRankedUsers", null);
 __decorate([
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)("id")),
