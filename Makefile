@@ -6,7 +6,7 @@
 #    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/07 13:10:25 by nabentay         ###   ########.fr        #
+#    Updated: 2022/06/07 13:13:19 by nabentay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,9 +39,11 @@ re: rm up
 
 devb:
 	@docker-compose up -d database
+	@npm i --prefix ./backend/api
 	@npm run start:dev --prefix ./backend/api
 
 devf:
+	@npm i --prefix ./frontend
 	@npm run dev --prefix ./frontend
 
 down:
