@@ -6,7 +6,7 @@
 #    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/01 23:00:19 by lucasseha        ###   ########.fr        #
+#    Updated: 2022/06/07 13:10:25 by nabentay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,13 @@ up:
 all: up
 
 re: rm up
+
+devb:
+	@docker-compose up -d database
+	@npm run start:dev --prefix ./backend/api
+
+devf:
+	@npm run dev --prefix ./frontend
 
 down:
 	@docker-compose -f docker-compose.yaml down
