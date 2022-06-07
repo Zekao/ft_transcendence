@@ -35,4 +35,5 @@ export declare class UsersController {
     patchRemoveWin(id: any): Promise<number>;
     patchRemoveLoose(id: any): Promise<number>;
     patchUpdateRatio(id: any): Promise<number>;
+    patchUpdateRank(): Promise<User[]>;
 }

@@ -166,4 +166,8 @@ export class UsersController {
   patchUpdateRatio(@Param("id") id): Promise<number> {
     return this.UsersService.patchUpdateRatio(id);
   }
+  @Patch("/updateRank")
+  patchUpdateRank(): Promise<User[]> {
+    return this.UsersService.patchUpdateRank();
+  }
 }

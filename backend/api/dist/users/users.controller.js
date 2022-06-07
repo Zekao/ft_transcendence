@@ -110,6 +110,9 @@ let UsersController = class UsersController {
     patchUpdateRatio(id) {
         return this.UsersService.patchUpdateRatio(id);
     }
+    patchUpdateRank() {
+        return this.UsersService.patchUpdateRank();
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -322,6 +325,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUpdateRatio", null);
+__decorate([
+    (0, common_1.Patch)("/updateRank"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchUpdateRank", null);
 UsersController = __decorate([
     (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])

@@ -36,4 +36,5 @@ export declare class UsersService {
     patchRemoveWin(id: string): Promise<number>;
     patchRemoveLoose(id: string): Promise<number>;
     patchUpdateRatio(id: string): Promise<number>;
+    patchUpdateRank(): Promise<User[]>;
 }

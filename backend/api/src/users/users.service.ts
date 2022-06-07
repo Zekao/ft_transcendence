@@ -280,4 +280,12 @@ export class UsersService {
     this.UserRepository.save(found);
     return found.ratio;
   }
+  async patchUpdateRank(): Promise<User[]> {
+    const found = await this.getRankedUsers();
+    for (let i = 0; i < found.length; i++) {
+      found[i].rank = i + 1;
+      this.UserRepository.save(found[i]);
+    }
+    return found;
+  }
 }
