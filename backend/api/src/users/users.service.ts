@@ -278,6 +278,7 @@ export class UsersService {
       found.ratio = found.win / found.loose;
     }
     this.UserRepository.save(found);
+    this.patchUpdateRank();
     return found.ratio;
   }
   async patchUpdateRank(): Promise<User[]> {

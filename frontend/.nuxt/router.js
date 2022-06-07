@@ -10,7 +10,10 @@ const _63cdee4d = () => interopDefault(import('../pages/Friends.vue' /* webpackC
 const _1f0e34ea = () => interopDefault(import('../pages/Game.vue' /* webpackChunkName: "pages/Game" */))
 const _5554a313 = () => interopDefault(import('../pages/Image.vue' /* webpackChunkName: "pages/Image" */))
 const _3de54532 = () => interopDefault(import('../pages/inspire.vue' /* webpackChunkName: "pages/inspire" */))
+const _a87fdb7e = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
 const _28415f58 = () => interopDefault(import('../pages/Podium.vue' /* webpackChunkName: "pages/Podium" */))
+const _1a9b0461 = () => interopDefault(import('../pages/Profile.vue' /* webpackChunkName: "pages/Profile" */))
+const _e6aeb1ca = () => interopDefault(import('../pages/Register.vue' /* webpackChunkName: "pages/Register" */))
 const _4426dd8a = () => interopDefault(import('../pages/Test.vue' /* webpackChunkName: "pages/Test" */))
 const _6d4b4590 = () => interopDefault(import('../pages/test2.vue' /* webpackChunkName: "pages/test2" */))
 const _3bcf21ac = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
@@ -51,9 +54,21 @@ export const routerOptions = {
     component: _3de54532,
     name: "inspire"
   }, {
+    path: "/login",
+    component: _a87fdb7e,
+    name: "login"
+  }, {
     path: "/Podium",
     component: _28415f58,
     name: "Podium"
+  }, {
+    path: "/Profile",
+    component: _1a9b0461,
+    name: "Profile"
+  }, {
+    path: "/Register",
+    component: _e6aeb1ca,
+    name: "Register"
   }, {
     path: "/Test",
     component: _4426dd8a,

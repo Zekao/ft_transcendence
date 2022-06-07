@@ -42,11 +42,32 @@
     "_name": "_3de54532"
   },
   {
+    "name": "login",
+    "path": "/login",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/login.vue",
+    "chunkName": "pages/login",
+    "_name": "_a87fdb7e"
+  },
+  {
     "name": "Podium",
     "path": "/Podium",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Podium.vue",
     "chunkName": "pages/Podium",
     "_name": "_28415f58"
+  },
+  {
+    "name": "Profile",
+    "path": "/Profile",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Profile.vue",
+    "chunkName": "pages/Profile",
+    "_name": "_1a9b0461"
+  },
+  {
+    "name": "Register",
+    "path": "/Register",
+    "component": "/home/ubuntu/transcendence/nao/frontend/pages/Register.vue",
+    "chunkName": "pages/Register",
+    "_name": "_e6aeb1ca"
   },
   {
     "name": "Test",
