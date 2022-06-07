@@ -12,8 +12,8 @@ const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const bcrypt = require("bcrypt");
 let UsersRepository = class UsersRepository extends typeorm_1.Repository {
-    async createUser(authCredentilasDto) {
-        const { user_name, password } = authCredentilasDto;
+    async createUser(authCredentialsDto) {
+        const { user_name, password } = authCredentialsDto;
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
         const user = this.create({
