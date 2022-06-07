@@ -19,15 +19,16 @@ export class UsersRepository extends Repository<User> {
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.create({
       status: stat,
-      in_game: UserGameStatus.IN_GAME, 
+      in_game: UserGameStatus.IN_GAME,
       user_name,
       password: hashedPassword,
       email: user_name + "@transcendence.com",
-      first_name: "",
-      last_name: "",
+      first_name: "Fake",
+      last_name: "Users",
       win: 0,
       loose: 0,
       rank: 0,
+      ratio: 1,
     });
     // debug to see if password correctly get hashed
     console.log("salt value : ", salt);

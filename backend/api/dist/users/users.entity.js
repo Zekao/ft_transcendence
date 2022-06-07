@@ -58,6 +58,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], User.prototype, "rank", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "real" }),
+    __metadata("design:type", Number)
+], User.prototype, "ratio", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

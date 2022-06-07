@@ -3,60 +3,70 @@
     "name": "Account",
     "path": "/Account",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Account.vue",
-    "chunkName": "pages/Account"
+    "chunkName": "pages/Account",
+    "_name": "_43a422e5"
   },
   {
     "name": "Chat",
     "path": "/Chat",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Chat.vue",
-    "chunkName": "pages/Chat"
+    "chunkName": "pages/Chat",
+    "_name": "_43a34d60"
   },
   {
     "name": "Friends",
     "path": "/Friends",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Friends.vue",
-    "chunkName": "pages/Friends"
+    "chunkName": "pages/Friends",
+    "_name": "_63cdee4d"
   },
   {
     "name": "Game",
     "path": "/Game",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Game.vue",
-    "chunkName": "pages/Game"
+    "chunkName": "pages/Game",
+    "_name": "_1f0e34ea"
   },
   {
     "name": "Image",
     "path": "/Image",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Image.vue",
-    "chunkName": "pages/Image"
+    "chunkName": "pages/Image",
+    "_name": "_5554a313"
   },
   {
     "name": "inspire",
     "path": "/inspire",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/inspire.vue",
-    "chunkName": "pages/inspire"
+    "chunkName": "pages/inspire",
+    "_name": "_3de54532"
   },
   {
     "name": "Podium",
     "path": "/Podium",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Podium.vue",
-    "chunkName": "pages/Podium"
+    "chunkName": "pages/Podium",
+    "_name": "_28415f58"
   },
   {
     "name": "Test",
     "path": "/Test",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/Test.vue",
-    "chunkName": "pages/Test"
+    "chunkName": "pages/Test",
+    "_name": "_4426dd8a"
   },
   {
     "name": "test2",
     "path": "/test2",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/test2.vue",
-    "chunkName": "pages/test2"
+    "chunkName": "pages/test2",
+    "_name": "_6d4b4590"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/home/ubuntu/transcendence/nao/frontend/pages/index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_3bcf21ac"
   }
 ]

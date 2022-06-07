@@ -28,7 +28,7 @@
           <v-divider></v-divider>
         </v-flex>
         <v-flex xs6 sm4 md3>
-          <div> {{item.user}} </div>
+          <div> {{item.user_name}} </div>
           <v-divider></v-divider>
         </v-flex>
          <v-flex xs3 sm2 md1>
@@ -36,7 +36,7 @@
         <v-divider></v-divider>
         </v-flex>
          <v-flex xs3 sm2 md1>
-          <div> {{item.lost}} </div>
+          <div> {{item.loose}} </div>
           <v-divider></v-divider>
         </v-flex>
          <v-flex xs3 sm2 md1>
@@ -44,28 +44,26 @@
           <v-divider></v-divider>
         </v-flex>
       </v-layout>
-
   </v-container>
     </div>
 
 </template>
 
 <script>
+
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      ranks: [
-        { rank: 1, user: 'lusehair', win: 13, lost:2, ratio: 1.80},
-        { rank: 2, user: 'clitorine', win: 10, lost:1, ratio: 1.73},
-        { rank: 3, user: 'foutriquet', win: 9, lost:1, ratio: 1.70},
-        { rank: 4, user: 'MacLahann', win: 30, lost:8, ratio: 0.80},
-        { rank: 5, user: 'DEFCON', win: 10, lost:5, ratio: 0.5},
-        { rank: 6, user: 'CAPCOM', win: 13, lost:9, ratio: 0.49},
-        { rank: 7, user: 'Peter Strip', win: 0, lost:23, ratio: 0.03}
-
-      ]
+      ranks: []
     }
-  }
+  },
+  mounted(){
+    axios
+    .get('http://localhost:3000/users')
+    .then(response => (this.ranks = response.data));
+  },
 }
 </script>
 

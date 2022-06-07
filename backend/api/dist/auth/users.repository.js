@@ -25,11 +25,12 @@ let UsersRepository = class UsersRepository extends typeorm_1.Repository {
             user_name,
             password: hashedPassword,
             email: user_name + "@transcendence.com",
-            first_name: "",
-            last_name: "",
+            first_name: "Fake",
+            last_name: "Users",
             win: 0,
             loose: 0,
             rank: 0,
+            ratio: 1,
         });
         console.log("salt value : ", salt);
         console.log(user.user_name, user.password, user.email);

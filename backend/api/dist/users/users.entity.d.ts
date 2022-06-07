@@ -11,4 +11,5 @@ export declare class User {
     win: number;
     loose: number;
     rank: number;
+    ratio: number;
 }

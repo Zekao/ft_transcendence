@@ -56,6 +56,9 @@ let UsersController = class UsersController {
     getRank(id) {
         return this.UsersService.getRank(id);
     }
+    getRatio(id) {
+        return this.UsersService.getRatio(id);
+    }
     createUser(createUser) {
         return this.UsersService.createUser(createUser);
     }
@@ -100,6 +103,9 @@ let UsersController = class UsersController {
     }
     patchRemoveLoose(id) {
         return this.UsersService.patchRemoveLoose(id);
+    }
+    patchUpdateRatio(id) {
+        return this.UsersService.patchUpdateRatio(id);
     }
 };
 __decorate([
@@ -179,6 +185,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRank", null);
+__decorate([
+    (0, common_1.Get)("/:id/ratio"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getRatio", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -293,6 +306,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchRemoveLoose", null);
+__decorate([
+    (0, common_1.Patch)("/:id/updateRatio"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchUpdateRatio", null);
 UsersController = __decorate([
     (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])

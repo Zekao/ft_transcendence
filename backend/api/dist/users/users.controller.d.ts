@@ -17,6 +17,7 @@ export declare class UsersController {
     getWin(id: string): Promise<number>;
     getLoose(id: string): Promise<number>;
     getRank(id: string): Promise<number>;
+    getRatio(id: string): Promise<string>;
     createUser(createUser: createUserDTO): Promise<User>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, query: any): Promise<string>;
@@ -32,4 +33,5 @@ export declare class UsersController {
     patchAddLoose(id: any): Promise<number>;
     patchRemoveWin(id: any): Promise<number>;
     patchRemoveLoose(id: any): Promise<number>;
+    patchUpdateRatio(id: any): Promise<number>;
 }

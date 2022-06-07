@@ -26,4 +26,6 @@ export class User {
   loose: number;
   @Column()
   rank: number;
+  @Column({ type: "real" })
+  ratio: number;
 }

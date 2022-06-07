@@ -127,6 +127,11 @@ export class UsersService {
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return found.rank;
   }
+  async getRatio(id: string): Promise<string> {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    return found.ratio.toPrecision(2);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -144,6 +149,7 @@ export class UsersService {
       win: 0,
       loose: 0,
       rank: 0,
+      ratio: 1,
     });
     await this.UserRepository.save(user);
     return user;
@@ -229,24 +235,40 @@ export class UsersService {
     const found = await this.getUserId(id);
     found.win++;
     this.UserRepository.save(found);
+    this.patchUpdateRatio(id);
     return found.win;
   }
   async patchAddLoose(id: string): Promise<number> {
     const found = await this.getUserId(id);
     found.loose++;
     this.UserRepository.save(found);
+    this.patchUpdateRatio(id);
     return found.loose;
   }
   async patchRemoveWin(id: string): Promise<number> {
     const found = await this.getUserId(id);
-    found.win--;
-    this.UserRepository.save(found);
+    if (found.loose != 0) {
+      found.win--;
+      this.UserRepository.save(found);
+      this.patchUpdateRatio(id);
+    }
     return found.win;
   }
   async patchRemoveLoose(id: string): Promise<number> {
     const found = await this.getUserId(id);
-    found.loose--;
-    this.UserRepository.save(found);
+    if (found.loose != 0) {
+      found.loose--;
+      this.UserRepository.save(found);
+      this.patchUpdateRatio(id);
+    }
     return found.loose;
+  }
+  async patchUpdateRatio(id: string): Promise<number> {
+    const found = await this.getUserId(id);
+    if (found.win != 0 || found.loose != 0) {
+      found.ratio = found.win / found.loose;
+    }
+    this.UserRepository.save(found);
+    return found.ratio;
   }
 }

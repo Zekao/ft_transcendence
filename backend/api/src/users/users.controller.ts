@@ -68,6 +68,10 @@ export class UsersController {
   getRank(@Param("id") id: string): Promise<number> {
     return this.UsersService.getRank(id);
   }
+  @Get("/:id/ratio")
+  getRatio(@Param("id") id: string): Promise<string> {
+    return this.UsersService.getRatio(id);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -144,5 +148,9 @@ export class UsersController {
   @Patch("/:id/removeLoose")
   patchRemoveLoose(@Param("id") id): Promise<number> {
     return this.UsersService.patchRemoveLoose(id);
+  }
+  @Patch("/:id/updateRatio")
+  patchUpdateRatio(@Param("id") id): Promise<number> {
+    return this.UsersService.patchUpdateRatio(id);
   }
 }
