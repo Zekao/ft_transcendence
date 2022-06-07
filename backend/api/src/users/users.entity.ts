@@ -13,6 +13,8 @@ export class User {
   @Column({ unique: true })
   user_name: string;
   @Column()
+  password: string;
+  @Column()
   email: string;
   @Column()
   status: UserStatus;

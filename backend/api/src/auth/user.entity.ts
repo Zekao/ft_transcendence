@@ -18,13 +18,12 @@ export class User {
   last_name: string;
   @Column()
   status: UserStatus;
-  @Column({ nullable: true})
+  @Column()
   in_game: UserGameStatus;
-  @Column({ nullable: true})
+  @Column()
   win: number;
-  @Column({ nullable: true})
+  @Column()
   loose: number;
-  @Column({ nullable: true})
+  @Column()
   rank: number;
-
 }
