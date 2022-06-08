@@ -17,9 +17,60 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
+function isChannel(id) {
+    const splited = id.split("-");
+    return (id.length === 36 &&
+        splited.length === 5 &&
+        splited[0].length === 8 &&
+        splited[1].length === 4 &&
+        splited[2].length === 4 &&
+        splited[3].length === 4 &&
+        splited[4].length === 12);
+}
 let ChannelsService = class ChannelsService {
     constructor(ChannelsRepository) {
         this.ChannelsRepository = ChannelsRepository;
+    }
+    async getChannel() {
+        const users = await this.ChannelsRepository.find();
+        if (!users)
+            throw new common_1.NotFoundException(`Channel not found`);
+        return users;
+    }
+    async getChannelByFilter(filter) {
+        const { name, permissions, status } = filter;
+        let channels = await this.getChannel();
+        if (name)
+            channels = channels.filter((channel) => channel.name === name);
+        if (status)
+            channels = channels.filter((channel) => channel.status === status);
+        if (permissions)
+            channels = channels.filter((channel) => channel.permissions === permissions);
+        if (!channels)
+            throw new common_1.NotFoundException(`Channel not found`);
+        return channels;
+    }
+    async getChannelId(id) {
+        let found = null;
+        if (isChannel(id))
+            found = await this.ChannelsRepository.findOne({ where: { id: id } });
+        else
+            found = await this.ChannelsRepository.findOne({ where: { name: id } });
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return found;
+    }
+    async getChannelPermissions(id) {
+        const found = await this.getChannelId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return found.permissions;
+    }
+    async getChannelStatus(id) {
+        const found = await this.getChannelId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return found.status;
     }
     async createChannel(channelsDto) {
         const { name, status, permissions } = channelsDto;

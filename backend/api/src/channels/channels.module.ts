@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ChannelsController } from "./channels.controller";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
-import { ChannelsGateway } from "./channels.gateway"
+import { ChannelsGateway } from "./channels.gateway";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Channel])],

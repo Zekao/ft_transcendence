@@ -6,7 +6,7 @@ export class Channel {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
   @Column()
   status: ChannelStatus;

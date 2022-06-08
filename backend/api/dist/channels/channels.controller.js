@@ -15,15 +15,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelsController = void 0;
 const common_1 = require("@nestjs/common");
 const channels_service_1 = require("./channels.service");
+const channels_filter_dto_1 = require("./dto/channels-filter.dto");
 const channels_dto_1 = require("./dto/channels.dto");
 let ChannelsController = class ChannelsController {
-    constructor(ChannelService) {
-        this.ChannelService = ChannelService;
+    constructor(channelService) {
+        this.channelService = channelService;
+    }
+    getUsers(filters) {
+        if (Object.keys(filters).length)
+            return this.channelService.getChannelByFilter(filters);
+        return this.channelService.getChannel();
+    }
+    getChannelStatus(id) {
+        return this.channelService.getChannelStatus(id);
+    }
+    getChannelPermission(id) {
+        return this.channelService.getChannelPermissions(id);
     }
     createChannel(ChannelsDtos) {
-        return this.ChannelService.createChannel(ChannelsDtos);
+        return this.channelService.createChannel(ChannelsDtos);
     }
 };
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getUsers", null);
+__decorate([
+    (0, common_1.Get)("/:id/status"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getChannelStatus", null);
+__decorate([
+    (0, common_1.Get)("/:id/permission"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getChannelPermission", null);
 __decorate([
     (0, common_1.Post)("/create"),
     __param(0, (0, common_1.Body)()),
