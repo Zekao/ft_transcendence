@@ -1,18 +1,25 @@
 import {
   Controller,
   Param,
+  Res,
   Body,
   Query,
   Get,
   Post,
   Delete,
   Patch,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
+import { Express } from "express";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
+import { diskStorage } from "multer";
+import { imageFileFilter, editFileName } from "./file-upload.utils";
 
 @Controller("users")
 export class UsersController {
@@ -76,10 +83,31 @@ export class UsersController {
   getRatio(@Param("id") id: string): Promise<string> {
     return this.UsersService.getRatio(id);
   }
+  @Get("/:id/avatar")
+  getAvatar(@Param("id") id: string, @Res() res) {
+    return this.UsersService.getAvatar(id, res);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
+
+  @Post("/:id/upload")
+  @UseInterceptors(
+    FileInterceptor("image", {
+      storage: diskStorage({
+        destination: "./files",
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    })
+  )
+  async uploadedFile(
+    @Param("id") id: string,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    return this.UsersService.uploadFile(id, file);
+  }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */

@@ -14,11 +14,18 @@ const users_entity_1 = require("./users.entity");
 const users_service_1 = require("./users.service");
 const auth_module_1 = require("../auth/auth.module");
 const jwt_1 = require("@nestjs/jwt");
+const platform_express_1 = require("@nestjs/platform-express");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([users_entity_1.User]), auth_module_1.AuthModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([users_entity_1.User]),
+            auth_module_1.AuthModule,
+            platform_express_1.MulterModule.register({
+                dest: "./files",
+            }),
+        ],
         controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService, jwt_1.JwtService],
     })

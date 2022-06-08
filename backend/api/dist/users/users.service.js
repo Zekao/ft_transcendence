@@ -20,25 +20,6 @@ const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
-function setNickName(users, first, last) {
-    let nick;
-    let first_size = 1;
-    let cond = false;
-    while (!cond) {
-        cond = true;
-        nick = `${first.slice(0, first_size)}${last}`;
-        nick = nick.length > 8 ? nick.slice(0, 8) : nick;
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].user_name === nick) {
-                if (first_size < first.length)
-                    first_size++;
-                cond = false;
-            }
-            continue;
-        }
-    }
-    return nick;
-}
 function isId(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
@@ -162,6 +143,12 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found.ratio.toPrecision(2);
     }
+    async getAvatar(id, res) {
+        const found = await this.getUserId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return res.sendFile(found.avatar, { root: "./files" });
+    }
     async createUsers(authCredentialsDto) {
         const { user_name, password } = authCredentialsDto;
         const stat = users_status_enum_1.UserStatus.ONLINE;
@@ -179,6 +166,7 @@ let UsersService = class UsersService {
             loose: 0,
             rank: 0,
             ratio: 1,
+            avatar: "default/img_avatar.png",
         });
         try {
             await this.UserRepository.save(user);
@@ -209,6 +197,18 @@ let UsersService = class UsersService {
         else {
             throw new common_1.UnauthorizedException("Incorrect password or username");
         }
+    }
+    async uploadFile(id, file) {
+        const found = await this.getUserId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        const response = {
+            originalname: file.originalname,
+            filename: file.filename,
+        };
+        found.avatar = file.filename;
+        this.UserRepository.save(found);
+        return response;
     }
     async deleteUser(id) {
         const target = await this.UserRepository.delete(id);
@@ -326,6 +326,12 @@ let UsersService = class UsersService {
         return found;
     }
 };
+__decorate([
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersService.prototype, "getAvatar", null);
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),

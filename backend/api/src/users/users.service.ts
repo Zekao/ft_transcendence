@@ -4,6 +4,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
   UnauthorizedException,
+  Res,
 } from "@nestjs/common";
 import { UserStatus, UserGameStatus } from "./users-status.enum";
 import { createUserDTO } from "./dto/create-user.dto";
@@ -129,6 +130,11 @@ export class UsersService {
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return found.ratio.toPrecision(2);
   }
+  async getAvatar(id: string, @Res() res) {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    return res.sendFile(found.avatar, { root: "./files" });
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -152,6 +158,7 @@ export class UsersService {
       loose: 0,
       rank: 0,
       ratio: 1,
+      avatar: "default/img_avatar.png",
     });
     try {
       await this.UserRepository.save(user);
@@ -184,6 +191,18 @@ export class UsersService {
     } else {
       throw new UnauthorizedException("Incorrect password or username");
     }
+  }
+
+  async uploadFile(id: string, file: Express.Multer.File) {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    const response = {
+      originalname: file.originalname,
+      filename: file.filename,
+    };
+    found.avatar = file.filename;
+    this.UserRepository.save(found);
+    return response;
   }
 
   /* ************************************************************************** */

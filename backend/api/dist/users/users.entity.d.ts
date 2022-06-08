@@ -6,6 +6,7 @@ export declare class User {
     user_name: string;
     password: string;
     email: string;
+    avatar: string;
     status: UserStatus;
     in_game: UserGameStatus;
     win: number;

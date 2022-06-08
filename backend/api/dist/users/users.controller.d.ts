@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
@@ -18,6 +19,11 @@ export declare class UsersController {
     getLoose(id: string): Promise<number>;
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
+    getAvatar(id: string, res: any): Promise<any>;
+    uploadedFile(id: string, file: Express.Multer.File): Promise<{
+        originalname: string;
+        filename: string;
+    }>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, query: any): Promise<string>;
     patchLastName(id: string, query: any): Promise<string>;

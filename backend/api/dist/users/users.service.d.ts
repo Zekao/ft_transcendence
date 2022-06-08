@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import { UserStatus, UserGameStatus } from "./users-status.enum";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
@@ -22,10 +23,15 @@ export declare class UsersService {
     getLoose(id: string): Promise<number>;
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
+    getAvatar(id: string, res: any): Promise<any>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
     signIn(AuthCredentialsDto: AuthCredentialsDto): Promise<{
         accessToken: string;
+    }>;
+    uploadFile(id: string, file: Express.Multer.File): Promise<{
+        originalname: string;
+        filename: string;
     }>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, first_name: string): Promise<string>;
