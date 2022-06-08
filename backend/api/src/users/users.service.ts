@@ -16,25 +16,6 @@ import { JwtPayload } from "../auth/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 
-function setNickName(users: User[], first: string, last: string): string {
-  let nick: string;
-  let first_size = 1;
-  let cond = false;
-  while (!cond) {
-    cond = true;
-    nick = `${first.slice(0, first_size)}${last}`;
-    nick = nick.length > 8 ? nick.slice(0, 8) : nick;
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].user_name === nick) {
-        if (first_size < first.length) first_size++;
-        cond = false;
-      }
-      continue;
-    }
-  }
-  return nick;
-}
-
 function isId(id: string): boolean {
   const splited: string[] = id.split("-");
   return (
