@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   Res,
 } from "@nestjs/common";
+import * as fs from "fs";
 import { UserStatus, UserGameStatus } from "./users-status.enum";
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
@@ -16,6 +17,7 @@ import { Repository } from "typeorm";
 import { JwtPayload } from "../auth/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import { fstat } from "fs";
 
 function isId(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -200,6 +202,9 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
+    if (found.avatar != "default/img_avatar.png") {
+      this.deleteAvatar(id);
+    }
     found.avatar = file.filename;
     this.UserRepository.save(found);
     return response;
@@ -212,6 +217,19 @@ export class UsersService {
     const target = await this.UserRepository.delete(id);
     if (target.affected === 0)
       throw new NotFoundException(`User \`${id}' not found`);
+  }
+
+  async deleteAvatar(id: string): Promise<void> {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    if (found.avatar == "default/img_avatar.png")
+      throw new UnauthorizedException(`Default avatar cannot be deleted`);
+    try {
+      fs.unlinkSync("./files/" + found.avatar);
+    } catch (err) {
+      console.error(err);
+      throw new NotFoundException(`Avatar \`${id}' not found`);
+    }
   }
 
   /* ************************************************************************** */

@@ -34,6 +34,7 @@ export declare class UsersService {
         filename: string;
     }>;
     deleteUser(id: string): Promise<void>;
+    deleteAvatar(id: string): Promise<void>;
     patchFirstName(id: string, first_name: string): Promise<string>;
     patchLastName(id: string, last_name: string): Promise<string>;
     patchUserName(id: string, user_name: string): Promise<string>;

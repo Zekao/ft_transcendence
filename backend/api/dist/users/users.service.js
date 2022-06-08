@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
+const fs = require("fs");
 const users_status_enum_1 = require("./users-status.enum");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
@@ -206,6 +207,9 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
+        if (found.avatar != "default/img_avatar.png") {
+            this.deleteAvatar(id);
+        }
         found.avatar = file.filename;
         this.UserRepository.save(found);
         return response;
@@ -214,6 +218,20 @@ let UsersService = class UsersService {
         const target = await this.UserRepository.delete(id);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
+    }
+    async deleteAvatar(id) {
+        const found = await this.getUserId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        if (found.avatar == "default/img_avatar.png")
+            throw new common_1.UnauthorizedException(`Default avatar cannot be deleted`);
+        try {
+            fs.unlinkSync("./files/" + found.avatar);
+        }
+        catch (err) {
+            console.error(err);
+            throw new common_1.NotFoundException(`Avatar \`${id}' not found`);
+        }
     }
     async patchFirstName(id, first_name) {
         const found = await this.getUserId(id);

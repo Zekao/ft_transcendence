@@ -25,6 +25,7 @@ export declare class UsersController {
         filename: string;
     }>;
     deleteUser(id: string): Promise<void>;
+    deleteAvatar(id: string): Promise<void>;
     patchFirstName(id: string, query: any): Promise<string>;
     patchLastName(id: string, query: any): Promise<string>;
     patchUserName(id: string, query: any): Promise<string>;

@@ -116,6 +116,10 @@ export class UsersController {
   deleteUser(@Param("id") id: string) {
     return this.UsersService.deleteUser(id);
   }
+  @Delete("/:id/avatar")
+  deleteAvatar(@Param("id") id: string) {
+    return this.UsersService.deleteAvatar(id);
+  }
 
   /* ************************************************************************** */
   /*                   PATCH                                                    */

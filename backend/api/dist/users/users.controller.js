@@ -73,6 +73,9 @@ let UsersController = class UsersController {
     deleteUser(id) {
         return this.UsersService.deleteUser(id);
     }
+    deleteAvatar(id) {
+        return this.UsersService.deleteAvatar(id);
+    }
     patchFirstName(id, query) {
         return this.UsersService.patchFirstName(id, query.firstname);
     }
@@ -239,6 +242,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deleteUser", null);
+__decorate([
+    (0, common_1.Delete)("/:id/avatar"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "deleteAvatar", null);
 __decorate([
     (0, common_1.Patch)("/:id/firstname"),
     __param(0, (0, common_1.Param)("id")),
