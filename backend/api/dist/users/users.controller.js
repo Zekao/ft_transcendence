@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
-const create_user_dto_1 = require("./dto/create-user.dto");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
 const users_service_1 = require("./users.service");
 let UsersController = class UsersController {
@@ -61,9 +60,6 @@ let UsersController = class UsersController {
     }
     getRatio(id) {
         return this.UsersService.getRatio(id);
-    }
-    createUser(createUser) {
-        return this.UsersService.createUser(createUser);
     }
     deleteUser(id) {
         return this.UsersService.deleteUser(id);
@@ -204,13 +200,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRatio", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.createUserDTO]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
     __param(0, (0, common_1.Param)("id")),

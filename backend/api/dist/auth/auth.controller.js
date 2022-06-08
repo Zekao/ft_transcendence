@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
-const auth_service_1 = require("./auth.service");
+const users_service_1 = require("../users/users.service");
 const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
 let AuthController = class AuthController {
     constructor(authService) {
@@ -55,7 +55,7 @@ __decorate([
 ], AuthController.prototype, "test", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

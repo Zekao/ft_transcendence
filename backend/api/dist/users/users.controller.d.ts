@@ -1,4 +1,3 @@
-import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
@@ -19,7 +18,6 @@ export declare class UsersController {
     getLoose(id: string): Promise<number>;
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
-    createUser(createUser: createUserDTO): Promise<User>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, query: any): Promise<string>;
     patchLastName(id: string, query: any): Promise<string>;

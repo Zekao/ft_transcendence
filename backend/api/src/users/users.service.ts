@@ -2,13 +2,19 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { UserStatus, UserGameStatus } from "./users-status.enum";
 import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
+import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
+import { JwtPayload } from "../auth/jwt-payload.interface";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
 
 function setNickName(users: User[], first: string, last: string): string {
   let nick: string;
@@ -45,7 +51,8 @@ function isId(id: string): boolean {
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private UserRepository: Repository<User>
+    @InjectRepository(User) private UserRepository: Repository<User>,
+    private JwtService: JwtService
   ) {}
 
   /* ************************************************************************** */
@@ -145,23 +152,57 @@ export class UsersService {
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
-  async createUser(createUser: createUserDTO): Promise<User> {
-    const { first_name, last_name } = createUser;
-    const username = setNickName(await this.getUsers(), first_name, last_name);
+
+  async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    const { user_name, password } = authCredentialsDto;
+    // hash the password with bcrypt before storing it
+    const stat = UserStatus.ONLINE;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.UserRepository.create({
-      first_name,
-      last_name,
-      user_name: username,
-      email: `${username}@transcendence.com`,
-      status: UserStatus.ONLINE,
-      in_game: UserGameStatus.OUT_GAME,
+      status: stat,
+      in_game: UserGameStatus.IN_GAME,
+      user_name,
+      password: hashedPassword,
+      email: user_name + "@transcendence.com",
+      first_name: "Fake",
+      last_name: "Users",
       win: 0,
       loose: 0,
       rank: 0,
       ratio: 1,
     });
-    await this.UserRepository.save(user);
-    return user;
+    try {
+      await this.UserRepository.save(user);
+      this.patchUpdateRank();
+    } catch (error) {
+      // 23505 = error code for duplicate username
+      if (error.code == "23505") {
+        throw new ConflictException("Username already exists");
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
+    return this.createUsers(AuthCredentialsDto);
+  }
+  async signIn(
+    AuthCredentialsDto: AuthCredentialsDto
+  ): Promise<{ accessToken: string }> {
+    const { user_name, password } = AuthCredentialsDto;
+    const user = await this.UserRepository.findOne({
+      where: { user_name: user_name },
+    });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      // return an access token for the client
+      const payload: JwtPayload = { user_name };
+      const accessToken: string = await this.JwtService.sign(payload);
+      return { accessToken };
+    } else {
+      throw new UnauthorizedException("Incorrect password or username");
+    }
   }
 
   /* ************************************************************************** */

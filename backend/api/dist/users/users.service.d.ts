@@ -1,11 +1,13 @@
 import { UserStatus, UserGameStatus } from "./users-status.enum";
-import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
+import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
+import { JwtService } from "@nestjs/jwt";
 export declare class UsersService {
     private UserRepository;
-    constructor(UserRepository: Repository<User>);
+    private JwtService;
+    constructor(UserRepository: Repository<User>, JwtService: JwtService);
     getUsers(): Promise<User[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string): Promise<User>;
@@ -20,7 +22,11 @@ export declare class UsersService {
     getLoose(id: string): Promise<number>;
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
-    createUser(createUser: createUserDTO): Promise<User>;
+    createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
+    signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
+    signIn(AuthCredentialsDto: AuthCredentialsDto): Promise<{
+        accessToken: string;
+    }>;
     deleteUser(id: string): Promise<void>;
     patchFirstName(id: string, first_name: string): Promise<string>;
     patchLastName(id: string, last_name: string): Promise<string>;

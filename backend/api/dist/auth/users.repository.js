@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const users_status_enum_1 = require("../users/users-status.enum");
 const users_status_enum_2 = require("../users/users-status.enum");
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("./user.entity");
+const users_entity_1 = require("../users/users.entity");
 const bcrypt = require("bcrypt");
 let UsersRepository = class UsersRepository extends typeorm_1.Repository {
     async createUser(authCredentialsDto) {
@@ -32,8 +32,6 @@ let UsersRepository = class UsersRepository extends typeorm_1.Repository {
             rank: 0,
             ratio: 1,
         });
-        console.log("salt value : ", salt);
-        console.log(user.user_name, user.password, user.email);
         try {
             await this.save(user);
         }
@@ -48,7 +46,7 @@ let UsersRepository = class UsersRepository extends typeorm_1.Repository {
     }
 };
 UsersRepository = __decorate([
-    (0, typeorm_1.EntityRepository)(user_entity_1.User)
+    (0, typeorm_1.EntityRepository)(users_entity_1.User)
 ], UsersRepository);
 exports.UsersRepository = UsersRepository;
 //# sourceMappingURL=users.repository.js.map

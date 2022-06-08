@@ -18,6 +18,8 @@ const users_status_enum_1 = require("./users-status.enum");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
+const jwt_1 = require("@nestjs/jwt");
+const bcrypt = require("bcrypt");
 function setNickName(users, first, last) {
     let nick;
     let first_size = 1;
@@ -48,8 +50,9 @@ function isId(id) {
         splited[4].length === 12);
 }
 let UsersService = class UsersService {
-    constructor(UserRepository) {
+    constructor(UserRepository, JwtService) {
         this.UserRepository = UserRepository;
+        this.JwtService = JwtService;
     }
     async getUsers() {
         const users = await this.UserRepository.find();
@@ -159,23 +162,53 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found.ratio.toPrecision(2);
     }
-    async createUser(createUser) {
-        const { first_name, last_name } = createUser;
-        const username = setNickName(await this.getUsers(), first_name, last_name);
+    async createUsers(authCredentialsDto) {
+        const { user_name, password } = authCredentialsDto;
+        const stat = users_status_enum_1.UserStatus.ONLINE;
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
         const user = this.UserRepository.create({
-            first_name,
-            last_name,
-            user_name: username,
-            email: `${username}@transcendence.com`,
-            status: users_status_enum_1.UserStatus.ONLINE,
-            in_game: users_status_enum_1.UserGameStatus.OUT_GAME,
+            status: stat,
+            in_game: users_status_enum_1.UserGameStatus.IN_GAME,
+            user_name,
+            password: hashedPassword,
+            email: user_name + "@transcendence.com",
+            first_name: "Fake",
+            last_name: "Users",
             win: 0,
             loose: 0,
             rank: 0,
             ratio: 1,
         });
-        await this.UserRepository.save(user);
-        return user;
+        try {
+            await this.UserRepository.save(user);
+            this.patchUpdateRank();
+        }
+        catch (error) {
+            if (error.code == "23505") {
+                throw new common_1.ConflictException("Username already exists");
+            }
+            else {
+                throw new common_1.InternalServerErrorException();
+            }
+        }
+    }
+    async signUp(AuthCredentialsDto) {
+        return this.createUsers(AuthCredentialsDto);
+    }
+    async signIn(AuthCredentialsDto) {
+        const { user_name, password } = AuthCredentialsDto;
+        const user = await this.UserRepository.findOne({
+            where: { user_name: user_name },
+        });
+        if (user && (await bcrypt.compare(password, user.password))) {
+            const payload = { user_name };
+            const accessToken = await this.JwtService.sign(payload);
+            return { accessToken };
+        }
+        else {
+            throw new common_1.UnauthorizedException("Incorrect password or username");
+        }
     }
     async deleteUser(id) {
         const target = await this.UserRepository.delete(id);
@@ -296,7 +329,8 @@ let UsersService = class UsersService {
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        jwt_1.JwtService])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

@@ -80,10 +80,6 @@ export class UsersController {
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
-  @Post()
-  createUser(@Body() createUser: createUserDTO): Promise<User> {
-    return this.UsersService.createUser(createUser);
-  }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */
