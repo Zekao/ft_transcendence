@@ -8,7 +8,6 @@ import {
 } from "@nestjs/common";
 import * as fs from "fs";
 import { UserStatus, UserGameStatus } from "./users-status.enum";
-import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -17,7 +16,6 @@ import { Repository } from "typeorm";
 import { JwtPayload } from "../auth/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { fstat } from "fs";
 
 function isId(id: string): boolean {
   const splited: string[] = id.split("-");

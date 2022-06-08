@@ -2,7 +2,6 @@ import {
   Controller,
   Param,
   Res,
-  Body,
   Query,
   Get,
   Post,
@@ -13,7 +12,6 @@ import {
 } from "@nestjs/common";
 import { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { createUserDTO } from "./dto/create-user.dto";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users-status.enum";
 import { User } from "./users.entity";
