@@ -72,12 +72,14 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.status;
     }
-    async createChannel(channelsDto) {
+    async createChannel(channelsDto, channelPasswordDto) {
         const { name, status, permissions } = channelsDto;
+        const { password } = channelPasswordDto;
         const channel = this.ChannelsRepository.create({
             name,
             status,
             permissions,
+            password,
         });
         try {
             await this.ChannelsRepository.save(channel);
@@ -87,6 +89,7 @@ let ChannelsService = class ChannelsService {
                 throw new common_1.ConflictException("Channel already exist");
             }
             else {
+                console.log(error);
                 throw new common_1.InternalServerErrorException();
             }
         }

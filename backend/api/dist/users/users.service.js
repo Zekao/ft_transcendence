@@ -180,7 +180,6 @@ let UsersService = class UsersService {
             rank: 0,
             ratio: 1,
             avatar: "default/img_avatar.png",
-            friend: null,
         });
         try {
             await this.UserRepository.save(user);

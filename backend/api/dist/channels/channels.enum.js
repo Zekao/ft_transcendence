@@ -4,6 +4,7 @@ exports.ChannelPermissions = exports.ChannelStatus = void 0;
 var ChannelStatus;
 (function (ChannelStatus) {
     ChannelStatus["PRIVATE"] = "PRIVATE";
+    ChannelStatus["PROTECTED"] = "PROTECTED";
     ChannelStatus["PUBLIC"] = "PUBLIC";
 })(ChannelStatus = exports.ChannelStatus || (exports.ChannelStatus = {}));
 var ChannelPermissions;

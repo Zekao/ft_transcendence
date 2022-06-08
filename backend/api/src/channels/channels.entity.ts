@@ -12,4 +12,6 @@ export class Channel {
   status: ChannelStatus;
   @Column()
   permissions: ChannelPermissions;
+  @Column({ nullable: true })
+  password: string;
 }

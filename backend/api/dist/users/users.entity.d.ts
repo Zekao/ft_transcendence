@@ -13,5 +13,4 @@ export declare class User {
     loose: number;
     rank: number;
     ratio: number;
-    friend: User[];
 }

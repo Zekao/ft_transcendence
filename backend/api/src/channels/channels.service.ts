@@ -7,8 +7,9 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
+import { ChannelStatus } from "./channels.enum";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelsDto } from "./dto/channels.dto";
+import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 
 function isChannel(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -73,12 +74,17 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createChannel(channelsDto: ChannelsDto): Promise<void> {
+  async createChannel(
+    channelsDto: ChannelsDto,
+    channelPasswordDto: ChannelPasswordDto
+  ): Promise<void> {
     const { name, status, permissions } = channelsDto;
+    const { password } = channelPasswordDto;
     const channel = this.ChannelsRepository.create({
       name,
       status,
       permissions,
+      password,
     });
     try {
       await this.ChannelsRepository.save(channel);
@@ -87,6 +93,7 @@ export class ChannelsService {
       if (error.code == "23505") {
         throw new ConflictException("Channel already exist");
       } else {
+        console.log(error);
         throw new InternalServerErrorException();
       }
     }

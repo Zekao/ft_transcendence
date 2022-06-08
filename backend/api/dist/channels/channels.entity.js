@@ -30,6 +30,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Channel.prototype, "permissions", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Channel.prototype, "password", void 0);
 Channel = __decorate([
     (0, typeorm_1.Entity)()
 ], Channel);

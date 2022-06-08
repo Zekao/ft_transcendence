@@ -32,8 +32,8 @@ let ChannelsController = class ChannelsController {
     getChannelPermission(id) {
         return this.channelService.getChannelPermissions(id);
     }
-    createChannel(ChannelsDtos) {
-        return this.channelService.createChannel(ChannelsDtos);
+    createChannel(ChannelsDtos, channelPasswordDto) {
+        return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
     }
     deleteUser(id) {
         return this.channelService.deleteChannel(id);
@@ -63,8 +63,10 @@ __decorate([
 __decorate([
     (0, common_1.Post)("/create"),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [channels_dto_1.ChannelsDto]),
+    __metadata("design:paramtypes", [channels_dto_1.ChannelsDto,
+        channels_dto_1.ChannelPasswordDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([

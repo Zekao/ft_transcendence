@@ -4,4 +4,5 @@ export declare class Channel {
     name: string;
     status: ChannelStatus;
     permissions: ChannelPermissions;
+    password: string;
 }

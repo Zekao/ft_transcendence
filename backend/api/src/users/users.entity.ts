@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { UserStatus, UserGameStatus } from "./users-status.enum";
 
 @Entity()
@@ -36,9 +30,4 @@ export class User {
   rank: number;
   @Column({ type: "real" })
   ratio: number;
-  @ManyToMany(() => User, (user) => user.id, {
-    cascade: true,
-  })
-  @JoinTable()
-  friend: User[];
 }

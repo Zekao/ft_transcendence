@@ -8,12 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const users_status_enum_1 = require("./users-status.enum");
-let User = User_1 = class User {
+let User = class User {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
@@ -67,14 +66,7 @@ __decorate([
     (0, typeorm_1.Column)({ type: "real" }),
     __metadata("design:type", Number)
 ], User.prototype, "ratio", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => User_1, (user) => user.id, {
-        cascade: true,
-    }),
-    (0, typeorm_1.JoinTable)(),
-    __metadata("design:type", Array)
-], User.prototype, "friend", void 0);
-User = User_1 = __decorate([
+User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);
 exports.User = User;

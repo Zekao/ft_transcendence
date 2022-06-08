@@ -10,7 +10,7 @@ import {
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelsDto } from "./dto/channels.dto";
+import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 
 @Controller("channel")
 export class ChannelsController {
@@ -38,8 +38,11 @@ export class ChannelsController {
   /* ************************************************************************** */
 
   @Post("/create")
-  createChannel(@Body() ChannelsDtos: ChannelsDto): Promise<void> {
-    return this.channelService.createChannel(ChannelsDtos);
+  createChannel(
+    @Body() ChannelsDtos: ChannelsDto,
+    @Body() channelPasswordDto: ChannelPasswordDto
+  ): Promise<void> {
+    return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
   }
 
   /* ************************************************************************** */

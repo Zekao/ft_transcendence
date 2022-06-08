@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelsDto = void 0;
+exports.ChannelPasswordDto = exports.ChannelsDto = void 0;
 const class_validator_1 = require("class-validator");
 const channels_enum_1 = require("../channels.enum");
 class ChannelsDto {
@@ -35,4 +35,16 @@ __decorate([
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "name", void 0);
 exports.ChannelsDto = ChannelsDto;
+class ChannelPasswordDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(12),
+    (0, class_validator_1.MaxLength)(32),
+    (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: "password is too weak",
+    }),
+    __metadata("design:type", String)
+], ChannelPasswordDto.prototype, "password", void 0);
+exports.ChannelPasswordDto = ChannelPasswordDto;
 //# sourceMappingURL=channels.dto.js.map

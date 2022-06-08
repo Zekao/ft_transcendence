@@ -4,3 +4,6 @@ export declare class ChannelsDto {
     status: ChannelStatus;
     name: string;
 }
+export declare class ChannelPasswordDto {
+    password: string;
+}

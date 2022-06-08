@@ -169,7 +169,6 @@ export class UsersService {
       rank: 0,
       ratio: 1,
       avatar: "default/img_avatar.png",
-      friend: null,
     });
     try {
       await this.UserRepository.save(user);
@@ -191,11 +190,10 @@ export class UsersService {
   async addFriend(friend: string) {
     const found = await this.getUserId(friend);
     if (!found) throw new NotFoundException(`Friend \`${friend}' not found`);
-   // found.friend.push
+    // found.friend.push
     this.UserRepository.save(found);
     return found;
   }
-
 
   async signIn(
     AuthCredentialsDto: AuthCredentialsDto

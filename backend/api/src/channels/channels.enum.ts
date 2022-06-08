@@ -1,5 +1,6 @@
 export enum ChannelStatus {
   PRIVATE = "PRIVATE",
+  PROTECTED = "PROTECTED",
   PUBLIC = "PUBLIC",
 }
 
