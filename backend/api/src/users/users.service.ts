@@ -176,6 +176,7 @@ export class UsersService {
   async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.createUsers(AuthCredentialsDto);
   }
+
   async signIn(
     AuthCredentialsDto: AuthCredentialsDto
   ): Promise<{ accessToken: string }> {

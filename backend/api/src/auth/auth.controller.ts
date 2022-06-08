@@ -6,6 +6,11 @@ import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 @Controller("auth")
 export class AuthController {
   constructor(private authService: UsersService) {}
+
+  /* ************************************************************************** */
+  /*                   POST                                                     */
+  /* ************************************************************************** */
+
   @Post("/signup")
   signup(@Body() AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.authService.signUp(AuthCredentialsDto);

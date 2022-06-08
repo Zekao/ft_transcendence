@@ -11,7 +11,7 @@ const common_1 = require("../node_modules/@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
-const chat_gateway_1 = require("./chat/chat.gateway");
+const channels_module_1 = require("./channels/channels.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -19,6 +19,7 @@ AppModule = __decorate([
         imports: [
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
+            channels_module_1.ChannelsModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
                 host: "localhost",
@@ -30,7 +31,6 @@ AppModule = __decorate([
                 synchronize: true,
             }),
         ],
-        providers: [chat_gateway_1.ChatGateway],
     })
 ], AppModule);
 exports.AppModule = AppModule;
