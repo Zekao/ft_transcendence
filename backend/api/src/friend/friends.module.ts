@@ -9,4 +9,4 @@ import { FriendsService } from "./friends.service";
   controllers: [FriendsController],
   providers: [FriendsService],
 })
-export class ChannelsModule {}
+export class FriendsModule {}
