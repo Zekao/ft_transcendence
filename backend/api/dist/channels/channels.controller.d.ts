@@ -9,4 +9,5 @@ export declare class ChannelsController {
     getChannelStatus(id: string): Promise<string>;
     getChannelPermission(id: string): Promise<string>;
     createChannel(ChannelsDtos: ChannelsDto): Promise<void>;
+    deleteUser(id: string): Promise<void>;
 }

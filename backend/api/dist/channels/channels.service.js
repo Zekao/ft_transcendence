@@ -91,6 +91,11 @@ let ChannelsService = class ChannelsService {
             }
         }
     }
+    async deleteChannel(id) {
+        const target = await this.ChannelsRepository.delete(id);
+        if (target.affected === 0)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+    }
 };
 ChannelsService = __decorate([
     (0, common_1.Injectable)(),

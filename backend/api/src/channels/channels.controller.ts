@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Get, Query, Param } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  Query,
+  Param,
+  Delete,
+} from "@nestjs/common";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
@@ -37,6 +45,10 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
+  @Delete("/:id")
+  deleteUser(@Param("id") id: string) {
+    return this.channelService.deleteChannel(id);
+  }
 
   /* ************************************************************************** */
   /*                   PATCH                                                    */

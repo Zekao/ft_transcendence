@@ -11,4 +11,5 @@ export declare class ChannelsService {
     getChannelPermissions(id: string): Promise<string>;
     getChannelStatus(id: string): Promise<string>;
     createChannel(channelsDto: ChannelsDto): Promise<void>;
+    deleteChannel(id: string): Promise<void>;
 }

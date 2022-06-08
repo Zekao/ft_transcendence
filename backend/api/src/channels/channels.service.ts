@@ -95,9 +95,14 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
+  async deleteChannel(id: string): Promise<void> {
+    const target = await this.ChannelsRepository.delete(id);
+    if (target.affected === 0)
+      throw new NotFoundException(`Channel \`${id}' not found`);
+  }
 
   /* **************************************************************************
-\*/
+  /*
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 }
