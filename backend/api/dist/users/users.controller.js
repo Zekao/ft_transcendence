@@ -67,6 +67,9 @@ let UsersController = class UsersController {
     getAvatar(id, res) {
         return this.UsersService.getAvatar(id, res);
     }
+    getAvatarPath(id) {
+        return this.UsersService.getAvatarPath(id);
+    }
     async uploadedFile(id, file) {
         return this.UsersService.uploadFile(id, file);
     }
@@ -220,6 +223,13 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatar", null);
+__decorate([
+    (0, common_1.Get)("/:id/avatar/path"),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getAvatarPath", null);
 __decorate([
     (0, common_1.Post)("/:id/upload"),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {

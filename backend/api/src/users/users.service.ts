@@ -45,6 +45,11 @@ export class UsersService {
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
+  async getFriends(): Promise<User[]> {
+    const users = await this.UserRepository.find();
+    if (!users) throw new NotFoundException(`Users not found`);
+    return users;
+  }
   async getUserByFilter(filter: UsersFiltesDTO): Promise<User[]> {
     const { status, username } = filter;
     let users = await this.getUsers();
@@ -135,6 +140,11 @@ export class UsersService {
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return res.sendFile(found.avatar, { root: "./files" });
   }
+  async getAvatarPath(id: string) {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    return found.avatar;
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -159,6 +169,7 @@ export class UsersService {
       rank: 0,
       ratio: 1,
       avatar: "default/img_avatar.png",
+      friend: null,
     });
     try {
       await this.UserRepository.save(user);
@@ -177,6 +188,15 @@ export class UsersService {
     return this.createUsers(AuthCredentialsDto);
   }
 
+  async addFriend(friend: string) {
+    const found = await this.getUserId(friend);
+    if (!found) throw new NotFoundException(`Friend \`${friend}' not found`);
+   // found.friend.push
+    this.UserRepository.save(found);
+    return found;
+  }
+
+
   async signIn(
     AuthCredentialsDto: AuthCredentialsDto
   ): Promise<{ accessToken: string }> {
@@ -187,7 +207,7 @@ export class UsersService {
     if (user && (await bcrypt.compare(password, user.password))) {
       // return an access token for the client
       const payload: JwtPayload = { user_name };
-      const accessToken: string = await this.JwtService.sign(payload);
+      const accessToken: string = this.JwtService.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException("Incorrect password or username");

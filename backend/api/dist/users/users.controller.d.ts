@@ -20,6 +20,7 @@ export declare class UsersController {
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
+    getAvatarPath(id: string): Promise<string>;
     uploadedFile(id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;

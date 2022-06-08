@@ -85,6 +85,10 @@ export class UsersController {
   getAvatar(@Param("id") id: string, @Res() res) {
     return this.UsersService.getAvatar(id, res);
   }
+  @Get("/:id/avatar/path")
+  getAvatarPath(@Param("id") id: string) {
+    return this.UsersService.getAvatarPath(id);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */

@@ -3,14 +3,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { ChannelsModule } from "./channels/channels.module";
-import { FriendsModule } from "./friend/friends.module";
 
 @Module({
   imports: [
     UsersModule,
     AuthModule,
     ChannelsModule,
-    FriendsModule,
     TypeOrmModule.forRoot({
       type: "postgres",
       host: "localhost", // to modify postgres

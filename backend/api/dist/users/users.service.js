@@ -42,6 +42,12 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Users not found`);
         return users;
     }
+    async getFriends() {
+        const users = await this.UserRepository.find();
+        if (!users)
+            throw new common_1.NotFoundException(`Users not found`);
+        return users;
+    }
     async getUserByFilter(filter) {
         const { status, username } = filter;
         let users = await this.getUsers();
@@ -150,6 +156,12 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return res.sendFile(found.avatar, { root: "./files" });
     }
+    async getAvatarPath(id) {
+        const found = await this.getUserId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return found.avatar;
+    }
     async createUsers(authCredentialsDto) {
         const { user_name, password } = authCredentialsDto;
         const stat = users_status_enum_1.UserStatus.ONLINE;
@@ -168,6 +180,7 @@ let UsersService = class UsersService {
             rank: 0,
             ratio: 1,
             avatar: "default/img_avatar.png",
+            friend: null,
         });
         try {
             await this.UserRepository.save(user);
@@ -185,6 +198,13 @@ let UsersService = class UsersService {
     async signUp(AuthCredentialsDto) {
         return this.createUsers(AuthCredentialsDto);
     }
+    async addFriend(friend) {
+        const found = await this.getUserId(friend);
+        if (!found)
+            throw new common_1.NotFoundException(`Friend \`${friend}' not found`);
+        this.UserRepository.save(found);
+        return found;
+    }
     async signIn(AuthCredentialsDto) {
         const { user_name, password } = AuthCredentialsDto;
         const user = await this.UserRepository.findOne({
@@ -192,7 +212,7 @@ let UsersService = class UsersService {
         });
         if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { user_name };
-            const accessToken = await this.JwtService.sign(payload);
+            const accessToken = this.JwtService.sign(payload);
             return { accessToken };
         }
         else {

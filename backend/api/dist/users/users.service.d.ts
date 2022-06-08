@@ -10,6 +10,7 @@ export declare class UsersService {
     private JwtService;
     constructor(UserRepository: Repository<User>, JwtService: JwtService);
     getUsers(): Promise<User[]>;
+    getFriends(): Promise<User[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string): Promise<User>;
     getRankedUsers(): Promise<User[]>;
@@ -24,8 +25,10 @@ export declare class UsersService {
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
+    getAvatarPath(id: string): Promise<string>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
+    addFriend(friend: string): Promise<User>;
     signIn(AuthCredentialsDto: AuthCredentialsDto): Promise<{
         accessToken: string;
     }>;
