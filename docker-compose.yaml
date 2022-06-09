@@ -9,13 +9,13 @@ volumes:
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: ${DIR}/backend/api
+            device: ${PWD}/backend/api
     database:
         driver: local
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: ${DIR}/backend/database/data
+            device: ${PWD}/backend/database/data
 
 
 # ************************************************************
