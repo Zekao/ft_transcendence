@@ -17,5 +17,6 @@ import { MulterModule } from "@nestjs/platform-express";
   ],
   controllers: [UsersController],
   providers: [UsersService, JwtService],
+  exports: [UsersService],
 })
 export class UsersModule {}

@@ -16,6 +16,7 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
+const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 const users_service_1 = require("./users.service");
 const multer_1 = require("multer");
 const file_upload_utils_1 = require("./file-upload.utils");
@@ -30,6 +31,9 @@ let UsersController = class UsersController {
     }
     getRankedUsers() {
         return this.UsersService.getRankedUsers();
+    }
+    getProfile(req) {
+        return req.user;
     }
     getUserId(id) {
         return this.UsersService.getUserId(id);
@@ -138,6 +142,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRankedUsers", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("profile"),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getProfile", null);
 __decorate([
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)("id")),

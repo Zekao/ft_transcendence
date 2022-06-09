@@ -21,16 +21,7 @@ const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
-function isId(id) {
-    const splited = id.split("-");
-    return (id.length === 36 &&
-        splited.length === 5 &&
-        splited[0].length === 8 &&
-        splited[1].length === 4 &&
-        splited[2].length === 4 &&
-        splited[3].length === 4 &&
-        splited[4].length === 12);
-}
+const utils_1 = require("../utils/utils");
 let UsersService = class UsersService {
     constructor(UserRepository, JwtService) {
         this.UserRepository = UserRepository;
@@ -72,7 +63,7 @@ let UsersService = class UsersService {
     }
     async getUserId(id) {
         let found = null;
-        if (isId(id))
+        if ((0, utils_1.isUuid)(id))
             found = await this.UserRepository.findOne({ where: { id: id } });
         else
             found = await this.UserRepository.findOne({ where: { user_name: id } });

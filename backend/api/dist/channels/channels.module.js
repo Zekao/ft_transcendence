@@ -13,13 +13,15 @@ const channels_controller_1 = require("./channels.controller");
 const channels_entity_1 = require("./channels.entity");
 const channels_service_1 = require("./channels.service");
 const channels_gateway_1 = require("./channels.gateway");
+const jwt_1 = require("@nestjs/jwt");
+const users_module_1 = require("../users/users.module");
 let ChannelsModule = class ChannelsModule {
 };
 ChannelsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([channels_entity_1.Channel])],
+        imports: [users_module_1.UsersModule, typeorm_1.TypeOrmModule.forFeature([channels_entity_1.Channel])],
         controllers: [channels_controller_1.ChannelsController],
-        providers: [channels_service_1.ChannelsService, channels_gateway_1.ChannelsGateway],
+        providers: [channels_service_1.ChannelsService, channels_gateway_1.ChannelsGateway, jwt_1.JwtService],
     })
 ], ChannelsModule);
 exports.ChannelsModule = ChannelsModule;

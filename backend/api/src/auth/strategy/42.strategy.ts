@@ -48,7 +48,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     @InjectRepository(UsersService)
     private usersRepository: Repository<User>
   ) {
-    const FortyTwoStrategy = require("passport-42").Strategy;
+    //const FortyTwoStrategy = require("passport-42").Strategy;
     console.log(process.env);
     super({
       // a remplacer avec les variables d'env

@@ -8,6 +8,7 @@ export declare class UsersController {
     constructor(UsersService: UsersService);
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
     getRankedUsers(): Promise<User[]>;
+    getProfile(req: any): any;
     getUserId(id: string): Promise<User>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;

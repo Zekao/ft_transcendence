@@ -13,23 +13,11 @@ import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
-import { JwtPayload } from "../auth/jwt-payload.interface";
+import { JwtPayload } from "../auth/interface/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
-
-function isId(id: string): boolean {
-  const splited: string[] = id.split("-");
-  return (
-    id.length === 36 &&
-    splited.length === 5 &&
-    splited[0].length === 8 &&
-    splited[1].length === 4 &&
-    splited[2].length === 4 &&
-    splited[3].length === 4 &&
-    splited[4].length === 12
-  );
-}
+import { isUuid } from "../utils/utils";
 
 @Injectable()
 export class UsersService {
@@ -68,7 +56,7 @@ export class UsersService {
   }
   async getUserId(id: string): Promise<User> {
     let found = null;
-    if (isId(id))
+    if (isUuid(id))
       found = await this.UserRepository.findOne({ where: { id: id } });
     else
       found = await this.UserRepository.findOne({ where: { user_name: id } });

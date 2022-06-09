@@ -9,11 +9,14 @@ import {
   Patch,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
+  Request,
 } from "@nestjs/common";
 import { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users-status.enum";
+import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { diskStorage } from "multer";
@@ -35,6 +38,11 @@ export class UsersController {
   @Get("/ranklist")
   getRankedUsers(): Promise<User[]> {
     return this.UsersService.getRankedUsers();
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get("profile")
+  getProfile(@Request() req) {
+    return req.user;
   }
   @Get("/:id")
   getUserId(@Param("id") id: string): Promise<User> {

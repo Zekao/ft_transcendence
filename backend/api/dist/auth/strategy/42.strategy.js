@@ -22,7 +22,6 @@ const typeorm_2 = require("typeorm");
 const users_service_1 = require("../../users/users.service");
 let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStrategy)(passport_42_1.Strategy) {
     constructor(usersRepository) {
-        const FortyTwoStrategy = require("passport-42").Strategy;
         console.log(process.env);
         super({
             clientID: "1d54373ef2df42a5273b49008cb047a94b1b1baf6f7202c9855112e9646461f3",

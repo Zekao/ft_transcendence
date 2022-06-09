@@ -83,6 +83,7 @@ let ChannelsService = class ChannelsService {
             permissions,
             password,
         });
+        this.channelGateway;
         try {
             await this.ChannelsRepository.save(channel);
         }

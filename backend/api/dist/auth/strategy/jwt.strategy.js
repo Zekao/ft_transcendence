@@ -19,29 +19,27 @@ const typeorm_1 = require("@nestjs/typeorm");
 const passport_jwt_1 = require("passport-jwt");
 const users_entity_1 = require("../../users/users.entity");
 const typeorm_2 = require("typeorm");
+const users_service_1 = require("../../users/users.service");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    constructor(usersRepository) {
+    constructor(usersRepository, userService) {
         super({
             secretOrKey: "secretkey",
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
         });
         this.usersRepository = usersRepository;
+        this.userService = userService;
     }
     async validate(payload) {
         const { user_name } = payload;
-        const user = await this.usersRepository.findOne({
-            where: { user_name: user_name },
-        });
-        if (!user) {
-            throw new common_1.UnauthorizedException();
-        }
+        const user = this.userService.getUserId(user_name);
         return user;
     }
 };
 JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        users_service_1.UsersService])
 ], JwtStrategy);
 exports.JwtStrategy = JwtStrategy;
 //# sourceMappingURL=jwt.strategy.js.map
