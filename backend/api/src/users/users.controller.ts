@@ -21,6 +21,7 @@ import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { diskStorage } from "multer";
 import { imageFileFilter, editFileName } from "./file-upload.utils";
+import { FortyTwoAuthGuard } from "../auth/guard/42.auth.guard";
 
 @Controller("users")
 export class UsersController {

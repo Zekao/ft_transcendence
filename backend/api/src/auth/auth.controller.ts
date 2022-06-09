@@ -4,6 +4,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { FortyTwoAuthGuard } from "./guard/42.auth.guard";
+import { JwtAuthGuard } from "./guard/jwt.auth.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -29,11 +30,17 @@ export class AuthController {
   }
 
   @Post("/test") // to check that request can be made with the jwt
-  @UseGuards(FortyTwoAuthGuard)
+  @UseGuards(JwtAuthGuard)
   test(@Req() req) {
+    console.log(req.user);
     this.authService.GenerateJwtToken(req.user);
     // generer la jwt
     // rediriger la personne vers le front
     // console.log(req.user);
+  }
+  @Post("/test/42")
+  @UseGuards(FortyTwoAuthGuard)
+  test42(@Req() req) {
+    console.log(req.user);
   }
 }

@@ -18,6 +18,7 @@ const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("./auth.services");
 const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
+const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 let AuthController = class AuthController {
     constructor(userService, authService) {
         this.userService = userService;
@@ -30,7 +31,11 @@ let AuthController = class AuthController {
         return this.userService.signIn(AuthCredentialsDto);
     }
     test(req) {
+        console.log(req.user);
         this.authService.GenerateJwtToken(req.user);
+    }
+    test42(req) {
+        console.log(req.user);
     }
 };
 __decorate([
@@ -49,12 +54,20 @@ __decorate([
 ], AuthController.prototype, "signin", null);
 __decorate([
     (0, common_1.Post)("/test"),
-    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "test", null);
+__decorate([
+    (0, common_1.Post)("/test/42"),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "test42", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
     __metadata("design:paramtypes", [users_service_1.UsersService,
