@@ -185,29 +185,12 @@ let UsersService = class UsersService {
             }
         }
     }
-    async signUp(AuthCredentialsDto) {
-        return this.createUsers(AuthCredentialsDto);
-    }
     async addFriend(friend) {
         const found = await this.getUserId(friend);
         if (!found)
             throw new common_1.NotFoundException(`Friend \`${friend}' not found`);
         this.UserRepository.save(found);
         return found;
-    }
-    async signIn(AuthCredentialsDto) {
-        const { user_name, password } = AuthCredentialsDto;
-        const user = await this.UserRepository.findOne({
-            where: { user_name: user_name },
-        });
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const payload = { user_name };
-            const accessToken = this.JwtService.sign(payload);
-            return { accessToken };
-        }
-        else {
-            throw new common_1.UnauthorizedException("Incorrect password or username");
-        }
     }
     async uploadFile(id, file) {
         const found = await this.getUserId(id);

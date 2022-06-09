@@ -25,16 +25,16 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     signup(AuthCredentialsDto) {
-        return this.userService.signUp(AuthCredentialsDto);
+        return this.authService.signUp(AuthCredentialsDto);
     }
     signin(AuthCredentialsDto) {
-        return this.userService.signIn(AuthCredentialsDto);
+        return this.authService.signIn(AuthCredentialsDto);
     }
     test(req) {
         console.log(req.user);
         this.authService.GenerateJwtToken(req.user);
     }
-    test42(req) {
+    logfortytwo(req) {
         console.log(req.user);
     }
 };
@@ -61,13 +61,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "test", null);
 __decorate([
-    (0, common_1.Get)("/42/test"),
+    (0, common_1.Get)("/42"),
     (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "test42", null);
+], AuthController.prototype, "logfortytwo", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
     __metadata("design:paramtypes", [users_service_1.UsersService,

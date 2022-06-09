@@ -10,5 +10,5 @@ export declare class AuthController {
         accessToken: string;
     }>;
     test(req: any): void;
-    test42(req: any): void;
+    logfortytwo(req: any): void;
 }

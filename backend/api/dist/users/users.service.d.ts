@@ -28,11 +28,7 @@ export declare class UsersService {
     getAvatar(id: string, res: any): Promise<any>;
     getAvatarPath(id: string): Promise<string>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
-    signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(friend: string): Promise<User>;
-    signIn(AuthCredentialsDto: AuthCredentialsDto): Promise<{
-        accessToken: string;
-    }>;
     uploadFile(id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;

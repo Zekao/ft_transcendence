@@ -8,23 +8,53 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const users_entity_1 = require("../users/users.entity");
+const users_service_1 = require("../users/users.service");
+const bcrypt = require("bcrypt");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 let AuthService = class AuthService {
-    constructor(JwtService) {
+    constructor(JwtService, userRepository, userService) {
         this.JwtService = JwtService;
+        this.userRepository = userRepository;
+        this.userService = userService;
     }
     GenerateJwtToken(User) {
         const payload = { user_name: User.user_name, user_id: User.user_id };
         this.JwtService.sign(payload);
         console.log(User);
     }
+    async signIn(AuthCredentialsDto) {
+        const { user_name, password } = AuthCredentialsDto;
+        const user = await this.userRepository.findOne({
+            where: { user_name: user_name },
+        });
+        if (user && (await bcrypt.compare(password, user.password))) {
+            const payload = { user_name };
+            const accessToken = this.JwtService.sign(payload);
+            return { accessToken };
+        }
+        else {
+            throw new common_1.UnauthorizedException("Incorrect password or username");
+        }
+    }
+    async signUp(AuthCredentialsDto) {
+        return this.userService.createUsers(AuthCredentialsDto);
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService])
+    __param(1, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
+    __metadata("design:paramtypes", [jwt_1.JwtService,
+        typeorm_2.Repository,
+        users_service_1.UsersService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.services.js.map

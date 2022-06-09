@@ -19,14 +19,14 @@ export class AuthController {
 
   @Post("/signup")
   signup(@Body() AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.userService.signUp(AuthCredentialsDto);
+    return this.authService.signUp(AuthCredentialsDto);
   }
 
   @Post("/signin")
   signin(
     @Body() AuthCredentialsDto: AuthCredentialsDto
   ): Promise<{ accessToken: string }> {
-    return this.userService.signIn(AuthCredentialsDto);
+    return this.authService.signIn(AuthCredentialsDto);
   }
 
   @Post("/test") // to check that request can be made with the jwt
@@ -38,9 +38,9 @@ export class AuthController {
     // rediriger la personne vers le front
     // console.log(req.user);
   }
-  @Get("/42/test")
+  @Get("/42")
   @UseGuards(FortyTwoAuthGuard)
-  test42(@Req() req) {
+  logfortytwo(@Req() req) {
     console.log(req.user);
   }
 }

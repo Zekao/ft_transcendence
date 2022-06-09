@@ -172,33 +172,12 @@ export class UsersService {
     }
   }
 
-  async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.createUsers(AuthCredentialsDto);
-  }
-
   async addFriend(friend: string) {
     const found = await this.getUserId(friend);
     if (!found) throw new NotFoundException(`Friend \`${friend}' not found`);
     // found.friend.push
     this.UserRepository.save(found);
     return found;
-  }
-
-  async signIn(
-    AuthCredentialsDto: AuthCredentialsDto
-  ): Promise<{ accessToken: string }> {
-    const { user_name, password } = AuthCredentialsDto;
-    const user = await this.UserRepository.findOne({
-      where: { user_name: user_name },
-    });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      // return an access token for the client
-      const payload: JwtPayload = { user_name };
-      const accessToken: string = this.JwtService.sign(payload);
-      return { accessToken };
-    } else {
-      throw new UnauthorizedException("Incorrect password or username");
-    }
   }
 
   async uploadFile(id: string, file: Express.Multer.File) {
