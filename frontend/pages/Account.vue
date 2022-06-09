@@ -5,7 +5,7 @@
         <v-list-item>
          <v-list-item-avatar size="100">
             <img
-              src="https://www.w3schools.com/howto/img_avatar.png"
+              src="http://127.0.0.1:3000/users/naofel1/avatar"
               alt="John"
             >
           </v-list-item-avatar>
@@ -32,7 +32,7 @@ export default {
   },
 mounted(){
   axios
-  .get('http://localhost:3000/users/0b490f3f-fc29-4e25-af1b-4774d772ddea')
+  .get('http://localhost:3000/users/naofel1')
   .then(response => (this.info = response.data));
 },
 }

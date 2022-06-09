@@ -6,6 +6,7 @@ import {
   Query,
   Param,
   Delete,
+  Patch,
 } from "@nestjs/common";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
@@ -48,12 +49,19 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  @Delete("/:id")
-  deleteUser(@Param("id") id: string) {
+  @Delete("/:id/delete")
+  deleteUser(@Param("id") id: string): Promise<boolean> {
     return this.channelService.deleteChannel(id);
   }
 
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
+  @Patch("/:id/edit")
+  editChannel(
+    @Param("id") id: string,
+    @Query() edit: ChannelsDto
+  ): Promise<Channel> {
+    return this.channelService.editChannel(id, edit);
+  }
 }

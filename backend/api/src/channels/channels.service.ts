@@ -102,14 +102,24 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  async deleteChannel(id: string): Promise<void> {
+  async deleteChannel(id: string): Promise<boolean> {
     const target = await this.ChannelsRepository.delete(id);
     if (target.affected === 0)
       throw new NotFoundException(`Channel \`${id}' not found`);
+    return true;
   }
 
   /* **************************************************************************
   /*
   /*                   PATCH                                                    */
   /* ************************************************************************** */
+  async editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel> {
+    const { name, status, permissions } = ChannelDto;
+    const found = await this.getChannelId(id);
+    if (name) found.name = name;
+    if (status) found.status = status;
+    if (permissions) found.permissions = permissions;
+    await this.ChannelsRepository.save(found);
+    return found;
+  }
 }
