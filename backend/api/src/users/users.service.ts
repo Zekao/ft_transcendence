@@ -231,23 +231,28 @@ export class UsersService {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  async deleteUser(id: string): Promise<void> {
-    const target = await this.UserRepository.delete(id);
+  async deleteUser(id: string): Promise<boolean> {
+    const found = await this.getUserId(id);
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    const target = await this.UserRepository.delete(found);
     if (target.affected === 0)
       throw new NotFoundException(`User \`${id}' not found`);
+    return true;
   }
 
-  async deleteAvatar(id: string): Promise<void> {
+  async deleteAvatar(id: string): Promise<boolean> {
     const found = await this.getUserId(id);
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
     if (found.avatar == "default/img_avatar.png")
       throw new UnauthorizedException(`Default avatar cannot be deleted`);
     try {
       fs.unlinkSync("./files/" + found.avatar);
+      found.avatar = "default/img_avatar.png";
+      this.UserRepository.save(found);
     } catch (err) {
-      console.error(err);
       throw new NotFoundException(`Avatar \`${id}' not found`);
     }
+    return true;
   }
 
   /* ************************************************************************** */

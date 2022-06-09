@@ -115,11 +115,11 @@ export class UsersController {
   /*                   DELETE                                                   */
   /* ************************************************************************** */
   @Delete("/:id")
-  deleteUser(@Param("id") id: string) {
+  deleteUser(@Param("id") id: string): Promise<boolean> {
     return this.UsersService.deleteUser(id);
   }
   @Delete("/:id/avatar")
-  deleteAvatar(@Param("id") id: string) {
+  deleteAvatar(@Param("id") id: string): Promise<boolean> {
     return this.UsersService.deleteAvatar(id);
   }
 

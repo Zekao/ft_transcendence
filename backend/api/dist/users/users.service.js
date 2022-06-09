@@ -236,9 +236,13 @@ let UsersService = class UsersService {
         return response;
     }
     async deleteUser(id) {
-        const target = await this.UserRepository.delete(id);
+        const found = await this.getUserId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
+        const target = await this.UserRepository.delete(found);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
+        return true;
     }
     async deleteAvatar(id) {
         const found = await this.getUserId(id);
@@ -248,11 +252,13 @@ let UsersService = class UsersService {
             throw new common_1.UnauthorizedException(`Default avatar cannot be deleted`);
         try {
             fs.unlinkSync("./files/" + found.avatar);
+            found.avatar = "default/img_avatar.png";
+            this.UserRepository.save(found);
         }
         catch (err) {
-            console.error(err);
             throw new common_1.NotFoundException(`Avatar \`${id}' not found`);
         }
+        return true;
     }
     async patchFirstName(id, first_name) {
         const found = await this.getUserId(id);
