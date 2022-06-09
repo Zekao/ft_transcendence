@@ -31,6 +31,20 @@ let AuthService = class AuthService {
         this.JwtService.sign(payload);
         console.log(User);
     }
+    async handleFortyTwo(Ftwo) {
+        const AuthCredentialsDto = {
+            first_name: Ftwo.first_name,
+            last_name: Ftwo.last_name,
+            user_name: Ftwo.login,
+            email: Ftwo.email,
+            avatar: Ftwo.image_url,
+            password: "TinkyWinkey42",
+        };
+        const found = this.userService.getUserId(Ftwo.login);
+        if (!found)
+            return this.signUp(AuthCredentialsDto);
+        return this.signIn(AuthCredentialsDto);
+    }
     async signIn(AuthCredentialsDto) {
         const { user_name, password } = AuthCredentialsDto;
         const user = await this.userRepository.findOne({

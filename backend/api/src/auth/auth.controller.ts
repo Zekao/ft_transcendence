@@ -1,6 +1,4 @@
 import { Body, Get, Controller, Post, Req, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { FortyTwoAuthGuard } from "./guard/42.auth.guard";
@@ -8,10 +6,7 @@ import { JwtAuthGuard } from "./guard/jwt.auth.guard";
 
 @Controller("auth")
 export class AuthController {
-  constructor(
-    private userService: UsersService,
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -21,12 +16,16 @@ export class AuthController {
   signup(@Body() AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.authService.signUp(AuthCredentialsDto);
   }
-
   @Post("/signin")
   signin(
     @Body() AuthCredentialsDto: AuthCredentialsDto
   ): Promise<{ accessToken: string }> {
     return this.authService.signIn(AuthCredentialsDto);
+  }
+  @Get("/42/test")
+  @UseGuards(FortyTwoAuthGuard)
+  logfortytwo(@Req() req) {
+    this.authService.handleFortyTwo(req.user._json);
   }
 
   @Post("/test") // to check that request can be made with the jwt
@@ -37,10 +36,5 @@ export class AuthController {
     // generer la jwt
     // rediriger la personne vers le front
     // console.log(req.user);
-  }
-  @Get("/42")
-  @UseGuards(FortyTwoAuthGuard)
-  logfortytwo(@Req() req) {
-    console.log(req.user);
   }
 }

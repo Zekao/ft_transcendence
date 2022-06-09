@@ -14,14 +14,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("./auth.services");
 const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
 const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 let AuthController = class AuthController {
-    constructor(userService, authService) {
-        this.userService = userService;
+    constructor(authService) {
         this.authService = authService;
     }
     signup(AuthCredentialsDto) {
@@ -30,12 +28,12 @@ let AuthController = class AuthController {
     signin(AuthCredentialsDto) {
         return this.authService.signIn(AuthCredentialsDto);
     }
+    logfortytwo(req) {
+        this.authService.handleFortyTwo(req.user._json);
+    }
     test(req) {
         console.log(req.user);
         this.authService.GenerateJwtToken(req.user);
-    }
-    logfortytwo(req) {
-        console.log(req.user);
     }
 };
 __decorate([
@@ -53,6 +51,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signin", null);
 __decorate([
+    (0, common_1.Get)("/42/test"),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logfortytwo", null);
+__decorate([
     (0, common_1.Post)("/test"),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
@@ -60,18 +66,9 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "test", null);
-__decorate([
-    (0, common_1.Get)("/42"),
-    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "logfortytwo", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
-        auth_services_1.AuthService])
+    __metadata("design:paramtypes", [auth_services_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

@@ -2,7 +2,10 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "src/users/users.entity";
 import { UsersService } from "src/users/users.service";
-import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
+import {
+  AuthCredentialsDto,
+  AuthCredentialsFortyTwoDto,
+} from "./dto/auth-credentials.dto";
 import * as bcrypt from "bcrypt";
 import { JwtPayload } from "./interface/jwt-payload.interface";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -19,6 +22,19 @@ export class AuthService {
     const payload = { user_name: User.user_name, user_id: User.user_id };
     this.JwtService.sign(payload);
     console.log(User);
+  }
+  async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
+    const AuthCredentialsDto = {
+      first_name: Ftwo.first_name,
+      last_name: Ftwo.last_name,
+      user_name: Ftwo.login,
+      email: Ftwo.email,
+      avatar: Ftwo.image_url,
+      password: "TinkyWinkey42",
+    };
+    const found = this.userService.getUserId(Ftwo.login);
+    if (!found) return this.signUp(AuthCredentialsDto);
+    return this.signIn(AuthCredentialsDto);
   }
   async signIn(
     AuthCredentialsDto: AuthCredentialsDto

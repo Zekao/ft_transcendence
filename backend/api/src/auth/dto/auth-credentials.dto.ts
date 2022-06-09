@@ -12,7 +12,10 @@ export class AuthCredentialsDto {
   @MinLength(2)
   @MaxLength(8)
   user_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
+  avatar: string;
   @IsString()
   @MinLength(12)
   @MaxLength(32)
@@ -20,4 +23,12 @@ export class AuthCredentialsDto {
     message: "password is too weak",
   })
   password: string;
+}
+
+export class AuthCredentialsFortyTwoDto {
+  first_name: string;
+  last_name: string;
+  login: string;
+  email: string;
+  image_url: string;
 }

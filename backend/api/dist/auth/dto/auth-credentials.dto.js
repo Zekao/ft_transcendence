@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthCredentialsDto = void 0;
+exports.AuthCredentialsFortyTwoDto = exports.AuthCredentialsDto = void 0;
 const class_validator_1 = require("class-validator");
 class AuthCredentialsDto {
 }
@@ -29,4 +29,7 @@ __decorate([
     __metadata("design:type", String)
 ], AuthCredentialsDto.prototype, "password", void 0);
 exports.AuthCredentialsDto = AuthCredentialsDto;
+class AuthCredentialsFortyTwoDto {
+}
+exports.AuthCredentialsFortyTwoDto = AuthCredentialsFortyTwoDto;
 //# sourceMappingURL=auth-credentials.dto.js.map
