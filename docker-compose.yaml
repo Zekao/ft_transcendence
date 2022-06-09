@@ -42,6 +42,8 @@ services:
           - .env
         networks:
             - api_network
+        depends_on:
+            - database
 
     # *******************FRONTEND*******************
     frontend:
@@ -77,7 +79,6 @@ services:
             - 5432:5432
         volumes:
             - database:/var/lib/postgresql/data
-            - ${DIR}/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
             - api_network
 
