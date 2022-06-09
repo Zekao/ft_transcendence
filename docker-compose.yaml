@@ -11,12 +11,6 @@ volumes:
             o: 'bind'
             device: ${PWD}/backend/api
     database:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: ${PWD}/backend/database/data
-
 
 # ************************************************************
 # *                  NETWORK                                 *
