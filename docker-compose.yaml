@@ -30,22 +30,19 @@ networks:
 services:
     # *******************API*******************
     api:
-        container_name: api
-        image: api:latest
+        container_name: backend
+        image: backend:latest
         build:
-            context: ./backend
-            dockerfile: api.Dockerfile
+            context: ./backend/api
         restart: always
-        volumes:
-            - api_volume:/home/api
         ports:
             - ${SERVER_PORT_BACK}:${SERVER_PORT_BACK}
+        command: npm run start:dev
         env_file:
           - .env
         networks:
             - api_network
-        depends_on:
-            - database
+
     # *******************FRONTEND*******************
     frontend:
         container_name: frontend

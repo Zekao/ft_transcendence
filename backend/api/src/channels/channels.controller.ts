@@ -42,7 +42,7 @@ export class ChannelsController {
   createChannel(
     @Body() ChannelsDtos: ChannelsDto,
     @Body() channelPasswordDto: ChannelPasswordDto
-  ): Promise<void> {
+  ): Promise<Channel> {
     return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
   }
 

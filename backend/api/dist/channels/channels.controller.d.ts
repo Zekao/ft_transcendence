@@ -8,7 +8,7 @@ export declare class ChannelsController {
     getUsers(filters: ChannelFilteDto): Promise<Channel[]>;
     getChannelStatus(id: string): Promise<string>;
     getChannelPermission(id: string): Promise<string>;
-    createChannel(ChannelsDtos: ChannelsDto, channelPasswordDto: ChannelPasswordDto): Promise<void>;
+    createChannel(ChannelsDtos: ChannelsDto, channelPasswordDto: ChannelPasswordDto): Promise<Channel>;
     deleteUser(id: string): Promise<boolean>;
     editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
 }

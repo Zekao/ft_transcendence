@@ -92,10 +92,10 @@ let UsersController = class UsersController {
         return this.UsersService.patchEmail(id, query.email);
     }
     patchStatus(id, query) {
-        return this.UsersService.patchStatus(id, query.status);
+        return this.UsersService.patchStatus(id, query);
     }
     patchGameStatus(id, query) {
-        return this.UsersService.patchUserGameStatus(id, query.status);
+        return this.UsersService.patchUserGameStatus(id, query);
     }
     patchWin(id, query) {
         return this.UsersService.patchWin(id, query);

@@ -11,7 +11,7 @@ import { ChannelsModule } from "./channels/channels.module";
     ChannelsModule,
     TypeOrmModule.forRoot({
       type: "postgres",
-      host: "localhost", // to modify postgres
+      host: "database", // to modify postgres
       port: 5432,
       username: "postgres",
       password: "root",

@@ -16,6 +16,7 @@ import { Repository } from "typeorm";
 import { JwtPayload } from "../auth/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
+import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 
 function isId(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -288,17 +289,24 @@ export class UsersService {
     this.UserRepository.save(found);
     return found.email;
   }
-  async patchStatus(id: string, status: UserStatus): Promise<UserStatus> {
+  async patchStatus(
+    id: string,
+    userStatusDto: UserStatusDto
+  ): Promise<UserStatus> {
     const found = await this.getUserId(id);
+    const { status } = userStatusDto;
+    if (!status) throw new UnauthorizedException(`Invalid user status`);
     found.status = status;
     this.UserRepository.save(found);
     return found.status;
   }
   async patchUserGameStatus(
     id: string,
-    in_game: UserGameStatus
+    userGameStatusDto: UserGameStatusDto
   ): Promise<UserGameStatus> {
     const found = await this.getUserId(id);
+    const { in_game } = userGameStatusDto;
+    if (!in_game) throw new UnauthorizedException(`Invalid game status`);
     found.in_game = in_game;
     this.UserRepository.save(found);
     return found.in_game;
@@ -307,12 +315,14 @@ export class UsersService {
     const found = await this.getUserId(id);
     found.win = win;
     this.UserRepository.save(found);
+    this.patchUpdateRank();
     return found.win;
   }
   async patchLoose(id: string, loose: number): Promise<number> {
     const found = await this.getUserId(id);
     found.loose = loose;
     this.UserRepository.save(found);
+    this.patchUpdateRank();
     return found.loose;
   }
   async patchRank(id: string, rank: number): Promise<number> {

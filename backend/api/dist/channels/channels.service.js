@@ -93,9 +93,13 @@ let ChannelsService = class ChannelsService {
                 throw new common_1.InternalServerErrorException();
             }
         }
+        return channel;
     }
     async deleteChannel(id) {
-        const target = await this.ChannelsRepository.delete(id);
+        const found = await this.getChannelId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        const target = await this.ChannelsRepository.delete(found);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return true;

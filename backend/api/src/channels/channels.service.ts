@@ -77,7 +77,7 @@ export class ChannelsService {
   async createChannel(
     channelsDto: ChannelsDto,
     channelPasswordDto: ChannelPasswordDto
-  ): Promise<void> {
+  ): Promise<Channel> {
     const { name, status, permissions } = channelsDto;
     const { password } = channelPasswordDto;
     const channel = this.ChannelsRepository.create({
@@ -97,13 +97,16 @@ export class ChannelsService {
         throw new InternalServerErrorException();
       }
     }
+    return channel;
   }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
   async deleteChannel(id: string): Promise<boolean> {
-    const target = await this.ChannelsRepository.delete(id);
+    const found = await this.getChannelId(id);
+    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
+    const target = await this.ChannelsRepository.delete(found);
     if (target.affected === 0)
       throw new NotFoundException(`Channel \`${id}' not found`);
     return true;

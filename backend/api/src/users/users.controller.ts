@@ -145,14 +145,14 @@ export class UsersController {
   }
   @Patch("/:id/status")
   patchStatus(@Param("id") id: string, @Query() query): Promise<UserStatus> {
-    return this.UsersService.patchStatus(id, query.status);
+    return this.UsersService.patchStatus(id, query);
   }
   @Patch("/:id/gameStatus")
   patchGameStatus(
     @Param("id") id: string,
     @Query() query
   ): Promise<UserGameStatus> {
-    return this.UsersService.patchUserGameStatus(id, query.status);
+    return this.UsersService.patchUserGameStatus(id, query);
   }
   @Patch("/:id/win")
   patchWin(

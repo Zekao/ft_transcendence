@@ -291,14 +291,20 @@ let UsersService = class UsersService {
         this.UserRepository.save(found);
         return found.email;
     }
-    async patchStatus(id, status) {
+    async patchStatus(id, userStatusDto) {
         const found = await this.getUserId(id);
+        const { status } = userStatusDto;
+        if (!status)
+            throw new common_1.UnauthorizedException(`Invalid user status`);
         found.status = status;
         this.UserRepository.save(found);
         return found.status;
     }
-    async patchUserGameStatus(id, in_game) {
+    async patchUserGameStatus(id, userGameStatusDto) {
         const found = await this.getUserId(id);
+        const { in_game } = userGameStatusDto;
+        if (!in_game)
+            throw new common_1.UnauthorizedException(`Invalid game status`);
         found.in_game = in_game;
         this.UserRepository.save(found);
         return found.in_game;
@@ -307,12 +313,14 @@ let UsersService = class UsersService {
         const found = await this.getUserId(id);
         found.win = win;
         this.UserRepository.save(found);
+        this.patchUpdateRank();
         return found.win;
     }
     async patchLoose(id, loose) {
         const found = await this.getUserId(id);
         found.loose = loose;
         this.UserRepository.save(found);
+        this.patchUpdateRank();
         return found.loose;
     }
     async patchRank(id, rank) {

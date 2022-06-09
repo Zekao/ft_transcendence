@@ -5,6 +5,7 @@ import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
+import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 export declare class UsersService {
     private UserRepository;
     private JwtService;
@@ -42,8 +43,8 @@ export declare class UsersService {
     patchLastName(id: string, last_name: string): Promise<string>;
     patchUserName(id: string, user_name: string): Promise<string>;
     patchEmail(id: string, email: string): Promise<string>;
-    patchStatus(id: string, status: UserStatus): Promise<UserStatus>;
-    patchUserGameStatus(id: string, in_game: UserGameStatus): Promise<UserGameStatus>;
+    patchStatus(id: string, userStatusDto: UserStatusDto): Promise<UserStatus>;
+    patchUserGameStatus(id: string, userGameStatusDto: UserGameStatusDto): Promise<UserGameStatus>;
     patchWin(id: string, win: number): Promise<number>;
     patchLoose(id: string, loose: number): Promise<number>;
     patchRank(id: string, rank: number): Promise<number>;
