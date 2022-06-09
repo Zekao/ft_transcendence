@@ -222,6 +222,8 @@ let UsersService = class UsersService {
         const found = await this.getUserId(id);
         if (!found)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
+        if (!file)
+            throw new common_1.NotFoundException(`Avatar not found`);
         const response = {
             originalname: file.originalname,
             filename: file.filename,

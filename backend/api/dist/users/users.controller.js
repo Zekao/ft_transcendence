@@ -231,7 +231,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatarPath", null);
 __decorate([
-    (0, common_1.Post)("/:id/upload"),
+    (0, common_1.Post)("/:id/avatar/upload"),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
         storage: (0, multer_1.diskStorage)({
             destination: "./files",

@@ -98,6 +98,19 @@ let ChannelsService = class ChannelsService {
         const target = await this.ChannelsRepository.delete(id);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return true;
+    }
+    async editChannel(id, ChannelDto) {
+        const { name, status, permissions } = ChannelDto;
+        const found = await this.getChannelId(id);
+        if (name)
+            found.name = name;
+        if (status)
+            found.status = status;
+        if (permissions)
+            found.permissions = permissions;
+        await this.ChannelsRepository.save(found);
+        return found;
     }
 };
 ChannelsService = __decorate([

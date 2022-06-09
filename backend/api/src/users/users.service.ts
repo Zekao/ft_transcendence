@@ -215,6 +215,7 @@ export class UsersService {
   async uploadFile(id: string, file: Express.Multer.File) {
     const found = await this.getUserId(id);
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
+    if (!file) throw new NotFoundException(`Avatar not found`);
     const response = {
       originalname: file.originalname,
       filename: file.filename,

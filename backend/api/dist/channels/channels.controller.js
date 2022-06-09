@@ -38,6 +38,9 @@ let ChannelsController = class ChannelsController {
     deleteUser(id) {
         return this.channelService.deleteChannel(id);
     }
+    editChannel(id, edit) {
+        return this.channelService.editChannel(id, edit);
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -70,12 +73,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([
-    (0, common_1.Delete)("/:id"),
+    (0, common_1.Delete)("/:id/delete"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
+__decorate([
+    (0, common_1.Patch)("/:id/edit"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([
     (0, common_1.Controller)("channel"),
     __metadata("design:paramtypes", [channels_service_1.ChannelsService])

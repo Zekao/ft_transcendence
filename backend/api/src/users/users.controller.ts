@@ -94,7 +94,7 @@ export class UsersController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  @Post("/:id/upload")
+  @Post("/:id/avatar/upload")
   @UseInterceptors(
     FileInterceptor("image", {
       storage: diskStorage({

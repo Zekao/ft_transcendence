@@ -14,21 +14,23 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const passport_1 = require("@nestjs/passport");
 const users_service_1 = require("../users/users.service");
+const auth_services_1 = require("./auth.services");
 const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
+const _42_auth_guard_1 = require("./guard/42.auth.guard");
 let AuthController = class AuthController {
-    constructor(authService) {
+    constructor(userService, authService) {
+        this.userService = userService;
         this.authService = authService;
     }
     signup(AuthCredentialsDto) {
-        return this.authService.signUp(AuthCredentialsDto);
+        return this.userService.signUp(AuthCredentialsDto);
     }
     signin(AuthCredentialsDto) {
-        return this.authService.signIn(AuthCredentialsDto);
+        return this.userService.signIn(AuthCredentialsDto);
     }
     test(req) {
-        console.log(req);
+        this.authService.GenerateJwtToken(req.user);
     }
 };
 __decorate([
@@ -47,7 +49,7 @@ __decorate([
 ], AuthController.prototype, "signin", null);
 __decorate([
     (0, common_1.Post)("/test"),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -55,7 +57,8 @@ __decorate([
 ], AuthController.prototype, "test", null);
 AuthController = __decorate([
     (0, common_1.Controller)("auth"),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        auth_services_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map
