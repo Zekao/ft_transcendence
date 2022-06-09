@@ -22,7 +22,7 @@ AppModule = __decorate([
             channels_module_1.ChannelsModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
-                host: "localhost",
+                host: "database",
                 port: 5432,
                 username: "postgres",
                 password: "root",

@@ -4,19 +4,19 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _43a422e5 = () => interopDefault(import('../pages/Account.vue' /* webpackChunkName: "pages/Account" */))
-const _43a34d60 = () => interopDefault(import('../pages/Chat.vue' /* webpackChunkName: "pages/Chat" */))
-const _63cdee4d = () => interopDefault(import('../pages/Friends.vue' /* webpackChunkName: "pages/Friends" */))
-const _1f0e34ea = () => interopDefault(import('../pages/Game.vue' /* webpackChunkName: "pages/Game" */))
-const _5554a313 = () => interopDefault(import('../pages/Image.vue' /* webpackChunkName: "pages/Image" */))
-const _3de54532 = () => interopDefault(import('../pages/inspire.vue' /* webpackChunkName: "pages/inspire" */))
-const _a87fdb7e = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
-const _28415f58 = () => interopDefault(import('../pages/Podium.vue' /* webpackChunkName: "pages/Podium" */))
-const _1a9b0461 = () => interopDefault(import('../pages/Profile.vue' /* webpackChunkName: "pages/Profile" */))
-const _e6aeb1ca = () => interopDefault(import('../pages/Register.vue' /* webpackChunkName: "pages/Register" */))
-const _4426dd8a = () => interopDefault(import('../pages/Test.vue' /* webpackChunkName: "pages/Test" */))
-const _6d4b4590 = () => interopDefault(import('../pages/test2.vue' /* webpackChunkName: "pages/test2" */))
-const _3bcf21ac = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+const _35b554ed = () => interopDefault(import('../pages/Account.vue' /* webpackChunkName: "pages/Account" */))
+const _5751a448 = () => interopDefault(import('../pages/Chat.vue' /* webpackChunkName: "pages/Chat" */))
+const _55df2055 = () => interopDefault(import('../pages/Friends.vue' /* webpackChunkName: "pages/Friends" */))
+const _cf9d003c = () => interopDefault(import('../pages/Game.vue' /* webpackChunkName: "pages/Game" */))
+const _009ab71b = () => interopDefault(import('../pages/Image.vue' /* webpackChunkName: "pages/Image" */))
+const _2ff6773a = () => interopDefault(import('../pages/inspire.vue' /* webpackChunkName: "pages/inspire" */))
+const _57062649 = () => interopDefault(import('../pages/login.vue' /* webpackChunkName: "pages/login" */))
+const _ad488568 = () => interopDefault(import('../pages/Podium.vue' /* webpackChunkName: "pages/Podium" */))
+const _0cac3669 = () => interopDefault(import('../pages/Profile.vue' /* webpackChunkName: "pages/Profile" */))
+const _468493da = () => interopDefault(import('../pages/Register.vue' /* webpackChunkName: "pages/Register" */))
+const _856baefc = () => interopDefault(import('../pages/Test.vue' /* webpackChunkName: "pages/Test" */))
+const _74a07140 = () => interopDefault(import('../pages/test2.vue' /* webpackChunkName: "pages/test2" */))
+const _e542f99c = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -31,55 +31,55 @@ export const routerOptions = {
 
   routes: [{
     path: "/Account",
-    component: _43a422e5,
+    component: _35b554ed,
     name: "Account"
   }, {
     path: "/Chat",
-    component: _43a34d60,
+    component: _5751a448,
     name: "Chat"
   }, {
     path: "/Friends",
-    component: _63cdee4d,
+    component: _55df2055,
     name: "Friends"
   }, {
     path: "/Game",
-    component: _1f0e34ea,
+    component: _cf9d003c,
     name: "Game"
   }, {
     path: "/Image",
-    component: _5554a313,
+    component: _009ab71b,
     name: "Image"
   }, {
     path: "/inspire",
-    component: _3de54532,
+    component: _2ff6773a,
     name: "inspire"
   }, {
     path: "/login",
-    component: _a87fdb7e,
+    component: _57062649,
     name: "login"
   }, {
     path: "/Podium",
-    component: _28415f58,
+    component: _ad488568,
     name: "Podium"
   }, {
     path: "/Profile",
-    component: _1a9b0461,
+    component: _0cac3669,
     name: "Profile"
   }, {
     path: "/Register",
-    component: _e6aeb1ca,
+    component: _468493da,
     name: "Register"
   }, {
     path: "/Test",
-    component: _4426dd8a,
+    component: _856baefc,
     name: "Test"
   }, {
     path: "/test2",
-    component: _6d4b4590,
+    component: _74a07140,
     name: "test2"
   }, {
     path: "/",
-    component: _3bcf21ac,
+    component: _e542f99c,
     name: "index"
   }],
 

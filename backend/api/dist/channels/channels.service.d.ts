@@ -1,10 +1,12 @@
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
+import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 export declare class ChannelsService {
     private ChannelsRepository;
-    constructor(ChannelsRepository: Repository<Channel>);
+    private channelGateway;
+    constructor(ChannelsRepository: Repository<Channel>, channelGateway: ChannelsGateway);
     getChannel(): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
     getChannelId(id: string): Promise<Channel>;

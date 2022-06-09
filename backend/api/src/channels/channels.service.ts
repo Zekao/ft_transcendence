@@ -5,9 +5,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Socket } from "dgram";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelStatus } from "./channels.enum";
+import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 
@@ -27,7 +29,8 @@ function isChannel(id: string): boolean {
 @Injectable()
 export class ChannelsService {
   constructor(
-    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>
+    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>,
+    private channelGateway: ChannelsGateway
   ) {}
 
   /* ************************************************************************** */
@@ -86,6 +89,8 @@ export class ChannelsService {
       permissions,
       password,
     });
+    //    const client = Socket;
+    //    this.channelGateway.handleMessage(client, "aa");
     try {
       await this.ChannelsRepository.save(channel);
     } catch (error) {

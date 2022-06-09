@@ -4,12 +4,6 @@ version: '3.7'
 # *                  VOLUMES                                 *
 # ************************************************************
 volumes:
-    api_volume:
-        driver: local
-        driver_opts:
-            type: 'none'
-            o: 'bind'
-            device: ${PWD}/backend/api
     database:
 
 # ************************************************************
@@ -29,6 +23,9 @@ services:
         build:
             context: ./backend/api
         restart: always
+        volumes:
+          - ./backend/api/:/usr/src/app
+          - /usr/src/app/node_modules
         ports:
             - ${SERVER_PORT_BACK}:${SERVER_PORT_BACK}
         command: npm run start:dev
@@ -47,8 +44,8 @@ services:
             context: ./frontend
         restart: always
         volumes:
-          - ./frontend/:/usr/frontend/app
-          - /usr/frontend/app/node_modules
+          - ./frontend/:/usr/src/app
+          - /usr/src/app/node_modules
         ports:
             - ${SERVER_PORT_FRONT}:${SERVER_PORT_FRONT}
         command: npm run dev

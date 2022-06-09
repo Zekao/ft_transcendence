@@ -6,7 +6,7 @@
 #    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/07 13:22:58 by nabentay         ###   ########.fr        #
+#    Updated: 2022/06/09 14:05:20 by nabentay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,6 @@ DIR=.
 C=api
 
 up:
-	@mkdir -p ${DIR}/backend/database/data
-	@mkdir -p ${DIR}/backend/api
 	@docker-compose -f docker-compose.yaml up -d
 
 all: up

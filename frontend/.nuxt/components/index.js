@@ -1,4 +1,5 @@
 export { default as MyNavbar } from '../../components/MyNavbar.vue'
+export { default as Notification } from '../../components/Notification.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {
