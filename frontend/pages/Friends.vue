@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar
-      flat
+      text
                  background-color="deep-purple accent-4"
     >
       <v-toolbar-title >User Profile</v-toolbar-title>
@@ -18,7 +18,8 @@ mdi-account-supervisor
         </v-icon>
         Account Setting
       </v-tab>
-      <v-tab>
+      <v-tab             v-on:click="getUsers()"
+>
         <v-icon left>
 mdi-account-supervisor
         </v-icon>
@@ -43,14 +44,14 @@ mdi-account-cancel
     <v-card flat >
 <v-card-text>
   <v-container>
-    <h3>{{info.first_name}} {{info.last_name}} profil </h3>
+    <h3>Lusehair profil </h3>
 
     <v-row>
     <!-- PROFIL PICTURE  -->
     <v-col cols="6">
       <v-avatar size="250">
       <img
-        src="https://i.picsum.photos/id/398/200/300.jpg?hmac=Hfi27DwRf-atKwN-O57cBXGhlUtMCe6rozr2rWH8xH8"
+        src= 'http://localhost:3000/users/pon/avatar'
         alt="John">
     </v-avatar>
       </v-col>
@@ -58,10 +59,7 @@ mdi-account-cancel
 
   <!-- PSEUDO ZONE  -->
     <v-col cols="3">
-  <h3>PSEUDO : {{info.user_name}}</h3>
-  <h3>Email : {{info.email}}</h3><p></p>
-  <h3>Win Game : {{info.win}}</h3>
-  <h3>loose Game : {{info.loose}}</h3>
+  <h3>{{this.user.data.user_name}}</h3>
     </v-col>
 
       <v-col cols="3">
@@ -95,6 +93,7 @@ mdi-account-cancel
               >
                 <v-text-field
                   label="new pseudo"
+                  v-model="newPseudo"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -105,13 +104,15 @@ mdi-account-cancel
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+                        @click="dialog = false"
+
           >
             Close
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
+            v-on:click="submit()"
             @click="dialog = false"
           >
             Save
@@ -126,7 +127,8 @@ mdi-account-cancel
 
       <!-- EDIT PP  -->
       <v-col cols="12">
-        <v-btn centered >
+        <v-btn centered             v-on:click="getImage()"
+ >
           edit avatar
         </v-btn>
       </v-col>
@@ -147,33 +149,33 @@ mdi-account-cancel
             <v-list subheader>
 
       <v-list-item
-        v-for="chat in recent"
-        :key="chat.title"
+        v-for="friend in users"
+        :key="friend.id"
       >
-              <v-badge  v-if="chat.active" left color="green"/>
+              <v-badge  v-if="friend.status == 'online'" left color="green"/>
               <v-badge v-else left color="red"/>
 
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-img
-            :alt="`${chat.title} avatar`"
+            :alt="`${friend.user} avatar`"
             :src="chat.avatar"
           ></v-img>
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content>
-          <v-list-item-title v-text="chat.title"></v-list-item-title>
+          <v-list-item-title v-text="friend.user_name"></v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-content>
-         win  <v-list-item-title v-text="chat.win"></v-list-item-title>
+         win  <v-list-item-title v-text="friend.win"></v-list-item-title>
         </v-list-item-content>
 
          <v-list-item-content>
-         lost  <v-list-item-title v-text="chat.lost"></v-list-item-title>
+         lost  <v-list-item-title v-text="friend.lost"></v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-content>
-         ratio  <v-list-item-title v-text="chat.ratio"></v-list-item-title>
+         ratio  <v-list-item-title v-text="friend.rank"></v-list-item-title>
         </v-list-item-content>
 
 <!-- HISTORY BUTTON + MODAL  -->
@@ -207,19 +209,19 @@ mdi-account-cancel
 
       <!-- BUTTONS SEND MSG  -->
        <v-btn>
-        <v-icon :color="chat.active ? 'deep-purple accent-4' : 'grey'">
+        <v-icon :color="user.status != 'offline' ? 'deep-purple accent-4' : 'grey'">
             mdi-message-outline
           </v-icon>
           </v-btn>
           <!-- END OF BUTTON SEND MSG  -->
 
           <!-- BUTTON PLAY WITH PLAYER -->
-          <v-btn v-if="!chat.active" disabled>
-            <v-icon :color="chat.active ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
+          <v-btn v-if="user.status == 'offline'" disabled>
+            <v-icon :color="user.status != offline ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
           </v-btn>
 
           <v-btn v-else>
-            <v-icon :color="chat.active ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
+            <v-icon :color="user.status == 'online' ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
           </v-btn>
           <!-- END OF BUTTON PLAY WITH HIM  -->
         </v-list-item-icon>
@@ -258,13 +260,13 @@ mdi-account-cancel
           <v-card-text>
            <v-list subheader>
 
-      <v-list-item v-for="chat in recent" :key="chat.active">
+      <v-list-item v-for="chat in users" :key="chat.status">
         <v-list-item-avatar>
           <v-img :alt="`${chat.title} avatar`" :src="chat.avatar" ></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-         <v-list-item-title v-text="chat.title"></v-list-item-title>
+         <v-list-item-title v-text="chat.pseudo_name"></v-list-item-title>
         </v-list-item-content>
 
         <v-list-item-icon>
@@ -279,20 +281,21 @@ mdi-account-off
           </v-card-text>
         </v-card>
       </v-tab-item>
+      {{avatar}}
       <!-- END OF LIST OF BLOCKED USER  -->
     </v-tabs>
   </v-card>
 </template>
 
 <script>
-  import axios from 'axios'
-
+import axios from 'axios'
   export default {
     data () {
       return {
-        info: null,
+        newPseudo: null,
+        user: null,
+        avatar: '../test.jpg',
         dialog: false,
-
         headers: [
           {
             text: 'rank',
@@ -313,9 +316,7 @@ mdi-account-off
         { rank: 5, user: 'DEFCON', win: 10, lost:5, ratio: 0.5},
         { rank: 6, user: 'CAPCOM', win: 13, lost:9, ratio: 0.49},
         { rank: 7, user: 'Peter Strip', win: 0, lost:23, ratio: 0.03}
-
         ],
-
       gamehistory: [
         { idGame: 1, player1: 'lusehair', player2: 'sobriquet', score1: 3, score2: 1},
         { idGame: 2, player1: 'lusehair', player2: 'camaru', score1: 2, score2: 3},
@@ -324,59 +325,68 @@ mdi-account-off
         { idGame: 5, player1: 'lusehair', player2: 'camron', score1: 1, score2: 3},
         { idGame: 6, player1: 'lusehair', player2: 'fulli', score1: 3, score2: 1},
       ],
-
-        recent: [
-        {
-          active: true,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          title: 'Jason Oner',
-          win: 13,
-          lost: 4,
-          ratio: 1.23
-        },
-        {
-          active: true,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          title: 'Mike Carlson',
-          win: 13,
-          lost: 4,
-          ratio: 1.23
-        },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          title: 'Cindy Baker',
-          win: 13,
-          lost: 4,
-          ratio: 1.23
-        },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          title: 'Ali Connors',
-          win: 13,
-          lost: 4,
-          ratio: 1.23
-        },
-      ]
       }
     },
-    mounted(){
-      axios
-      .get('http://localhost:3000/users/0b490f3f-fc29-4e25-af1b-4774d772ddea')
-      .then(response => (this.info = response.data));
-    },
-    methods: {
-    deleteItem(item) {
-      this.$set(item, 'deleted', true);
-    },
-  async getIncidents() {
-  let res = await this.$store.dispatch("users");
-  this.incidents = res.data.data.incidents;
-},
-    },
-  computed: {
-    validItems() {
-      return this.items.filter(item => !item['deleted']);
-    },
+  mounted(){
+  axios
+  .get('http://localhost:3000/users/pon')
+  .then((reponse) => {
+    this.user = reponse;
+    console.log(this.user)
+  });
+  // axios.get('http://localhost:3000/users/' + this.user.id + '/avatar/path')
+    // axios.get('http://localhost:3000/users/pon/avatar/path')
+    //   .then(response => {
+
+    //     avatar = response.data;
+    //     //console.log(this.avatar);
+    //   });
   },
-  }
+      //     data () {
+      // return {
+      //   user: null
+      // };
+      //   },
+
+methods:{
+  async submit(){
+        console.log(this.newPseudo);
+   let prefix  = "http://www.localhost:3000/users/";
+    let suffix = "/username?username=";
+    let id = this.user.data.id;
+    console.log(this.newPseudo);
+      axios.patch(prefix + id + suffix + this.newPseudo, { username: this.newPseudo })     .then(response => {
+      console.log(response);
+      if (response.status == 209) {
+        this.dialog = false;
+        this.newPseudo = null;
+      }
+       else {
+      this.user.user_name = this.newPseudo
+}
+    })
+
+  },
+  async getUsers() {
+    axios.get('http://localhost:3000/users')
+      .then(response => {
+        this.users = response.data;
+      })
+  console.log(this.users);
+  const index = this.users.indexOf(this.user);
+  console.log(index);
+  this.users.splice(index, 1);
+  },
+  // function get image with axios get request and set it to the avatar of the user
+  // async getImage(user) {
+  //   axios.get('http://localhost:3000/users/' + this.user.id + '/avatar')
+  //     .then(response => {
+  //       this.user.avatar = response.data;
+  //     })
+  // },
+
+}
+}
+
+
 </script>
