@@ -26,7 +26,7 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
         super({
             clientID: "1d54373ef2df42a5273b49008cb047a94b1b1baf6f7202c9855112e9646461f3",
             clientSecret: "4c59774b6a90907bb513aa2ad708f73c705a9e02def13670b5626a1affd98458",
-            callbackURL: "http://localhost:3000/auth/42/test",
+            callbackURL: "http://localhost:4500/Account",
         });
         this.usersRepository = usersRepository;
     }

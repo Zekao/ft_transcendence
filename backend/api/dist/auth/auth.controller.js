@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signin", null);
 __decorate([
-    (0, common_1.Get)("/42/test"),
+    (0, common_1.Get)("/42"),
     (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),

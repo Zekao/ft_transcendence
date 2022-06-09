@@ -22,7 +22,7 @@ export class AuthController {
   ): Promise<{ accessToken: string }> {
     return this.authService.signIn(AuthCredentialsDto);
   }
-  @Get("/42/test")
+  @Get("/42")
   @UseGuards(FortyTwoAuthGuard)
   logfortytwo(@Req() req) {
     this.authService.handleFortyTwo(req.user._json);
