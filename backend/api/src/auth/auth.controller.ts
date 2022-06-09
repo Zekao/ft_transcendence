@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Get, Controller, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.services";
@@ -38,7 +38,7 @@ export class AuthController {
     // rediriger la personne vers le front
     // console.log(req.user);
   }
-  @Post("/test/42")
+  @Get("/42/test")
   @UseGuards(FortyTwoAuthGuard)
   test42(@Req() req) {
     console.log(req.user);
