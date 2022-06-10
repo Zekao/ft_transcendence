@@ -616,6 +616,11 @@
     "semver" "^7.3.5"
     "tar" "^6.1.11"
 
+"@nanogiants/nestjs-swagger-api-exception-decorator@^1.6.1":
+  "integrity" "sha512-aJBpqLD4dStvlg9R/6kesng0wEutytbSlCrIEUHnr6cHsUNROOqdEOxKfE5I9rgqg/ruh5w6D3s/uMJennyqmQ=="
+  "resolved" "https://registry.npmjs.org/@nanogiants/nestjs-swagger-api-exception-decorator/-/nestjs-swagger-api-exception-decorator-1.6.1.tgz"
+  "version" "1.6.1"
+
 "@nestjs/cli@^8.0.0":
   "integrity" "sha512-uvwKbUZJmgdJu1D24e+uUqHnwoB/0R9hLfUJjr5pTvLlP/RJugHAdJr7m1dQe92Xzdyi36kBN4Id3RXHgfz1UA=="
   "resolved" "https://registry.npmjs.org/@nestjs/cli/-/cli-8.2.6.tgz"
@@ -644,7 +649,7 @@
     "webpack" "5.72.1"
     "webpack-node-externals" "3.0.0"
 
-"@nestjs/common@^6.0.0 || ^7.0.0 || ^8.0.0", "@nestjs/common@^7.0.8 || ^8.0.0", "@nestjs/common@^8.0.0":
+"@nestjs/common@^6.0.0 || ^7.0.0 || ^8.0.0", "@nestjs/common@^7.0.8 || ^8.0.0", "@nestjs/common@^7.6.0 || ^8.0.0", "@nestjs/common@^8.0.0":
   "integrity" "sha512-INp1ERDrLiQ4GwRc3zotTwBLZm2sIwcJwnBE2yXqsth17KijmoVmY8UB5Tares0IlwjsqlRFWkCX8uWE5rzbSA=="
   "resolved" "https://registry.npmjs.org/@nestjs/common/-/common-8.4.6.tgz"
   "version" "8.4.6"
@@ -715,7 +720,7 @@
     "jsonc-parser" "3.0.0"
     "pluralize" "8.0.0"
 
-"@nestjs/swagger@^5.2.1":
+"@nestjs/swagger@^4.8.1 || ^5.0.0", "@nestjs/swagger@^5.2.1":
   "integrity" "sha512-7dNa08WCnTsW/oAk3Ujde+z64JMfNm19DhpXasFR8oJp/9pggYAbYU927HpA+GJsSFJX6adjIRZsCKUqaGWznw=="
   "resolved" "https://registry.npmjs.org/@nestjs/swagger/-/swagger-5.2.1.tgz"
   "version" "5.2.1"

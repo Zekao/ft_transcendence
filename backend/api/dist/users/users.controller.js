@@ -15,12 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const file_upload_dto_1 = require("./dto/file-upload.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
 const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
+const users_entity_1 = require("./users.entity");
 const users_service_1 = require("./users.service");
 const multer_1 = require("multer");
 const file_upload_utils_1 = require("./file-upload.utils");
+const nestjs_swagger_api_exception_decorator_1 = require("@nanogiants/nestjs-swagger-api-exception-decorator");
+const templated_api_exception_1 = require("./template/templated-api-exception");
+const yargs_1 = require("yargs");
 let UsersController = class UsersController {
     constructor(UsersService) {
         this.UsersService = UsersService;
@@ -71,9 +76,6 @@ let UsersController = class UsersController {
     }
     getAvatar(id, res) {
         return this.UsersService.getAvatar(id, res);
-    }
-    getAvatarPath(id) {
-        return this.UsersService.getAvatarPath(id);
     }
     async uploadedFile(id, file) {
         return this.UsersService.uploadFile(id, file);
@@ -133,6 +135,10 @@ let UsersController = class UsersController {
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: "Return list of all existing users" }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: users_entity_1.User,
+    }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_filter_dto_1.UsersFiltesDTO]),
@@ -141,16 +147,25 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/ranklist"),
     (0, swagger_1.ApiOperation)({ summary: "Return all user in ranked order" }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRankedUsers", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)("profile"),
+    (0, common_1.Get)("/me"),
     (0, swagger_1.ApiOperation)({
         summary: "Return profile of user associated with his credential",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, nestjs_swagger_api_exception_decorator_1.ApiException)(() => common_1.UnauthorizedException, { description: "Unauthorized" }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -159,6 +174,11 @@ __decorate([
 __decorate([
     (0, common_1.Get)("/:id"),
     (0, swagger_1.ApiOperation)({ summary: "Return specifc user profile" }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, nestjs_swagger_api_exception_decorator_1.ApiException)(() => common_1.UnauthorizedException, { description: "Unauthorized" }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -169,6 +189,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the first name of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: users_entity_1.User,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -179,6 +204,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the last name of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -189,6 +219,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the username of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -199,6 +234,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return email of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -209,6 +249,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the status of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -219,6 +264,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the game status of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -229,6 +279,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the total win game of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -239,6 +294,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the total loose game of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -249,6 +309,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the rank of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -259,6 +324,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the ratio of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -269,22 +339,16 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Return the avatar of a specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatar", null);
-__decorate([
-    (0, common_1.Get)("/:id/avatar/path"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the avatar path (server-side) of a specified user profile",
-    }),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "getAvatarPath", null);
 __decorate([
     (0, common_1.Post)("/:id/avatar/upload"),
     (0, swagger_1.ApiOperation)({
@@ -297,6 +361,12 @@ __decorate([
         }),
         fileFilter: file_upload_utils_1.imageFileFilter,
     })),
+    (0, swagger_1.ApiConsumes)("multipart/form-data"),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: file_upload_dto_1.FileUploadDto,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -308,6 +378,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Delete the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -318,6 +393,12 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Delete the specified avatar for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    (0, templated_api_exception_1.AvatarApiException)(() => common_1.UnauthorizedException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -328,6 +409,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the first name for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -350,6 +436,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the username for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -361,6 +452,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the email for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -372,6 +468,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the status for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -383,6 +484,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the game status for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -394,6 +500,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the number of win game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("win")),
     __metadata("design:type", Function),
@@ -405,6 +516,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the number of loose game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("loose")),
     __metadata("design:type", Function),
@@ -416,6 +532,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Modify the rank for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("rank")),
     __metadata("design:type", Function),
@@ -427,6 +548,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Add a win game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -437,6 +563,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Add a loose game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -447,6 +578,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Remove a win game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -457,6 +593,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Remove a loose game for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -467,6 +608,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Update the ratio for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -477,6 +623,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Update the rank for the specified user profile",
     }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
