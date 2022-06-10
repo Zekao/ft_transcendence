@@ -41,15 +41,11 @@ export const actions: ActionTree<RootState, RootState> = {
       const res = await this.$axios.$get(
         `/auth/callback?code=${authCode}`
       )
-      const { accessToken /*, refreshToken, expiresAt, issuedAt */ } = res
+      const { accessToken } = res
       this.$cookies.set('access_token', accessToken)
-    //   this.$cookies.set('refresh_token', refreshToken)
-    //   this.$cookies.set('expires_at', expiresAt)
-    //   this.$cookies.set('issued_at', issuedAt)
       commit('AUTH_SUCCESS', res)
       return res
     } catch (err) {
-      console.log(err)
       this.$cookies.removeAll()
       commit('AUTH_ERROR')
       throw err
