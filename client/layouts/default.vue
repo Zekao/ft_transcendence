@@ -53,7 +53,7 @@ export default Vue.extend({
     imagePath: 'gamarcha',
     items: [
         {
-          icon: 'mdi-apps',
+          icon: 'mdi-gamepad-square',
           title: 'Game',
           to: '/',
         },
