@@ -11,11 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserGameStatusDto = exports.UserStatusDto = void 0;
 const class_validator_1 = require("class-validator");
-const users_status_enum_1 = require("../users-status.enum");
+const users_enum_1 = require("../users.enum");
 class UserStatusDto {
 }
 __decorate([
-    (0, class_validator_1.IsEnum)(users_status_enum_1.UserStatus, {
+    (0, class_validator_1.IsEnum)(users_enum_1.UserStatus, {
         message: "permissions must be: ONLINE, OFFLINE",
     }),
     (0, class_validator_1.IsNotEmpty)(),
@@ -25,7 +25,7 @@ exports.UserStatusDto = UserStatusDto;
 class UserGameStatusDto {
 }
 __decorate([
-    (0, class_validator_1.IsEnum)(users_status_enum_1.UserGameStatus, {
+    (0, class_validator_1.IsEnum)(users_enum_1.UserGameStatus, {
         message: "permissions must be: IN_GAME, OUT_GAME",
     }),
     (0, class_validator_1.IsNotEmpty)(),

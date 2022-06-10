@@ -1,19 +1,23 @@
 /// <reference types="multer" />
-import { UserStatus, UserGameStatus } from "./users-status.enum";
+import { UserStatus, UserGameStatus } from "./users.enum";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
 import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
+import { UserDto } from "./dto/user.dto";
+export declare class UserRelationsPicker {
+    withFriends?: boolean;
+}
 export declare class UsersService {
     private UserRepository;
     private JwtService;
     constructor(UserRepository: Repository<User>, JwtService: JwtService);
     getUsers(): Promise<User[]>;
-    getFriends(): Promise<User[]>;
+    getFriends(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
-    getUserId(id: string): Promise<User>;
+    getUserId(id: string, RelationsPicker?: UserRelationsPicker): Promise<User>;
     getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;
@@ -28,7 +32,7 @@ export declare class UsersService {
     getAvatar(id: string, res: any): Promise<any>;
     getAvatarPath(id: string): Promise<string>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
-    addFriend(friend: string): Promise<User>;
+    addFriend(id: string, friend_id: string): Promise<User>;
     uploadFile(id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;

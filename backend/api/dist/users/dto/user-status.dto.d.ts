@@ -1,4 +1,4 @@
-import { UserStatus, UserGameStatus } from "../users-status.enum";
+import { UserStatus, UserGameStatus } from "../users.enum";
 export declare class UserStatusDto {
     status: UserStatus;
 }

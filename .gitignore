@@ -1,7 +1,6 @@
-# DATABASE
-./backend/database/data/**
-./backend/database/data
+# SYSTEM
+.vscode
 
 # MODULES
-./backend/api/node_modules/**
 ./backend/api/node_modules
+./backend/api/package-lock.json

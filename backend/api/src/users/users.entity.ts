@@ -1,6 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { UserStatus, UserGameStatus } from "./users-status.enum";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { UserStatus, UserGameStatus } from "./users.enum";
 
 @Entity()
 export class User {
@@ -17,9 +23,6 @@ export class User {
   @ApiProperty()
   @Column({ unique: true })
   user_name: string;
-  @ApiProperty()
-  @Column()
-  password: string;
   @ApiProperty()
   @Column()
   email: string;
@@ -44,4 +47,12 @@ export class User {
   @ApiProperty()
   @Column({ type: "real" })
   ratio: number;
+
+  @ManyToMany(() => User, (user) => user.friends)
+  @JoinTable({ name: "friends" })
+  friends: User[];
+
+  @ManyToMany(() => User, (user) => user.blockedUsers)
+  @JoinTable({ name: "blockedUsers" })
+  blockedUsers: User[];
 }

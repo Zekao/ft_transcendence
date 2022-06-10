@@ -1,13 +1,14 @@
 import {
-  ConflictException,
   Injectable,
   NotFoundException,
+  ConflictException,
+  BadRequestException,
   InternalServerErrorException,
   UnauthorizedException,
   Res,
 } from "@nestjs/common";
 import * as fs from "fs";
-import { UserStatus, UserGameStatus } from "./users-status.enum";
+import { UserStatus, UserGameStatus } from "./users.enum";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -15,9 +16,13 @@ import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { JwtPayload } from "../auth/interface/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from "bcrypt";
 import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
+import { UserDto } from "./dto/user.dto";
+
+export class UserRelationsPicker {
+  withFriends?: boolean;
+}
 
 @Injectable()
 export class UsersService {
@@ -34,10 +39,13 @@ export class UsersService {
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
-  async getFriends(): Promise<User[]> {
-    const users = await this.UserRepository.find();
-    if (!users) throw new NotFoundException(`Users not found`);
-    return users;
+  async getFriends(id: string): Promise<UserDto[]> {
+    const user = await this.getUserId(id, { withFriends: true });
+    if (!user.friends) return [];
+    const friends: UserDto[] = user.friends.map((friend) => {
+      return new UserDto(friend);
+    });
+    return friends;
   }
   async getUserByFilter(filter: UsersFiltesDTO): Promise<User[]> {
     const { status, username } = filter;
@@ -54,12 +62,25 @@ export class UsersService {
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
-  async getUserId(id: string): Promise<User> {
+  async getUserId(
+    id: string,
+    RelationsPicker?: UserRelationsPicker
+  ): Promise<User> {
+    const relations = null;
+    if (RelationsPicker) {
+      RelationsPicker.withFriends && relations.push("friends");
+    }
     let found = null;
     if (isUuid(id))
-      found = await this.UserRepository.findOne({ where: { id: id } });
+      found = await this.UserRepository.findOne({
+        where: { id: id },
+        relations,
+      });
     else
-      found = await this.UserRepository.findOne({ where: { user_name: id } });
+      found = await this.UserRepository.findOne({
+        where: { user_name: id },
+        relations,
+      });
     if (!found)
       if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return found;
@@ -75,64 +96,40 @@ export class UsersService {
   }
 
   async getFirstName(id: string): Promise<string> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.first_name;
+    return (await this.getUserId(id)).first_name;
   }
   async getLastName(id: string): Promise<string> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.last_name;
+    return (await this.getUserId(id)).last_name;
   }
   async getUserName(id: string): Promise<string> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.user_name;
+    return (await this.getUserId(id)).user_name;
   }
   async getEmail(id: string): Promise<string> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.email;
+    return (await this.getUserId(id)).email;
   }
   async getStatus(id: string): Promise<UserStatus> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.status;
+    return (await this.getUserId(id)).status;
   }
   async getGameStatus(id: string): Promise<UserGameStatus> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.in_game;
+    return (await this.getUserId(id)).in_game;
   }
   async getWin(id: string): Promise<number> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.win;
+    return (await this.getUserId(id)).win;
   }
   async getLoose(id: string): Promise<number> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.loose;
+    return (await this.getUserId(id)).loose;
   }
   async getRank(id: string): Promise<number> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.rank;
+    return (await this.getUserId(id)).rank;
   }
   async getRatio(id: string): Promise<string> {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.ratio.toPrecision(2);
+    return (await this.getUserId(id)).ratio.toPrecision(2);
   }
   async getAvatar(id: string, @Res() res) {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return res.sendFile(found.avatar, { root: "./files" });
+    return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
   }
   async getAvatarPath(id: string) {
-    const found = await this.getUserId(id);
-    if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    return found.avatar;
+    return (await this.getUserId(id)).avatar;
   }
 
   /* ************************************************************************** */
@@ -141,15 +138,11 @@ export class UsersService {
 
   async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { user_name, password } = authCredentialsDto;
-    // hash the password with bcrypt before storing it
     const stat = UserStatus.ONLINE;
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.UserRepository.create({
       status: stat,
-      in_game: UserGameStatus.IN_GAME,
+      in_game: UserGameStatus.OUT_GAME,
       user_name,
-      password: hashedPassword,
       email: user_name + "@transcendence.com",
       first_name: "Fake",
       last_name: "Users",
@@ -172,12 +165,19 @@ export class UsersService {
     }
   }
 
-  async addFriend(friend: string) {
-    const found = await this.getUserId(friend);
-    if (!found) throw new NotFoundException(`Friend \`${friend}' not found`);
-    // found.friend.push
+  async addFriend(id: string, friend_id: string): Promise<User> {
+    if (friend_id == id)
+      throw new BadRequestException("You can't add yourself");
+    const found = await this.getUserId(id, { withFriends: true });
+    const friend = await this.getUserId(friend_id);
+    if (!found.friends) found.friends = [];
+    if (found.friends.includes(friend)) {
+      console.log("Already friends");
+      throw new ConflictException("Already friend");
+    }
+    found.friends.push(friend);
     this.UserRepository.save(found);
-    return found;
+    return friend;
   }
 
   async uploadFile(id: string, file: Express.Multer.File) {

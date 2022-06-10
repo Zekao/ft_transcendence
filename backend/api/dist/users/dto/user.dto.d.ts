@@ -1,5 +1,7 @@
-import { UserStatus, UserGameStatus } from "./users.enum";
-export declare class User {
+import { UserGameStatus, UserStatus } from "../users.enum";
+import { User } from "../users.entity";
+export declare class UserDto {
+    constructor(user?: User);
     id: string;
     first_name: string;
     last_name: string;
@@ -12,6 +14,6 @@ export declare class User {
     loose: number;
     rank: number;
     ratio: number;
-    friends: User[];
-    blockedUsers: User[];
+    friends: UserDto[];
+    blockedUsers: UserDto[];
 }

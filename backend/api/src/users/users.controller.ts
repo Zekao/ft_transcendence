@@ -28,14 +28,17 @@ import { FileUploadDto } from "./dto/file-upload.dto";
 import { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { UserGameStatus, UserStatus } from "./users-status.enum";
+import { UserGameStatus, UserStatus } from "./users.enum";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { diskStorage } from "multer";
 import { imageFileFilter, editFileName } from "./file-upload.utils";
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { AvatarApiException, UserApiException } from "./template/templated-api-exception";
+import {
+  AvatarApiException,
+  UserApiException,
+} from "./template/templated-api-exception";
 import { boolean } from "yargs";
 
 @ApiTags("users")
@@ -235,9 +238,32 @@ export class UsersController {
     return this.UsersService.getAvatar(id, res);
   }
 
+  @Get("/:id/friends")
+  @ApiOperation({
+    summary: "Return the list of friends of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getFriends(@Param("id") id: string): Promise<User[]> {
+    return this.UsersService.getFriends(id);
+  }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
+
+  @Post("/:id/friends/add/:friend_id")
+  @ApiOperation({
+    summary: "Add a friend to a specified user profile",
+  })
+  addFriend(
+    @Param("id") id: string,
+    @Param("friend_id") friend: string
+  ): Promise<User> {
+    return this.UsersService.addFriend(id, friend);
+  }
 
   @Post("/:id/avatar/upload")
   @ApiOperation({

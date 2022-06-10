@@ -12,16 +12,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
+exports.UsersService = exports.UserRelationsPicker = void 0;
 const common_1 = require("@nestjs/common");
 const fs = require("fs");
-const users_status_enum_1 = require("./users-status.enum");
+const users_enum_1 = require("./users.enum");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
-const bcrypt = require("bcrypt");
 const utils_1 = require("../utils/utils");
+const user_dto_1 = require("./dto/user.dto");
+class UserRelationsPicker {
+}
+exports.UserRelationsPicker = UserRelationsPicker;
 let UsersService = class UsersService {
     constructor(UserRepository, JwtService) {
         this.UserRepository = UserRepository;
@@ -33,11 +36,14 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Users not found`);
         return users;
     }
-    async getFriends() {
-        const users = await this.UserRepository.find();
-        if (!users)
-            throw new common_1.NotFoundException(`Users not found`);
-        return users;
+    async getFriends(id) {
+        const user = await this.getUserId(id, { withFriends: true });
+        if (!user.friends)
+            return [];
+        const friends = user.friends.map((friend) => {
+            return new user_dto_1.UserDto(friend);
+        });
+        return friends;
     }
     async getUserByFilter(filter) {
         const { status, username } = filter;
@@ -61,12 +67,22 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Users not found`);
         return users;
     }
-    async getUserId(id) {
+    async getUserId(id, RelationsPicker) {
+        const relations = null;
+        if (RelationsPicker) {
+            RelationsPicker.withFriends && relations.push("friends");
+        }
         let found = null;
         if ((0, utils_1.isUuid)(id))
-            found = await this.UserRepository.findOne({ where: { id: id } });
+            found = await this.UserRepository.findOne({
+                where: { id: id },
+                relations,
+            });
         else
-            found = await this.UserRepository.findOne({ where: { user_name: id } });
+            found = await this.UserRepository.findOne({
+                where: { user_name: id },
+                relations,
+            });
         if (!found)
             if (!found)
                 throw new common_1.NotFoundException(`User \`${id}' not found`);
@@ -82,87 +98,48 @@ let UsersService = class UsersService {
         return users;
     }
     async getFirstName(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.first_name;
+        return (await this.getUserId(id)).first_name;
     }
     async getLastName(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.last_name;
+        return (await this.getUserId(id)).last_name;
     }
     async getUserName(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.user_name;
+        return (await this.getUserId(id)).user_name;
     }
     async getEmail(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.email;
+        return (await this.getUserId(id)).email;
     }
     async getStatus(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.status;
+        return (await this.getUserId(id)).status;
     }
     async getGameStatus(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.in_game;
+        return (await this.getUserId(id)).in_game;
     }
     async getWin(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.win;
+        return (await this.getUserId(id)).win;
     }
     async getLoose(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.loose;
+        return (await this.getUserId(id)).loose;
     }
     async getRank(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.rank;
+        return (await this.getUserId(id)).rank;
     }
     async getRatio(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.ratio.toPrecision(2);
+        return (await this.getUserId(id)).ratio.toPrecision(2);
     }
     async getAvatar(id, res) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return res.sendFile(found.avatar, { root: "./files" });
+        return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
     }
     async getAvatarPath(id) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        return found.avatar;
+        return (await this.getUserId(id)).avatar;
     }
     async createUsers(authCredentialsDto) {
         const { user_name, password } = authCredentialsDto;
-        const stat = users_status_enum_1.UserStatus.ONLINE;
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const stat = users_enum_1.UserStatus.ONLINE;
         const user = this.UserRepository.create({
             status: stat,
-            in_game: users_status_enum_1.UserGameStatus.IN_GAME,
+            in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name,
-            password: hashedPassword,
             email: user_name + "@transcendence.com",
             first_name: "Fake",
             last_name: "Users",
@@ -185,12 +162,20 @@ let UsersService = class UsersService {
             }
         }
     }
-    async addFriend(friend) {
-        const found = await this.getUserId(friend);
-        if (!found)
-            throw new common_1.NotFoundException(`Friend \`${friend}' not found`);
+    async addFriend(id, friend_id) {
+        if (friend_id == id)
+            throw new common_1.BadRequestException("You can't add yourself");
+        const found = await this.getUserId(id, { withFriends: true });
+        const friend = await this.getUserId(friend_id);
+        if (!found.friends)
+            found.friends = [];
+        if (found.friends.includes(friend)) {
+            console.log("Already friends");
+            throw new common_1.ConflictException("Already friend");
+        }
+        found.friends.push(friend);
         this.UserRepository.save(found);
-        return found;
+        return friend;
     }
     async uploadFile(id, file) {
         const found = await this.getUserId(id);

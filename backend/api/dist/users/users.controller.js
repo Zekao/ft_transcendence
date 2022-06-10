@@ -77,6 +77,12 @@ let UsersController = class UsersController {
     getAvatar(id, res) {
         return this.UsersService.getAvatar(id, res);
     }
+    getFriends(id) {
+        return this.UsersService.getFriends(id);
+    }
+    addFriend(id, friend) {
+        return this.UsersService.addFriend(id, friend);
+    }
     async uploadedFile(id, file) {
         return this.UsersService.uploadFile(id, file);
     }
@@ -349,6 +355,31 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatar", null);
+__decorate([
+    (0, common_1.Get)("/:id/friends"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the list of friends of a specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getFriends", null);
+__decorate([
+    (0, common_1.Post)("/:id/friends/add/:friend_id"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a friend to a specified user profile",
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Param)("friend_id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addFriend", null);
 __decorate([
     (0, common_1.Post)("/:id/avatar/upload"),
     (0, swagger_1.ApiOperation)({
