@@ -68,7 +68,7 @@ let UsersService = class UsersService {
         return users;
     }
     async getUserId(id, RelationsPicker) {
-        const relations = null;
+        const relations = [];
         if (RelationsPicker) {
             RelationsPicker.withFriends && relations.push("friends");
         }
