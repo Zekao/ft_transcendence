@@ -220,7 +220,7 @@ let UsersService = class UsersService {
         return true;
     }
     async patchUser(id, query) {
-        const { firstname, lastname, email, status, ingame, win, loose, rank, ratio } = query;
+        const { firstname, lastname, email, status, ingame, win, loose, rank, ratio, } = query;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
