@@ -3,13 +3,13 @@ import { RootState } from '.'
 
 export interface IUser {
   id: string,
-  firstName: string,
-  lastName: string,
-  userName: string,
+  first_name: string,
+  last_name: string,
+  user_name: string,
   email: string,
   avatar: string,
   status: string,
-  inGame: string,
+  in_game: string,
   win: number,
   loose: number,
   rank: number,
@@ -43,6 +43,7 @@ export const actions: ActionTree<UserState, RootState> = {
   async fetchAuth({ commit }) {
     try {
       const res = await this.$axios.$get(`/users/me`)
+      console.log(res)
       commit('FETCH_AUTH', res)
       return res
     } catch (err) {
