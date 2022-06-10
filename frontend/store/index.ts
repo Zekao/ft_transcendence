@@ -44,7 +44,7 @@ export const actions: ActionTree<RootState, RootState> = {
       const res = await this.$axios.$get(
         `/auth/callback?code=${authCode}&state=${authState}`
       )
-      const { accessToken, refreshToken, expiresAt, issuedAt } = res
+      const { accessToken /*, refreshToken, expiresAt, issuedAt */ } = res
       this.$cookies.set('access_token', accessToken)
     //   this.$cookies.set('refresh_token', refreshToken)
     //   this.$cookies.set('expires_at', expiresAt)
