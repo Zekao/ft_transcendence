@@ -49,7 +49,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'localhost:3000',
+    baseURL: 'https://ft.localhost:4500/api',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -80,6 +80,6 @@ export default {
   },
 
   publicRuntimeConfig: {
-    serverLogin: 'http://localhost:3000/auth/login',
+    serverLogin: 'https://ft.localhost:4500/api/auth/login',
   }
 }
