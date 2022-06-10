@@ -15,6 +15,7 @@ export declare class UsersService {
     private JwtService;
     constructor(UserRepository: Repository<User>, JwtService: JwtService);
     getUsers(): Promise<User[]>;
+    getUserFortyTwo(FortyTwoID: number): Promise<User>;
     getFriends(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string, RelationsPicker?: UserRelationsPicker): Promise<User>;

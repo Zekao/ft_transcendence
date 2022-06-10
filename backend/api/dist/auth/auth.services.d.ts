@@ -8,10 +8,10 @@ export declare class AuthService {
     private userRepository;
     private userService;
     constructor(JwtService: JwtService, userRepository: Repository<User>, userService: UsersService);
-    GenerateJwtToken(User: any): void;
-    handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any>;
-    signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<{
+    GenerateJwtToken(FortyTwoID: number): {
         accessToken: string;
-    }>;
+    };
+    handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any>;
+    signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
 }

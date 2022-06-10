@@ -40,6 +40,13 @@ export class UsersService {
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
+  async getUserFortyTwo(FortyTwoID: number): Promise<User> {
+    const users = await this.UserRepository.findOne({
+      where: { FortyTwoID: FortyTwoID },
+    });
+    if (!users) throw new NotFoundException(`Users not found`);
+    return users;
+  }
   async getFriends(id: string): Promise<UserDto[]> {
     const user = await this.getUserId(id, { withFriends: true });
     if (!user.friends) return [];

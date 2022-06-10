@@ -6,6 +6,7 @@ import { JwtPayload } from "../interface/jwt-payload.interface";
 import { User } from "../../users/users.entity";
 import { Repository } from "typeorm";
 import { UsersService } from "../../users/users.service";
+import { FortyTwoUser } from "../interface/42.interface";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -20,9 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   // fetching user form db
-  async validate(payload: JwtPayload): Promise<User> {
-    const { user_name } = payload;
-    const user = this.userService.getUserId(user_name);
+  async validate(payload: FortyTwoUser): Promise<User> {
+    console.log(payload.FortyTwoID);
+    const { FortyTwoID } = payload;
+    const user = this.userService.getUserFortyTwo(FortyTwoID);
     return user;
   }
 }

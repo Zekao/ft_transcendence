@@ -25,10 +25,10 @@ let AuthService = class AuthService {
         this.userRepository = userRepository;
         this.userService = userService;
     }
-    GenerateJwtToken(User) {
-        const payload = { user_name: User.user_name, user_id: User.user_id };
-        this.JwtService.sign(payload);
-        console.log(User);
+    GenerateJwtToken(FortyTwoID) {
+        const payload = { FortyTwoID };
+        const accessToken = this.JwtService.sign(payload);
+        return { accessToken };
     }
     async handleFortyTwo(Ftwo) {
         const user = await this.userRepository.findOne({
@@ -56,9 +56,7 @@ let AuthService = class AuthService {
             where: { FortyTwoID: FortyTwoID },
         });
         if (user) {
-            const payload = { FortyTwoID };
-            const accessToken = this.JwtService.sign(payload);
-            return { accessToken };
+            this.GenerateJwtToken(FortyTwoID);
         }
         else {
             throw new common_1.UnauthorizedException("Incorrect user id");

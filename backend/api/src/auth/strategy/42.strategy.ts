@@ -63,6 +63,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     });
   }
   async validate(accessToken, refreshToken, profile) {
-    return accessToken;
+    this.authService.handleFortyTwo(profile._json);
+    return profile;
   }
 }
