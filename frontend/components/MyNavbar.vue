@@ -1,6 +1,6 @@
 <template>
 <nav>
-    <v-toolbar flat >
+    <v-toolbar text >
     <!-- <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"> </v-toolbar-side-icon> -->
              <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
@@ -10,7 +10,7 @@
             <span>Transcendence </span>
         </v-toolbar-title>
         <v-spacer>  </v-spacer>
-        <v-btn flat color="grey">
+        <v-btn text color="grey">
             <span> Sign-out</span>
             <v-icon right > mdi-exit-to-app</v-icon>
         </v-btn>
@@ -18,11 +18,8 @@
 
     </v-toolbar>
             <v-navigation-drawer app v-model="drawer" temporary class="success" >
-  <v-list flat>
-      <v-list-item-group
-        v-model="selectedItem"
-        color="primary"
-      >
+  <v-list text>
+      <v-list-item-group color="primary">
         <v-list-item
           v-for="(link, i) in links"
           :key="i"
