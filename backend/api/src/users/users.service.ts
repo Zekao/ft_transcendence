@@ -19,6 +19,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
 import { UserDto } from "./dto/user.dto";
+import * as bcrypt from "bcrypt";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
@@ -62,7 +63,10 @@ export class UsersService {
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
-  async getUserId(id: string, RelationsPicker?: UserRelationsPicker): Promise<User> {
+  async getUserId(
+    id: string,
+    RelationsPicker?: UserRelationsPicker
+  ): Promise<User> {
     const relations = [];
     if (RelationsPicker) {
       RelationsPicker.withFriends && relations.push("friends");
@@ -136,10 +140,13 @@ export class UsersService {
   async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { user_name, password } = authCredentialsDto;
     const stat = UserStatus.ONLINE;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.UserRepository.create({
       status: stat,
       in_game: UserGameStatus.OUT_GAME,
       user_name,
+      password: hashedPassword,
       email: user_name + "@transcendence.com",
       first_name: "Fake",
       last_name: "Users",
@@ -224,21 +231,30 @@ export class UsersService {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 
-
   async patchUser(id: string, query: UsersFiltesDTO): Promise<User> {
-	const {firstname, lastname, email, status, ingame, win, loose, rank, ratio} = query;
-	const found = await this.getUserId(id);
-	if (firstname) found.first_name = firstname;
-	if (lastname) found.last_name = lastname;
-	if (email) found.email = email;
-	if (status) found.status = status;
-	if (ingame) found.in_game = ingame;
-	if (win) found.win = win;
-	if (loose) found.loose = loose;
-	if (rank) found.rank = rank;
-	if (ratio) found.ratio = ratio;
-	this.UserRepository.save(found);
-	return found;
+    const {
+      firstname,
+      lastname,
+      email,
+      status,
+      ingame,
+      win,
+      loose,
+      rank,
+      ratio,
+    } = query;
+    const found = await this.getUserId(id);
+    if (firstname) found.first_name = firstname;
+    if (lastname) found.last_name = lastname;
+    if (email) found.email = email;
+    if (status) found.status = status;
+    if (ingame) found.in_game = ingame;
+    if (win) found.win = win;
+    if (loose) found.loose = loose;
+    if (rank) found.rank = rank;
+    if (ratio) found.ratio = ratio;
+    this.UserRepository.save(found);
+    return found;
   }
 
   async patchFirstName(id: string, first_name: string): Promise<string> {

@@ -260,7 +260,7 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend( @Param("id") id: string, @Query() query): Promise<User> {                   
+  addFriend(@Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.addFriend(id, query.friend);
   }
 
@@ -324,7 +324,6 @@ export class UsersController {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 
-  
   @Patch("/:id")
   @ApiOperation({
     summary: "Update the specified user profile",
