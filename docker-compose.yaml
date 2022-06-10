@@ -7,12 +7,6 @@ volumes:
     database:
 
 # ************************************************************
-# *                  NETWORK                                 *
-# ************************************************************
-networks:
-    api_network:
-
-# ************************************************************
 # *                  SERVICES                                *
 # ************************************************************
 services:
@@ -31,30 +25,26 @@ services:
         command: npm run start:dev
         env_file:
           - .env
-        networks:
-            - api_network
         depends_on:
             - database
 
     # *******************FRONTEND*******************
-    frontend:
-        container_name: frontend
-        image: frontend:latest
-        build:
-            context: ./frontend
-        restart: always
+
+    client:
+        image: node:16-alpine
+        working_dir: /app
+        entrypoint: |
+          /bin/sh -c "
+            yarn dev --dotenv ../.env
+          "
         volumes:
-          - ./frontend/:/usr/src/app
-          - /usr/src/app/node_modules
+          - ./client:/app
+          - ./.env:/.env
         ports:
             - ${SERVER_PORT_FRONT}:${SERVER_PORT_FRONT}
-        command: npm run dev
         env_file:
           - .env
-        networks:
-            - api_network
-        depends_on:
-            - api
+        restart: unless-stopped
 
     # *******************DATABASE*******************
     database:
@@ -70,8 +60,6 @@ services:
             - 5432:5432
         volumes:
             - database:/var/lib/postgresql/data
-        networks:
-            - api_network
 
     # *******************ADMINER*******************
     adminer:
@@ -80,7 +68,5 @@ services:
         restart: always
         ports:
             - ${ADMINER_PORT}:8080
-        networks:
-            - api_network
         depends_on:
             - database

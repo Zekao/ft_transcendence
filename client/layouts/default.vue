@@ -15,7 +15,6 @@
           </v-btn>
         </template>
 
-
         <v-list class="mt-6">
           <v-list-item @click="logoutRedirect">
             <v-list-item-action>
@@ -43,7 +42,7 @@ export default Vue.extend({
   name: 'DefaultLayout',
 
   data: () => ({
-    title: 'FT Transcendance',
+    title: 'ft_transcendance',
     login: 'gamarcha',
     imagePath: 'gamarcha',
   }),
