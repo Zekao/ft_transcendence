@@ -11,14 +11,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthCredentialsFortyTwoDto = exports.AuthCredentialsDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 class AuthCredentialsDto {
 }
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(2),
     (0, class_validator_1.MaxLength)(8),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], AuthCredentialsDto.prototype, "user_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthCredentialsDto.prototype, "first_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthCredentialsDto.prototype, "last_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthCredentialsDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], AuthCredentialsDto.prototype, "avatar", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(12),
@@ -26,6 +44,7 @@ __decorate([
     (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
         message: "password is too weak",
     }),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], AuthCredentialsDto.prototype, "password", void 0);
 exports.AuthCredentialsDto = AuthCredentialsDto;

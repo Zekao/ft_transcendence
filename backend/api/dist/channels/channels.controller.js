@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelsController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const channels_service_1 = require("./channels.service");
 const channels_filter_dto_1 = require("./dto/channels-filter.dto");
 const channels_dto_1 = require("./dto/channels.dto");
@@ -44,6 +45,7 @@ let ChannelsController = class ChannelsController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing channels" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
@@ -51,6 +53,9 @@ __decorate([
 ], ChannelsController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Get)("/:id/status"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the status of a specified channel",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -58,6 +63,9 @@ __decorate([
 ], ChannelsController.prototype, "getChannelStatus", null);
 __decorate([
     (0, common_1.Get)("/:id/permission"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the permission of a specified channel",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -65,6 +73,9 @@ __decorate([
 ], ChannelsController.prototype, "getChannelPermission", null);
 __decorate([
     (0, common_1.Post)("/create"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Create a new channel",
+    }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -74,6 +85,9 @@ __decorate([
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([
     (0, common_1.Delete)("/:id/delete"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete a specified channel",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -81,6 +95,9 @@ __decorate([
 ], ChannelsController.prototype, "deleteUser", null);
 __decorate([
     (0, common_1.Patch)("/:id/edit"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify attribute of a specified channel",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -88,6 +105,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([
+    (0, swagger_1.ApiTags)("channel"),
     (0, common_1.Controller)("channel"),
     __metadata("design:paramtypes", [channels_service_1.ChannelsService])
 ], ChannelsController);

@@ -5,16 +5,22 @@ import {
   MaxLength,
   MinLength,
 } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 import { MetadataAlreadyExistsError } from "typeorm";
 
 export class AuthCredentialsDto {
   @IsString()
   @MinLength(2)
   @MaxLength(8)
+  @ApiProperty()
   user_name: string;
+  @ApiProperty()
   first_name: string;
+  @ApiProperty()
   last_name: string;
+  @ApiProperty()
   email: string;
+  @ApiProperty()
   avatar: string;
   @IsString()
   @MinLength(12)
@@ -22,6 +28,7 @@ export class AuthCredentialsDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: "password is too weak",
   })
+  @ApiProperty()
   password: string;
 }
 

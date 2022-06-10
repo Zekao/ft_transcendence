@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const platform_express_1 = require("@nestjs/platform-express");
 const user_filter_dto_1 = require("./dto/user-filter.dto");
 const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
@@ -131,6 +132,7 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing users" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_filter_dto_1.UsersFiltesDTO]),
@@ -138,6 +140,7 @@ __decorate([
 ], UsersController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Get)("/ranklist"),
+    (0, swagger_1.ApiOperation)({ summary: "Return all user in ranked order" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -145,6 +148,9 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("profile"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return profile of user associated with his credential",
+    }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -152,6 +158,7 @@ __decorate([
 ], UsersController.prototype, "getProfile", null);
 __decorate([
     (0, common_1.Get)("/:id"),
+    (0, swagger_1.ApiOperation)({ summary: "Return specifc user profile" }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -159,6 +166,9 @@ __decorate([
 ], UsersController.prototype, "getUserId", null);
 __decorate([
     (0, common_1.Get)("/:id/firstname"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the first name of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -166,6 +176,9 @@ __decorate([
 ], UsersController.prototype, "getFirstName", null);
 __decorate([
     (0, common_1.Get)("/:id/lastname"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the last name of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -173,6 +186,9 @@ __decorate([
 ], UsersController.prototype, "getLastName", null);
 __decorate([
     (0, common_1.Get)("/:id/username"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the username of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -180,6 +196,9 @@ __decorate([
 ], UsersController.prototype, "getUserName", null);
 __decorate([
     (0, common_1.Get)("/:id/email"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return email of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -187,6 +206,9 @@ __decorate([
 ], UsersController.prototype, "getEmail", null);
 __decorate([
     (0, common_1.Get)("/:id/status"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the status of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -194,6 +216,9 @@ __decorate([
 ], UsersController.prototype, "getStatus", null);
 __decorate([
     (0, common_1.Get)("/:id/gameStatus"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the game status of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -201,6 +226,9 @@ __decorate([
 ], UsersController.prototype, "getInGame", null);
 __decorate([
     (0, common_1.Get)("/:id/win"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the total win game of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -208,6 +236,9 @@ __decorate([
 ], UsersController.prototype, "getWin", null);
 __decorate([
     (0, common_1.Get)("/:id/loose"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the total loose game of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -215,6 +246,9 @@ __decorate([
 ], UsersController.prototype, "getLoose", null);
 __decorate([
     (0, common_1.Get)("/:id/rank"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the rank of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -222,6 +256,9 @@ __decorate([
 ], UsersController.prototype, "getRank", null);
 __decorate([
     (0, common_1.Get)("/:id/ratio"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the ratio of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -229,6 +266,9 @@ __decorate([
 ], UsersController.prototype, "getRatio", null);
 __decorate([
     (0, common_1.Get)("/:id/avatar"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the avatar of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
@@ -237,6 +277,9 @@ __decorate([
 ], UsersController.prototype, "getAvatar", null);
 __decorate([
     (0, common_1.Get)("/:id/avatar/path"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the avatar path (server-side) of a specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -244,6 +287,9 @@ __decorate([
 ], UsersController.prototype, "getAvatarPath", null);
 __decorate([
     (0, common_1.Post)("/:id/avatar/upload"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Upload avatar for the specified user profile",
+    }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
         storage: (0, multer_1.diskStorage)({
             destination: "./files",
@@ -259,6 +305,9 @@ __decorate([
 ], UsersController.prototype, "uploadedFile", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -266,6 +315,9 @@ __decorate([
 ], UsersController.prototype, "deleteUser", null);
 __decorate([
     (0, common_1.Delete)("/:id/avatar"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete the specified avatar for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -273,6 +325,9 @@ __decorate([
 ], UsersController.prototype, "deleteAvatar", null);
 __decorate([
     (0, common_1.Patch)("/:id/firstname"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the first name for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -281,6 +336,9 @@ __decorate([
 ], UsersController.prototype, "patchFirstName", null);
 __decorate([
     (0, common_1.Patch)("/:id/lastname"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the last name for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -289,6 +347,9 @@ __decorate([
 ], UsersController.prototype, "patchLastName", null);
 __decorate([
     (0, common_1.Patch)("/:id/username"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the username for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -297,6 +358,9 @@ __decorate([
 ], UsersController.prototype, "patchUserName", null);
 __decorate([
     (0, common_1.Patch)("/:id/email"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the email for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -305,6 +369,9 @@ __decorate([
 ], UsersController.prototype, "patchEmail", null);
 __decorate([
     (0, common_1.Patch)("/:id/status"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the status for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -313,6 +380,9 @@ __decorate([
 ], UsersController.prototype, "patchStatus", null);
 __decorate([
     (0, common_1.Patch)("/:id/gameStatus"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the game status for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -321,6 +391,9 @@ __decorate([
 ], UsersController.prototype, "patchGameStatus", null);
 __decorate([
     (0, common_1.Patch)("/:id/win"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the number of win game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("win")),
     __metadata("design:type", Function),
@@ -329,6 +402,9 @@ __decorate([
 ], UsersController.prototype, "patchWin", null);
 __decorate([
     (0, common_1.Patch)("/:id/loose"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the number of loose game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("loose")),
     __metadata("design:type", Function),
@@ -337,6 +413,9 @@ __decorate([
 ], UsersController.prototype, "patchLoose", null);
 __decorate([
     (0, common_1.Patch)("/:id/rank"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Modify the rank for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)("rank")),
     __metadata("design:type", Function),
@@ -345,6 +424,9 @@ __decorate([
 ], UsersController.prototype, "patchRank", null);
 __decorate([
     (0, common_1.Patch)("/:id/addWin"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a win game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -352,6 +434,9 @@ __decorate([
 ], UsersController.prototype, "patchAddWin", null);
 __decorate([
     (0, common_1.Patch)("/:id/addLoose"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a loose game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -359,6 +444,9 @@ __decorate([
 ], UsersController.prototype, "patchAddLoose", null);
 __decorate([
     (0, common_1.Patch)("/:id/removeWin"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Remove a win game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -366,6 +454,9 @@ __decorate([
 ], UsersController.prototype, "patchRemoveWin", null);
 __decorate([
     (0, common_1.Patch)("/:id/removeLoose"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Remove a loose game for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -373,6 +464,9 @@ __decorate([
 ], UsersController.prototype, "patchRemoveLoose", null);
 __decorate([
     (0, common_1.Patch)("/:id/updateRatio"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Update the ratio for the specified user profile",
+    }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -380,11 +474,15 @@ __decorate([
 ], UsersController.prototype, "patchUpdateRatio", null);
 __decorate([
     (0, common_1.Patch)("/updateRank"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Update the rank for the specified user profile",
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUpdateRank", null);
 UsersController = __decorate([
+    (0, swagger_1.ApiTags)("users"),
     (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
