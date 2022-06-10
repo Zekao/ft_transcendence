@@ -22,6 +22,7 @@ const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
+const bcrypt = require("bcrypt");
 class UserRelationsPicker {
 }
 exports.UserRelationsPicker = UserRelationsPicker;
@@ -136,10 +137,13 @@ let UsersService = class UsersService {
     async createUsers(authCredentialsDto) {
         const { user_name, password } = authCredentialsDto;
         const stat = users_enum_1.UserStatus.ONLINE;
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
         const user = this.UserRepository.create({
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name,
+            password: hashedPassword,
             email: user_name + "@transcendence.com",
             first_name: "Fake",
             last_name: "Users",

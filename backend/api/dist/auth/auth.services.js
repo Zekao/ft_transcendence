@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_entity_1 = require("../users/users.entity");
 const users_service_1 = require("../users/users.service");
+const bcrypt = require("bcrypt");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 let AuthService = class AuthService {
@@ -49,7 +50,7 @@ let AuthService = class AuthService {
         const user = await this.userRepository.findOne({
             where: { user_name: user_name },
         });
-        if (user) {
+        if (user && (await bcrypt.compare(password, user.password))) {
             const payload = { user_name };
             const accessToken = this.JwtService.sign(payload);
             return { accessToken };

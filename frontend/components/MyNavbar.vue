@@ -1,6 +1,6 @@
 <template>
 <nav>
-    <v-toolbar flat app >
+    <v-toolbar flat >
     <!-- <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"> </v-toolbar-side-icon> -->
              <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
@@ -17,7 +17,7 @@
 
 
     </v-toolbar>
-            <v-navigation-drawer  app v-model="drawer" temporary class="success" >
+            <v-navigation-drawer app v-model="drawer" temporary class="success" >
   <v-list flat>
       <v-list-item-group
         v-model="selectedItem"
@@ -46,12 +46,12 @@
 export default {
     data() {
         return {
-            drawer: false, 
+            drawer: false,
             links: [
-                {icon: 'mdi-account-circle-outline', text: 'Account', route: '/Account'}, 
-                {icon: 'mdi-podium', text: 'Podium', route: '/Podium'}, 
-                {icon: 'mdi-table-tennis', text: 'Play', route: '/Game'}, 
-                {icon: 'mdi-account-multiple', text: 'Friends', route: '/Friends'}, 
+                {icon: 'mdi-account-circle-outline', text: 'Account', route: '/Account'},
+                {icon: 'mdi-podium', text: 'Podium', route: '/Podium'},
+                {icon: 'mdi-table-tennis', text: 'Play', route: '/Game'},
+                {icon: 'mdi-account-multiple', text: 'Friends', route: '/Friends'},
                 {icon: 'mdi-chat', text: 'chat', route: '/Chat'}
             ]
         }

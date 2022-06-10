@@ -19,6 +19,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
 import { UserDto } from "./dto/user.dto";
+import * as bcrypt from "bcrypt";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
@@ -139,10 +140,13 @@ export class UsersService {
   async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { user_name, password } = authCredentialsDto;
     const stat = UserStatus.ONLINE;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.UserRepository.create({
       status: stat,
       in_game: UserGameStatus.OUT_GAME,
       user_name,
+      password: hashedPassword,
       email: user_name + "@transcendence.com",
       first_name: "Fake",
       last_name: "Users",
