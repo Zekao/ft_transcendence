@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsString,
@@ -13,15 +14,18 @@ export class ChannelsDto {
     message: "permissions must be: ON_INVITE, OPEN",
   })
   @IsNotEmpty()
+  @ApiProperty()
   permissions: ChannelPermissions;
   @IsEnum(ChannelStatus, {
     message: "status must be: PRIVATE, PUBLIC",
   })
   @IsNotEmpty()
+  @ApiProperty()
   status: ChannelStatus;
   @IsString()
   @MinLength(2)
   @MaxLength(8)
+  @ApiProperty()
   name: string;
 }
 
@@ -32,5 +36,6 @@ export class ChannelPasswordDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: "password is too weak",
   })
+  @ApiProperty()
   password: string;
 }

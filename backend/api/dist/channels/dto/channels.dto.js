@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelPasswordDto = exports.ChannelsDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const channels_enum_1 = require("../channels.enum");
 class ChannelsDto {
@@ -19,6 +20,7 @@ __decorate([
         message: "permissions must be: ON_INVITE, OPEN",
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "permissions", void 0);
 __decorate([
@@ -26,12 +28,14 @@ __decorate([
         message: "status must be: PRIVATE, PUBLIC",
     }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "status", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(2),
     (0, class_validator_1.MaxLength)(8),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "name", void 0);
 exports.ChannelsDto = ChannelsDto;
@@ -44,6 +48,7 @@ __decorate([
     (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
         message: "password is too weak",
     }),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelPasswordDto.prototype, "password", void 0);
 exports.ChannelPasswordDto = ChannelPasswordDto;

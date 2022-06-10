@@ -17,9 +17,13 @@ class UserDto {
             this.rank = user.rank;
             this.ratio = user.ratio;
             if (user.friends)
-                this.friends = user.friends.map((friend) => { return new UserDto(friend); });
+                this.friends = user.friends.map((friend) => {
+                    return new UserDto(friend);
+                });
             if (user.blockedUsers)
-                this.blockedUsers = user.blockedUsers.map((user) => { return new UserDto(user); });
+                this.blockedUsers = user.blockedUsers.map((user) => {
+                    return new UserDto(user);
+                });
         }
     }
 }
