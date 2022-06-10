@@ -66,7 +66,7 @@ export class UsersService {
     id: string,
     RelationsPicker?: UserRelationsPicker
   ): Promise<User> {
-    const relations = null;
+    const relations = [];
     if (RelationsPicker) {
       RelationsPicker.withFriends && relations.push("friends");
     }
