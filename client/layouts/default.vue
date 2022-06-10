@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default Vue.extend({
 
@@ -49,8 +49,6 @@ export default Vue.extend({
 
   data: () => ({
     title: 'ft_transcendance',
-    login: 'gamarcha',
-    imagePath: 'gamarcha',
     items: [
         {
           icon: 'mdi-gamepad-square',
@@ -69,16 +67,16 @@ export default Vue.extend({
         },
       ],
   }),
-  // computed: {
-    // ...mapState({
-    //   login: (state: any): string => state.user.authenticatedUser.login,
-    //   imagePath: (state: any): string => state.user.authenticatedUser.imagePath,
-    // }),
+  computed: {
+    ...mapState({
+      login: (state: any): string => state.user.authUser.user_name,
+      imagePath: (state: any): string => state.user.authUser.avatar,
+    }),
     // ...mapGetters({
     //   isTutor: 'user/authenticatedUserIsTutor',
     //   isAdmin: 'user/authenticatedUserIsTutor',
     // }),
-  // },
+  },
   methods: {
     ...mapActions({
       logout: 'auth/logout',
