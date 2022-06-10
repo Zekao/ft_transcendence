@@ -22,12 +22,9 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    logfortytwo(req) {
-        this.authService.handleFortyTwo(req._json);
-    }
+    logfortytwo(req) { }
     callbackfortytwo(req) {
-        console.log(req.user);
-        console.log("dsas");
+        return this.authService.GenerateJwtToken(req._json);
     }
     test(req) {
         console.log(req.user);

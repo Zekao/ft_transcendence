@@ -30,8 +30,9 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.userService = userService;
     }
     async validate(payload) {
-        const { user_name } = payload;
-        const user = this.userService.getUserId(user_name);
+        console.log(payload.FortyTwoID);
+        const { FortyTwoID } = payload;
+        const user = this.userService.getUserFortyTwo(FortyTwoID);
         return user;
     }
 };

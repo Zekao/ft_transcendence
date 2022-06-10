@@ -33,7 +33,8 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
         this.authService = authService;
     }
     async validate(accessToken, refreshToken, profile) {
-        return accessToken;
+        this.authService.handleFortyTwo(profile._json);
+        return profile;
     }
 };
 FortyTwoStrategy = __decorate([

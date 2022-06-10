@@ -36,6 +36,14 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Users not found`);
         return users;
     }
+    async getUserFortyTwo(FortyTwoID) {
+        const users = await this.UserRepository.findOne({
+            where: { FortyTwoID: FortyTwoID },
+        });
+        if (!users)
+            throw new common_1.NotFoundException(`Users not found`);
+        return users;
+    }
     async getFriends(id) {
         const user = await this.getUserId(id, { withFriends: true });
         if (!user.friends)

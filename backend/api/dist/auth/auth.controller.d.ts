@@ -3,6 +3,8 @@ export declare class AuthController {
     private authService;
     constructor(authService: AuthService);
     logfortytwo(req: any): void;
-    callbackfortytwo(req: any): void;
+    callbackfortytwo(req: any): {
+        accessToken: string;
+    };
     test(req: any): void;
 }

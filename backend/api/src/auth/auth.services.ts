@@ -20,10 +20,10 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private userService: UsersService
   ) {}
-  GenerateJwtToken(User: any) {
-    const payload = { user_name: User.user_name, user_id: User.user_id };
-    this.JwtService.sign(payload);
-    console.log(User);
+  GenerateJwtToken(FortyTwoID: number) {
+    const payload: FortyTwoUser = { FortyTwoID };
+    const accessToken: string = this.JwtService.sign(payload);
+    return { accessToken };
   }
 
   async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
@@ -46,22 +46,20 @@ export class AuthService {
     };
     return this.signIn(LoginFortyTwoDto);
   }
-  async signIn(
-    loginFortyTwoDto: LoginFortyTwoDto
-  ): Promise<{ accessToken: string }> {
+
+  async signIn(loginFortyTwoDto: LoginFortyTwoDto) {
     const { FortyTwoID } = loginFortyTwoDto;
     const user = await this.userRepository.findOne({
       where: { FortyTwoID: FortyTwoID },
     });
     if (user) {
       // return an access token for the client
-      const payload: FortyTwoUser = { FortyTwoID };
-      const accessToken: string = this.JwtService.sign(payload);
-      return { accessToken };
+      this.GenerateJwtToken(FortyTwoID);
     } else {
       throw new UnauthorizedException("Incorrect user id");
     }
   }
+
   async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userService.createUsers(AuthCredentialsDto);
   }
