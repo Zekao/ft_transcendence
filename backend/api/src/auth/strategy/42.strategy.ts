@@ -5,6 +5,7 @@ import { User } from "src/users/users.entity";
 import { Strategy } from "passport-42";
 import { Repository } from "typeorm";
 import { UsersService } from "src/users/users.service";
+import { AuthService } from "../auth.services";
 
 /**
  * `Strategy` constructor.
@@ -46,7 +47,8 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(User)
     @InjectRepository(UsersService)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
+    private authService: AuthService
   ) {
     console.log(process.env);
     super({
@@ -57,10 +59,10 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
         "d89e41624c9c1c6dcfa0aa00a39c7f06793f8ecc79c441f519d3f96efb76ca24",
       // clientID: process.env['FORTYTWO_ID'],
       // clientSecret: process.env['FORTYTWO_SECRET'],
-      callbackURL: "http://localhost:4500/Account",
+      callbackURL: "http://localhost:4500/login",
     });
   }
   async validate(accessToken, refreshToken, profile) {
-    return profile;
+    return accessToken;
   }
 }

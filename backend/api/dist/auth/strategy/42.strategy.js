@@ -20,25 +20,28 @@ const users_entity_1 = require("../../users/users.entity");
 const passport_42_1 = require("passport-42");
 const typeorm_2 = require("typeorm");
 const users_service_1 = require("../../users/users.service");
+const auth_services_1 = require("../auth.services");
 let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStrategy)(passport_42_1.Strategy) {
-    constructor(usersRepository) {
+    constructor(usersRepository, authService) {
         console.log(process.env);
         super({
             clientID: "360cc9c295cc9eb63bf65794b2a2a50650d8e03353db6fc515d8ac4ad651436a",
             clientSecret: "d89e41624c9c1c6dcfa0aa00a39c7f06793f8ecc79c441f519d3f96efb76ca24",
-            callbackURL: "http://localhost:4500/Account",
+            callbackURL: "http://localhost:4500/login",
         });
         this.usersRepository = usersRepository;
+        this.authService = authService;
     }
     async validate(accessToken, refreshToken, profile) {
-        return profile;
+        return accessToken;
     }
 };
 FortyTwoStrategy = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
     __param(0, (0, typeorm_1.InjectRepository)(users_service_1.UsersService)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        auth_services_1.AuthService])
 ], FortyTwoStrategy);
 exports.FortyTwoStrategy = FortyTwoStrategy;
 //# sourceMappingURL=42.strategy.js.map

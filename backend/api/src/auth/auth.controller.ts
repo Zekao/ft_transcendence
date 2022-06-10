@@ -25,7 +25,18 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   logfortytwo(@Req() req) {
-    this.authService.handleFortyTwo(req.user._json);
+    this.authService.handleFortyTwo(req._json);
+  }
+
+  @Get("/callback")
+  @ApiOperation({
+    summary: "Login or create of user with 42 OAuth",
+  })
+  @UseGuards(FortyTwoAuthGuard)
+  callbackfortytwo(@Req() req) {
+    console.log(req.user);
+    console.log("dsas");
+    //return this.
   }
 
   @Post("/test") // to check that request can be made with the jwt

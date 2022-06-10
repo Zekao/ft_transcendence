@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { User } from "src/users/users.entity";
 import { UsersService } from "src/users/users.service";
 import {
+  AuthCodeDto,
   AuthCredentialsDto,
   AuthCredentialsFortyTwoDto,
   LoginFortyTwoDto,
@@ -24,6 +25,7 @@ export class AuthService {
     this.JwtService.sign(payload);
     console.log(User);
   }
+
   async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
     const user = await this.userRepository.findOne({
       where: { FortyTwoID: Ftwo.id },
