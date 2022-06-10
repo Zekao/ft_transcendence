@@ -1,6 +1,6 @@
 <template>
   <div class="podium">
-    <h1 class="subheading grey--text">This is an podium page</h1>
+    <h1 class="subheading grey--text">This is the podium page</h1>
   <v-container class="my-1">
     <v-card flat class="pa-3">
       <v-layout row wrap>
