@@ -16,14 +16,20 @@
         </template>
 
         <v-list class="mt-6">
-          <v-list-item @click="logoutRedirect">
-            <v-list-item-action>
-              <v-icon>mdi-logout</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>Déconnexion</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :to="item.to"
+          router
+          exact
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title" />
+          </v-list-item-content>
+        </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
@@ -45,6 +51,23 @@ export default Vue.extend({
     title: 'ft_transcendance',
     login: 'gamarcha',
     imagePath: 'gamarcha',
+    items: [
+        {
+          icon: 'mdi-apps',
+          title: 'Game',
+          to: '/',
+        },
+        {
+          icon: 'mdi-account',
+          title: 'Profile',
+          to: '/profile',
+        },
+        {
+          icon: 'mdi-logout',
+          title: 'Logout',
+          to: '/logout',
+        },
+      ],
   }),
   // computed: {
     // ...mapState({
