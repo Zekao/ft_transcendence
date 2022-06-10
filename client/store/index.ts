@@ -35,14 +35,11 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-  async login(
-    { commit },
-    { authCode, authState }: { authCode: string; authState: string }
-  ) {
+  async login({ commit }, authCode: string) {
     commit('AUTH_REQUEST')
     try {
       const res = await this.$axios.$get(
-        `/auth/callback?code=${authCode}&state=${authState}`
+        `/auth/callback?code=${authCode}`
       )
       const { accessToken /*, refreshToken, expiresAt, issuedAt */ } = res
       this.$cookies.set('access_token', accessToken)
@@ -52,6 +49,7 @@ export const actions: ActionTree<RootState, RootState> = {
       commit('AUTH_SUCCESS', res)
       return res
     } catch (err) {
+      console.log(err)
       this.$cookies.removeAll()
       commit('AUTH_ERROR')
       throw err
