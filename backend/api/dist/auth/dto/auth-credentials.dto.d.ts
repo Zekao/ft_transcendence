@@ -17,3 +17,6 @@ export declare class AuthCredentialsFortyTwoDto {
 export declare class LoginFortyTwoDto {
     FortyTwoID: number;
 }
+export declare class AuthCodeDto {
+    authCode: number;
+}

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginFortyTwoDto = exports.AuthCredentialsFortyTwoDto = exports.AuthCredentialsDto = void 0;
+exports.AuthCodeDto = exports.LoginFortyTwoDto = exports.AuthCredentialsFortyTwoDto = exports.AuthCredentialsDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class AuthCredentialsDto {
@@ -48,4 +48,7 @@ exports.AuthCredentialsFortyTwoDto = AuthCredentialsFortyTwoDto;
 class LoginFortyTwoDto {
 }
 exports.LoginFortyTwoDto = LoginFortyTwoDto;
+class AuthCodeDto {
+}
+exports.AuthCodeDto = AuthCodeDto;
 //# sourceMappingURL=auth-credentials.dto.js.map

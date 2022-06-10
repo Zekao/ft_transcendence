@@ -23,7 +23,11 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     logfortytwo(req) {
-        this.authService.handleFortyTwo(req.user._json);
+        this.authService.handleFortyTwo(req._json);
+    }
+    callbackfortytwo(req) {
+        console.log(req.user);
+        console.log("dsas");
     }
     test(req) {
         console.log(req.user);
@@ -41,6 +45,17 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "logfortytwo", null);
+__decorate([
+    (0, common_1.Get)("/callback"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Login or create of user with 42 OAuth",
+    }),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "callbackfortytwo", null);
 __decorate([
     (0, common_1.Post)("/test"),
     (0, swagger_1.ApiOperation)({
