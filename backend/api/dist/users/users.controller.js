@@ -80,8 +80,8 @@ let UsersController = class UsersController {
     getFriends(id) {
         return this.UsersService.getFriends(id);
     }
-    addFriend(id, friend) {
-        return this.UsersService.addFriend(id, friend);
+    addFriend(id, query) {
+        return this.UsersService.addFriend(id, query.friend);
     }
     async uploadedFile(id, file) {
         return this.UsersService.uploadFile(id, file);
@@ -91,6 +91,9 @@ let UsersController = class UsersController {
     }
     deleteAvatar(id) {
         return this.UsersService.deleteAvatar(id);
+    }
+    patchUser(id, query) {
+        return this.UsersService.patchUser(id, query);
     }
     patchFirstName(id, query) {
         return this.UsersService.patchFirstName(id, query.firstname);
@@ -370,14 +373,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
-    (0, common_1.Post)("/:id/friends/add/:friend_id"),
+    (0, common_1.Post)("/:id/friends/"),
     (0, swagger_1.ApiOperation)({
         summary: "Add a friend to a specified user profile",
     }),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Param)("friend_id")),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addFriend", null);
 __decorate([
@@ -435,6 +438,22 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteAvatar", null);
+__decorate([
+    (0, common_1.Patch)("/:id"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Update the specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: yargs_1.boolean,
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "patchUser", null);
 __decorate([
     (0, common_1.Patch)("/:id/firstname"),
     (0, swagger_1.ApiOperation)({

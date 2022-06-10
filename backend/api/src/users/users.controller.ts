@@ -3,6 +3,7 @@ import {
   Param,
   Res,
   Query,
+  Body,
   Get,
   Post,
   Delete,
@@ -25,7 +26,7 @@ import {
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { FileUploadDto } from "./dto/file-upload.dto";
-import { Express } from "express";
+import { Express, query } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users.enum";
@@ -40,6 +41,7 @@ import {
   UserApiException,
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
+import { UserDto } from "./dto/user.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -246,7 +248,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Param("id") id: string): Promise<User[]> {
+  getFriends(@Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getFriends(id);
   }
 
@@ -254,15 +256,12 @@ export class UsersController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  @Post("/:id/friends/add/:friend_id")
+  @Post("/:id/friends/")
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend(
-    @Param("id") id: string,
-    @Param("friend_id") friend: string
-  ): Promise<User> {
-    return this.UsersService.addFriend(id, friend);
+  addFriend( @Param("id") id: string, @Query() query): Promise<User> {                   
+    return this.UsersService.addFriend(id, query.friend);
   }
 
   @Post("/:id/avatar/upload")
@@ -324,6 +323,20 @@ export class UsersController {
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
+
+  
+  @Patch("/:id")
+  @ApiOperation({
+    summary: "Update the specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+    type: boolean,
+  })
+  @UserApiException(() => NotFoundException)
+  patchUser(@Param("id") id: string, @Query() query): Promise<User> {
+    return this.UsersService.patchUser(id, query);
+  }
 
   @Patch("/:id/firstname")
   @ApiOperation({

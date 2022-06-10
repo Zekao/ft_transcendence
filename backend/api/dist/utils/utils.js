@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isUuid = void 0;
 const class_validator_1 = require("class-validator");
 function isUuid(id) {
+    console.log(`=== ${typeof id} === ${id} ===`);
     const splited = id.split("-");
     for (const s in splited) {
         if (!(0, class_validator_1.isAlphanumeric)(s))

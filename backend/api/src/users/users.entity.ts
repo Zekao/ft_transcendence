@@ -25,6 +25,9 @@ export class User {
   user_name: string;
   @ApiProperty()
   @Column()
+  password: string;
+  @ApiProperty()
+  @Column()
   email: string;
   @ApiProperty()
   @Column()

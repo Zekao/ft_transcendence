@@ -68,7 +68,7 @@ let UsersService = class UsersService {
         return users;
     }
     async getUserId(id, RelationsPicker) {
-        const relations = null;
+        const relations = [];
         if (RelationsPicker) {
             RelationsPicker.withFriends && relations.push("friends");
         }
@@ -218,6 +218,30 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException(`Avatar \`${id}' not found`);
         }
         return true;
+    }
+    async patchUser(id, query) {
+        const { firstname, lastname, email, status, ingame, win, loose, rank, ratio } = query;
+        const found = await this.getUserId(id);
+        if (firstname)
+            found.first_name = firstname;
+        if (lastname)
+            found.last_name = lastname;
+        if (email)
+            found.email = email;
+        if (status)
+            found.status = status;
+        if (ingame)
+            found.in_game = ingame;
+        if (win)
+            found.win = win;
+        if (loose)
+            found.loose = loose;
+        if (rank)
+            found.rank = rank;
+        if (ratio)
+            found.ratio = ratio;
+        this.UserRepository.save(found);
+        return found;
     }
     async patchFirstName(id, first_name) {
         const found = await this.getUserId(id);
