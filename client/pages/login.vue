@@ -34,10 +34,10 @@ export default Vue.extend({
   },
 
   async asyncData({ query, store, redirect }) {
-    const { code: authCode, state: authState } = query
-    if (authCode && authState) {
+    const { code: authCode } = query
+    if (authCode) {
       try {
-        await store.dispatch('auth/login', { authCode, authState })
+        await store.dispatch('login', authCode)
         redirect('/')
       } catch (err) {
         return {
