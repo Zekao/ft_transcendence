@@ -138,23 +138,22 @@ export class UsersService {
   /* ************************************************************************** */
 
   async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { user_name, password } = authCredentialsDto;
+    const { FortyTwoID, user_name, first_name, last_name, avatar } =
+      authCredentialsDto;
     const stat = UserStatus.ONLINE;
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
     const user = this.UserRepository.create({
+      FortyTwoID: FortyTwoID,
       status: stat,
       in_game: UserGameStatus.OUT_GAME,
-      user_name,
-      password: hashedPassword,
+      user_name: user_name,
       email: user_name + "@transcendence.com",
-      first_name: "Fake",
-      last_name: "Users",
+      first_name: first_name,
+      last_name: last_name,
       win: 0,
       loose: 0,
       rank: 0,
       ratio: 1,
-      avatar: "default/img_avatar.png",
+      avatar: avatar,
     });
     try {
       await this.UserRepository.save(user);

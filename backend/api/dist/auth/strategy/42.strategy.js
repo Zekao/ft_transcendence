@@ -24,9 +24,9 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
     constructor(usersRepository) {
         console.log(process.env);
         super({
-            clientID: "1d54373ef2df42a5273b49008cb047a94b1b1baf6f7202c9855112e9646461f3",
-            clientSecret: "4c59774b6a90907bb513aa2ad708f73c705a9e02def13670b5626a1affd98458",
-            callbackURL: "http://localhost:4500/Account",
+            clientID: "360cc9c295cc9eb63bf65794b2a2a50650d8e03353db6fc515d8ac4ad651436a",
+            clientSecret: "d89e41624c9c1c6dcfa0aa00a39c7f06793f8ecc79c441f519d3f96efb76ca24",
+            callbackURL: "http://localhost:3000/auth/login",
         });
         this.usersRepository = usersRepository;
     }

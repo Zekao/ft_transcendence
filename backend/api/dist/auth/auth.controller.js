@@ -15,19 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_services_1 = require("./auth.services");
-const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
 const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
-    }
-    signup(AuthCredentialsDto) {
-        return this.authService.signUp(AuthCredentialsDto);
-    }
-    signin(AuthCredentialsDto) {
-        return this.authService.signIn(AuthCredentialsDto);
     }
     logfortytwo(req) {
         this.authService.handleFortyTwo(req.user._json);
@@ -38,27 +31,7 @@ let AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, common_1.Post)("/signup"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Create a new user",
-    }),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_credentials_dto_1.AuthCredentialsDto]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "signup", null);
-__decorate([
-    (0, common_1.Post)("/signin"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Login with an existing user",
-    }),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_credentials_dto_1.AuthCredentialsDto]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "signin", null);
-__decorate([
-    (0, common_1.Get)("/42"),
+    (0, common_1.Get)("/login"),
     (0, swagger_1.ApiOperation)({
         summary: "Login or create of user with 42 OAuth",
     }),

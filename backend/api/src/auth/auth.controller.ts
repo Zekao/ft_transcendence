@@ -19,23 +19,7 @@ export class AuthController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  @Post("/signup")
-  @ApiOperation({
-    summary: "Create a new user",
-  })
-  signup(@Body() AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.authService.signUp(AuthCredentialsDto);
-  }
-  @Post("/signin")
-  @ApiOperation({
-    summary: "Login with an existing user",
-  })
-  signin(
-    @Body() AuthCredentialsDto: AuthCredentialsDto
-  ): Promise<{ accessToken: string }> {
-    return this.authService.signIn(AuthCredentialsDto);
-  }
-  @Get("/42")
+  @Get("/login")
   @ApiOperation({
     summary: "Login or create of user with 42 OAuth",
   })

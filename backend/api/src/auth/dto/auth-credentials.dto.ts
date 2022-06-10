@@ -9,6 +9,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { MetadataAlreadyExistsError } from "typeorm";
 
 export class AuthCredentialsDto {
+  @ApiProperty()
+  FortyTwoID: number;
   @IsString()
   @MinLength(2)
   @MaxLength(8)
@@ -22,20 +24,17 @@ export class AuthCredentialsDto {
   email: string;
   @ApiProperty()
   avatar: string;
-  @IsString()
-  @MinLength(12)
-  @MaxLength(32)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: "password is too weak",
-  })
-  @ApiProperty()
-  password: string;
 }
 
 export class AuthCredentialsFortyTwoDto {
+  id: number;
   first_name: string;
   last_name: string;
   login: string;
   email: string;
   image_url: string;
+}
+
+export class LoginFortyTwoDto {
+  FortyTwoID: number;
 }

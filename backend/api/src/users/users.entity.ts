@@ -13,7 +13,9 @@ export class User {
   @ApiProperty()
   @PrimaryGeneratedColumn("uuid")
   id: string;
-
+  @ApiProperty()
+  @Column()
+  FortyTwoID: number;
   @ApiProperty()
   @Column()
   first_name: string;
@@ -23,9 +25,6 @@ export class User {
   @ApiProperty()
   @Column({ unique: true })
   user_name: string;
-  @ApiProperty()
-  @Column()
-  password: string;
   @ApiProperty()
   @Column()
   email: string;

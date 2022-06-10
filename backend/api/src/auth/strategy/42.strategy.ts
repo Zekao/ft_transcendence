@@ -52,12 +52,12 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     super({
       // a remplacer avec les variables d'env
       clientID:
-        "1d54373ef2df42a5273b49008cb047a94b1b1baf6f7202c9855112e9646461f3",
+        "360cc9c295cc9eb63bf65794b2a2a50650d8e03353db6fc515d8ac4ad651436a",
       clientSecret:
-        "4c59774b6a90907bb513aa2ad708f73c705a9e02def13670b5626a1affd98458",
+        "d89e41624c9c1c6dcfa0aa00a39c7f06793f8ecc79c441f519d3f96efb76ca24",
       // clientID: process.env['FORTYTWO_ID'],
       // clientSecret: process.env['FORTYTWO_SECRET'],
-      callbackURL: "http://localhost:4500/Account",
+      callbackURL: "http://localhost:3000/auth/login",
     });
   }
   async validate(accessToken, refreshToken, profile) {

@@ -1,3 +1,3 @@
 export interface FortyTwoUser {
-    id: number;
+    FortyTwoID: number;
 }

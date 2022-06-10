@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_entity_1 = require("../users/users.entity");
 const users_service_1 = require("../users/users.service");
-const bcrypt = require("bcrypt");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 let AuthService = class AuthService {
@@ -32,31 +31,37 @@ let AuthService = class AuthService {
         console.log(User);
     }
     async handleFortyTwo(Ftwo) {
-        const AuthCredentialsDto = {
-            first_name: Ftwo.first_name,
-            last_name: Ftwo.last_name,
-            user_name: Ftwo.login,
-            email: Ftwo.email,
-            avatar: Ftwo.image_url,
-            password: "TinkyWinkey42",
-        };
-        const found = this.userService.getUserId(Ftwo.login);
-        if (!found)
-            return this.signUp(AuthCredentialsDto);
-        return this.signIn(AuthCredentialsDto);
-    }
-    async signIn(AuthCredentialsDto) {
-        const { user_name, password } = AuthCredentialsDto;
         const user = await this.userRepository.findOne({
-            where: { user_name: user_name },
+            where: { FortyTwoID: Ftwo.id },
         });
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const payload = { user_name };
+        if (!user) {
+            const AuthCredentialsDto = {
+                FortyTwoID: Ftwo.id,
+                first_name: Ftwo.first_name,
+                last_name: Ftwo.last_name,
+                user_name: Ftwo.login,
+                email: Ftwo.email,
+                avatar: Ftwo.image_url,
+            };
+            return this.signUp(AuthCredentialsDto);
+        }
+        const LoginFortyTwoDto = {
+            FortyTwoID: Ftwo.id,
+        };
+        return this.signIn(LoginFortyTwoDto);
+    }
+    async signIn(loginFortyTwoDto) {
+        const { FortyTwoID } = loginFortyTwoDto;
+        const user = await this.userRepository.findOne({
+            where: { FortyTwoID: FortyTwoID },
+        });
+        if (user) {
+            const payload = { FortyTwoID };
             const accessToken = this.JwtService.sign(payload);
             return { accessToken };
         }
         else {
-            throw new common_1.UnauthorizedException("Incorrect password or username");
+            throw new common_1.UnauthorizedException("Incorrect user id");
         }
     }
     async signUp(AuthCredentialsDto) {
