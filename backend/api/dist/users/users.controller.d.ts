@@ -3,6 +3,7 @@ import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { UserGameStatus, UserStatus } from "./users.enum";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
+import { UserDto } from "./dto/user.dto";
 export declare class UsersController {
     private UsersService;
     constructor(UsersService: UsersService);
@@ -21,7 +22,7 @@ export declare class UsersController {
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
-    getFriends(id: string): Promise<User[]>;
+    getFriends(id: string): Promise<UserDto[]>;
     addFriend(id: string, query: any): Promise<User>;
     uploadedFile(id: string, file: Express.Multer.File): Promise<{
         originalname: string;

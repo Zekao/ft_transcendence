@@ -41,6 +41,7 @@ import {
   UserApiException,
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
+import { UserDto } from "./dto/user.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -247,7 +248,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Param("id") id: string): Promise<User[]> {
+  getFriends(@Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getFriends(id);
   }
 
