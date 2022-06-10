@@ -28,6 +28,8 @@ let AuthService = class AuthService {
     GenerateJwtToken(FortyTwoID) {
         const payload = { FortyTwoID };
         const accessToken = this.JwtService.sign(payload);
+        console.log(payload);
+        console.log(accessToken);
         return { accessToken };
     }
     async handleFortyTwo(Ftwo) {

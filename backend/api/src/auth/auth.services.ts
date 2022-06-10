@@ -23,6 +23,8 @@ export class AuthService {
   GenerateJwtToken(FortyTwoID: number) {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.JwtService.sign(payload);
+    console.log(payload);
+    console.log(accessToken);
     return { accessToken };
   }
 

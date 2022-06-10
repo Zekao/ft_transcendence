@@ -32,7 +32,8 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
-    return this.authService.GenerateJwtToken(req._json);
+    console.log(req.user._json.id);
+    return this.authService.GenerateJwtToken(req.user._json.id);
   }
 
   @Post("/test") // to check that request can be made with the jwt
