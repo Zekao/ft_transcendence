@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nabentay <nabentay@student.42.fr>          +#+  +:+       +#+         #
+#    By: gamarcha <gamarcha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/09 14:05:20 by nabentay         ###   ########.fr        #
+#    Updated: 2022/06/10 11:40:32 by gamarcha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ DIR=.
 C=api
 
 up:
-	@docker-compose -f docker-compose.yaml up -d
+	@docker-compose -f docker-compose.yaml up --build -d
 
 all: up
 
