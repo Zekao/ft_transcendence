@@ -32,7 +32,6 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
-    console.log(req.user._json.id);
     return this.authService.GenerateJwtToken(req.user._json.id);
   }
 

@@ -24,7 +24,6 @@ let AuthController = class AuthController {
     }
     logfortytwo(req) { }
     callbackfortytwo(req) {
-        console.log(req.user._json.id);
         return this.authService.GenerateJwtToken(req.user._json.id);
     }
     test(req) {
