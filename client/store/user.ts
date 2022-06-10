@@ -19,7 +19,7 @@ export interface IUser {
 export const state = () => ({
   authUser: {} as IUser,
   users: [] as IUser[],
-  // rankList: [] as IUser[],
+  leaderboard: [] as IUser[],
 })
 
 export type UserState = ReturnType<typeof state>
@@ -37,6 +37,9 @@ export const mutations: MutationTree<UserState> = {
   DELETE: (state, userID: string) => {
     state.users = state.users.filter(el => el.id !== userID)
   },
+  FETCH_LEADERBOARD: (state, users: IUser[]) => {
+    state.leaderboard = users
+  }
 }
 
 export const actions: ActionTree<UserState, RootState> = {
@@ -72,6 +75,15 @@ export const actions: ActionTree<UserState, RootState> = {
     try {
       const res = await this.$axios.$delete(`/users/${userID}`)
       commit('DELETE', userID)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async fetchLeaderboard({ commit }) {
+    try {
+      const res = await this.$axios.$get(`/users/ranklist`)
+      commit('FETCH_LEADERBOARD', res)
       return res
     } catch (err) {
       throw err
