@@ -22,13 +22,14 @@ export declare class UsersController {
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
     getFriends(id: string): Promise<User[]>;
-    addFriend(id: string, friend: string): Promise<User>;
+    addFriend(id: string, query: any): Promise<User>;
     uploadedFile(id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;
     deleteUser(id: string): Promise<boolean>;
     deleteAvatar(id: string): Promise<boolean>;
+    patchUser(id: string, query: any): Promise<User>;
     patchFirstName(id: string, query: any): Promise<string>;
     patchLastName(id: string, query: any): Promise<string>;
     patchUserName(id: string, query: any): Promise<string>;

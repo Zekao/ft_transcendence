@@ -1,5 +1,14 @@
-import { UserStatus } from "../users.enum";
+import { UserGameStatus, UserStatus } from "../users.enum";
 export declare class UsersFiltesDTO {
-    status?: UserStatus;
+    firstname?: string;
+    lastname?: string;
     username?: string;
+    email?: string;
+    avatar?: string;
+    status?: UserStatus;
+    ingame?: UserGameStatus;
+    win?: number;
+    loose?: number;
+    rank?: number;
+    ratio?: number;
 }
