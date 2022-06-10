@@ -1,79 +1,75 @@
 <template>
-  <div class="login">
-    <div>
-      <form @submit.prevent="submit">
-        <div>
-          <label for="username">Username:</label>
-          <input type="text" name="username" v-model="form.username" />
-        </div>
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" name="password" v-model="form.password" />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-      <p v-if="showError" id="error">Username or Password is incorrect</p>
-    </div>
-  </div>
+  <v-container fill-height fluid>
+    <v-row justify="center">
+      <v-card flat align="center">
+        <h1 class="ma-4 text-center"> {{ title }} </h1>
+        <v-btn
+          dark
+          x-large
+          :elevation="0"
+          :loading="loading"
+          color="grey darken-3"
+          class="ma-4"
+          @click="login"
+        >
+          Connexion
+          <img src="42_logo.svg" class="logo" />
+        </v-btn>
+      </v-card>
+    </v-row>
+  </v-container>
 </template>
 
-<script>
-import { mapActions } from "vuex";
-export default {
-  name: "Login",
-  components: {},
-  data() {
-    return {
-      form: {
-        username: "",
-        password: "",
-      },
-      showError: false
-    };
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  name: 'LoginPage',
+
+  layout: 'login',
+
+  middleware({ $cookies, redirect }) {
+    const accessToken = $cookies.get('access_token')
+    if (accessToken) redirect('/')
+  },
+
+  async asyncData({ query, store, redirect }) {
+    const { code: authCode, state: authState } = query
+    if (authCode && authState) {
+      try {
+        await store.dispatch('auth/login', { authCode, authState })
+        redirect('/')
+      } catch (err) {
+        return {
+          error: true,
+        }
+      }
+    }
+  },
+
+  data: () => ({
+    title: 'ft_transcendance',
+    error: false,
+    loading: false,
+  }),
+
+  created() {
+    if (this.error) {
+      console.log(this.error)
+    }
   },
   methods: {
-    ...mapActions(["LogIn"]),
-    async submit() {
-      const User = new FormData();
-      User.append("user_name", this.form.username);
-      User.append("password", this.form.password);
-      try {
-          await this.LogIn(User);
-          this.$router.push("/posts");
-          this.showError = false
-      } catch (error) {
-        this.showError = true
-      }
+    login() {
+      this.loading = true
+      window.location.href = this.$config.serverLogin ?? ''
     },
   },
-};
+})
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
-}
-button[type=submit] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius:30px;
-}
-button[type=submit]:hover {
-  background-color: #45a049;
-}
-input {
-  margin: 5px;
-  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-  padding:10px;
-  border-radius:30px;
-}
-#error {
-  color: red;
+.logo {
+  height: 1rem;
+  margin-left: 0.5rem;
 }
 </style>
