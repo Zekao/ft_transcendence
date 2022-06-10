@@ -21,14 +21,12 @@ export class AuthController {
 
   @Get("/login")
   @ApiOperation({
-    summary: "Login or create of user with 42 OAuth",
+    summary: "Redirect to Intra login page.",
   })
   @UseGuards(FortyTwoAuthGuard)
-  logfortytwo(@Req() req) {}
-
   @Get("/callback")
   @ApiOperation({
-    summary: "Login or create of user with 42 OAuth",
+    summary: "Register or log using authCode / Return AccesToken",
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
