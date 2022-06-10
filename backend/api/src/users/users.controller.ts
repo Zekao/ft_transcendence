@@ -21,7 +21,7 @@ import {
 import { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { UserGameStatus, UserStatus } from "./users-status.enum";
+import { UserGameStatus, UserStatus } from "./users.enum";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
@@ -147,10 +147,25 @@ export class UsersController {
   getAvatarPath(@Param("id") id: string) {
     return this.UsersService.getAvatarPath(id);
   }
+  @Get("/:id/friends")
+  @ApiOperation({
+    summary: "Return the list of friends of a specified user profile",
+  })
+  getFriends(@Param("id") id: string): Promise<User[]> {
+    return this.UsersService.getFriends(id);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
+
+  @Post("/:id/friends/add/:friend_id")
+  @ApiOperation({
+    summary: "Add a friend to a specified user profile",
+  })
+  addFriend(@Param("id") id: string, @Param('friend_id') friend: string): Promise<User> {
+    return this.UsersService.addFriend(id, friend);
+  }
 
   @Post("/:id/avatar/upload")
   @ApiOperation({
@@ -171,6 +186,7 @@ export class UsersController {
   ) {
     return this.UsersService.uploadFile(id, file);
   }
+  
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */

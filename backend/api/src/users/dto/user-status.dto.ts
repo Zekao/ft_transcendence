@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsEnum } from "class-validator";
-import { UserStatus, UserGameStatus } from "../users-status.enum";
+import { UserStatus, UserGameStatus } from "../users.enum";
 
 export class UserStatusDto {
   @IsEnum(UserStatus, {
