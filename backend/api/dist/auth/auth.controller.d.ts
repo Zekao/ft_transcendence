@@ -7,5 +7,5 @@ export declare class AuthController {
         accessToken: string;
     };
     test(req: any): void;
-    qrcode(): Promise<void>;
+    qrcode(): Promise<string>;
 }

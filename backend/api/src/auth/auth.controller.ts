@@ -1,4 +1,12 @@
-import { Body, Get, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Get,
+  Controller,
+  Post,
+  Req,
+  UseGuards,
+  Res,
+} from "@nestjs/common";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { FortyTwoAuthGuard } from "./guard/42.auth.guard";
@@ -53,8 +61,9 @@ export class AuthController {
   @ApiOperation({
     summary: "Get image of qrcode",
   })
-  async qrcode() {
-    const Test = await this.authService.generateQR();
+  async qrcode(): Promise<string> {
+    const Test = this.authService.generateQR();
     console.log(Test);
+    return (await Test).qrcode;
   }
 }

@@ -67,7 +67,7 @@ export class AuthService {
     return this.userService.createUsers(AuthCredentialsDto);
   }
 
-  async generateQR(): Promise<any> {
+  async generateQR(): Promise<QRObjects> {
     const secret = speakeasy.generateSecret({
       name: " Ft_transcendence ",
     });
