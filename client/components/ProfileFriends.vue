@@ -6,11 +6,10 @@
       color="primary"
       ></v-progress-circular>
     <v-list v-else-if="$fetchState.error">
-      <v-list-item>Failed to load friend list.</v-list-item>
+      <v-list-item dense>Failed to load friend list.</v-list-item>
     </v-list>
     <v-list v-else-if="!authUserFriends.length">
       <v-list-item dense>No friends yet.</v-list-item>
-      <v-list-item dense>Please add someone to display friend-list!</v-list-item>
     </v-list>
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i">
