@@ -66,7 +66,7 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  @Delete("/:id/delete")
+  @Delete("/:id")
   @ApiOperation({
     summary: "Delete a specified channel",
   })

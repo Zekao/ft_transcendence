@@ -84,7 +84,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([
-    (0, common_1.Delete)("/:id/delete"),
+    (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Delete a specified channel",
     }),
