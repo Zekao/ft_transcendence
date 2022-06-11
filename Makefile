@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gamarcha <gamarcha@student.42.fr>          +#+  +:+       +#+         #
+#    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/10 11:40:32 by gamarcha         ###   ########.fr        #
+#    Updated: 2022/06/11 17:00:28 by robriard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,9 @@ C=api
 
 up:
 	@docker-compose -f docker-compose.yaml up --build -d
+
+show-logs: ################################################################
+	@docker-compose -f docker-compose.yaml up --build
 
 all: up
 
@@ -60,4 +63,4 @@ logs:
 exec:
 	@docker exec -it ${C} '/bin/sh'
 
-.PHONY:	all up down re ps rm logs
+.PHONY:	all up show-logs down re ps rm logs

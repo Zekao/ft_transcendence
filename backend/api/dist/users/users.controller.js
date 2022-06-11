@@ -92,50 +92,11 @@ let UsersController = class UsersController {
     deleteAvatar(id) {
         return this.UsersService.deleteAvatar(id);
     }
+    removeFriend(id, query) {
+        return this.UsersService.removeFriend(id, query.friend);
+    }
     patchUser(id, query) {
         return this.UsersService.patchUser(id, query);
-    }
-    patchFirstName(id, query) {
-        return this.UsersService.patchFirstName(id, query.firstname);
-    }
-    patchLastName(id, query) {
-        return this.UsersService.patchLastName(id, query.lastname);
-    }
-    patchUserName(id, query) {
-        return this.UsersService.patchUserName(id, query.username);
-    }
-    patchEmail(id, query) {
-        return this.UsersService.patchEmail(id, query.email);
-    }
-    patchStatus(id, query) {
-        return this.UsersService.patchStatus(id, query);
-    }
-    patchGameStatus(id, query) {
-        return this.UsersService.patchUserGameStatus(id, query);
-    }
-    patchWin(id, query) {
-        return this.UsersService.patchWin(id, query);
-    }
-    patchLoose(id, query) {
-        return this.UsersService.patchLoose(id, query);
-    }
-    patchRank(id, query) {
-        return this.UsersService.patchRank(id, query);
-    }
-    patchAddWin(id) {
-        return this.UsersService.patchAddWin(id);
-    }
-    patchAddLoose(id) {
-        return this.UsersService.patchAddLoose(id);
-    }
-    patchRemoveWin(id) {
-        return this.UsersService.patchRemoveWin(id);
-    }
-    patchRemoveLoose(id) {
-        return this.UsersService.patchRemoveLoose(id);
-    }
-    patchUpdateRatio(id) {
-        return this.UsersService.patchUpdateRatio(id);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -439,6 +400,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteAvatar", null);
 __decorate([
+    (0, common_1.Delete)("/:id/friends/"),
+    (0, swagger_1.ApiOperation)({
+        summary: "delete a friend to a specified user profile",
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "removeFriend", null);
+__decorate([
     (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Update the specified user profile",
@@ -454,220 +426,6 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUser", null);
-__decorate([
-    (0, common_1.Patch)("/:id/firstname"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the first name for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchFirstName", null);
-__decorate([
-    (0, common_1.Patch)("/:id/lastname"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the last name for the specified user profile",
-    }),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchLastName", null);
-__decorate([
-    (0, common_1.Patch)("/:id/username"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the username for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchUserName", null);
-__decorate([
-    (0, common_1.Patch)("/:id/email"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the email for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchEmail", null);
-__decorate([
-    (0, common_1.Patch)("/:id/status"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the status for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchStatus", null);
-__decorate([
-    (0, common_1.Patch)("/:id/gameStatus"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the game status for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchGameStatus", null);
-__decorate([
-    (0, common_1.Patch)("/:id/win"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the number of win game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)("win")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchWin", null);
-__decorate([
-    (0, common_1.Patch)("/:id/loose"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the number of loose game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)("loose")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchLoose", null);
-__decorate([
-    (0, common_1.Patch)("/:id/rank"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Modify the rank for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)("rank")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchRank", null);
-__decorate([
-    (0, common_1.Patch)("/:id/addWin"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Add a win game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchAddWin", null);
-__decorate([
-    (0, common_1.Patch)("/:id/addLoose"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Add a loose game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchAddLoose", null);
-__decorate([
-    (0, common_1.Patch)("/:id/removeWin"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Remove a win game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchRemoveWin", null);
-__decorate([
-    (0, common_1.Patch)("/:id/removeLoose"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Remove a loose game for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchRemoveLoose", null);
-__decorate([
-    (0, common_1.Patch)("/:id/updateRatio"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Update the ratio for the specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: yargs_1.boolean,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "patchUpdateRatio", null);
 __decorate([
     (0, common_1.Patch)("/updateRank"),
     (0, swagger_1.ApiOperation)({

@@ -1,7 +1,6 @@
 import { isAlphanumeric } from "class-validator";
 
 export function isUuid(id: string): boolean {
-  console.log(`=== ${typeof id} === ${id} ===`);
   const splited: string[] = id.split("-");
   for (const s in splited) {
     if (!isAlphanumeric(s)) return false;
