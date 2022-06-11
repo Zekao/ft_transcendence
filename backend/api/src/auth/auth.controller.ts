@@ -17,7 +17,9 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import {decode} from 'node-base64-image';
+import * as fs from 'fs';
+
+
 
 @ApiTags("auth")
 @Controller("auth")
@@ -62,14 +64,17 @@ export class AuthController {
     summary: "Get image of qrcode",
   })
   async qrcode(): Promise<string> {
-    const Test = this.authService.generateQR();
-    console.log(Test);
-    const image = (await Test).qrcode;
-    // convert data to an image
-    await decode(image, { fname: 'user_qrcode', ext: 'png' });
-    
-
-    
-    return (await Test).qrcode;
+  const Test = this.authService.generateQR();
+  
+  var file = fs;
+  file.writeFile("qrcode_user.png", (await Test).qrcode.substring(22), { encoding: 'base64' }, function (err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("The file was saved!");
+    }
+  })
+    return (await Test).qrcode.substring(22);
   }
 }
