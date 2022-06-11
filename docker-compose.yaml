@@ -6,7 +6,6 @@ version: '3.7'
 volumes:
     database:
     certificates:
-    api-cache:
 
 # ************************************************************
 # *                  SERVICES                                *
@@ -69,11 +68,10 @@ services:
       /bin/sh -c "
         npm install;
         npm run build;
-        npm run start
+        npm run start:dev
       "
     volumes:
       - ./backend/api/:/app
-      - api-cache:/app/node_modules
     # ports:
     #   - ${SERVER_PORT_BACK}:${SERVER_PORT_BACK}
     env_file:
