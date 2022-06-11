@@ -1,5 +1,5 @@
 import { ActionTree, MutationTree } from 'vuex'
-import { RootState } from '.'
+import { RootState } from '@/store'
 
 export interface IChannel {
   id: string,
