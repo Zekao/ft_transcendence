@@ -18,6 +18,7 @@ export interface IUser {
 
 export const state = () => ({
   authUser: {} as IUser,
+  authUserFriends: [] as IUser[],
   users: [] as IUser[],
   // rankList: [] as IUser[],
 })
@@ -27,6 +28,9 @@ export type UserState = ReturnType<typeof state>
 export const mutations: MutationTree<UserState> = {
   FETCH_AUTH: (state, user: IUser) => {
     state.authUser = user
+  },
+  FETCH_AUTH_FRIENDS: (state, users: IUser[]) => {
+    state.authUserFriends = users
   },
   FETCH: (state, users: IUser[]) => {
     state.users = users
@@ -44,6 +48,15 @@ export const actions: ActionTree<UserState, RootState> = {
     try {
       const res = await this.$axios.$get(`/users/me`)
       commit('FETCH_AUTH', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async fetchAuthFriends({ state, commit }) {
+    try {
+      const res = await this.$axios.$get(`/users/${state.authUser.id}/friends`)
+      commit('FETCH_AUTH_FRIENDS', res)
       return res
     } catch (err) {
       throw err
