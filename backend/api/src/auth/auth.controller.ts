@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { QRObjects } from "./dto/2fa.dto";
+import {decode} from 'node-base64-image';
 
 @ApiTags("auth")
 @Controller("auth")
@@ -64,6 +64,12 @@ export class AuthController {
   async qrcode(): Promise<string> {
     const Test = this.authService.generateQR();
     console.log(Test);
+    const image = (await Test).qrcode;
+    // convert data to an image
+    await decode(image, { fname: 'user_qrcode', ext: 'png' });
+    
+
+    
     return (await Test).qrcode;
   }
 }
