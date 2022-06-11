@@ -320,6 +320,14 @@ export class UsersController {
     return this.UsersService.deleteAvatar(id);
   }
 
+  @Delete("/:id/friends/")
+  @ApiOperation({
+    summary: "delete a friend to a specified user profile",
+  })
+  removeFriend(@Param("id") id: string, @Query() query): Promise<User> {
+    return this.UsersService.removeFriend(id, query.friend);
+  }
+
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
@@ -335,195 +343,6 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   patchUser(@Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.patchUser(id, query);
-  }
-
-  @Patch("/:id/firstname")
-  @ApiOperation({
-    summary: "Modify the first name for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchFirstName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchFirstName(id, query.firstname);
-  }
-
-  @Patch("/:id/lastname")
-  @ApiOperation({
-    summary: "Modify the last name for the specified user profile",
-  })
-  patchLastName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchLastName(id, query.lastname);
-  }
-
-  @Patch("/:id/username")
-  @ApiOperation({
-    summary: "Modify the username for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchUserName(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchUserName(id, query.username);
-  }
-
-  @Patch("/:id/email")
-  @ApiOperation({
-    summary: "Modify the email for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchEmail(@Param("id") id: string, @Query() query): Promise<string> {
-    return this.UsersService.patchEmail(id, query.email);
-  }
-
-  @Patch("/:id/status")
-  @ApiOperation({
-    summary: "Modify the status for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchStatus(@Param("id") id: string, @Query() query): Promise<UserStatus> {
-    return this.UsersService.patchStatus(id, query);
-  }
-
-  @Patch("/:id/gameStatus")
-  @ApiOperation({
-    summary: "Modify the game status for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchGameStatus(
-    @Param("id") id: string,
-    @Query() query
-  ): Promise<UserGameStatus> {
-    return this.UsersService.patchUserGameStatus(id, query);
-  }
-
-  @Patch("/:id/win")
-  @ApiOperation({
-    summary: "Modify the number of win game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchWin(
-    @Param("id") id: string,
-    @Query("win") query: number
-  ): Promise<number> {
-    return this.UsersService.patchWin(id, query);
-  }
-
-  @Patch("/:id/loose")
-  @ApiOperation({
-    summary: "Modify the number of loose game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchLoose(
-    @Param("id") id: string,
-    @Query("loose") query: number
-  ): Promise<number> {
-    return this.UsersService.patchLoose(id, query);
-  }
-
-  @Patch("/:id/rank")
-  @ApiOperation({
-    summary: "Modify the rank for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchRank(
-    @Param("id") id: string,
-    @Query("rank") query: number
-  ): Promise<number> {
-    return this.UsersService.patchRank(id, query);
-  }
-
-  @Patch("/:id/addWin")
-  @ApiOperation({
-    summary: "Add a win game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchAddWin(@Param("id") id): Promise<number> {
-    return this.UsersService.patchAddWin(id);
-  }
-
-  @Patch("/:id/addLoose")
-  @ApiOperation({
-    summary: "Add a loose game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchAddLoose(@Param("id") id): Promise<number> {
-    return this.UsersService.patchAddLoose(id);
-  }
-
-  @Patch("/:id/removeWin")
-  @ApiOperation({
-    summary: "Remove a win game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchRemoveWin(@Param("id") id): Promise<number> {
-    return this.UsersService.patchRemoveWin(id);
-  }
-
-  @Patch("/:id/removeLoose")
-  @ApiOperation({
-    summary: "Remove a loose game for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchRemoveLoose(@Param("id") id): Promise<number> {
-    return this.UsersService.patchRemoveLoose(id);
-  }
-
-  @Patch("/:id/updateRatio")
-  @ApiOperation({
-    summary: "Update the ratio for the specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: boolean,
-  })
-  @UserApiException(() => NotFoundException)
-  patchUpdateRatio(@Param("id") id): Promise<number> {
-    return this.UsersService.patchUpdateRatio(id);
   }
 
   @Patch("/updateRank")

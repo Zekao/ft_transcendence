@@ -30,20 +30,7 @@ export declare class UsersController {
     }>;
     deleteUser(id: string): Promise<boolean>;
     deleteAvatar(id: string): Promise<boolean>;
+    removeFriend(id: string, query: any): Promise<User>;
     patchUser(id: string, query: any): Promise<User>;
-    patchFirstName(id: string, query: any): Promise<string>;
-    patchLastName(id: string, query: any): Promise<string>;
-    patchUserName(id: string, query: any): Promise<string>;
-    patchEmail(id: string, query: any): Promise<string>;
-    patchStatus(id: string, query: any): Promise<UserStatus>;
-    patchGameStatus(id: string, query: any): Promise<UserGameStatus>;
-    patchWin(id: string, query: number): Promise<number>;
-    patchLoose(id: string, query: number): Promise<number>;
-    patchRank(id: string, query: number): Promise<number>;
-    patchAddWin(id: any): Promise<number>;
-    patchAddLoose(id: any): Promise<number>;
-    patchRemoveWin(id: any): Promise<number>;
-    patchRemoveLoose(id: any): Promise<number>;
-    patchUpdateRatio(id: any): Promise<number>;
     patchUpdateRank(): Promise<User[]>;
 }
