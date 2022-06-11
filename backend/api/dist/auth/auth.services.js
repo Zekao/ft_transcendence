@@ -71,14 +71,11 @@ let AuthService = class AuthService {
         const secret = speakeasy.generateSecret({
             name: " Ft_transcendence ",
         });
-        console.log(secret);
-        qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-            const res = {
-                qrcode: data_url,
-                secret: secret.ascii,
-            };
-            return res;
-        });
+        const QRObjects = {
+            qrcode: await qrcode.toDataURL(secret.otpauth_url),
+            secret: secret.ascii,
+        };
+        return QRObjects;
     }
     async verifyQR(user_token, qrObjet) {
         const verified = speakeasy.totp.verify({

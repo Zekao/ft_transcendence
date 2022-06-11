@@ -72,17 +72,12 @@ export class AuthService {
       name: " Ft_transcendence ",
     });
 
-    // secret pour le verifyQR
-    console.log(secret);
-    // genere une image vers le qrcode qu'il faudra afficher
-    qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-      const res: QRObjects = {
-        qrcode: data_url,
-        secret: secret.ascii,
-      };
-      return res;
-    });
-  } // verify qr prends le token et verifie si le token est correct puis return un bool
+    const QRObjects = {
+      qrcode: await qrcode.toDataURL(secret.otpauth_url),
+      secret: secret.ascii,
+    };
+    return QRObjects;
+  }
 
   async verifyQR(user_token: string, qrObjet: QRObjects): Promise<any> {
     const verified = speakeasy.totp.verify({

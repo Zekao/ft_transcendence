@@ -31,7 +31,8 @@ let AuthController = class AuthController {
         this.authService.GenerateJwtToken(req.user);
     }
     async qrcode() {
-        console.log(await this.authService.generateQR());
+        const Test = await this.authService.generateQR();
+        console.log(Test);
     }
 };
 __decorate([

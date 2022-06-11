@@ -54,6 +54,7 @@ export class AuthController {
     summary: "Get image of qrcode",
   })
   async qrcode() {
-    console.log(await this.authService.generateQR());
+    const Test = await this.authService.generateQR();
+    console.log(Test);
   }
 }
