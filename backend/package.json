@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "node-base64-image": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/js-base64": "^3.3.1"
+  }
+}

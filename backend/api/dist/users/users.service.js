@@ -175,7 +175,7 @@ let UsersService = class UsersService {
         const friend = await this.getUserId(friend_id);
         if (!found.friends)
             found.friends = [];
-        if (found.friends.includes(friend)) {
+        if (found.friends.find((f) => f.id == friend.id)) {
             console.log("Already friends");
             throw new common_1.ConflictException("Already friend");
         }
@@ -225,6 +225,17 @@ let UsersService = class UsersService {
         }
         return true;
     }
+    async removeFriend(id, friend_id) {
+        const user = await this.getUserId(id, { withFriends: true });
+        if (!user.friends || !user.friends.length)
+            throw new common_1.NotFoundException(`User \`${id}' has no friends`);
+        const friend = await this.getUserId(friend_id);
+        if (!user.friends.find((f) => f.id == friend.id))
+            throw new common_1.NotFoundException(`User \`${id}' has no friend \`${friend_id}'`);
+        user.friends = user.friends.filter((f) => f.id != friend.id);
+        this.UserRepository.save(user);
+        return friend;
+    }
     async patchUser(id, query) {
         const { firstname, lastname, email, status, ingame, win, loose, rank, ratio, } = query;
         const found = await this.getUserId(id);
@@ -248,116 +259,6 @@ let UsersService = class UsersService {
             found.ratio = ratio;
         this.UserRepository.save(found);
         return found;
-    }
-    async patchFirstName(id, first_name) {
-        const found = await this.getUserId(id);
-        found.first_name = first_name;
-        this.UserRepository.save(found);
-        return found.first_name;
-    }
-    async patchLastName(id, last_name) {
-        const found = await this.getUserId(id);
-        found.last_name = last_name;
-        this.UserRepository.save(found);
-        return found.last_name;
-    }
-    async patchUserName(id, user_name) {
-        const users = await this.getUsers();
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].id === id)
-                continue;
-            if (users[i].user_name === user_name)
-                throw new common_1.ConflictException(`username \`${user_name}' already exist`);
-        }
-        const found = await this.getUserId(id);
-        found.user_name = user_name;
-        this.UserRepository.save(found);
-        return found.user_name;
-    }
-    async patchEmail(id, email) {
-        const found = await this.getUserId(id);
-        found.email = email;
-        this.UserRepository.save(found);
-        return found.email;
-    }
-    async patchStatus(id, userStatusDto) {
-        const found = await this.getUserId(id);
-        const { status } = userStatusDto;
-        if (!status)
-            throw new common_1.UnauthorizedException(`Invalid user status`);
-        found.status = status;
-        this.UserRepository.save(found);
-        return found.status;
-    }
-    async patchUserGameStatus(id, userGameStatusDto) {
-        const found = await this.getUserId(id);
-        const { in_game } = userGameStatusDto;
-        if (!in_game)
-            throw new common_1.UnauthorizedException(`Invalid game status`);
-        found.in_game = in_game;
-        this.UserRepository.save(found);
-        return found.in_game;
-    }
-    async patchWin(id, win) {
-        const found = await this.getUserId(id);
-        found.win = win;
-        this.UserRepository.save(found);
-        this.patchUpdateRank();
-        return found.win;
-    }
-    async patchLoose(id, loose) {
-        const found = await this.getUserId(id);
-        found.loose = loose;
-        this.UserRepository.save(found);
-        this.patchUpdateRank();
-        return found.loose;
-    }
-    async patchRank(id, rank) {
-        const found = await this.getUserId(id);
-        found.rank = rank;
-        this.UserRepository.save(found);
-        return found.rank;
-    }
-    async patchAddWin(id) {
-        const found = await this.getUserId(id);
-        found.win++;
-        this.UserRepository.save(found);
-        this.patchUpdateRatio(id);
-        return found.win;
-    }
-    async patchAddLoose(id) {
-        const found = await this.getUserId(id);
-        found.loose++;
-        this.UserRepository.save(found);
-        this.patchUpdateRatio(id);
-        return found.loose;
-    }
-    async patchRemoveWin(id) {
-        const found = await this.getUserId(id);
-        if (found.loose != 0) {
-            found.win--;
-            this.UserRepository.save(found);
-            this.patchUpdateRatio(id);
-        }
-        return found.win;
-    }
-    async patchRemoveLoose(id) {
-        const found = await this.getUserId(id);
-        if (found.loose != 0) {
-            found.loose--;
-            this.UserRepository.save(found);
-            this.patchUpdateRatio(id);
-        }
-        return found.loose;
-    }
-    async patchUpdateRatio(id) {
-        const found = await this.getUserId(id);
-        if (found.win != 0 || found.loose != 0) {
-            found.ratio = found.win / found.loose;
-        }
-        this.UserRepository.save(found);
-        this.patchUpdateRank();
-        return found.ratio;
     }
     async patchUpdateRank() {
         const found = await this.getRankedUsers();
