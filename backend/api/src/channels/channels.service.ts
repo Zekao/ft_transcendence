@@ -28,8 +28,7 @@ function isChannel(id: string): boolean {
 @Injectable()
 export class ChannelsService {
   constructor(
-    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>,
-    private channelGateway: ChannelsGateway
+    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>
   ) {}
 
   /* ************************************************************************** */
@@ -88,7 +87,6 @@ export class ChannelsService {
       permissions,
       password,
     });
-    this.channelGateway;
     try {
       await this.ChannelsRepository.save(channel);
     } catch (error) {

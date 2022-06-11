@@ -3,16 +3,19 @@ import { Socket, Server } from "socket.io";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
+import { ChannelsService } from "./channels.service";
 export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService;
     private readonly userService;
     private readonly authService;
-    constructor(jwtService: JwtService, userService: UsersService, authService: AuthService);
-    server: Server;
+    private readonly channelService;
+    constructor(jwtService: JwtService, userService: UsersService, authService: AuthService, channelService: ChannelsService);
+    server: any;
     private logger;
     afterInit(server: Server): void;
-    joinChannel(participant: string, client: Socket): void;
-    handleMessage(client: Socket, message: string): void;
+    getChannel(client: Socket, id: string): Promise<void>;
+    getChannelMe(client: Socket): Promise<void>;
+    emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
 }

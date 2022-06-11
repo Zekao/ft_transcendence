@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
-const channels_gateway_1 = require("./channels.gateway");
 function isChannel(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
@@ -29,9 +28,8 @@ function isChannel(id) {
         splited[4].length === 12);
 }
 let ChannelsService = class ChannelsService {
-    constructor(ChannelsRepository, channelGateway) {
+    constructor(ChannelsRepository) {
         this.ChannelsRepository = ChannelsRepository;
-        this.channelGateway = channelGateway;
     }
     async getChannel() {
         const users = await this.ChannelsRepository.find();
@@ -83,7 +81,6 @@ let ChannelsService = class ChannelsService {
             permissions,
             password,
         });
-        this.channelGateway;
         try {
             await this.ChannelsRepository.save(channel);
         }
@@ -123,8 +120,7 @@ let ChannelsService = class ChannelsService {
 ChannelsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(channels_entity_1.Channel)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        channels_gateway_1.ChannelsGateway])
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], ChannelsService);
 exports.ChannelsService = ChannelsService;
 //# sourceMappingURL=channels.service.js.map
