@@ -19,8 +19,8 @@ const users_entity_1 = require("../users/users.entity");
 const users_service_1 = require("../users/users.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const qrcode_1 = require("qrcode");
-const speakeasy_1 = require("speakeasy");
+const speakeasy = require("speakeasy");
+const qrcode = require("qrcode");
 let AuthService = class AuthService {
     constructor(JwtService, userRepository, userService) {
         this.JwtService = JwtService;
@@ -68,22 +68,19 @@ let AuthService = class AuthService {
         return this.userService.createUsers(AuthCredentialsDto);
     }
     async generateQR() {
-        const Qrcode = qrcode_1.qrcode;
-        const Speakeasy = speakeasy_1.speakeasy;
-        const secret = speakeasy_1.speakeasy.generateSecret({
+        const secret = speakeasy.generateSecret({
             name: " Ft_transcendence ",
         });
         console.log(secret);
-        qrcode_1.qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-            const QRObject = {
+        qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
+            const res = {
                 qrcode: data_url,
                 secret: secret.ascii,
             };
-            return QRObject;
+            return res;
         });
     }
     async verifyQR(user_token, qrObjet) {
-        const speakeasy = require("speakeasy");
         const verified = speakeasy.totp.verify({
             secret: qrObjet.secret,
             encoding: "ascii",

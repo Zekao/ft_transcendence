@@ -30,6 +30,9 @@ let AuthController = class AuthController {
         console.log(req.user);
         this.authService.GenerateJwtToken(req.user);
     }
+    async qrcode() {
+        console.log(await this.authService.generateQR());
+    }
 };
 __decorate([
     (0, common_1.Get)("/login"),
@@ -64,6 +67,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "test", null);
+__decorate([
+    (0, common_1.Get)("/qrcode"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Get image of qrcode",
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "qrcode", null);
 AuthController = __decorate([
     (0, swagger_1.ApiTags)("auth"),
     (0, common_1.Controller)("auth"),

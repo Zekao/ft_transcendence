@@ -136,9 +136,6 @@ export class UsersService {
   async getAvatar(id: string, @Res() res) {
     return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
   }
-  async getAvatarPath(id: string) {
-    return (await this.getUserId(id)).avatar;
-  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */

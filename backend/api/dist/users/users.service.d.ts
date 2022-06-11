@@ -31,7 +31,6 @@ export declare class UsersService {
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
-    getAvatarPath(id: string): Promise<string>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(id: string, friend_id: string): Promise<User>;
     uploadFile(id: string, file: Express.Multer.File): Promise<{

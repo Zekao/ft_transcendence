@@ -138,9 +138,6 @@ let UsersService = class UsersService {
     async getAvatar(id, res) {
         return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
     }
-    async getAvatarPath(id) {
-        return (await this.getUserId(id)).avatar;
-    }
     async createUsers(authCredentialsDto) {
         const { FortyTwoID, user_name, first_name, last_name, avatar } = authCredentialsDto;
         const stat = users_enum_1.UserStatus.ONLINE;

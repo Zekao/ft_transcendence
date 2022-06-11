@@ -12,8 +12,9 @@ import { JwtPayload } from "./interface/jwt-payload.interface";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { FortyTwoUser } from "./interface/42.interface";
-import { qrcode } from "qrcode";
-import { speakeasy } from "speakeasy";
+import * as speakeasy from "speakeasy";
+import * as qrcode from "qrcode";
+import { QRObjects } from "./dto/2fa.dto";
 
 @Injectable()
 export class AuthService {
@@ -67,9 +68,6 @@ export class AuthService {
   }
 
   async generateQR(): Promise<any> {
-    const Qrcode = qrcode;
-    const Speakeasy = speakeasy;
-
     const secret = speakeasy.generateSecret({
       name: " Ft_transcendence ",
     });
@@ -78,17 +76,15 @@ export class AuthService {
     console.log(secret);
     // genere une image vers le qrcode qu'il faudra afficher
     qrcode.toDataURL(secret.otpauth_url, function (err, data_url) {
-      const QRObject = {
+      const res: QRObjects = {
         qrcode: data_url,
         secret: secret.ascii,
       };
-      return QRObject;
+      return res;
     });
   } // verify qr prends le token et verifie si le token est correct puis return un bool
 
-  async verifyQR(user_token: string, qrObjet: QRObject): Promise<any> {
-    const speakeasy = require("speakeasy");
-
+  async verifyQR(user_token: string, qrObjet: QRObjects): Promise<any> {
     const verified = speakeasy.totp.verify({
       secret: qrObjet.secret,
       encoding: "ascii",

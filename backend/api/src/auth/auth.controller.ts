@@ -9,6 +9,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { QRObjects } from "./dto/2fa.dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -46,5 +47,13 @@ export class AuthController {
     // generer la jwt
     // rediriger la personne vers le front
     // console.log(req.user);
+  }
+
+  @Get("/qrcode") // to check that request can be made with the jwt
+  @ApiOperation({
+    summary: "Get image of qrcode",
+  })
+  async qrcode() {
+    console.log(await this.authService.generateQR());
   }
 }
