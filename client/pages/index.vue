@@ -22,60 +22,13 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-card
-          class="mb-12"
-          color="grey lighten-1"
-          height="calc(100% - 76px)"
-        >
-        <v-btn
-          color="primary"
-          @click="e1 = 2"
-        >
-          Continue
-        </v-btn>
-
-        <v-btn text>
-          Cancel
-        </v-btn>
-        </v-card>
+        <GameMatchmaking @next="e1 = 2"/>
       </v-stepper-content>
-
       <v-stepper-content step="2">
-        <v-card
-          class="mb-12"
-          color="grey lighten-1"
-          height="calc(100% - 76px)"
-        >
-        <v-btn
-          color="primary"
-          @click="e1 = 3"
-        >
-          Continue
-        </v-btn>
-
-        <v-btn text>
-          Cancel
-        </v-btn>
-        </v-card>
+        <GameMatchmaking @next="e1 = 3"/>
       </v-stepper-content>
-
       <v-stepper-content step="3">
-        <v-card
-          class="mb-12"
-          color="grey lighten-1"
-          height="calc(100% - 76px)"
-        >
-        <v-btn
-          color="primary"
-          @click="e1 = 1"
-        >
-          Continue
-        </v-btn>
-
-        <v-btn text>
-          Cancel
-        </v-btn>
-        </v-card>
+        <GameMatchmaking @next="e1 = 1"/>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
