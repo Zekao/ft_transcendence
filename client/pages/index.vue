@@ -12,7 +12,7 @@
         :complete="e1 > 2"
         step="2"
       >
-        Pong game
+        Game
       </v-stepper-step>
       <v-divider/>
       <v-stepper-step step="3">

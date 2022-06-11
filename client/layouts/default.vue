@@ -74,12 +74,18 @@
               :disabled="!valid"
               @click="createChannel"
             >
-              Validate
+              Create
             </v-btn>
           </v-list-item>
         </v-list>
       </v-form>
       <v-divider/>
+      <v-toolbar>
+          <v-icon class="mr-3">
+            mdi-playlist-minus
+          </v-icon>
+          Browse channels
+        </v-toolbar>
       <v-list v-if="!channels.length">
         <v-list-item>
           <v-list-item-subtitle>
