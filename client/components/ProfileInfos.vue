@@ -1,29 +1,24 @@
 <template>
   <v-card height="calc(100% - 114px)" color="grey lighten-1">
     <div> 
-            <v-toolbar text background-color="deep-purple accent-4">
-               <v-toolbar-title >User Profile</v-toolbar-title>
-            </v-toolbar> 
+      
 
                 <v-card flat >
 <v-card-text>
   <v-container>
-    <h3>Lusehair profil </h3>
 
     <v-row>
     <!-- PROFIL PICTURE  -->
     <v-col cols="6">
       <v-avatar size="250">
-      <img
-        src= 'http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/fe/fef49e7fa7e02ee0448e698badc273e5856b12f4_full.jpg'
-        alt="John">
+   <v-img :src="imagePath"></v-img>
     </v-avatar>
       </v-col>
             <!-- END OF PROFIL PICTURE  -->
 
   <!-- PSEUDO ZONE  -->
     <v-col cols="3">
-  <h3>Test </h3>
+  <h3>{{login}}</h3>
     </v-col>
 
       <v-col cols="3">
@@ -110,7 +105,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import mapState from 'vuex'
+import { mapState } from 'vuex'
 export default Vue.extend({
   name: 'ProfileInfos', 
   middleware: 'auth',
@@ -126,3 +121,4 @@ export default Vue.extend({
 }
 })
 </script>
+
