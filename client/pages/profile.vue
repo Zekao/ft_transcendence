@@ -21,17 +21,17 @@
       </v-btn>
     </v-toolbar>
     <v-tabs-items v-model="componentSelected">
-      <v-tab-item :key="componentList[0]">
-        <TestComponent/>
+      <v-tab-item key="Infos">
+        <ProfileInfos/>
       </v-tab-item>
-      <v-tab-item :key="componentList[1]">
-        <TestComponent/>
+      <v-tab-item key="Friends">
+        <ProfileFriends/>
       </v-tab-item>
-      <v-tab-item :key="componentList[2]">
-        <TestComponent/>
+      <v-tab-item key="Match history">
+        <ProfileMatchhistory/>
       </v-tab-item>
-      <v-tab-item :key="componentList[3]">
-        <TestComponent/>
+      <v-tab-item key="Stats">
+        <ProfileStats/>
       </v-tab-item>
     </v-tabs-items>
   </v-sheet>
