@@ -33,7 +33,7 @@ AuthModule = __decorate([
         ],
         providers: [_42_strategy_1.FortyTwoStrategy, jwt_strategy_1.JwtStrategy, users_service_1.UsersService, auth_services_1.AuthService],
         controllers: [auth_controller_1.AuthController],
-        exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule],
+        exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule, auth_services_1.AuthService],
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

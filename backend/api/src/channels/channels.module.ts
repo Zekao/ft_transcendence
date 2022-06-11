@@ -6,9 +6,10 @@ import { ChannelsService } from "./channels.service";
 import { ChannelsGateway } from "./channels.gateway";
 import { JwtService } from "@nestjs/jwt";
 import { UsersModule } from "../users/users.module";
+import { AuthModule } from "src/auth/auth.module";
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forFeature([Channel])],
+  imports: [UsersModule, AuthModule, TypeOrmModule.forFeature([Channel])],
   controllers: [ChannelsController],
   providers: [ChannelsService, ChannelsGateway, JwtService],
 })

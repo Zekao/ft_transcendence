@@ -15,6 +15,7 @@ import { FortyTwoUser } from "./interface/42.interface";
 import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
 import { QRObjects } from "./dto/2fa.dto";
+import { Socket } from "socket.io";
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,11 @@ export class AuthService {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.JwtService.sign(payload);
     return { accessToken };
+  }
+  verifyJwtToken(token: string): Promise<FortyTwoUser> {
+    try {
+      return this.JwtService.verify(token);
+    } catch (err) {}
   }
 
   async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
@@ -65,6 +71,14 @@ export class AuthService {
 
   async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userService.createUsers(AuthCredentialsDto);
+  }
+
+  async getUserIDFromSocket(client: Socket): Promise<User> {
+    const token = client.handshake.headers.authorization;
+    if (!token) throw new UnauthorizedException("No token provided");
+    const payload = this.verifyJwtToken(token);
+    if (!payload) throw new UnauthorizedException("Invalid token provided");
+    return this.userService.getUserFortyTwo((await payload).FortyTwoID);
   }
 
   async generateQR(): Promise<QRObjects> {

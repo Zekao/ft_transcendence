@@ -32,6 +32,12 @@ let AuthService = class AuthService {
         const accessToken = this.JwtService.sign(payload);
         return { accessToken };
     }
+    verifyJwtToken(token) {
+        try {
+            return this.JwtService.verify(token);
+        }
+        catch (err) { }
+    }
     async handleFortyTwo(Ftwo) {
         const user = await this.userRepository.findOne({
             where: { FortyTwoID: Ftwo.id },
@@ -66,6 +72,15 @@ let AuthService = class AuthService {
     }
     async signUp(AuthCredentialsDto) {
         return this.userService.createUsers(AuthCredentialsDto);
+    }
+    async getUserIDFromSocket(client) {
+        const token = client.handshake.headers.authorization;
+        if (!token)
+            throw new common_1.UnauthorizedException("No token provided");
+        const payload = this.verifyJwtToken(token);
+        if (!payload)
+            throw new common_1.UnauthorizedException("Invalid token provided");
+        return this.userService.getUserFortyTwo((await payload).FortyTwoID);
     }
     async generateQR() {
         const secret = speakeasy.generateSecret({

@@ -18,10 +18,12 @@ const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
+const auth_services_1 = require("../auth/auth.services");
 let ChannelsGateway = class ChannelsGateway {
-    constructor(jwtService, userService) {
+    constructor(jwtService, userService, authService) {
         this.jwtService = jwtService;
         this.userService = userService;
+        this.authService = authService;
         this.logger = new common_1.Logger("ChannelsGateway");
     }
     afterInit(server) {
@@ -38,8 +40,14 @@ let ChannelsGateway = class ChannelsGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    handleConnection(client, ...args) {
-        this.logger.log(`Client connected: ${client.id}`);
+    async handleConnection(client, ...args) {
+        try {
+            const user = await this.authService.getUserIDFromSocket(client);
+            this.logger.log(`Client connected: ${client.id}`);
+        }
+        catch (err) {
+            return client.disconnect();
+        }
     }
 };
 __decorate([
@@ -61,13 +69,10 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChannelsGateway.prototype, "handleMessage", null);
 ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({
-        cors: {
-            origin: "*",
-        },
-    }),
+    (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
-        users_service_1.UsersService])
+        users_service_1.UsersService,
+        auth_services_1.AuthService])
 ], ChannelsGateway);
 exports.ChannelsGateway = ChannelsGateway;
 //# sourceMappingURL=channels.gateway.js.map

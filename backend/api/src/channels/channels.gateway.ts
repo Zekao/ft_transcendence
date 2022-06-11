@@ -12,18 +12,16 @@ import { Logger } from "@nestjs/common";
 import { Socket, Server } from "socket.io";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
+import { AuthService } from "src/auth/auth.services";
 
-@WebSocketGateway({
-  cors: {
-    origin: "*",
-  },
-})
+@WebSocketGateway()
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
+    private readonly authService: AuthService
   ) {}
 
   @WebSocketServer() server: Server;
@@ -57,7 +55,13 @@ export class ChannelsGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client connected: ${client.id}`);
+  async handleConnection(client: Socket, ...args: any[]) {
+    try {
+      const user = await this.authService.getUserIDFromSocket(client);
+
+      this.logger.log(`Client connected: ${client.id}`);
+    } catch (err) {
+      return client.disconnect();
+    }
   }
 }
