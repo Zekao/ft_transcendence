@@ -33,7 +33,7 @@ export const mutations: MutationTree<ChannelState> = {
 export const actions: ActionTree<ChannelState, RootState> = {
   async fetch({ commit }) {
     try {
-      const res = await this.$axios.$get(`/channels`)
+      const res = await this.$axios.$get(`/channel`)
       commit('FETCH', res)
       return res
     } catch (err) {
@@ -42,7 +42,7 @@ export const actions: ActionTree<ChannelState, RootState> = {
   },
   async create({ commit }, channel: IChannel) {
     try {
-      const res = await this.$axios.$post(`/channels`, channel)
+      const res = await this.$axios.$post(`/channel/create`, channel)
       commit('CREATE', res)
       return res
     } catch (err) {

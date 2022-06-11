@@ -43,7 +43,6 @@ export const actions: ActionTree<UserState, RootState> = {
   async fetchAuth({ commit }) {
     try {
       const res = await this.$axios.$get(`/users/me`)
-      console.log(res)
       commit('FETCH_AUTH', res)
       return res
     } catch (err) {
