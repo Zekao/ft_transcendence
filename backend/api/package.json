@@ -36,11 +36,13 @@
     "passport-42": "^1.2.6",
     "passport-jwt": "^4.0.0",
     "pg": "^8.7.3",
+    "qrcode": "^1.5.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "speakeasy": "^2.0.0",
     "swagger-ui-express": "^4.4.0",
-    "typeorm": "^0.2.44"
+    "typeorm": "^0.2.45"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

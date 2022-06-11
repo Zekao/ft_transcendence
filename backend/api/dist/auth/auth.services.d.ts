@@ -14,4 +14,6 @@ export declare class AuthService {
     handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any>;
     signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
+    generateQR(): Promise<any>;
+    verifyQR(user_token: string, qr: any): Promise<any>;
 }
