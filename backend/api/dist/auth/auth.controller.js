@@ -18,7 +18,7 @@ const auth_services_1 = require("./auth.services");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
 const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 const swagger_1 = require("@nestjs/swagger");
-const node_base64_image_1 = require("node-base64-image");
+const fs = require("fs");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -33,10 +33,16 @@ let AuthController = class AuthController {
     }
     async qrcode() {
         const Test = this.authService.generateQR();
-        console.log(Test);
-        const image = (await Test).qrcode;
-        await (0, node_base64_image_1.decode)(image, { fname: 'user_qrcode', ext: 'png' });
-        return (await Test).qrcode;
+        var file = fs;
+        file.writeFile("qrcode_user.png", (await Test).qrcode.substring(22), { encoding: 'base64' }, function (err) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log("The file was saved!");
+            }
+        });
+        return (await Test).qrcode.substring(22);
     }
 };
 __decorate([
