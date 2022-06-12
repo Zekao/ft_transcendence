@@ -6,6 +6,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Matches } from "../matches/matches.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 
 @Entity()
@@ -36,6 +37,9 @@ export class User {
   avatar: string;
   @ApiProperty()
   @Column()
+  TwoFA: boolean;
+  @ApiProperty()
+  @Column()
   status: UserStatus;
   @ApiProperty()
   @Column()
@@ -53,10 +57,17 @@ export class User {
   @Column({ type: "real" })
   ratio: number;
 
+  @ApiProperty()
+  @ManyToMany(() => Matches, (matches) => matches.users)
+  @JoinTable({ name: "Users" })
+  matches: Matches[];
+
+  @ApiProperty()
   @ManyToMany(() => User, (user) => user.friends)
   @JoinTable({ name: "friends" })
   friends: User[];
 
+  @ApiProperty()
   @ManyToMany(() => User, (user) => user.blockedUsers)
   @JoinTable({ name: "blockedUsers" })
   blockedUsers: User[];

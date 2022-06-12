@@ -184,6 +184,7 @@ export class UsersService {
 	  email: user_name + "@transcendence.com",
 	  first_name: first_name,
 	  last_name: last_name,
+	  TwoFA: false,
 	  win: 0,
 	  loose: 0,
 	  rank: 0,
