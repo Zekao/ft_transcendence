@@ -44,15 +44,16 @@ export class MatchesController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Post("/create")
   @ApiOperation({
     summary: "Create a new match",
   })
-  createMatch(@Body() matchesDto: MatchDto): Promise<Matches> {
-    return this.matchService.createMatch(matchesDto);
+  createMatch(@Request() req): Promise<Matches> {
+    const user = req.user;
+    return this.matchService.createMatch(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post("/:id")
   @ApiOperation({
     summary: "Add a user to the match",
@@ -62,7 +63,7 @@ export class MatchesController {
     @Param("id") id: string
   ): Promise<Matches> {
     const user = req.user;
-    return this.matchService.addPlayerToMatch(user.id, id);
+    return this.matchService.defineMatch(user.id, id);
   }
 
   /* ************************************************************************** */

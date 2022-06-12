@@ -18,6 +18,7 @@ import { MatchDto } from "./dto/matches.dto";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/users.entity";
 import { UserDto } from "../users/dto/user.dto";
+import { MatchStatus } from "./matches.enum";
 
 function isMatches(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -90,16 +91,14 @@ export class MatchesService {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createMatch(matchDto: MatchDto): Promise<Matches> {
-    const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer } =
-      matchDto;
+  async createMatch(user: User): Promise<Matches> {
     const match = this.matchesRepository.create({
-      FirstPlayer,
-      SecondPlayer,
-      scoreFirstPlayer,
-      scoreSecondPlayer,
+      FirstPlayer: user.id,
     });
     try {
+      match.player = [];
+      match.player.push(user);
+      match.MatchStatus = MatchStatus.PENDING;
       await this.matchesRepository.save(match);
     } catch (error) {
       console.log(error);
@@ -108,12 +107,31 @@ export class MatchesService {
     return match;
   }
 
-  async addPlayerToMatch(id: string, match_id: string): Promise<Matches> {
-    const found = await this.userService.getUserId(id, { myMatches: true });
+  async addMatchToPlayer(player: User, match: Matches): Promise<Matches> {
+    player.matches.push(match);
+    await this.userService.saveUser(player);
+    return match;
+  }
+
+  async addPlayerToMatch(player: User, match: Matches): Promise<Matches> {
+    if (!match.SecondPlayer) match.SecondPlayer = player.id;
+    else throw new UnauthorizedException("Match is full");
+    match.player.push(player);
+    this.matchesRepository.save(match);
+
+    return match;
+  }
+
+  async defineMatch(id: string, match_id: string): Promise<Matches> {
+    const player = await this.userService.getUserId(id);
     const match = await this.getMatchesId(match_id);
-    if (!found.matches) found.matches = [];
-    found.matches.push(match);
-    await this.userService.saveUser(found);
+    try {
+      await this.addPlayerToMatch(player, match);
+    } catch (err) {
+      console.log(err);
+    }
+    await this.addMatchToPlayer(player, match);
+
     return match;
   }
 

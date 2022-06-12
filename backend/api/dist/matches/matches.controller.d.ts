@@ -6,7 +6,7 @@ export declare class MatchesController {
     private matchService;
     constructor(matchService: MatchesService);
     getMatches(filters: MatchesFilteDto): Promise<Matches[]>;
-    createMatch(matchesDto: MatchDto): Promise<Matches>;
+    createMatch(req: any): Promise<Matches>;
     addUserToMatchMatch(req: any, id: string): Promise<Matches>;
     deleteUser(id: string): Promise<boolean>;
     editChannel(id: string, edit: MatchDto): Promise<Matches>;

@@ -1,4 +1,5 @@
 import { User } from "../users/users.entity";
+import { MatchStatus } from "./matches.enum";
 export declare class Matches {
     id: string;
     FirstPlayer: string;
@@ -6,5 +7,6 @@ export declare class Matches {
     scoreFirstPlayer: number;
     scoreSecondPlayer: number;
     winner: string;
+    MatchStatus: MatchStatus;
     player: User[];
 }
