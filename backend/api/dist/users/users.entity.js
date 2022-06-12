@@ -95,7 +95,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => matches_entity_1.Matches, (matches) => matches.player),
-    (0, typeorm_1.JoinTable)({ name: "users" }),
+    (0, typeorm_1.JoinTable)({ name: "MatchHistory" }),
     __metadata("design:type", Array)
 ], User.prototype, "matches", void 0);
 __decorate([

@@ -18,6 +18,7 @@ const swagger_1 = require("@nestjs/swagger");
 const matches_filter_dto_1 = require("./dto/matches-filter.dto");
 const matches_service_1 = require("./matches.service");
 const matches_dto_1 = require("./dto/matches.dto");
+const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 let MatchesController = class MatchesController {
     constructor(matchService) {
         this.matchService = matchService;
@@ -26,10 +27,13 @@ let MatchesController = class MatchesController {
         if (Object.keys(filters).length)
             return this.matchService.getMatchesByFilter(filters);
         return this.matchService.getMatches();
-        return;
     }
-    createChannel(matchesDto) {
+    createMatch(matchesDto) {
         return this.matchService.createMatch(matchesDto);
+    }
+    addUserToMatchMatch(req, id) {
+        const user = req.user;
+        return this.matchService.addPlayerToMatch(user.id, id);
     }
     deleteUser(id) {
         return this.matchService.deleteMatch(id);
@@ -55,7 +59,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [matches_dto_1.MatchDto]),
     __metadata("design:returntype", Promise)
-], MatchesController.prototype, "createChannel", null);
+], MatchesController.prototype, "createMatch", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/:id"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a user to the match",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], MatchesController.prototype, "addUserToMatchMatch", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({

@@ -1,5 +1,6 @@
 import { UserGameStatus, UserStatus } from "../users.enum";
 import { User } from "../users.entity";
+import { MatchDto } from "../../matches/dto/matches.dto";
 export declare class UserDto {
     constructor(user?: User);
     id: string;
@@ -14,6 +15,7 @@ export declare class UserDto {
     loose: number;
     rank: number;
     ratio: number;
+    matches: MatchDto[];
     friends: UserDto[];
     blockedUsers: UserDto[];
 }

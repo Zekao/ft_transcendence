@@ -15,6 +15,9 @@ import { Matches } from "./matches.entity";
 import { ChannelFilteDto } from "../channels/dto/channels-filter.dto";
 import { MatchesFilteDto } from "./dto/matches-filter.dto";
 import { MatchDto } from "./dto/matches.dto";
+import { UsersService } from "../users/users.service";
+import { User } from "../users/users.entity";
+import { UserDto } from "../users/dto/user.dto";
 
 function isMatches(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -32,7 +35,8 @@ function isMatches(id: string): boolean {
 @Injectable()
 export class MatchesService {
   constructor(
-    @InjectRepository(Matches) private matchesRepository: Repository<Matches>
+    @InjectRepository(Matches) private matchesRepository: Repository<Matches>,
+    private userService: UsersService
   ) {}
 
   /* ************************************************************************** */
@@ -81,6 +85,7 @@ export class MatchesService {
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
@@ -100,6 +105,15 @@ export class MatchesService {
       console.log(error);
       throw new InternalServerErrorException();
     }
+    return match;
+  }
+
+  async addPlayerToMatch(id: string, match_id: string): Promise<Matches> {
+    const found = await this.userService.getUserId(id, { myMatches: true });
+    const match = await this.getMatchesId(match_id);
+    if (!found.matches) found.matches = [];
+    found.matches.push(match);
+    await this.userService.saveUser(found);
     return match;
   }
 

@@ -59,7 +59,7 @@ export class User {
 
   @ApiProperty()
   @ManyToMany(() => Matches, (matches) => matches.player)
-  @JoinTable({ name: "users" })
+  @JoinTable({ name: "MatchHistory" })
   matches: Matches[];
 
   @ApiProperty()

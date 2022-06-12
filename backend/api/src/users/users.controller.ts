@@ -42,6 +42,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
+import { MatchDto } from "../matches/dto/matches.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -122,6 +123,20 @@ export class UsersController {
   getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
     const user = req.user;
     return this.UsersService.getFriends(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/matches")
+  @ApiOperation({
+    summary: "Return the list of matches of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getMatches(@Request() req): Promise<MatchDto[]> {
+    const user = req.user;
+    return this.UsersService.getMatches(user.id);
   }
 
   @UseGuards(JwtAuthGuard)

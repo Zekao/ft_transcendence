@@ -1,5 +1,6 @@
 import { UserGameStatus, UserStatus } from "../users.enum";
 import { User } from "../users.entity";
+import { MatchDto } from "../../matches/dto/matches.dto";
 
 export class UserDto {
   constructor(user?: User) {
@@ -24,6 +25,10 @@ export class UserDto {
         this.blockedUsers = user.blockedUsers.map((user) => {
           return new UserDto(user);
         });
+      if (user.matches)
+        this.matches = user.matches.map((match) => {
+          return new MatchDto(match);
+        });
       // if (user.adminChannels)
       //     this.adminChannels = user.adminChannels.map((channel) => {return new ChannelDto(channel)});
       // this.color = user.color;
@@ -45,6 +50,7 @@ export class UserDto {
   loose: number;
   rank: number;
   ratio: number;
+  matches: MatchDto[];
   friends: UserDto[];
   blockedUsers: UserDto[];
 }

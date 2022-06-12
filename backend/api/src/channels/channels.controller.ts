@@ -66,7 +66,7 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
-  @Patch("/:id/edit")
+  @Patch("/:id")
   @ApiOperation({
     summary: "Modify attribute of a specified channel",
   })

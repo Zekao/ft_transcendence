@@ -68,7 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
 __decorate([
-    (0, common_1.Patch)("/:id/edit"),
+    (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Modify attribute of a specified channel",
     }),
