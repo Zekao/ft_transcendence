@@ -138,7 +138,7 @@ export class UsersController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  @Post("/:id/friends/")
+  @Post("/me/friends/")
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
@@ -147,10 +147,12 @@ export class UsersController {
     @Param("id") id: string,
     @Query() query
   ): Promise<User> {
-    return this.UsersService.addFriend(id, query.friend);
+    const user = req.user;
+    return this.UsersService.addFriend(user, query.friend);
   }
 
-  @Post("/:id/blocked/")
+  @UseGuards(JwtAuthGuard)
+  @Post("/me/blocked")
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
@@ -159,7 +161,8 @@ export class UsersController {
     @Param("id") id: string,
     @Query() query
   ): Promise<User> {
-    return this.UsersService.addBlocked(id, query.blocked);
+    const user = req.user;
+    return this.UsersService.addBlocked(user, query.blocked);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -186,8 +189,8 @@ export class UsersController {
     @Request() req,
     @UploadedFile() file: Express.Multer.File
   ) {
-    const id = req.user;
-    return this.UsersService.uploadFile(id, file);
+    const user = req.user;
+    return this.UsersService.uploadFile(user, file);
   }
 
   /* ************************************************************************** */
@@ -229,7 +232,8 @@ export class UsersController {
     @Param("id") id: string,
     @Query() query
   ): Promise<User> {
-    return this.UsersService.removeFriend(id, query.friend);
+    const user = req.user;
+    return this.UsersService.removeFriend(user, query.friend);
   }
 
   @Delete("/:id/blocked/")

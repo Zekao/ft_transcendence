@@ -32,10 +32,10 @@ let ChannelsService = class ChannelsService {
         this.ChannelsRepository = ChannelsRepository;
     }
     async getChannel() {
-        const users = await this.ChannelsRepository.find();
-        if (!users)
+        const channel = await this.ChannelsRepository.find();
+        if (!channel)
             throw new common_1.NotFoundException(`Channel not found`);
-        return users;
+        return channel;
     }
     async getChannelByFilter(filter) {
         const { name, permissions, status } = filter;

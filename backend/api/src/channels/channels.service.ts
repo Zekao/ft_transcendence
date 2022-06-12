@@ -35,9 +35,9 @@ export class ChannelsService {
   /*                   GET                                                      */
   /* ************************************************************************** */
   async getChannel(): Promise<Channel[]> {
-    const users = await this.ChannelsRepository.find();
-    if (!users) throw new NotFoundException(`Channel not found`);
-    return users;
+    const channel = await this.ChannelsRepository.find();
+    if (!channel) throw new NotFoundException(`Channel not found`);
+    return channel;
   }
   async getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]> {
     const { name, permissions, status } = filter;

@@ -31,6 +31,17 @@ let MatchesService = class MatchesService {
     constructor(matchesRepository) {
         this.matchesRepository = matchesRepository;
     }
+    async getMatches() {
+        const matches = await this.matchesRepository.find();
+        if (!matches)
+            throw new common_1.NotFoundException(`Matches not found`);
+        return matches;
+    }
+    async getMatchesByFilter(filter) {
+        const { name, permissions, status } = filter;
+        const matches = await this.getMatches();
+        return matches;
+    }
 };
 MatchesService = __decorate([
     (0, common_1.Injectable)(),
