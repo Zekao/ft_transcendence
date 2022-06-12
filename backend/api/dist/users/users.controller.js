@@ -41,62 +41,65 @@ let UsersController = class UsersController {
     getProfile(req) {
         return req.user;
     }
-    getUserId(id) {
-        return this.UsersService.getUserId(id);
+    getUserId(req, id) {
+        return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
     }
-    getFirstName(id) {
-        return this.UsersService.getFirstName(id);
+    getFirstName(req, id) {
+        return this.UsersService.getFirstName((id === 'me') ? req.user.id : id);
     }
-    getLastName(id) {
-        return this.UsersService.getLastName(id);
+    getLastName(req, id) {
+        return this.UsersService.getLastName((id === 'me') ? req.user.id : id);
     }
-    getUserName(id) {
-        return this.UsersService.getUserName(id);
+    getUserName(req, id) {
+        return this.UsersService.getUserName((id === 'me') ? req.user.id : id);
     }
-    getEmail(id) {
-        return this.UsersService.getEmail(id);
+    getEmail(req, id) {
+        return this.UsersService.getEmail((id === 'me') ? req.user.id : id);
     }
-    getStatus(id) {
-        return this.UsersService.getStatus(id);
+    getStatus(req, id) {
+        return this.UsersService.getStatus((id === 'me') ? req.user.id : id);
     }
-    getInGame(id) {
-        return this.UsersService.getGameStatus(id);
+    getInGame(req, id) {
+        return this.UsersService.getGameStatus((id === 'me') ? req.user.id : id);
     }
-    getWin(id) {
-        return this.UsersService.getWin(id);
+    getWin(req, id) {
+        return this.UsersService.getWin((id === 'me') ? req.user.id : id);
     }
-    getLoose(id) {
-        return this.UsersService.getLoose(id);
+    getLoose(req, id) {
+        return this.UsersService.getLoose((id === 'me') ? req.user.id : id);
     }
-    getRank(id) {
-        return this.UsersService.getRank(id);
+    getRank(req, id) {
+        return this.UsersService.getRank((id === 'me') ? req.user.id : id);
     }
-    getRatio(id) {
-        return this.UsersService.getRatio(id);
+    getRatio(req, id) {
+        return this.UsersService.getRatio((id === 'me') ? req.user.id : id);
     }
-    getAvatar(id, res) {
-        return this.UsersService.getAvatar(id, res);
+    getAvatar(req, id, res) {
+        return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
     }
-    getFriends(id) {
+    getFriends(req, id) {
+        console.log(req.user);
+        if (id === 'me')
+            return this.UsersService.getFriends(id);
         return this.UsersService.getFriends(id);
     }
-    addFriend(id, query) {
-        return this.UsersService.addFriend(id, query.friend);
+    addFriend(req, id, query) {
+        return this.UsersService.addFriend((id === 'me') ? req.user.id : id, query.friend);
     }
-    async uploadedFile(id, file) {
-        return this.UsersService.uploadFile(id, file);
+    async uploadedFile(req, id, file) {
+        return this.UsersService.uploadFile((id === 'me') ? req.user.id : id, file);
     }
-    deleteUser(id) {
-        return this.UsersService.deleteUser(id);
+    deleteUser(req, id) {
+        return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
     }
-    deleteAvatar(id) {
-        return this.UsersService.deleteAvatar(id);
+    deleteAvatar(req, id) {
+        return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
     }
-    removeFriend(id, query) {
-        return this.UsersService.removeFriend(id, query.friend);
+    removeFriend(req, id, query) {
+        return this.UsersService.removeFriend((id === 'me') ? req.user.id : id, query.friend);
     }
-    patchUser(id, query) {
-        return this.UsersService.patchUser(id, query);
+    patchUser(req, id, query) {
+        return this.UsersService.patchUser((id === 'me') ? req.user.id : id, query);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -149,9 +152,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, nestjs_swagger_api_exception_decorator_1.ApiException)(() => common_1.UnauthorizedException, { description: "Unauthorized" }),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserId", null);
 __decorate([
@@ -164,9 +168,10 @@ __decorate([
         type: users_entity_1.User,
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFirstName", null);
 __decorate([
@@ -179,9 +184,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getLastName", null);
 __decorate([
@@ -194,9 +200,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserName", null);
 __decorate([
@@ -209,9 +216,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getEmail", null);
 __decorate([
@@ -224,9 +232,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getStatus", null);
 __decorate([
@@ -239,9 +248,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getInGame", null);
 __decorate([
@@ -254,9 +264,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getWin", null);
 __decorate([
@@ -269,9 +280,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getLoose", null);
 __decorate([
@@ -284,9 +296,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRank", null);
 __decorate([
@@ -299,9 +312,10 @@ __decorate([
         type: [users_entity_1.User],
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getRatio", null);
 __decorate([
@@ -313,10 +327,11 @@ __decorate([
         description: "Ok.",
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Res)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatar", null);
 __decorate([
@@ -328,9 +343,10 @@ __decorate([
         description: "Ok.",
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
@@ -338,10 +354,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Add a friend to a specified user profile",
     }),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addFriend", null);
 __decorate([
@@ -362,10 +379,11 @@ __decorate([
         type: file_upload_dto_1.FileUploadDto,
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.UploadedFile)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "uploadedFile", null);
 __decorate([
@@ -378,9 +396,10 @@ __decorate([
         type: yargs_1.boolean,
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteUser", null);
 __decorate([
@@ -394,9 +413,10 @@ __decorate([
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     (0, templated_api_exception_1.AvatarApiException)(() => common_1.UnauthorizedException),
-    __param(0, (0, common_1.Param)("id")),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteAvatar", null);
 __decorate([
@@ -404,10 +424,11 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "delete a friend to a specified user profile",
     }),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "removeFriend", null);
 __decorate([
@@ -420,10 +441,11 @@ __decorate([
         type: yargs_1.boolean,
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "patchUser", null);
 __decorate([

@@ -30,6 +30,7 @@ let AuthController = class AuthController {
     test(req) {
         console.log(req.user);
         this.authService.GenerateJwtToken(req.user);
+        console.log(req.user);
     }
     async qrcode() {
         const Test = this.authService.generateQR();

@@ -3,7 +3,6 @@ import {
   Param,
   Res,
   Query,
-  Body,
   Get,
   Post,
   Delete,
@@ -42,7 +41,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
-
+import { request } from "http";
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
@@ -94,7 +93,7 @@ export class UsersController {
     type: [User],
   })
   @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
-  getUserId(@Param("id") id: string): Promise<User> {
+  getUserId(@Request() req, @Param("id") id: string): Promise<User> {
     return this.UsersService.getUserId(id);
   }
 
@@ -107,7 +106,7 @@ export class UsersController {
     type: User,
   })
   @UserApiException(() => NotFoundException)
-  getFirstName(@Param("id") id: string): Promise<string> {
+  getFirstName(@Request() req, @Param("id") id: string): Promise<string> {
     return this.UsersService.getFirstName(id);
   }
 
@@ -120,7 +119,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getLastName(@Param("id") id: string): Promise<string> {
+  getLastName(@Request() req, @Param("id") id: string): Promise<string> {
     return this.UsersService.getLastName(id);
   }
 
@@ -133,7 +132,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getUserName(@Param("id") id: string): Promise<string> {
+  getUserName(@Request() req, @Param("id") id: string): Promise<string> {
     return this.UsersService.getUserName(id);
   }
 
@@ -146,7 +145,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getEmail(@Param("id") id: string): Promise<string> {
+  getEmail(@Request() req, @Param("id") id: string): Promise<string> {
     return this.UsersService.getEmail(id);
   }
 
@@ -159,7 +158,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getStatus(@Param("id") id: string): Promise<UserStatus> {
+  getStatus(@Request() req, @Param("id") id: string): Promise<UserStatus> {
     return this.UsersService.getStatus(id);
   }
 
@@ -172,7 +171,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getInGame(@Param("id") id: string): Promise<UserGameStatus> {
+  getInGame(@Request() req, @Param("id") id: string): Promise<UserGameStatus> {
     return this.UsersService.getGameStatus(id);
   }
 
@@ -185,7 +184,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getWin(@Param("id") id: string): Promise<number> {
+  getWin(@Request() req, @Param("id") id: string): Promise<number> {
     return this.UsersService.getWin(id);
   }
 
@@ -198,7 +197,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getLoose(@Param("id") id: string): Promise<number> {
+  getLoose(@Request() req, @Param("id") id: string): Promise<number> {
     return this.UsersService.getLoose(id);
   }
 
@@ -211,7 +210,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getRank(@Param("id") id: string): Promise<number> {
+  getRank(@Request() req, @Param("id") id: string): Promise<number> {
     return this.UsersService.getRank(id);
   }
 
@@ -224,7 +223,7 @@ export class UsersController {
     type: [User],
   })
   @UserApiException(() => NotFoundException)
-  getRatio(@Param("id") id: string): Promise<string> {
+  getRatio(@Request() req, @Param("id") id: string): Promise<string> {
     return this.UsersService.getRatio(id);
   }
 
@@ -236,10 +235,11 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getAvatar(@Param("id") id: string, @Res() res) {
+  getAvatar(@Request() req, @Param("id") id: string, @Res() res) {
     return this.UsersService.getAvatar(id, res);
   }
 
+  
   @Get("/:id/friends")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
@@ -248,7 +248,10 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Param("id") id: string): Promise<UserDto[]> {
+  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
+    console.log(req.user)
+    if (id === 'me')
+      return this.UsersService.getFriends(id);
     return this.UsersService.getFriends(id);
   }
 
@@ -260,7 +263,7 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend(@Param("id") id: string, @Query() query): Promise<User> {
+  addFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.addFriend(id, query.friend);
   }
 
@@ -284,6 +287,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   async uploadedFile(
+    @Request() req,
     @Param("id") id: string,
     @UploadedFile() file: Express.Multer.File
   ) {
@@ -302,7 +306,7 @@ export class UsersController {
     type: boolean,
   })
   @UserApiException(() => NotFoundException)
-  deleteUser(@Param("id") id: string): Promise<boolean> {
+  deleteUser(@Request() req, @Param("id") id: string): Promise<boolean> {
     return this.UsersService.deleteUser(id);
   }
 
@@ -316,7 +320,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   @AvatarApiException(() => UnauthorizedException)
-  deleteAvatar(@Param("id") id: string): Promise<boolean> {
+  deleteAvatar(@Request() req, @Param("id") id: string): Promise<boolean> {
     return this.UsersService.deleteAvatar(id);
   }
 
@@ -324,7 +328,7 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeFriend(@Param("id") id: string, @Query() query): Promise<User> {
+  removeFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.removeFriend(id, query.friend);
   }
 
@@ -341,7 +345,7 @@ export class UsersController {
     type: boolean,
   })
   @UserApiException(() => NotFoundException)
-  patchUser(@Param("id") id: string, @Query() query): Promise<User> {
+  patchUser(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.patchUser(id, query);
   }
 

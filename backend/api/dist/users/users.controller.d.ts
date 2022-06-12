@@ -10,27 +10,27 @@ export declare class UsersController {
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
     getRankedUsers(): Promise<User[]>;
     getProfile(req: any): any;
-    getUserId(id: string): Promise<User>;
-    getFirstName(id: string): Promise<string>;
-    getLastName(id: string): Promise<string>;
-    getUserName(id: string): Promise<string>;
-    getEmail(id: string): Promise<string>;
-    getStatus(id: string): Promise<UserStatus>;
-    getInGame(id: string): Promise<UserGameStatus>;
-    getWin(id: string): Promise<number>;
-    getLoose(id: string): Promise<number>;
-    getRank(id: string): Promise<number>;
-    getRatio(id: string): Promise<string>;
-    getAvatar(id: string, res: any): Promise<any>;
-    getFriends(id: string): Promise<UserDto[]>;
-    addFriend(id: string, query: any): Promise<User>;
-    uploadedFile(id: string, file: Express.Multer.File): Promise<{
+    getUserId(req: any, id: string): Promise<User>;
+    getFirstName(req: any, id: string): Promise<string>;
+    getLastName(req: any, id: string): Promise<string>;
+    getUserName(req: any, id: string): Promise<string>;
+    getEmail(req: any, id: string): Promise<string>;
+    getStatus(req: any, id: string): Promise<UserStatus>;
+    getInGame(req: any, id: string): Promise<UserGameStatus>;
+    getWin(req: any, id: string): Promise<number>;
+    getLoose(req: any, id: string): Promise<number>;
+    getRank(req: any, id: string): Promise<number>;
+    getRatio(req: any, id: string): Promise<string>;
+    getAvatar(req: any, id: string, res: any): Promise<any>;
+    getFriends(req: any, id: string): Promise<UserDto[]>;
+    addFriend(req: any, id: string, query: any): Promise<User>;
+    uploadedFile(req: any, id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;
-    deleteUser(id: string): Promise<boolean>;
-    deleteAvatar(id: string): Promise<boolean>;
-    removeFriend(id: string, query: any): Promise<User>;
-    patchUser(id: string, query: any): Promise<User>;
+    deleteUser(req: any, id: string): Promise<boolean>;
+    deleteAvatar(req: any, id: string): Promise<boolean>;
+    removeFriend(req: any, id: string, query: any): Promise<User>;
+    patchUser(req: any, id: string, query: any): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }

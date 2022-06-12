@@ -6,6 +6,7 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
   Res,
+  Req,
 } from "@nestjs/common";
 import * as fs from "fs";
 import { UserStatus, UserGameStatus } from "./users.enum";
@@ -23,6 +24,7 @@ import * as bcrypt from "bcrypt";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
+  withBlocked?: boolean;
 }
 
 @Injectable()
@@ -58,6 +60,15 @@ export class UsersService {
 	return friends;
   }
 
+  async getBlocked(id: string): Promise<UserDto[]> {
+	  const user = await this.getUserId(id, { withBlocked: true });
+	  if (!user.blockedUsers) return [];
+	  const blocked: UserDto[] = user.blockedUsers.map((blocked) => {
+		  return new UserDto(blocked);
+      });
+	  return blocked;
+  }
+
   async getUserByFilter(filter: UsersFiltesDTO): Promise<User[]> {
 	const { status, username } = filter;
 	let users = await this.getUsers();
@@ -80,7 +91,8 @@ export class UsersService {
   ): Promise<User> {
 	const relations = [];
 	if (RelationsPicker) {
-	  RelationsPicker.withFriends && relations.push("friends");
+		RelationsPicker.withFriends && relations.push("friends");
+		RelationsPicker.withBlocked && relations.push("blockedUsers");
 	}
 	let found = null;
 	if (isUuid(id))
@@ -190,16 +202,31 @@ export class UsersService {
 	if (friend_id == id)
 	  throw new BadRequestException("You can't add yourself");
 	const found = await this.getUserId(id, { withFriends: true });
-	const friend = await this.getUserId(friend_id);
+	const friend = await this.getUserId(friend_id, { withBlocked: true });
 	if (!found.friends) found.friends = [];
-	if (found.friends.find((f) => f.id == friend.id)) {
-	  console.log("Already friends");
+	if (friend.blockedUsers.find((f) => f.id === found.id))
+		throw new ConflictException(`You are blocked by \`${friend_id}'`);
+	if (found.friends.find((f) => f.id == friend.id))
 	  throw new ConflictException("Already friend");
-	}
 	found.friends.push(friend);
 	this.UserRepository.save(found);
 	return friend;
   }
+
+	async addBlocked(id: string, blockedUsersId: string) {
+		if (blockedUsersId === id)
+			throw new BadRequestException("You can't add yourself");
+		const found = await this.getUserId(id, { withBlocked: true });
+		const blockedUser = await this.getUserId(blockedUsersId, { withFriends: true });
+		if (!found.blockedUsers) found.blockedUsers = [];
+		if (found.blockedUsers.find((f) => f.id == blockedUser.id))
+			throw new ConflictException("Already blocked");
+		found.blockedUsers.push(blockedUser);
+		this.UserRepository.save(found);
+		if (blockedUser.friends.find((f) => f.id == found.id))
+			this.removeFriend(blockedUsersId, id);
+		return blockedUser;
+  	}
 
   async uploadFile(id: string, file: Express.Multer.File) {
 	const found = await this.getUserId(id);
@@ -253,6 +280,16 @@ export class UsersService {
 	this.UserRepository.save(user);
 	return friend;
   }
+
+  async removeBlocked(id: string, blockedUsersId: string): Promise<User> {
+	const user = await this.getUserId(id, { withBlocked: true });
+	if (!user.blockedUsers || !user.blockedUsers.length) throw new NotFoundException(`User \`${id}' has no blocked users`);
+	const blockedUser = await this.getUserId(id);
+	if (!user.blockedUsers.find((f) => f.id == blockedUser.id)) throw new NotFoundException (`User \`${id}' has no blocked user \`${blockedUsersId}'`);
+	user.blockedUsers = user.blockedUsers.filter((f) => f.id == blockedUser.id);
+	this.UserRepository.save(user);
+	return blockedUser;
+}
 
   /* ************************************************************************** */
   /*                   PATCH                                                    */

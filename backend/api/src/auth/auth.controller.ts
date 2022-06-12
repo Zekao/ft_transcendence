@@ -56,7 +56,7 @@ export class AuthController {
     this.authService.GenerateJwtToken(req.user);
     // generer la jwt
     // rediriger la personne vers le front
-    // console.log(req.user);
+    console.log(req.user);
   }
 
   @Get("/qrcode") // to check that request can be made with the jwt
