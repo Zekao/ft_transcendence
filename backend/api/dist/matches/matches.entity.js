@@ -26,6 +26,10 @@ __decorate([
     (0, typeorm_1.JoinTable)({ name: "player" }),
     __metadata("design:type", Array)
 ], Matches.prototype, "player", void 0);
+__decorate([
+    (0, typeorm_1.Column)("text", { nullable: true }),
+    __metadata("design:type", users_entity_1.User)
+], Matches.prototype, "firstPlayer", void 0);
 Matches = __decorate([
     (0, typeorm_1.Entity)()
 ], Matches);

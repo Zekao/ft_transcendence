@@ -27,9 +27,6 @@ AppModule = __decorate([
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, "..", "image"),
                 serveRoot: "/image",
-                serveStaticOptions: {
-                    cacheControl: false,
-                },
             }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
