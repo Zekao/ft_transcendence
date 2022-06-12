@@ -121,7 +121,11 @@ export class UsersService {
         relations,
       });
     if (!found)
-      if (!found) throw new NotFoundException(`User \`${id}' not found`);
+      found = await this.UserRepository.findOne({
+        where: { display_name: id },
+        relations,
+      });
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return found;
   }
 

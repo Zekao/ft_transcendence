@@ -114,8 +114,12 @@ let UsersService = class UsersService {
                 relations,
             });
         if (!found)
-            if (!found)
-                throw new common_1.NotFoundException(`User \`${id}' not found`);
+            found = await this.UserRepository.findOne({
+                where: { display_name: id },
+                relations,
+            });
+        if (!found)
+            throw new common_1.NotFoundException(`User \`${id}' not found`);
         return found;
     }
     async getRankedUsers() {

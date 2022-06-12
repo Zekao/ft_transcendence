@@ -54,13 +54,14 @@ export class MatchesController {
     return this.matchService.createMatch(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post("/join")
   @ApiOperation({
     summary: "Join a match",
   })
   addUserToMatchMatch(@Request() req): Promise<Matches> {
     const user = req.user;
-    return this.matchService.defineMatch(user.id);
+    return this.matchService.defineMatch(user);
   }
 
   /* ************************************************************************** */
