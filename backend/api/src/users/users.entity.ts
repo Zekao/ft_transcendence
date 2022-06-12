@@ -58,8 +58,8 @@ export class User {
   ratio: number;
 
   @ApiProperty()
-  @ManyToMany(() => Matches, (matches) => matches.users)
-  @JoinTable({ name: "Users" })
+  @ManyToMany(() => Matches, (matches) => matches.player)
+  @JoinTable({ name: "users" })
   matches: Matches[];
 
   @ApiProperty()

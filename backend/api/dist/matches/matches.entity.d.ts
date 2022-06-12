@@ -1,10 +1,5 @@
-import { gameStatus } from "./matches.enum";
+import { User } from "../users/users.entity";
 export declare class Matches {
     id: string;
-    in_game: gameStatus;
-    win: number;
-    loose: number;
-    rank: number;
-    ratio: number;
-    users: Matches[];
+    player: User[];
 }

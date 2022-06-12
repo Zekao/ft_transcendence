@@ -14,24 +14,9 @@ export class Matches {
   @ApiProperty()
   @PrimaryGeneratedColumn("uuid")
   id: string;
-  @ApiProperty()
-  @Column()
-  in_game: gameStatus;
-  @ApiProperty()
-  @Column()
-  win: number;
-  @ApiProperty()
-  @Column()
-  loose: number;
-  @ApiProperty()
-  @Column()
-  rank: number;
-  @ApiProperty()
-  @Column({ type: "real" })
-  ratio: number;
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)
-  @JoinTable({ name: "Matches" })
-  users: Matches[];
+  @JoinTable({ name: "player" })
+  player: User[];
 }
