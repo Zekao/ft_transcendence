@@ -168,7 +168,7 @@ let UsersService = class UsersService {
             loose: 0,
             rank: 0,
             ratio: 1,
-            avatar: avatar,
+            avatar: "default.png",
         });
         try {
             await this.UserRepository.save(user);
@@ -220,11 +220,8 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
-        console.log(id.avatar);
         await this.deleteAvatar(id.user_name);
-        console.log(id.avatar);
         id.avatar = file.filename;
-        console.log(id.avatar);
         this.UserRepository.save(id);
         return response;
     }
@@ -242,7 +239,7 @@ let UsersService = class UsersService {
         if (found.avatar == "default.png")
             return false;
         try {
-            fs.unlinkSync("./static/image/" + found.avatar);
+            fs.unlinkSync("image/" + found.avatar);
             found.avatar = "default.png";
         }
         catch (err) {

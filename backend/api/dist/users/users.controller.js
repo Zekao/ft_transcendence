@@ -422,7 +422,7 @@ __decorate([
     }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
         storage: (0, multer_1.diskStorage)({
-            destination: "./static/image",
+            destination: "./image",
             filename: file_upload_utils_1.editFileName,
         }),
         fileFilter: file_upload_utils_1.imageFileFilter,
