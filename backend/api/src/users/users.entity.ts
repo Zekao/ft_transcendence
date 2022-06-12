@@ -26,6 +26,9 @@ export class User {
   @Column({ unique: true })
   user_name: string;
   @ApiProperty()
+  @Column({ unique: true })
+  display_name: string;
+  @ApiProperty()
   @Column()
   email: string;
   @ApiProperty()

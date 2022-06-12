@@ -123,6 +123,19 @@ export class UsersController {
     return this.UsersService.getLastName(id);
   }
 
+  @Get("/:id/display_name")
+  @ApiOperation({
+    summary: "Return the diplay name of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+    type: [User],
+  })
+  @UserApiException(() => NotFoundException)
+  getDiplayName(@Request() req, @Param("id") id: string): Promise<string> {
+    return this.UsersService.getDisplayName(id);
+  }
+
   @Get("/:id/username")
   @ApiOperation({
     summary: "Return the username of a specified user profile",
@@ -239,7 +252,7 @@ export class UsersController {
     return this.UsersService.getAvatar(id, res);
   }
 
-  
+
   @Get("/:id/friends")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
@@ -248,7 +261,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
+  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getFriends(id);
   }
 
@@ -260,7 +273,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
+  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getBlocked(id);
   }
 

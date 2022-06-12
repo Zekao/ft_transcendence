@@ -13,6 +13,7 @@ export declare class UsersController {
     getUserId(req: any, id: string): Promise<User>;
     getFirstName(req: any, id: string): Promise<string>;
     getLastName(req: any, id: string): Promise<string>;
+    getDiplayName(req: any, id: string): Promise<string>;
     getUserName(req: any, id: string): Promise<string>;
     getEmail(req: any, id: string): Promise<string>;
     getStatus(req: any, id: string): Promise<UserStatus>;

@@ -50,6 +50,9 @@ let UsersController = class UsersController {
     getLastName(req, id) {
         return this.UsersService.getLastName(id);
     }
+    getDiplayName(req, id) {
+        return this.UsersService.getDisplayName(id);
+    }
     getUserName(req, id) {
         return this.UsersService.getUserName(id);
     }
@@ -196,6 +199,22 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getLastName", null);
+__decorate([
+    (0, common_1.Get)("/:id/display_name"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the diplay name of a specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getDiplayName", null);
 __decorate([
     (0, common_1.Get)("/:id/username"),
     (0, swagger_1.ApiOperation)({

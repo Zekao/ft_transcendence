@@ -43,6 +43,11 @@ __decorate([
 ], User.prototype, "user_name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], User.prototype, "display_name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
