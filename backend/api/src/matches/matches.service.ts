@@ -108,6 +108,15 @@ export class MatchesService {
     return match;
   }
 
+  async addPlayerToMatch(id: string, match_id: string): Promise<Matches> {
+    const found = await this.userService.getUserId(id, { myMatches: true });
+    const match = await this.getMatchesId(match_id);
+    if (!found.matches) found.matches = [];
+    found.matches.push(match);
+    await this.userService.saveUser(found);
+    return match;
+  }
+
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */

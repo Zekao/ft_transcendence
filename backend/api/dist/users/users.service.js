@@ -22,6 +22,7 @@ const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
+const matches_dto_1 = require("../matches/dto/matches.dto");
 class UserRelationsPicker {
 }
 exports.UserRelationsPicker = UserRelationsPicker;
@@ -52,6 +53,16 @@ let UsersService = class UsersService {
             return new user_dto_1.UserDto(friend);
         });
         return friends;
+    }
+    async getMatches(id) {
+        const user = await this.getUserId(id, { myMatches: true });
+        if (!user.matches)
+            return [];
+        console.log(user.matches);
+        const matches = user.matches.map((match) => {
+            return new matches_dto_1.MatchDto(match);
+        });
+        return matches;
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, { withBlocked: true });
@@ -89,7 +100,7 @@ let UsersService = class UsersService {
         if (RelationsPicker) {
             RelationsPicker.withFriends && relations.push("friends");
             RelationsPicker.withBlocked && relations.push("blockedUsers");
-            RelationsPicker.myMatches && relations.push("myMatches");
+            RelationsPicker.myMatches && relations.push("matches");
         }
         let found = null;
         if ((0, utils_1.isUuid)(id))
@@ -151,6 +162,10 @@ let UsersService = class UsersService {
     }
     async getAvatar(id, res) {
         return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
+    }
+    async saveUser(id) {
+        this.UserRepository.save(id);
+        return true;
     }
     async createUsers(authCredentialsDto) {
         const { FortyTwoID, user_name, first_name, last_name } = authCredentialsDto;

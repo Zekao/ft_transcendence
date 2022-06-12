@@ -21,17 +21,17 @@ export class Matches {
   @Column()
   SecondPlayer: string;
 
-  @Column()
+  @Column({ nullable: true })
   scoreFirstPlayer: number;
 
-  @Column()
+  @Column({ nullable: true })
   scoreSecondPlayer: number;
 
-  @Column()
+  @Column({ nullable: true })
   winner: string;
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)
-  @JoinTable({ name: "player" })
+  @JoinTable({ name: "PlayerInTheMatch" })
   player: User[];
 }

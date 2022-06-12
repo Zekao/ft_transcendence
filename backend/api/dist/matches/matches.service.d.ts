@@ -11,6 +11,7 @@ export declare class MatchesService {
     getMatchesByFilter(filter: MatchesFilteDto): Promise<Matches[]>;
     getMatchesId(id: string): Promise<Matches>;
     createMatch(matchDto: MatchDto): Promise<Matches>;
+    addPlayerToMatch(id: string, match_id: string): Promise<Matches>;
     deleteMatch(id: string): Promise<boolean>;
     editMatch(id: string, matchDto: MatchDto): Promise<Matches>;
 }
