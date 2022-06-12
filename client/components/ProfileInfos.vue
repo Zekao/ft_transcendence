@@ -84,9 +84,12 @@
 
       <!-- EDIT PP  -->
       <v-col cols="4">
+
       <v-file-input
           accept="image/*"
           label="Pick an image on your computer"
+                @change="selectFile"
+
         ></v-file-input>
       </v-col>
       <!-- END OF EDIT PP -->
@@ -127,7 +130,35 @@ export default Vue.extend({
       login: (state: any): string => state.user.authUser.user_name,
       imagePath: (state: any): string => state.user.authUser.avatar,
     }),
+},
+
+methods: {
+  async selectFile(e) {
+      const file = e.target.files[0];
+
+      /* Make sure file exists */
+      if (!file) return;
+
+      /* create a reader */
+      const readData = (f) =>  new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(f);
+      });
+
+      /* Read data */
+      const data = await readData(file);
+
+      /* upload the converted data */
+      const instance = this.$cloudinary.upload(data, {
+        folder: 'upload-examples',
+        uploadPreset: 'your-upload-preset',
+      })
+    }
+  }  
 }
-})
+
+
+)
 </script>
 
