@@ -220,10 +220,11 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
-        if (id.avatar != "default.png") {
-            this.deleteAvatar(id.user_name);
-        }
+        console.log(id.avatar);
+        await this.deleteAvatar(id.user_name);
+        console.log(id.avatar);
         id.avatar = file.filename;
+        console.log(id.avatar);
         this.UserRepository.save(id);
         return response;
     }
@@ -239,15 +240,15 @@ let UsersService = class UsersService {
     async deleteAvatar(id) {
         const found = await this.getUserId(id);
         if (found.avatar == "default.png")
-            throw new common_1.UnauthorizedException(`Default avatar cannot be deleted`);
+            return false;
         try {
             fs.unlinkSync("./static/image/" + found.avatar);
             found.avatar = "default.png";
-            this.UserRepository.save(found);
         }
         catch (err) {
-            throw new common_1.NotFoundException(`Avatar \`${id}' not found`);
+            return false;
         }
+        this.UserRepository.save(found);
         return true;
     }
     async removeFriend(id, friend_id) {
