@@ -14,11 +14,12 @@ const jwt_1 = require("@nestjs/jwt");
 const matches_entity_1 = require("./matches.entity");
 const matches_controller_1 = require("./matches.controller");
 const matches_service_1 = require("./matches.service");
+const users_module_1 = require("../users/users.module");
 let MatchesModule = class MatchesModule {
 };
 MatchesModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([matches_entity_1.Matches]), auth_module_1.AuthModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([matches_entity_1.Matches]), auth_module_1.AuthModule, users_module_1.UsersModule],
         controllers: [matches_controller_1.MatchesController],
         providers: [matches_service_1.MatchesService, jwt_1.JwtService],
     })

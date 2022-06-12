@@ -16,6 +16,9 @@ import { join } from "path";
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "image"),
       serveRoot: "/image",
+      serveStaticOptions: {
+        cacheControl: false,
+      },
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
