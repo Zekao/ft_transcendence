@@ -51,12 +51,12 @@ let UsersController = class UsersController {
         const user = req.user;
         return this.UsersService.getFriends(user.id);
     }
-    getMatch(req, id) {
-        return this.UsersService.getMatches(id);
-    }
     getMatches(req) {
         const user = req.user;
         return this.UsersService.getMatches(user.id);
+    }
+    getMatch(req, id) {
+        return this.UsersService.getMatches(id);
     }
     getBlocked(req, id) {
         const user = req.user;
@@ -181,21 +181,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
-    (0, common_1.Get)("/:id/matches"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the list of matches of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "getMatch", null);
-__decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/matches"),
     (0, swagger_1.ApiOperation)({
@@ -210,6 +195,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMatches", null);
+__decorate([
+    (0, common_1.Get)("/:id/matches"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the list of matches of a specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMatch", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/blocked"),
@@ -228,7 +228,7 @@ __decorate([
 ], UsersController.prototype, "getBlocked", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)("/me/friends/"),
+    (0, common_1.Post)("/me/friends"),
     (0, swagger_1.ApiOperation)({
         summary: "Add a friend to a specified user profile",
     }),
