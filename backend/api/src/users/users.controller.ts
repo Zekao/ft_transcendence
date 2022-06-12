@@ -248,11 +248,20 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
-    console.log(req.user)
-    if (id === 'me')
-      return this.UsersService.getFriends(id);
+  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
     return this.UsersService.getFriends(id);
+  }
+
+  @Get("/:id/blocked")
+  @ApiOperation({
+    summary: "Return the list of friends of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
+    return this.UsersService.getBlocked(id);
   }
 
   /* ************************************************************************** */
@@ -265,6 +274,14 @@ export class UsersController {
   })
   addFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.addFriend(id, query.friend);
+  }
+
+  @Post("/:id/blocked/")
+  @ApiOperation({
+    summary: "Add a friend to a specified user profile",
+  })
+  addBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+    return this.UsersService.addBlocked(id, query.blocked);
   }
 
   @Post("/:id/avatar/upload")
@@ -330,6 +347,14 @@ export class UsersController {
   })
   removeFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
     return this.UsersService.removeFriend(id, query.friend);
+  }
+
+  @Delete("/:id/blocked/")
+  @ApiOperation({
+    summary: "delete a friend to a specified user profile",
+  })
+  removeBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+    return this.UsersService.removeBlocked(id, query.blocked);
   }
 
   /* ************************************************************************** */
