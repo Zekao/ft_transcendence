@@ -1,6 +1,6 @@
 <template>
   <v-card height="100%" class="d-flex justify-center align-center">
-    <div> Hello World! </div>
+    <div>Hello World!</div>
   </v-card>
 </template>
 

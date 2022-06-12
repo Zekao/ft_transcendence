@@ -3,18 +3,20 @@ import { RootState } from '@/store'
 import { IMatch } from '@/store/match'
 
 export interface IUser {
-  id: string,
-  first_name: string,
-  last_name: string,
-  user_name: string,
-  email: string,
-  avatar: string,
-  status: string,
-  in_game: string,
-  win: number,
-  loose: number,
-  rank: number,
-  ratio: number,
+  id: string
+  first_name: string
+  last_name: string
+  user_name: string
+  display_name: string
+  email: string
+  avatar: string
+  TwoFA: boolean
+  status: string
+  in_game: string
+  win: number
+  loose: number
+  rank: number
+  ratio: number
 }
 
 export const state = () => ({
@@ -35,8 +37,24 @@ export const mutations: MutationTree<UserState> = {
   FETCH_AUTH_FRIENDS: (state, users: IUser[]) => {
     state.authUserFriends = users
   },
+  CREATE_AUTH_FRIEND: (state, user: IUser) => {
+    state.authUserFriends.push(user)
+  },
+  DELETE_AUTH_FRIEND: (state, userID: string) => {
+    state.authUserFriends = state.authUserFriends.filter(
+      (el) => el.id !== userID
+    )
+  },
   FETCH_AUTH_BLOCKED: (state, users: IUser[]) => {
     state.authUserBlocked = users
+  },
+  CREATE_AUTH_BLOCKED: (state, user: IUser) => {
+    state.authUserBlocked.push(user)
+  },
+  DELETE_AUTH_BLOCKED: (state, userID: string) => {
+    state.authUserBlocked = state.authUserFriends.filter(
+      (el) => el.id !== userID
+    )
   },
   FETCH_AUTH_MATCHES: (state, matches: IMatch[]) => {
     state.authUserMatches = matches
@@ -44,11 +62,17 @@ export const mutations: MutationTree<UserState> = {
   FETCH: (state, users: IUser[]) => {
     state.users = users
   },
+  UPDATE_AUTH_AVATAR: (state, userAvatar: string) => {
+    state.authUser.avatar = userAvatar + '#' + new Date().getTime()
+  },
+  UPDATE_AUTH: (state, user: IUser) => {
+    state.authUser = user
+  },
   UPDATE: (state, user: IUser) => {
-    state.users = state.users.map(el => el.id === user.id ? user : el)
+    state.users = state.users.map((el) => (el.id === user.id ? user : el))
   },
   DELETE: (state, userID: string) => {
-    state.users = state.users.filter(el => el.id !== userID)
+    state.users = state.users.filter((el) => el.id !== userID)
   },
 }
 
@@ -71,10 +95,54 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
+  async createAuthFriend({ state, commit }, userID: string) {
+    try {
+      const res = await this.$axios.$post(
+        `/users/${state.authUser.id}/friends?friend=${userID}`
+      )
+      commit('CREATE_AUTH_FRIEND', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async deleteAuthFriend({ state, commit }, userID: string) {
+    try {
+      const res = await this.$axios.$delete(
+        `/users/${state.authUser.id}/friends?friend=${userID}`
+      )
+      commit('DELETE_AUTH_FRIEND', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
   async fetchAuthBlocked({ state, commit }) {
     try {
       const res = await this.$axios.$get(`/users/${state.authUser.id}/blocked`)
       commit('FETCH_AUTH_BLOCKED', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async createAuthBlocked({ state, commit }, userID: string) {
+    try {
+      const res = await this.$axios.$post(
+        `/users/${state.authUser.id}/blocked?blocked=${userID}`
+      )
+      commit('CREATE_AUTH_BLOCKED', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async deleteAuthBlocked({ state, commit }, userID: string) {
+    try {
+      const res = await this.$axios.$delete(
+        `/users/${state.authUser.id}/blocked?blocked=${userID}`
+      )
+      commit('DELETE_AUTH_BLOCKED', res)
       return res
     } catch (err) {
       throw err
@@ -101,14 +169,23 @@ export const actions: ActionTree<UserState, RootState> = {
   async updateAuth({ state, commit }, user: IUser) {
     try {
       const res = await this.$axios.$patch(`/users/${state.authUser.id}`, user)
+      commit('UPDATE_AUTH', res)
       commit('UPDATE', res)
       return res
     } catch (err) {
       throw err
     }
   },
-  async update({ commit },
-    { userID, user }: { userID: string, user: IUser }) {
+  async updateAuthAvatar({ commit }, formData: FormData) {
+    try {
+      const res = await this.$axios.$post(`/users/me/upload`, formData)
+      commit('UPDATE_AUTH_AVATAR', res.filename)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async update({ commit }, { userID, user }: { userID: string; user: IUser }) {
     try {
       const res = await this.$axios.$patch(`/users/${userID}`, user)
       commit('UPDATE', res)

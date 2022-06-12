@@ -1,4 +1,4 @@
 export interface IMatch {
-  id: string,
-  _: any,
+  id: string
+  _: any
 }
