@@ -179,7 +179,7 @@ export class UsersService {
       status: stat,
       in_game: UserGameStatus.OUT_GAME,
       user_name: user_name,
-      display_name: user_name,
+      display_name: null,
       email: user_name + "@transcendence.com",
       first_name: first_name,
       last_name: last_name,
