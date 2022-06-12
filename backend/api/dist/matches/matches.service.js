@@ -93,6 +93,8 @@ let MatchesService = class MatchesService {
             match.SecondPlayer = player.id;
         else
             throw new common_1.UnauthorizedException("Match is full");
+        if (match.FirstPlayer == player.id)
+            throw new common_1.NotFoundException("Cannot join same match");
         console.log(player);
         this.matchesRepository.save(match);
         return match;

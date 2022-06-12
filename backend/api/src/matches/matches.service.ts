@@ -119,6 +119,8 @@ export class MatchesService {
   async addPlayerToMatch(player: User, match: Matches): Promise<Matches> {
     if (!match.SecondPlayer) match.SecondPlayer = player.id;
     else throw new UnauthorizedException("Match is full");
+    if (match.FirstPlayer == player.id)
+      throw new NotFoundException("Cannot join same match");
     console.log(player);
     this.matchesRepository.save(match);
     return match;
@@ -132,7 +134,6 @@ export class MatchesService {
       (Allmatches) => Allmatches.status === MatchStatus.PENDING
     );
     if (!Allmatches) throw new NotFoundException("No match are available");
-    // if (Allmatches.find( player)) throw new NotFoundException("No match are available");
     return Allmatches.at(0);
   }
 

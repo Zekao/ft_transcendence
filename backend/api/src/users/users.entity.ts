@@ -59,7 +59,7 @@ export class User {
   ratio: number;
 
   @ApiProperty()
-  @OneToMany(() => Matches, (matches) => matches.player)
+  @ManyToMany(() => Matches, (matches) => matches.player)
   @JoinTable({ name: "MatchHistory" })
   matches: Matches[];
 

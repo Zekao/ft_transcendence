@@ -65,6 +65,7 @@ export class UsersService {
   }
 
   async getMatches(id: string): Promise<MatchDto[]> {
+
     const user = await this.getUserId(id, { myMatches: true });
     if (!user.matches) return [];
     console.log(user.matches);
