@@ -13,35 +13,33 @@
               <v-img :src="imagePath"></v-img>
             </v-avatar>
             <v-col>
-              {{ login }}
+              {{ login ? login : username }}
             </v-col>
           </v-btn>
         </template>
 
         <v-list class="mt-6">
           <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+            v-for="(item, i) in items"
+            :key="i"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-navigation-drawer app clipped width="360" v-model="channelVisible">
+    <v-navigation-drawer v-model="channelVisible" app clipped width="360">
       <v-form v-model="valid">
         <v-toolbar>
-          <v-icon class="mr-3">
-            mdi-playlist-plus
-          </v-icon>
+          <v-icon class="mr-3"> mdi-playlist-plus </v-icon>
           Create channel
         </v-toolbar>
         <v-list>
@@ -52,7 +50,7 @@
               :counter="24"
               label="Channel name"
               required
-              ></v-text-field>
+            ></v-text-field>
           </v-list-item>
           <v-list-item>
             <v-select
@@ -61,7 +59,7 @@
               :rules="channelStatusRules"
               label="Channel status"
               required
-              ></v-select>
+            ></v-select>
           </v-list-item>
           <v-list-item>
             <v-select
@@ -70,42 +68,28 @@
               :rules="channelPermissionRules"
               label="Channel permission"
               required
-              ></v-select>
+            ></v-select>
           </v-list-item>
           <v-list-item class="justify-center">
-            <v-btn
-              :disabled="!valid"
-              @click="createChannel"
-            >
-              Create
-            </v-btn>
+            <v-btn :disabled="!valid" @click="createChannel"> Create </v-btn>
           </v-list-item>
         </v-list>
       </v-form>
-      <v-divider/>
+      <v-divider />
       <v-toolbar>
-          <v-icon class="mr-3">
-            mdi-playlist-minus
-          </v-icon>
-          Browse channels
-        </v-toolbar>
+        <v-icon class="mr-3"> mdi-playlist-minus </v-icon>
+        Browse channels
+      </v-toolbar>
       <v-list v-if="!channels.length">
         <v-list-item>
-          <v-list-item-subtitle>
-            No channel available.
-          </v-list-item-subtitle>
+          <v-list-item-subtitle> No channel available. </v-list-item-subtitle>
         </v-list-item>
       </v-list>
       <v-list v-else>
-        <v-list-group
-          v-for="(channel, i) in channels"
-          :key="i"
-        >
+        <v-list-group v-for="(channel, i) in channels" :key="i">
           <template #activator>
             <v-list-item-content>
-              <v-list-item-title>{{
-                channel.name
-              }}</v-list-item-title>
+              <v-list-item-title>{{ channel.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
           <v-list-item>
@@ -127,11 +111,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { IChannel } from '@/store/channel'
 
 export default Vue.extend({
-
   name: 'DefaultLayout',
 
   data: () => ({
@@ -140,9 +123,9 @@ export default Vue.extend({
     channelVisible: false,
     channelName: '',
     channelStatus: '',
-    channelStatusList: [ 'Public', 'Protected', 'Private' ],
+    channelStatusList: ['Public', 'Protected', 'Private'],
     channelPermission: '',
-    channelPermissionList: [ 'Open', 'On invitation' ],
+    channelPermissionList: ['Open', 'On invitation'],
     items: [
       {
         icon: 'mdi-gamepad-square',
@@ -164,24 +147,22 @@ export default Vue.extend({
       (v: string) => !!v || 'Name is required',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
     ],
-    channelStatusRules: [
-      (v: string) => !!v || 'Channel status is required',
-    ],
+    channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPermissionRules: [
       (v: string) => !!v || 'Channel permission is required',
-    ]
+    ],
   }),
 
   computed: {
     ...mapState({
-      login: (state: any): string => state.user.authUser.user_name,
-      imagePath: (state: any): string => state.user.authUser.avatar,
+      login: (state: any): string => state.user.authUser.display_name,
+      username: (state: any): string => state.user.authUser.user_name,
+      avatar: (state: any): string => state.user.authUser.avatar,
       channels: (state: any): IChannel[] => state.channel.channels,
     }),
-    // ...mapGetters({
-    //   isTutor: 'user/authenticatedUserIsTutor',
-    //   isAdmin: 'user/authenticatedUserIsTutor',
-    // }),
+    imagePath() {
+      return 'https://ft.localhost:4500/api/image/' + this.avatar
+    },
   },
 
   async fetch() {
@@ -193,41 +174,45 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions({
-      logout: 'auth/logout',
-    }),
     logoutRedirect() {
-      this.logout()
+      this.$store.dispatch('logout')
       this.$router.replace('/login')
     },
     convertChannelStatus(channelStatus: string): string {
-      switch(channelStatus) {
-        case 'Public': return 'PUBLIC'
-        case 'Protected': return 'PROTECTED'
-        case 'Private': return 'PRIVATE'
-        default: return ''
+      switch (channelStatus) {
+        case 'Public':
+          return 'PUBLIC'
+        case 'Protected':
+          return 'PROTECTED'
+        case 'Private':
+          return 'PRIVATE'
+        default:
+          return ''
       }
     },
     convertChannelPermission(channelPermission: string): string {
-      switch(channelPermission) {
-        case 'Open': return 'OPEN'
-        case 'On invitation': return 'ON_INVITE'
-        default: return ''
+      switch (channelPermission) {
+        case 'Open':
+          return 'OPEN'
+        case 'On invitation':
+          return 'ON_INVITE'
+        default:
+          return ''
       }
     },
     async createChannel() {
       try {
         const channel = {
           name: this.channelName,
-          status: this.convertChannelStatus(this.channelStatus),
-          permissions: this.convertChannelPermission(this.channelPermission),
+          status: (this as any).convertChannelStatus(this.channelStatus),
+          permissions: (this as any).convertChannelPermission(this.channelPermission),
           password: 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
-      } catch(err) {
+      } catch (err) {
         console.log(err)
       }
-    }
+    },
   },
 })
 </script>

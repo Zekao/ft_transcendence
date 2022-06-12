@@ -24,9 +24,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    '@/plugins/axios',
-  ],
+  plugins: ['@/plugins/axios'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -75,11 +73,11 @@ export default {
   build: {},
 
   server: {
-    port: 4500,     // default : 3000
-    host: '0.0.0.0' // do not put localhost (only accessible from the host machine)
+    port: 4500, // default : 3000
+    host: '0.0.0.0', // do not put localhost (only accessible from the host machine)
   },
 
   publicRuntimeConfig: {
     serverLogin: 'https://ft.localhost:4500/api/auth/login',
-  }
+  },
 }
