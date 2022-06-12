@@ -9,5 +9,9 @@ import {
 } from "class-validator";
 
 export class MatchDto {
-  name: string;
+  FirstPlayer: string;
+  SecondPlayer: string;
+  scoreFirstPlayer: number;
+  scoreSecondPlayer: number;
+  winner: string;
 }

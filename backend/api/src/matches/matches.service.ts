@@ -12,6 +12,7 @@ import * as fs from "fs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Matches } from "./matches.entity";
+import { ChannelFilteDto } from "../channels/dto/channels-filter.dto";
 
 function isMatches(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -35,6 +36,25 @@ export class MatchesService {
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
+
+  async getMatches(): Promise<Matches[]> {
+    const matches = await this.matchesRepository.find();
+    if (!matches) throw new NotFoundException(`Matches not found`);
+    return matches;
+  }
+  async getMatchesByFilter(filter: ChannelFilteDto): Promise<Matches[]> {
+    const { name, permissions, status } = filter;
+    const matches = await this.getMatches();
+    // if (name) channels = channels.filter((channel) => channel.name === name);
+    // if (status)
+    //   channels = channels.filter((channel) => channel.status === status);
+    // if (permissions)
+    //   channels = channels.filter(
+    //     (channel) => channel.permissions === permissions
+    //   );
+    // if (!channels) throw new NotFoundException(`Channel not found`);
+    return matches;
+  }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */

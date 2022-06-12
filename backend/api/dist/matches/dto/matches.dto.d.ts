@@ -1,3 +1,7 @@
 export declare class MatchDto {
-    name: string;
+    FirstPlayer: string;
+    SecondPlayer: string;
+    scoreFirstPlayer: number;
+    scoreSecondPlayer: number;
+    winner: string;
 }

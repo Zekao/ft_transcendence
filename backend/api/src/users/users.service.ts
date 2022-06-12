@@ -218,7 +218,7 @@ export class UsersService {
     return friend;
   }
 
-  async addBlocked(id: string, blockedUsersId: string) {
+  async addBlocked(id: string, blockedUsersId: string): Promise<User> {
     if (blockedUsersId === id)
       throw new BadRequestException("You can't add yourself");
     const found = await this.getUserId(id, { withBlocked: true });
