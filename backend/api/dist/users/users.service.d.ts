@@ -23,6 +23,7 @@ export declare class UsersService {
     getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;
+    getDisplayName(id: string): Promise<string>;
     getUserName(id: string): Promise<string>;
     getEmail(id: string): Promise<string>;
     getStatus(id: string): Promise<UserStatus>;

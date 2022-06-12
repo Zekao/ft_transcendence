@@ -13,6 +13,7 @@ export declare class UsersController {
     getUserId(req: any, id: string): Promise<User>;
     getFirstName(req: any, id: string): Promise<string>;
     getLastName(req: any, id: string): Promise<string>;
+    getDiplayName(req: any, id: string): Promise<string>;
     getUserName(req: any, id: string): Promise<string>;
     getEmail(req: any, id: string): Promise<string>;
     getStatus(req: any, id: string): Promise<UserStatus>;
@@ -23,7 +24,9 @@ export declare class UsersController {
     getRatio(req: any, id: string): Promise<string>;
     getAvatar(req: any, id: string, res: any): Promise<any>;
     getFriends(req: any, id: string): Promise<UserDto[]>;
+    getBlocked(req: any, id: string): Promise<UserDto[]>;
     addFriend(req: any, id: string, query: any): Promise<User>;
+    addBlocked(req: any, id: string, query: any): Promise<User>;
     uploadedFile(req: any, id: string, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
@@ -31,6 +34,7 @@ export declare class UsersController {
     deleteUser(req: any, id: string): Promise<boolean>;
     deleteAvatar(req: any, id: string): Promise<boolean>;
     removeFriend(req: any, id: string, query: any): Promise<User>;
+    removeBlocked(req: any, id: string, query: any): Promise<User>;
     patchUser(req: any, id: string, query: any): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }

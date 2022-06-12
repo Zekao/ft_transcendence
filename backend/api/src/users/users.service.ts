@@ -127,6 +127,10 @@ export class UsersService {
 	return (await this.getUserId(id)).last_name;
   }
 
+  async getDisplayName(id: string): Promise<string> {
+	return (await this.getUserId(id)).display_name;
+  }
+
   async getUserName(id: string): Promise<string> {
 	return (await this.getUserId(id)).user_name;
   }
@@ -176,6 +180,7 @@ export class UsersService {
 	  status: stat,
 	  in_game: UserGameStatus.OUT_GAME,
 	  user_name: user_name,
+	  display_name: user_name,
 	  email: user_name + "@transcendence.com",
 	  first_name: first_name,
 	  last_name: last_name,
@@ -299,6 +304,7 @@ export class UsersService {
 	const {
 	  firstname,
 	  lastname,
+	  display_name,
 	  email,
 	  status,
 	  ingame,

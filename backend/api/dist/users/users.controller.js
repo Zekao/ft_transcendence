@@ -42,64 +42,73 @@ let UsersController = class UsersController {
         return req.user;
     }
     getUserId(req, id) {
-        return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
+        return this.UsersService.getUserId(id);
     }
     getFirstName(req, id) {
-        return this.UsersService.getFirstName((id === 'me') ? req.user.id : id);
+        return this.UsersService.getFirstName(id);
     }
     getLastName(req, id) {
-        return this.UsersService.getLastName((id === 'me') ? req.user.id : id);
+        return this.UsersService.getLastName(id);
+    }
+    getDiplayName(req, id) {
+        return this.UsersService.getDisplayName(id);
     }
     getUserName(req, id) {
-        return this.UsersService.getUserName((id === 'me') ? req.user.id : id);
+        return this.UsersService.getUserName(id);
     }
     getEmail(req, id) {
-        return this.UsersService.getEmail((id === 'me') ? req.user.id : id);
+        return this.UsersService.getEmail(id);
     }
     getStatus(req, id) {
-        return this.UsersService.getStatus((id === 'me') ? req.user.id : id);
+        return this.UsersService.getStatus(id);
     }
     getInGame(req, id) {
-        return this.UsersService.getGameStatus((id === 'me') ? req.user.id : id);
+        return this.UsersService.getGameStatus(id);
     }
     getWin(req, id) {
-        return this.UsersService.getWin((id === 'me') ? req.user.id : id);
+        return this.UsersService.getWin(id);
     }
     getLoose(req, id) {
-        return this.UsersService.getLoose((id === 'me') ? req.user.id : id);
+        return this.UsersService.getLoose(id);
     }
     getRank(req, id) {
-        return this.UsersService.getRank((id === 'me') ? req.user.id : id);
+        return this.UsersService.getRank(id);
     }
     getRatio(req, id) {
-        return this.UsersService.getRatio((id === 'me') ? req.user.id : id);
+        return this.UsersService.getRatio(id);
     }
     getAvatar(req, id, res) {
-        return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
+        return this.UsersService.getAvatar(id, res);
     }
     getFriends(req, id) {
-        console.log(req.user);
-        if (id === 'me')
-            return this.UsersService.getFriends(id);
         return this.UsersService.getFriends(id);
     }
+    getBlocked(req, id) {
+        return this.UsersService.getBlocked(id);
+    }
     addFriend(req, id, query) {
-        return this.UsersService.addFriend((id === 'me') ? req.user.id : id, query.friend);
+        return this.UsersService.addFriend(id, query.friend);
+    }
+    addBlocked(req, id, query) {
+        return this.UsersService.addBlocked(id, query.blocked);
     }
     async uploadedFile(req, id, file) {
-        return this.UsersService.uploadFile((id === 'me') ? req.user.id : id, file);
+        return this.UsersService.uploadFile(id, file);
     }
     deleteUser(req, id) {
-        return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
+        return this.UsersService.deleteUser(id);
     }
     deleteAvatar(req, id) {
-        return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
+        return this.UsersService.deleteAvatar(id);
     }
     removeFriend(req, id, query) {
-        return this.UsersService.removeFriend((id === 'me') ? req.user.id : id, query.friend);
+        return this.UsersService.removeFriend(id, query.friend);
+    }
+    removeBlocked(req, id, query) {
+        return this.UsersService.removeBlocked(id, query.blocked);
     }
     patchUser(req, id, query) {
-        return this.UsersService.patchUser((id === 'me') ? req.user.id : id, query);
+        return this.UsersService.patchUser(id, query);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -190,6 +199,22 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getLastName", null);
+__decorate([
+    (0, common_1.Get)("/:id/display_name"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the diplay name of a specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+        type: [users_entity_1.User],
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getDiplayName", null);
 __decorate([
     (0, common_1.Get)("/:id/username"),
     (0, swagger_1.ApiOperation)({
@@ -350,6 +375,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
+    (0, common_1.Get)("/:id/blocked"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return the list of friends of a specified user profile",
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: "Ok.",
+    }),
+    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getBlocked", null);
+__decorate([
     (0, common_1.Post)("/:id/friends/"),
     (0, swagger_1.ApiOperation)({
         summary: "Add a friend to a specified user profile",
@@ -361,6 +401,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addFriend", null);
+__decorate([
+    (0, common_1.Post)("/:id/blocked/"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a friend to a specified user profile",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addBlocked", null);
 __decorate([
     (0, common_1.Post)("/:id/avatar/upload"),
     (0, swagger_1.ApiOperation)({
@@ -431,6 +483,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "removeFriend", null);
+__decorate([
+    (0, common_1.Delete)("/:id/blocked/"),
+    (0, swagger_1.ApiOperation)({
+        summary: "delete a friend to a specified user profile",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "removeBlocked", null);
 __decorate([
     (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({

@@ -121,6 +121,9 @@ let UsersService = class UsersService {
     async getLastName(id) {
         return (await this.getUserId(id)).last_name;
     }
+    async getDisplayName(id) {
+        return (await this.getUserId(id)).display_name;
+    }
     async getUserName(id) {
         return (await this.getUserId(id)).user_name;
     }
@@ -156,6 +159,7 @@ let UsersService = class UsersService {
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name: user_name,
+            display_name: user_name,
             email: user_name + "@transcendence.com",
             first_name: first_name,
             last_name: last_name,
@@ -273,7 +277,7 @@ let UsersService = class UsersService {
         return blockedUser;
     }
     async patchUser(id, query) {
-        const { firstname, lastname, email, status, ingame, win, loose, rank, ratio, } = query;
+        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, } = query;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
