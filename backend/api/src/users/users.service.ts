@@ -189,7 +189,7 @@ export class UsersService {
       loose: 0,
       rank: 0,
       ratio: 1,
-      avatar: avatar,
+      avatar: "default.png",
     });
     try {
       await this.UserRepository.save(user);
@@ -319,7 +319,7 @@ export class UsersService {
       loose,
       rank,
       ratio,
-	  TwoFA,
+      TwoFA,
     } = query;
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
