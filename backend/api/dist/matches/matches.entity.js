@@ -13,7 +13,6 @@ exports.Matches = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const typeorm_1 = require("typeorm");
 const users_entity_1 = require("../users/users.entity");
-const matches_enum_1 = require("./matches.enum");
 let Matches = class Matches {
 };
 __decorate([
@@ -23,35 +22,10 @@ __decorate([
 ], Matches.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Matches.prototype, "in_game", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Matches.prototype, "win", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Matches.prototype, "loose", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Matches.prototype, "rank", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)({ type: "real" }),
-    __metadata("design:type", Number)
-], Matches.prototype, "ratio", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matches),
-    (0, typeorm_1.JoinTable)({ name: "Matches" }),
+    (0, typeorm_1.JoinTable)({ name: "player" }),
     __metadata("design:type", Array)
-], Matches.prototype, "users", void 0);
+], Matches.prototype, "player", void 0);
 Matches = __decorate([
     (0, typeorm_1.Entity)()
 ], Matches);

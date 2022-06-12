@@ -18,10 +18,7 @@ let MatchesModule = class MatchesModule {
 };
 MatchesModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([matches_entity_1.Matches]),
-            auth_module_1.AuthModule,
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([matches_entity_1.Matches]), auth_module_1.AuthModule],
         controllers: [matches_controller_1.MatchesController],
         providers: [matches_service_1.MatchesService, jwt_1.JwtService],
     })

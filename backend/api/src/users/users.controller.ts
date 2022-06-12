@@ -41,7 +41,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
-import { request } from "http";
+
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
@@ -284,7 +284,11 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  addFriend(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.addFriend(id, query.friend);
   }
 
@@ -292,18 +296,23 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  addBlocked(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.addBlocked(id, query.blocked);
   }
 
-  @Post("/:id/avatar/upload")
+  @UseGuards(JwtAuthGuard)
+  @Post("/me/upload")
   @ApiOperation({
     summary: "Upload avatar for the specified user profile",
   })
   @UseInterceptors(
     FileInterceptor("image", {
       storage: diskStorage({
-        destination: "./files",
+        destination: "./static/image",
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -317,9 +326,9 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   async uploadedFile(
     @Request() req,
-    @Param("id") id: string,
     @UploadedFile() file: Express.Multer.File
   ) {
+    const id = req.user;
     return this.UsersService.uploadFile(id, file);
   }
 
@@ -357,7 +366,11 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  removeFriend(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.removeFriend(id, query.friend);
   }
 
@@ -365,7 +378,11 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  removeBlocked(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.removeBlocked(id, query.blocked);
   }
 
@@ -382,7 +399,11 @@ export class UsersController {
     type: boolean,
   })
   @UserApiException(() => NotFoundException)
-  patchUser(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  patchUser(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.patchUser(id, query);
   }
 

@@ -34,8 +34,8 @@ let AuthController = class AuthController {
     }
     async qrcode() {
         const Test = this.authService.generateQR();
-        var file = fs;
-        file.writeFile("qrcode_user.png", (await Test).qrcode.substring(22), { encoding: 'base64' }, function (err) {
+        const file = fs;
+        file.writeFile("qrcode_user.png", (await Test).qrcode.substring(22), { encoding: "base64" }, function (err) {
             if (err) {
                 console.log(err);
             }

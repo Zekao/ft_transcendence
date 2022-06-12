@@ -202,7 +202,9 @@ let UsersService = class UsersService {
         if (blockedUsersId === id)
             throw new common_1.BadRequestException("You can't add yourself");
         const found = await this.getUserId(id, { withBlocked: true });
-        const blockedUser = await this.getUserId(blockedUsersId, { withFriends: true });
+        const blockedUser = await this.getUserId(blockedUsersId, {
+            withFriends: true,
+        });
         if (!found.blockedUsers)
             found.blockedUsers = [];
         if (found.blockedUsers.find((f) => f.id == blockedUser.id))
@@ -214,20 +216,15 @@ let UsersService = class UsersService {
         return blockedUser;
     }
     async uploadFile(id, file) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        if (!file)
-            throw new common_1.NotFoundException(`Avatar not found`);
         const response = {
             originalname: file.originalname,
             filename: file.filename,
         };
-        if (found.avatar != "default/img_avatar.png") {
-            this.deleteAvatar(id);
+        if (id.avatar != "default.png") {
+            this.deleteAvatar(id.user_name);
         }
-        found.avatar = file.filename;
-        this.UserRepository.save(found);
+        id.avatar = file.filename;
+        this.UserRepository.save(id);
         return response;
     }
     async deleteUser(id) {
@@ -241,13 +238,11 @@ let UsersService = class UsersService {
     }
     async deleteAvatar(id) {
         const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        if (found.avatar == "default/img_avatar.png")
+        if (found.avatar == "default.png")
             throw new common_1.UnauthorizedException(`Default avatar cannot be deleted`);
         try {
-            fs.unlinkSync("./files/" + found.avatar);
-            found.avatar = "default/img_avatar.png";
+            fs.unlinkSync("./static/image/" + found.avatar);
+            found.avatar = "default.png";
             this.UserRepository.save(found);
         }
         catch (err) {

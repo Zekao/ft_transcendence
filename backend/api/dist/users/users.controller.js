@@ -92,7 +92,8 @@ let UsersController = class UsersController {
     addBlocked(req, id, query) {
         return this.UsersService.addBlocked(id, query.blocked);
     }
-    async uploadedFile(req, id, file) {
+    async uploadedFile(req, file) {
+        const id = req.user;
         return this.UsersService.uploadFile(id, file);
     }
     deleteUser(req, id) {
@@ -414,13 +415,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addBlocked", null);
 __decorate([
-    (0, common_1.Post)("/:id/avatar/upload"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/me/upload"),
     (0, swagger_1.ApiOperation)({
         summary: "Upload avatar for the specified user profile",
     }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
         storage: (0, multer_1.diskStorage)({
-            destination: "./files",
+            destination: "./static/image",
             filename: file_upload_utils_1.editFileName,
         }),
         fileFilter: file_upload_utils_1.imageFileFilter,
@@ -432,10 +434,9 @@ __decorate([
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "uploadedFile", null);
 __decorate([
