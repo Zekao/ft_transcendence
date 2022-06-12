@@ -15,6 +15,9 @@ export class Matches {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+//  @Column()
+//  firstPlayer: User;
+
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)
   @JoinTable({ name: "player" })
