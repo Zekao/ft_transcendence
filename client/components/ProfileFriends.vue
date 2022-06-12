@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <v-card height="calc(100% - 114px)" color="grey lighten-1" class="ma-6">
         <v-toolbar rounded="0">
       <v-text-field
@@ -17,15 +16,13 @@
           Clear
         </v-btn>
     </v-toolbar>
-        <v-card height="calc(100% - 64px)" color="#00000000" class="d-flex justify-center align-center">
+        <!-- <v-card height="calc(100% - 64px)" color="#00000000" class="d-flex justify-center align-center"> -->
 
-=======
   <v-card
     height="calc(100% - 114px)"
     color="grey lighten-1"
     class="d-flex justify-center align-center ma-6"
   >
->>>>>>> 993cf8005f11fcd063b6cf60e33af1dbbfddd328
     <v-progress-circular
       v-if="$fetchState.pending"
       indeterminate
