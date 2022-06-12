@@ -36,7 +36,7 @@ export declare class UsersService {
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(id: string, friend_id: string): Promise<User>;
     addBlocked(id: string, blockedUsersId: string): Promise<User>;
-    uploadFile(id: string, file: Express.Multer.File): Promise<{
+    uploadFile(id: User, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;

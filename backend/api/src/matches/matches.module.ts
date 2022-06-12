@@ -7,10 +7,7 @@ import { MatchesController } from "./matches.controller";
 import { MatchesService } from "./matches.service";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Matches]),
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Matches]), AuthModule],
   controllers: [MatchesController],
   providers: [MatchesService, JwtService],
 })

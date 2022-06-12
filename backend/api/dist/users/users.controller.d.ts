@@ -27,7 +27,7 @@ export declare class UsersController {
     getBlocked(req: any, id: string): Promise<UserDto[]>;
     addFriend(req: any, id: string, query: any): Promise<User>;
     addBlocked(req: any, id: string, query: any): Promise<User>;
-    uploadedFile(req: any, id: string, file: Express.Multer.File): Promise<{
+    uploadedFile(req: any, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;

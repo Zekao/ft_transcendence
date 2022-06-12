@@ -10,7 +10,7 @@ const imageFileFilter = (req, file, callback) => {
 };
 exports.imageFileFilter = imageFileFilter;
 const editFileName = (req, file, callback) => {
-    const name = file.originalname.split(".")[0];
+    const name = req.user.user_name;
     const fileExtName = (0, path_1.extname)(file.originalname);
     const randomName = Array(4)
         .fill(null)
