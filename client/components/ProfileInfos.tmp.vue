@@ -1,8 +1,7 @@
 <template>
   <v-card height="calc(100% - 114px)" color="grey lighten-1">
-    <div> 
+    <div>
 
-      <v-card-title> {{redismessage}} </v-card-title>
 
                 <v-card flat >
 <v-card-text>
@@ -71,9 +70,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false" 
-            v-model="newPseudo"
-
+            @click="dialog = false"
           >
             Save
           </v-btn>
@@ -87,7 +84,7 @@
 
       <!-- EDIT PP  -->
       <v-col cols="12">
-        <v-btn centered             
+        <v-btn centered
  >
           edit avatar
         </v-btn>
@@ -102,87 +99,26 @@
 
 
     </div>
- <v-card color="grey lighten-1" class="d-flex justify-center align-center ma-6">
-    <v-list width="420px">
-      <v-list-item>
-        <v-file-input
-          accept="image/*"
-          label="Pick an image on your computer"
-        ></v-file-input>
-      </v-list-item>
-    </v-list>
-  </v-card>
+
 </v-card>
- 
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
 export default Vue.extend({
-  name: 'ProfileInfos', 
+  name: 'ProfileInfos',
   middleware: 'auth',
   data: () => ({
     dialog: false,
-    newPseudo: '',
-    wsdata: null,
-    redismessage: '',
-    name: 'ProfileInfos',
-
-
-  }
-  ),
-    //})
-
-  // function who create websocket with redis connection and recieve message from redis
-  created() {
-    console.log("Starting connection to Websocket Server")
-    this.wsdata = new WebSocket('wss://echo.websocket.events') 
-
-    this.wsdata.onmessage = (event) => { 
-      this.redismessage = event.data; 
-      console.log(event.data); 
-      }
-
-    this.wsdata.onopen = (event) => { 
-     // console.log(event); 
-      console.log('Successfully connected to Websocket Server'); 
-    }
-  }, 
-
-
-  //  created() {
-  //    try {
-  //      const ws = new WebSocket('ws://localhost:3001/ws'); 
-  //      ws.onmessage = {{data}} => {
-  //        this.redismessage = data;
-  //        console.log(this.redismessage); 
-  //       }
-  //      } catch(err) {
-  //        console.log(err);
-  //      }
-  //     }
-  
+  }),
 
   computed: {
     ...mapState({
       login: (state: any): string => state.user.authUser.user_name,
-      imagePath: (state: any): string => state.user.authUser.avatar, 
+      imagePath: (state: any): string => state.user.authUser.avatar,
     }),
-  },
-
-  methods: { 
-
-    // async editPseudo() {
-    //        console.log(this.newPseudo)
-    // try {
-    //   await this.$store.dispatch('users/' + this.login + '/' + this.newPseudo, this.newPseudo)
-    //   this.dialog = false
-    // } catch (err) {
-    //   console.log(err)
-    // }   
-    //   this.dialog = false
-    // },
-  }
-  })
+}
+})
 </script>
+

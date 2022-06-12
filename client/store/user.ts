@@ -20,6 +20,7 @@ export interface IUser {
 export const state = () => ({
   authUser: {} as IUser,
   authUserFriends: [] as IUser[],
+  authUserBlocked: [] as IUser[],
   authUserMatches: [] as IMatch[],
   users: [] as IUser[],
   // rankList: [] as IUser[],
@@ -33,6 +34,9 @@ export const mutations: MutationTree<UserState> = {
   },
   FETCH_AUTH_FRIENDS: (state, users: IUser[]) => {
     state.authUserFriends = users
+  },
+  FETCH_AUTH_BLOCKED: (state, users: IUser[]) => {
+    state.authUserBlocked = users
   },
   FETCH_AUTH_MATCHES: (state, matches: IMatch[]) => {
     state.authUserMatches = matches
@@ -67,6 +71,15 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
+  async fetchAuthBlocked({ state, commit }) {
+    try {
+      const res = await this.$axios.$get(`/users/${state.authUser.id}/blocked`)
+      commit('FETCH_AUTH_BLOCKED', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
   async fetchAuthMatches({ state, commit }) {
     try {
       const res = await this.$axios.$get(`/users/${state.authUser.id}/matches`)
@@ -80,6 +93,15 @@ export const actions: ActionTree<UserState, RootState> = {
     try {
       const res = await this.$axios.$get(`/users`)
       commit('FETCH', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
+  async updateAuth({ state, commit }, user: IUser) {
+    try {
+      const res = await this.$axios.$patch(`/users/${state.authUser.id}`, user)
+      commit('UPDATE', res)
       return res
     } catch (err) {
       throw err

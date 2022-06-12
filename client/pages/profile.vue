@@ -8,30 +8,19 @@
           {{ component }}
         </v-tab>
       </v-tabs>
-      <v-text-field
-        v-model="usernameSelected"
-        prepend-icon="mdi-magnify"
-        label="Search user"
-        outlined
-        dense
-        hide-details
-        class="mr-2"/>
-      <v-btn outlined @click="usernameSelected = ''">
-        Clear
-      </v-btn>
     </v-toolbar>
-    <v-tabs-items v-model="componentSelected">
+    <v-tabs-items v-model="componentSelected" :key="componentSelected">
       <v-tab-item key="Infos">
         <ProfileInfos/>
       </v-tab-item>
       <v-tab-item key="Friends">
         <ProfileFriends/>
       </v-tab-item>
+      <v-tab-item key="Blocked">
+        <ProfileBlocked/>
+      </v-tab-item>
       <v-tab-item key="Match history">
         <ProfileMatchhistory/>
-      </v-tab-item>
-      <v-tab-item key="Stats">
-        <ProfileStats/>
       </v-tab-item>
     </v-tabs-items>
   </v-sheet>
@@ -46,10 +35,9 @@ export default Vue.extend({
   middleware: 'auth',
 
   data: () => ({
-    usernameSelected: '',
     componentSelected: '',
     componentList: [
-      'Infos', 'Friends', 'Match history', 'Stats',
+      'Infos', 'Friends', 'Blocked', 'Match history'
     ]
   })
 })
