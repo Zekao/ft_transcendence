@@ -241,10 +241,11 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
-    if (id.avatar != "default.png") {
-      this.deleteAvatar(id.user_name);
-    }
+    console.log(id.avatar);
+    await this.deleteAvatar(id.user_name);
+    console.log(id.avatar);
     id.avatar = file.filename;
+    console.log(id.avatar);
     this.UserRepository.save(id);
     return response;
   }
@@ -263,15 +264,14 @@ export class UsersService {
 
   async deleteAvatar(id: string): Promise<boolean> {
     const found = await this.getUserId(id);
-    if (found.avatar == "default.png")
-      throw new UnauthorizedException(`Default avatar cannot be deleted`);
+    if (found.avatar == "default.png") return false;
     try {
       fs.unlinkSync("./static/image/" + found.avatar);
       found.avatar = "default.png";
-      this.UserRepository.save(found);
     } catch (err) {
-      throw new NotFoundException(`Avatar \`${id}' not found`);
+      return false;
     }
+    this.UserRepository.save(found);
     return true;
   }
 
@@ -319,10 +319,13 @@ export class UsersService {
       loose,
       rank,
       ratio,
+	  TwoFA,
     } = query;
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
+    if (display_name) found.display_name = display_name;
+    if (TwoFA) found.TwoFA = TwoFA;
     if (email) found.email = email;
     if (status) found.status = status;
     if (ingame) found.in_game = ingame;

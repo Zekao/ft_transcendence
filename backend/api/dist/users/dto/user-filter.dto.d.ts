@@ -12,4 +12,5 @@ export declare class UsersFiltesDTO {
     loose?: number;
     rank?: number;
     ratio?: number;
+    TwoFA?: boolean;
 }
