@@ -241,11 +241,8 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
-    console.log(id.avatar);
     await this.deleteAvatar(id.user_name);
-    console.log(id.avatar);
     id.avatar = file.filename;
-    console.log(id.avatar);
     this.UserRepository.save(id);
     return response;
   }
@@ -266,7 +263,7 @@ export class UsersService {
     const found = await this.getUserId(id);
     if (found.avatar == "default.png") return false;
     try {
-      fs.unlinkSync("./static/image/" + found.avatar);
+      fs.unlinkSync("image/" + found.avatar);
       found.avatar = "default.png";
     } catch (err) {
       return false;

@@ -14,7 +14,7 @@ import { join } from "path";
     ChannelsModule,
     MatchesModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "static/image"),
+      rootPath: join(__dirname, "..", "image"),
       serveRoot: "/image",
     }),
     TypeOrmModule.forRoot({
