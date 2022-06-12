@@ -267,8 +267,8 @@ let UsersService = class UsersService {
         this.UserRepository.save(user);
         return blockedUser;
     }
-    async patchUser(id, query) {
-        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = query;
+    async patchUser(id, body) {
+        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
@@ -276,7 +276,7 @@ let UsersService = class UsersService {
             found.last_name = lastname;
         if (display_name)
             found.display_name = display_name;
-        if (TwoFA)
+        if (TwoFA != null)
             found.TwoFA = TwoFA;
         if (email)
             found.email = email;

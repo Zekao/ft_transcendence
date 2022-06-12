@@ -300,7 +300,7 @@ export class UsersService {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 
-  async patchUser(id: string, query: UsersFiltesDTO): Promise<User> {
+  async patchUser(id: string, body: UsersFiltesDTO): Promise<User> {
     const {
       firstname,
       lastname,
@@ -313,12 +313,12 @@ export class UsersService {
       rank,
       ratio,
       TwoFA,
-    } = query;
+    } = body;
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
     if (display_name) found.display_name = display_name;
-    if (TwoFA) found.TwoFA = TwoFA;
+    if (TwoFA != null) found.TwoFA = TwoFA;
     if (email) found.email = email;
     if (status) found.status = status;
     if (ingame) found.in_game = ingame;
