@@ -1,6 +1,6 @@
 <template>
   <v-sheet height="100%">
-    <v-toolbar>
+    <v-toolbar>l
       <v-tabs v-model="componentSelected">
         <v-tab
           v-for="component in componentList"
