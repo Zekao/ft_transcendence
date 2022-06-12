@@ -71,11 +71,11 @@ let MatchesService = class MatchesService {
         const match = this.matchesRepository.create({
             FirstPlayer: user.id,
         });
-        match.player = [];
-        match.player.push(user);
         try {
             match.status = matches_enum_1.MatchStatus.PENDING;
             await this.matchesRepository.save(match);
+            match.player = [];
+            match.player.push(user);
         }
         catch (error) {
             console.log(error);
@@ -93,26 +93,27 @@ let MatchesService = class MatchesService {
             match.SecondPlayer = player.id;
         else
             throw new common_1.UnauthorizedException("Match is full");
-        match.player.push(player);
+        console.log(player);
         this.matchesRepository.save(match);
         return match;
     }
     async findMatch() {
         let Allmatches = await this.getMatches();
+        if (!Allmatches.length)
+            throw new common_1.NotFoundException("No match are available");
         Allmatches = Allmatches.filter((Allmatches) => Allmatches.status === matches_enum_1.MatchStatus.PENDING);
         if (!Allmatches)
-            new common_1.NotFoundException("No match are available");
-        return Allmatches.at[0].id;
+            throw new common_1.NotFoundException("No match are available");
+        return Allmatches.at(0);
     }
-    async defineMatch(id) {
+    async defineMatch(player) {
         let match;
         try {
             match = await this.findMatch();
-            const player = await this.userService.getUserId(id);
             await this.addPlayerToMatch(player, match);
         }
         catch (err) {
-            console.log(err);
+            return err;
         }
         return match;
     }

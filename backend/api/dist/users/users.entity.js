@@ -94,7 +94,7 @@ __decorate([
 ], User.prototype, "ratio", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => matches_entity_1.Matches, (matches) => matches.player),
+    (0, typeorm_1.OneToMany)(() => matches_entity_1.Matches, (matches) => matches.player),
     (0, typeorm_1.JoinTable)({ name: "MatchHistory" }),
     __metadata("design:type", Array)
 ], User.prototype, "matches", void 0);

@@ -98,11 +98,11 @@ export class MatchesService {
     const match = this.matchesRepository.create({
       FirstPlayer: user.id,
     });
-    match.player = [];
-    match.player.push(user);
     try {
       match.status = MatchStatus.PENDING;
       await this.matchesRepository.save(match);
+      match.player = [];
+      match.player.push(user);
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException();
@@ -119,30 +119,30 @@ export class MatchesService {
   async addPlayerToMatch(player: User, match: Matches): Promise<Matches> {
     if (!match.SecondPlayer) match.SecondPlayer = player.id;
     else throw new UnauthorizedException("Match is full");
-    match.player.push(player);
+    console.log(player);
     this.matchesRepository.save(match);
-
     return match;
   }
 
   async findMatch(): Promise<Matches> {
     let Allmatches = await this.getMatches();
+    if (!Allmatches.length)
+      throw new NotFoundException("No match are available");
     Allmatches = Allmatches.filter(
       (Allmatches) => Allmatches.status === MatchStatus.PENDING
     );
-    if (!Allmatches) new NotFoundException("No match are available");
-
-    return Allmatches.at[0].id;
+    if (!Allmatches) throw new NotFoundException("No match are available");
+    // if (Allmatches.find( player)) throw new NotFoundException("No match are available");
+    return Allmatches.at(0);
   }
 
-  async defineMatch(id: string): Promise<Matches> {
+  async defineMatch(player: User): Promise<Matches> {
     let match;
     try {
       match = await this.findMatch();
-      const player = await this.userService.getUserId(id);
       await this.addPlayerToMatch(player, match);
     } catch (err) {
-      console.log(err);
+      return err;
     }
     // await this.addMatchToPlayer(player, match);
 

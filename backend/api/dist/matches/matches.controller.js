@@ -34,7 +34,7 @@ let MatchesController = class MatchesController {
     }
     addUserToMatchMatch(req) {
         const user = req.user;
-        return this.matchService.defineMatch(user.id);
+        return this.matchService.defineMatch(user);
     }
     deleteUser(id) {
         return this.matchService.deleteMatch(id);
@@ -63,6 +63,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "createMatch", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/join"),
     (0, swagger_1.ApiOperation)({
         summary: "Join a match",

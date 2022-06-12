@@ -4,6 +4,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Matches } from "../matches/matches.entity";
@@ -58,7 +59,7 @@ export class User {
   ratio: number;
 
   @ApiProperty()
-  @ManyToMany(() => Matches, (matches) => matches.player)
+  @OneToMany(() => Matches, (matches) => matches.player)
   @JoinTable({ name: "MatchHistory" })
   matches: Matches[];
 
