@@ -164,7 +164,7 @@ export class UsersService {
   }
 
   async getAvatar(id: string, @Res() res) {
-    return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
+    return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
   }
 
   /* ************************************************************************** */
@@ -172,8 +172,7 @@ export class UsersService {
   /* ************************************************************************** */
 
   async createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { FortyTwoID, user_name, first_name, last_name, avatar } =
-      authCredentialsDto;
+    const { FortyTwoID, user_name, first_name, last_name } = authCredentialsDto;
     const stat = UserStatus.ONLINE;
     const user = this.UserRepository.create({
       FortyTwoID: FortyTwoID,
@@ -241,7 +240,6 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
-    await this.deleteAvatar(id.user_name);
     id.avatar = file.filename;
     this.UserRepository.save(id);
     return response;
@@ -264,10 +262,8 @@ export class UsersService {
     if (found.avatar == "default.png") return false;
     try {
       fs.unlinkSync("image/" + found.avatar);
-      found.avatar = "default.png";
-    } catch (err) {
-      return false;
-    }
+    } catch (err) {}
+    found.avatar = "default.png";
     this.UserRepository.save(found);
     return true;
   }
