@@ -274,12 +274,16 @@ let UsersService = class UsersService {
         return blockedUser;
     }
     async patchUser(id, query) {
-        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, } = query;
+        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = query;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
         if (lastname)
             found.last_name = lastname;
+        if (display_name)
+            found.display_name = display_name;
+        if (TwoFA)
+            found.TwoFA = TwoFA;
         if (email)
             found.email = email;
         if (status)

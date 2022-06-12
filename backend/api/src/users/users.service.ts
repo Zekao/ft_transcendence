@@ -319,10 +319,13 @@ export class UsersService {
       loose,
       rank,
       ratio,
+	  TwoFA,
     } = query;
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
+    if (display_name) found.display_name = display_name;
+    if (TwoFA) found.TwoFA = TwoFA;
     if (email) found.email = email;
     if (status) found.status = status;
     if (ingame) found.in_game = ingame;
