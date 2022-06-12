@@ -35,6 +35,6 @@ export declare class UsersController {
     deleteAvatar(req: any, id: string): Promise<boolean>;
     removeFriend(req: any, id: string, query: any): Promise<User>;
     removeBlocked(req: any, id: string, query: any): Promise<User>;
-    patchUser(req: any, id: string, query: any): Promise<User>;
+    patchUser(req: any, id: string, body: any): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }
