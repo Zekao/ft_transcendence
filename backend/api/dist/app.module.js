@@ -12,6 +12,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
 const channels_module_1 = require("./channels/channels.module");
+const matches_module_1 = require("./matches/matches.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -20,6 +21,7 @@ AppModule = __decorate([
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             channels_module_1.ChannelsModule,
+            matches_module_1.MatchesModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
                 host: "database",

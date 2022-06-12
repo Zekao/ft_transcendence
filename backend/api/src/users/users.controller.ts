@@ -252,7 +252,6 @@ export class UsersController {
     return this.UsersService.getAvatar(id, res);
   }
 
-
   @Get("/:id/friends")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
