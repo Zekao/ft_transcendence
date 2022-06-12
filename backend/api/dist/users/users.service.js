@@ -149,7 +149,7 @@ let UsersService = class UsersService {
         return (await this.getUserId(id)).ratio.toPrecision(2);
     }
     async getAvatar(id, res) {
-        return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
+        return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
     }
     async createUsers(authCredentialsDto) {
         const { FortyTwoID, user_name, first_name, last_name, avatar } = authCredentialsDto;
