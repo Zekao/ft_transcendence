@@ -8,6 +8,7 @@ import {
 } from "class-validator";
 import { UserDto } from "../../users/dto/user.dto";
 import { Matches } from "../matches.entity";
+import { MatchStatus } from "../matches.enum";
 
 export class MatchDto {
   constructor(match?: Matches) {
@@ -18,6 +19,7 @@ export class MatchDto {
       this.scoreFirstPlayer = match.scoreFirstPlayer;
       this.scoreSecondPlayer = match.scoreSecondPlayer;
       this.winner = match.winner;
+      this.status = match.status;
       if (match.player)
         this.player = match.player.map((play) => {
           return new UserDto(play);
@@ -30,5 +32,6 @@ export class MatchDto {
   scoreFirstPlayer: number;
   scoreSecondPlayer: number;
   winner: string;
+  status: MatchStatus;
   player: UserDto[];
 }

@@ -32,9 +32,9 @@ let MatchesController = class MatchesController {
         const user = req.user;
         return this.matchService.createMatch(user);
     }
-    addUserToMatchMatch(req, id) {
+    addUserToMatchMatch(req) {
         const user = req.user;
-        return this.matchService.defineMatch(user.id, id);
+        return this.matchService.defineMatch(user.id);
     }
     deleteUser(id) {
         return this.matchService.deleteMatch(id);
@@ -63,14 +63,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "createMatch", null);
 __decorate([
-    (0, common_1.Post)("/:id"),
+    (0, common_1.Post)("/join"),
     (0, swagger_1.ApiOperation)({
-        summary: "Add a user to the match",
+        summary: "Join a match",
     }),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "addUserToMatchMatch", null);
 __decorate([

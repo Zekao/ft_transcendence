@@ -31,7 +31,7 @@ export class Matches {
   winner: string;
 
   @Column()
-  MatchStatus: MatchStatus;
+  status: MatchStatus;
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)

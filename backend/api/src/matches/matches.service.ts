@@ -56,24 +56,27 @@ export class MatchesService {
       scoreFirstPlayer,
       scoreSecondPlayer,
       winner,
+      status,
     } = filter;
     let matches = await this.getMatches();
     if (FirstPlayer)
       matches = matches.filter(
-        (channel) => channel.FirstPlayer === FirstPlayer
+        (matches) => matches.FirstPlayer === FirstPlayer
       );
     if (SecondPlayer)
       matches = matches.filter(
-        (channel) => channel.SecondPlayer === SecondPlayer
+        (matches) => matches.SecondPlayer === SecondPlayer
       );
     if (scoreFirstPlayer)
       matches = matches.filter(
-        (channel) => channel.scoreFirstPlayer === scoreFirstPlayer
+        (matches) => matches.scoreFirstPlayer === scoreFirstPlayer
       );
     if (scoreSecondPlayer)
       matches = matches.filter(
-        (channel) => channel.scoreSecondPlayer === scoreSecondPlayer
+        (matches) => matches.scoreSecondPlayer === scoreSecondPlayer
       );
+    if (status)
+      matches = matches.filter((channel) => channel.status === status);
     if (winner)
       matches = matches.filter((channel) => channel.winner === winner);
     if (!matches) throw new NotFoundException(`Channel not found`);
@@ -95,10 +98,10 @@ export class MatchesService {
     const match = this.matchesRepository.create({
       FirstPlayer: user.id,
     });
+    match.player = [];
+    match.player.push(user);
     try {
-      match.player = [];
-      match.player.push(user);
-      match.MatchStatus = MatchStatus.PENDING;
+      match.status = MatchStatus.PENDING;
       await this.matchesRepository.save(match);
     } catch (error) {
       console.log(error);
@@ -122,15 +125,26 @@ export class MatchesService {
     return match;
   }
 
-  async defineMatch(id: string, match_id: string): Promise<Matches> {
-    const player = await this.userService.getUserId(id);
-    const match = await this.getMatchesId(match_id);
+  async findMatch(): Promise<Matches> {
+    let Allmatches = await this.getMatches();
+    Allmatches = Allmatches.filter(
+      (Allmatches) => Allmatches.status === MatchStatus.PENDING
+    );
+    if (!Allmatches) new NotFoundException("No match are available");
+
+    return Allmatches.at[0].id;
+  }
+
+  async defineMatch(id: string): Promise<Matches> {
+    let match;
     try {
+      match = await this.findMatch();
+      const player = await this.userService.getUserId(id);
       await this.addPlayerToMatch(player, match);
     } catch (err) {
       console.log(err);
     }
-    await this.addMatchToPlayer(player, match);
+    // await this.addMatchToPlayer(player, match);
 
     return match;
   }

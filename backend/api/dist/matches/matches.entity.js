@@ -44,7 +44,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Matches.prototype, "MatchStatus", void 0);
+], Matches.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matches),

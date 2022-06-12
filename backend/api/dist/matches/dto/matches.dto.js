@@ -11,6 +11,7 @@ class MatchDto {
             this.scoreFirstPlayer = match.scoreFirstPlayer;
             this.scoreSecondPlayer = match.scoreSecondPlayer;
             this.winner = match.winner;
+            this.status = match.status;
             if (match.player)
                 this.player = match.player.map((play) => {
                     return new user_dto_1.UserDto(play);

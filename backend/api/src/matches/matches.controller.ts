@@ -54,16 +54,13 @@ export class MatchesController {
     return this.matchService.createMatch(user);
   }
 
-  @Post("/:id")
+  @Post("/join")
   @ApiOperation({
-    summary: "Add a user to the match",
+    summary: "Join a match",
   })
-  addUserToMatchMatch(
-    @Request() req,
-    @Param("id") id: string
-  ): Promise<Matches> {
+  addUserToMatchMatch(@Request() req): Promise<Matches> {
     const user = req.user;
-    return this.matchService.defineMatch(user.id, id);
+    return this.matchService.defineMatch(user.id);
   }
 
   /* ************************************************************************** */

@@ -41,16 +41,18 @@ let MatchesService = class MatchesService {
         return matches;
     }
     async getMatchesByFilter(filter) {
-        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, } = filter;
+        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, status, } = filter;
         let matches = await this.getMatches();
         if (FirstPlayer)
-            matches = matches.filter((channel) => channel.FirstPlayer === FirstPlayer);
+            matches = matches.filter((matches) => matches.FirstPlayer === FirstPlayer);
         if (SecondPlayer)
-            matches = matches.filter((channel) => channel.SecondPlayer === SecondPlayer);
+            matches = matches.filter((matches) => matches.SecondPlayer === SecondPlayer);
         if (scoreFirstPlayer)
-            matches = matches.filter((channel) => channel.scoreFirstPlayer === scoreFirstPlayer);
+            matches = matches.filter((matches) => matches.scoreFirstPlayer === scoreFirstPlayer);
         if (scoreSecondPlayer)
-            matches = matches.filter((channel) => channel.scoreSecondPlayer === scoreSecondPlayer);
+            matches = matches.filter((matches) => matches.scoreSecondPlayer === scoreSecondPlayer);
+        if (status)
+            matches = matches.filter((channel) => channel.status === status);
         if (winner)
             matches = matches.filter((channel) => channel.winner === winner);
         if (!matches)
@@ -69,10 +71,10 @@ let MatchesService = class MatchesService {
         const match = this.matchesRepository.create({
             FirstPlayer: user.id,
         });
+        match.player = [];
+        match.player.push(user);
         try {
-            match.player = [];
-            match.player.push(user);
-            match.MatchStatus = matches_enum_1.MatchStatus.PENDING;
+            match.status = matches_enum_1.MatchStatus.PENDING;
             await this.matchesRepository.save(match);
         }
         catch (error) {
@@ -95,16 +97,23 @@ let MatchesService = class MatchesService {
         this.matchesRepository.save(match);
         return match;
     }
-    async defineMatch(id, match_id) {
-        const player = await this.userService.getUserId(id);
-        const match = await this.getMatchesId(match_id);
+    async findMatch() {
+        let Allmatches = await this.getMatches();
+        Allmatches = Allmatches.filter((Allmatches) => Allmatches.status === matches_enum_1.MatchStatus.PENDING);
+        if (!Allmatches)
+            new common_1.NotFoundException("No match are available");
+        return Allmatches.at[0].id;
+    }
+    async defineMatch(id) {
+        let match;
         try {
+            match = await this.findMatch();
+            const player = await this.userService.getUserId(id);
             await this.addPlayerToMatch(player, match);
         }
         catch (err) {
             console.log(err);
         }
-        await this.addMatchToPlayer(player, match);
         return match;
     }
     async deleteMatch(id) {
