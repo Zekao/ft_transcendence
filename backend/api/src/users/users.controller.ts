@@ -13,6 +13,7 @@ import {
   Request,
   UnauthorizedException,
   NotFoundException,
+  Body,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -402,9 +403,9 @@ export class UsersController {
   patchUser(
     @Request() req,
     @Param("id") id: string,
-    @Query() query
+    @Body() body
   ): Promise<User> {
-    return this.UsersService.patchUser(id, query);
+    return this.UsersService.patchUser(id, body);
   }
 
   @Patch("/updateRank")

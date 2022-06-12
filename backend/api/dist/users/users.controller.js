@@ -108,8 +108,8 @@ let UsersController = class UsersController {
     removeBlocked(req, id, query) {
         return this.UsersService.removeBlocked(id, query.blocked);
     }
-    patchUser(req, id, query) {
-        return this.UsersService.patchUser(id, query);
+    patchUser(req, id, body) {
+        return this.UsersService.patchUser(id, body);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -508,7 +508,7 @@ __decorate([
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.Query)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
