@@ -220,9 +220,7 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
-        if (id.avatar != file.filename)
-            await this.deleteAvatarID(id);
-        id.avatar = file.filename;
+        id.avatar = file.filename + "?" + new Date().getTime();
         this.UserRepository.save(id);
         return response;
     }
@@ -245,15 +243,6 @@ let UsersService = class UsersService {
         catch (err) { }
         found.avatar = "default.png";
         this.UserRepository.save(found);
-        return true;
-    }
-    async deleteAvatarID(id) {
-        if (id.avatar == "default.png")
-            return false;
-        try {
-            fs.unlinkSync("image/" + id.avatar);
-        }
-        catch (err) { }
         return true;
     }
     async removeFriend(id, friend_id) {

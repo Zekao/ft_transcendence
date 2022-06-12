@@ -15,11 +15,23 @@ export class Matches {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column()
+  FirstPlayer: string;
+
+  @Column()
+  SecondPlayer: string;
+
+  @Column()
+  scoreFirstPlayer: number;
+
+  @Column()
+  scoreSecondPlayer: number;
+
+  @Column()
+  winner: string;
+
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)
   @JoinTable({ name: "player" })
   player: User[];
-
-  @Column("text", { nullable: true })
-  firstPlayer: User;
 }
