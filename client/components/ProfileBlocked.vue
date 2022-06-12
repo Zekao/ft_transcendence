@@ -6,13 +6,13 @@
       color="primary"
       ></v-progress-circular>
     <v-list v-else-if="$fetchState.error">
-      <v-list-item dense>Failed to load friend list.</v-list-item>
+      <v-list-item dense>Failed to load blocked user list.</v-list-item>
     </v-list>
-    <v-list v-else-if="!authUserFriends.length">
-      <v-list-item dense>No friends yet.</v-list-item>
+    <v-list v-else-if="!authUserBlocked.length">
+      <v-list-item dense>No user blocked yet.</v-list-item>
     </v-list>
     <v-list v-else>
-      <v-list-item v-for="(user, i) in authUserFriends" :key="i">
+      <v-list-item v-for="(user, i) in authUserBlocked" :key="i">
         {{ user.name }}
       </v-list-item>
     </v-list>
@@ -25,16 +25,16 @@ import { mapState } from 'vuex'
 import { IUser } from '@/store/user'
 
 export default Vue.extend({
-  name: 'ProfileFriends',
+  name: 'ProfileBlocked',
 
   computed: {
     ...mapState({
-      authUserFriends: (state: any): IUser[] => state.user.authUserFriends
+      authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked
     })
   },
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthFriends')
+    await this.$store.dispatch('user/fetchAuthBlocked')
   },
 })
 </script>

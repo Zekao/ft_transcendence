@@ -1,6 +1,9 @@
 <template>
   <v-app dark>
     <v-app-bar app clipped-left height="64">
+      <v-btn icon @click="channelVisible = !channelVisible">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-menu transition="slide-x-reverse-transition" offset-y>
@@ -33,7 +36,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-navigation-drawer app clipped width="360">
+    <v-navigation-drawer app clipped width="360" v-model="channelVisible">
       <v-form v-model="valid">
         <v-toolbar>
           <v-icon class="mr-3">
@@ -74,12 +77,18 @@
               :disabled="!valid"
               @click="createChannel"
             >
-              Validate
+              Create
             </v-btn>
           </v-list-item>
         </v-list>
       </v-form>
       <v-divider/>
+      <v-toolbar>
+          <v-icon class="mr-3">
+            mdi-playlist-minus
+          </v-icon>
+          Browse channels
+        </v-toolbar>
       <v-list v-if="!channels.length">
         <v-list-item>
           <v-list-item-subtitle>
@@ -128,6 +137,7 @@ export default Vue.extend({
   data: () => ({
     title: 'ft_transcendance',
     valid: false,
+    channelVisible: false,
     channelName: '',
     channelStatus: '',
     channelStatusList: [ 'Public', 'Protected', 'Private' ],
