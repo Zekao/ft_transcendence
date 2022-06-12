@@ -42,6 +42,7 @@ export declare class UsersService {
     }>;
     deleteUser(id: string): Promise<boolean>;
     deleteAvatar(id: string): Promise<boolean>;
+    deleteAvatarID(id: User): Promise<boolean>;
     removeFriend(id: string, friend_id: string): Promise<User>;
     removeBlocked(id: string, blockedUsersId: string): Promise<User>;
     patchUser(id: string, body: UsersFiltesDTO): Promise<User>;

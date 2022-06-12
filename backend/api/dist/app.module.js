@@ -28,7 +28,7 @@ AppModule = __decorate([
                 rootPath: (0, path_1.join)(__dirname, "..", "image"),
                 serveRoot: "/image",
                 serveStaticOptions: {
-                    cacheControl: false,
+                    index: false,
                 },
             }),
             typeorm_1.TypeOrmModule.forRoot({

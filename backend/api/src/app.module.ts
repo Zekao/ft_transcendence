@@ -17,7 +17,7 @@ import { join } from "path";
       rootPath: join(__dirname, "..", "image"),
       serveRoot: "/image",
       serveStaticOptions: {
-        cacheControl: false,
+        index: false,
       },
     }),
     TypeOrmModule.forRoot({
