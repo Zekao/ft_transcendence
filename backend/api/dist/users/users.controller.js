@@ -48,10 +48,12 @@ let UsersController = class UsersController {
         return this.UsersService.getAvatar(id, res);
     }
     getFriends(req, id) {
-        return this.UsersService.getFriends(id);
+        const user = req.user;
+        return this.UsersService.getFriends(user.id);
     }
     getBlocked(req, id) {
-        return this.UsersService.getBlocked(id);
+        const user = req.user;
+        return this.UsersService.getBlocked(user.id);
     }
     addFriend(req, id, query) {
         const user = req.user;
@@ -59,11 +61,11 @@ let UsersController = class UsersController {
     }
     addBlocked(req, id, query) {
         const user = req.user;
-        return this.UsersService.addBlocked(user, query.blocked);
+        return this.UsersService.addBlocked(user.id, query.blocked);
     }
     async uploadedFile(req, file) {
         const user = req.user;
-        return this.UsersService.uploadFile(user, file);
+        return this.UsersService.uploadFile(user.id, file);
     }
     deleteUser(req, id) {
         return this.UsersService.deleteUser(id);
@@ -73,10 +75,11 @@ let UsersController = class UsersController {
     }
     removeFriend(req, id, query) {
         const user = req.user;
-        return this.UsersService.removeFriend(user, query.friend);
+        return this.UsersService.removeFriend(user.id, query.friend);
     }
     removeBlocked(req, id, query) {
-        return this.UsersService.removeBlocked(id, query.blocked);
+        const user = req.user;
+        return this.UsersService.removeBlocked(user.id, query.blocked);
     }
     patchUser(req, id, body) {
         return this.UsersService.patchUser(id, body);
@@ -155,7 +158,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAvatar", null);
 __decorate([
-    (0, common_1.Get)("/:id/friends"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/me/friends"),
     (0, swagger_1.ApiOperation)({
         summary: "Return the list of friends of a specified user profile",
     }),
@@ -170,7 +174,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
-    (0, common_1.Get)("/:id/blocked"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
         summary: "Return the list of friends of a specified user profile",
     }),
@@ -269,7 +274,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteAvatar", null);
 __decorate([
-    (0, common_1.Delete)("/:id/friends/"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/me/friends"),
     (0, swagger_1.ApiOperation)({
         summary: "delete a friend to a specified user profile",
     }),
@@ -281,7 +287,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "removeFriend", null);
 __decorate([
-    (0, common_1.Delete)("/:id/blocked/"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
         summary: "delete a friend to a specified user profile",
     }),
