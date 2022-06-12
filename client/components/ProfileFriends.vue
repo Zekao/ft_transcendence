@@ -1,4 +1,23 @@
 <template>
+  <v-card height="calc(100% - 114px)" color="grey lighten-1" class="ma-6">
+        <v-toolbar rounded="0">
+      <v-text-field
+          v-model="usernameSelected"
+          prepend-icon="mdi-magnify"
+          label="Login"
+          outlined
+          dense
+          hide-details
+          class="mr-2"/>
+        <v-btn outlined class="mr-2" @click="usernameSelected = ''">
+          Search
+        </v-btn>
+        <v-btn outlined @click="usernameSelected = ''">
+          Clear
+        </v-btn>
+    </v-toolbar>
+        <!-- <v-card height="calc(100% - 64px)" color="#00000000" class="d-flex justify-center align-center"> -->
+
   <v-card
     height="calc(100% - 114px)"
     color="grey lighten-1"
@@ -26,30 +45,16 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          login
-          <v-list-item-title v-text="user.user_name"></v-list-item-title>
-        </v-list-item-content>
-
-        <v-list-item-content>
-         win  <v-list-item-title v-text="user.win"></v-list-item-title>
-        </v-list-item-content>
-
-        <v-list-item-content>
-         lost  <v-list-item-title v-text="user.loose"></v-list-item-title>
-        </v-list-item-content>
-
-        <v-list-item-content>
-         rank #  <v-list-item-title v-text="user.rank"></v-list-item-title>
+        
+        <FriendMenu :friend = user />
         </v-list-item-content>
 
                 <v-list-item-icon>
 
   <v-dialog v-model="dialog" width="500">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on">
+       <!-- <v-btn v-bind="attrs" v-on="on">
          <v-icon :color="orange">mdi-clipboard-list</v-icon>
-        </v-btn>
-      </template>
+        </v-btn> -->
      <!-- <v-card>
        <v-list-item
         v-for="chat in gamehistory"
@@ -68,25 +73,6 @@
     </v-dialog>
     <!-- END OF HISTORY + MODAL -->
         <!-- </v-btn> -->
-
-
-      <!-- BUTTONS SEND MSG  -->
-       <v-btn>
-        <v-icon :color="user.status != 'OFFLINE' ? 'deep-purple accent-4' : 'grey'">
-            mdi-message-outline
-          </v-icon>
-          </v-btn>
-          <!-- END OF BUTTON SEND MSG  -->
-
-          <!-- BUTTON PLAY WITH PLAYER -->
-          <v-btn v-if="user.status == 'OFFLINE'" disabled>
-            <v-icon :color="user.status != 'OFFLINE' ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
-          </v-btn>
-
-          <v-btn v-else>
-            <v-icon :color="user.status == 'ONLINE' ? 'green' : 'grey'">          mdi-sword-cross </v-icon>
-          </v-btn>
-          <!-- END OF BUTTON PLAY WITH HIM  -->
         <v-btn>
           <v-icon color="red"> mdi-delete</v-icon>
         </v-btn>
@@ -95,6 +81,7 @@
       </v-list-item>
     </v-list>
   </v-card>
+ </v-card>
 </template>
 
 <script lang="ts">
