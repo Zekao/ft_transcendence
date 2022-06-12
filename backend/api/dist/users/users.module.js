@@ -23,7 +23,7 @@ UsersModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([users_entity_1.User]),
             auth_module_1.AuthModule,
             platform_express_1.MulterModule.register({
-                dest: "./files",
+                dest: "./image",
             }),
         ],
         controllers: [users_controller_1.UsersController],

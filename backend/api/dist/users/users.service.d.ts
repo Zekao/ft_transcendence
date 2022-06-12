@@ -23,6 +23,7 @@ export declare class UsersService {
     getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;
+    getDisplayName(id: string): Promise<string>;
     getUserName(id: string): Promise<string>;
     getEmail(id: string): Promise<string>;
     getStatus(id: string): Promise<UserStatus>;
@@ -35,7 +36,7 @@ export declare class UsersService {
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(id: string, friend_id: string): Promise<User>;
     addBlocked(id: string, blockedUsersId: string): Promise<User>;
-    uploadFile(id: string, file: Express.Multer.File): Promise<{
+    uploadFile(id: User, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;
@@ -43,6 +44,6 @@ export declare class UsersService {
     deleteAvatar(id: string): Promise<boolean>;
     removeFriend(id: string, friend_id: string): Promise<User>;
     removeBlocked(id: string, blockedUsersId: string): Promise<User>;
-    patchUser(id: string, query: UsersFiltesDTO): Promise<User>;
+    patchUser(id: string, body: UsersFiltesDTO): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }

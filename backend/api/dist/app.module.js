@@ -12,6 +12,9 @@ const typeorm_1 = require("@nestjs/typeorm");
 const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
 const channels_module_1 = require("./channels/channels.module");
+const matches_module_1 = require("./matches/matches.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -20,6 +23,14 @@ AppModule = __decorate([
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             channels_module_1.ChannelsModule,
+            matches_module_1.MatchesModule,
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, "..", "image"),
+                serveRoot: "/image",
+                serveStaticOptions: {
+                    cacheControl: false,
+                },
+            }),
             typeorm_1.TypeOrmModule.forRoot({
                 type: "postgres",
                 host: "database",

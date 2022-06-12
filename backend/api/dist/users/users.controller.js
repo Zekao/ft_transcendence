@@ -44,36 +44,6 @@ let UsersController = class UsersController {
     getUserId(req, id) {
         return this.UsersService.getUserId(id);
     }
-    getFirstName(req, id) {
-        return this.UsersService.getFirstName(id);
-    }
-    getLastName(req, id) {
-        return this.UsersService.getLastName(id);
-    }
-    getUserName(req, id) {
-        return this.UsersService.getUserName(id);
-    }
-    getEmail(req, id) {
-        return this.UsersService.getEmail(id);
-    }
-    getStatus(req, id) {
-        return this.UsersService.getStatus(id);
-    }
-    getInGame(req, id) {
-        return this.UsersService.getGameStatus(id);
-    }
-    getWin(req, id) {
-        return this.UsersService.getWin(id);
-    }
-    getLoose(req, id) {
-        return this.UsersService.getLoose(id);
-    }
-    getRank(req, id) {
-        return this.UsersService.getRank(id);
-    }
-    getRatio(req, id) {
-        return this.UsersService.getRatio(id);
-    }
     getAvatar(req, id, res) {
         return this.UsersService.getAvatar(id, res);
     }
@@ -89,7 +59,8 @@ let UsersController = class UsersController {
     addBlocked(req, id, query) {
         return this.UsersService.addBlocked(id, query.blocked);
     }
-    async uploadedFile(req, id, file) {
+    async uploadedFile(req, file) {
+        const id = req.user;
         return this.UsersService.uploadFile(id, file);
     }
     deleteUser(req, id) {
@@ -104,8 +75,8 @@ let UsersController = class UsersController {
     removeBlocked(req, id, query) {
         return this.UsersService.removeBlocked(id, query.blocked);
     }
-    patchUser(req, id, query) {
-        return this.UsersService.patchUser(id, query);
+    patchUser(req, id, body) {
+        return this.UsersService.patchUser(id, body);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -164,166 +135,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserId", null);
-__decorate([
-    (0, common_1.Get)("/:id/firstname"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the first name of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: users_entity_1.User,
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getFirstName", null);
-__decorate([
-    (0, common_1.Get)("/:id/lastname"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the last name of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getLastName", null);
-__decorate([
-    (0, common_1.Get)("/:id/username"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the username of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getUserName", null);
-__decorate([
-    (0, common_1.Get)("/:id/email"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return email of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getEmail", null);
-__decorate([
-    (0, common_1.Get)("/:id/status"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the status of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getStatus", null);
-__decorate([
-    (0, common_1.Get)("/:id/gameStatus"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the game status of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getInGame", null);
-__decorate([
-    (0, common_1.Get)("/:id/win"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the total win game of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getWin", null);
-__decorate([
-    (0, common_1.Get)("/:id/loose"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the total loose game of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getLoose", null);
-__decorate([
-    (0, common_1.Get)("/:id/rank"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the rank of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getRank", null);
-__decorate([
-    (0, common_1.Get)("/:id/ratio"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the ratio of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-        type: [users_entity_1.User],
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getRatio", null);
 __decorate([
     (0, common_1.Get)("/:id/avatar"),
     (0, swagger_1.ApiOperation)({
@@ -395,13 +206,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addBlocked", null);
 __decorate([
-    (0, common_1.Post)("/:id/avatar/upload"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/me/upload"),
     (0, swagger_1.ApiOperation)({
         summary: "Upload avatar for the specified user profile",
     }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
         storage: (0, multer_1.diskStorage)({
-            destination: "./files",
+            destination: "./image",
             filename: file_upload_utils_1.editFileName,
         }),
         fileFilter: file_upload_utils_1.imageFileFilter,
@@ -413,10 +225,9 @@ __decorate([
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "uploadedFile", null);
 __decorate([
@@ -488,7 +299,7 @@ __decorate([
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.Query)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)

@@ -12,7 +12,7 @@ import { MulterModule } from "@nestjs/platform-express";
     TypeOrmModule.forFeature([User]),
     AuthModule,
     MulterModule.register({
-      dest: "./files",
+      dest: "./image",
     }),
   ],
   controllers: [UsersController],

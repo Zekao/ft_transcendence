@@ -13,6 +13,7 @@ import {
   Request,
   UnauthorizedException,
   NotFoundException,
+  Body,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -41,7 +42,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
-import { request } from "http";
+
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
@@ -97,136 +98,6 @@ export class UsersController {
     return this.UsersService.getUserId(id);
   }
 
-  @Get("/:id/firstname")
-  @ApiOperation({
-    summary: "Return the first name of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: User,
-  })
-  @UserApiException(() => NotFoundException)
-  getFirstName(@Request() req, @Param("id") id: string): Promise<string> {
-    return this.UsersService.getFirstName(id);
-  }
-
-  @Get("/:id/lastname")
-  @ApiOperation({
-    summary: "Return the last name of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getLastName(@Request() req, @Param("id") id: string): Promise<string> {
-    return this.UsersService.getLastName(id);
-  }
-
-  @Get("/:id/username")
-  @ApiOperation({
-    summary: "Return the username of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getUserName(@Request() req, @Param("id") id: string): Promise<string> {
-    return this.UsersService.getUserName(id);
-  }
-
-  @Get("/:id/email")
-  @ApiOperation({
-    summary: "Return email of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getEmail(@Request() req, @Param("id") id: string): Promise<string> {
-    return this.UsersService.getEmail(id);
-  }
-
-  @Get("/:id/status")
-  @ApiOperation({
-    summary: "Return the status of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getStatus(@Request() req, @Param("id") id: string): Promise<UserStatus> {
-    return this.UsersService.getStatus(id);
-  }
-
-  @Get("/:id/gameStatus")
-  @ApiOperation({
-    summary: "Return the game status of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getInGame(@Request() req, @Param("id") id: string): Promise<UserGameStatus> {
-    return this.UsersService.getGameStatus(id);
-  }
-
-  @Get("/:id/win")
-  @ApiOperation({
-    summary: "Return the total win game of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getWin(@Request() req, @Param("id") id: string): Promise<number> {
-    return this.UsersService.getWin(id);
-  }
-
-  @Get("/:id/loose")
-  @ApiOperation({
-    summary: "Return the total loose game of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getLoose(@Request() req, @Param("id") id: string): Promise<number> {
-    return this.UsersService.getLoose(id);
-  }
-
-  @Get("/:id/rank")
-  @ApiOperation({
-    summary: "Return the rank of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getRank(@Request() req, @Param("id") id: string): Promise<number> {
-    return this.UsersService.getRank(id);
-  }
-
-  @Get("/:id/ratio")
-  @ApiOperation({
-    summary: "Return the ratio of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-    type: [User],
-  })
-  @UserApiException(() => NotFoundException)
-  getRatio(@Request() req, @Param("id") id: string): Promise<string> {
-    return this.UsersService.getRatio(id);
-  }
-
   @Get("/:id/avatar")
   @ApiOperation({
     summary: "Return the avatar of a specified user profile",
@@ -239,7 +110,6 @@ export class UsersController {
     return this.UsersService.getAvatar(id, res);
   }
 
-  
   @Get("/:id/friends")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
@@ -248,7 +118,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
+  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getFriends(id);
   }
 
@@ -260,7 +130,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {    
+  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
     return this.UsersService.getBlocked(id);
   }
 
@@ -272,7 +142,11 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  addFriend(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.addFriend(id, query.friend);
   }
 
@@ -280,18 +154,23 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  addBlocked(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.addBlocked(id, query.blocked);
   }
 
-  @Post("/:id/avatar/upload")
+  @UseGuards(JwtAuthGuard)
+  @Post("/me/upload")
   @ApiOperation({
     summary: "Upload avatar for the specified user profile",
   })
   @UseInterceptors(
     FileInterceptor("image", {
       storage: diskStorage({
-        destination: "./files",
+        destination: "./image",
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -305,9 +184,9 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   async uploadedFile(
     @Request() req,
-    @Param("id") id: string,
     @UploadedFile() file: Express.Multer.File
   ) {
+    const id = req.user;
     return this.UsersService.uploadFile(id, file);
   }
 
@@ -345,7 +224,11 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeFriend(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  removeFriend(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.removeFriend(id, query.friend);
   }
 
@@ -353,7 +236,11 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeBlocked(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  removeBlocked(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.UsersService.removeBlocked(id, query.blocked);
   }
 
@@ -370,8 +257,12 @@ export class UsersController {
     type: boolean,
   })
   @UserApiException(() => NotFoundException)
-  patchUser(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
-    return this.UsersService.patchUser(id, query);
+  patchUser(
+    @Request() req,
+    @Param("id") id: string,
+    @Body() body
+  ): Promise<User> {
+    return this.UsersService.patchUser(id, body);
   }
 
   @Patch("/updateRank")

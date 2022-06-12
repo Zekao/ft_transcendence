@@ -121,6 +121,9 @@ let UsersService = class UsersService {
     async getLastName(id) {
         return (await this.getUserId(id)).last_name;
     }
+    async getDisplayName(id) {
+        return (await this.getUserId(id)).display_name;
+    }
     async getUserName(id) {
         return (await this.getUserId(id)).user_name;
     }
@@ -146,24 +149,26 @@ let UsersService = class UsersService {
         return (await this.getUserId(id)).ratio.toPrecision(2);
     }
     async getAvatar(id, res) {
-        return res.sendFile((await this.getUserId(id)).avatar, { root: "./files" });
+        return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
     }
     async createUsers(authCredentialsDto) {
-        const { FortyTwoID, user_name, first_name, last_name, avatar } = authCredentialsDto;
+        const { FortyTwoID, user_name, first_name, last_name } = authCredentialsDto;
         const stat = users_enum_1.UserStatus.ONLINE;
         const user = this.UserRepository.create({
             FortyTwoID: FortyTwoID,
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name: user_name,
+            display_name: user_name,
             email: user_name + "@transcendence.com",
             first_name: first_name,
             last_name: last_name,
+            TwoFA: false,
             win: 0,
             loose: 0,
             rank: 0,
             ratio: 1,
-            avatar: avatar,
+            avatar: "default.png",
         });
         try {
             await this.UserRepository.save(user);
@@ -197,7 +202,9 @@ let UsersService = class UsersService {
         if (blockedUsersId === id)
             throw new common_1.BadRequestException("You can't add yourself");
         const found = await this.getUserId(id, { withBlocked: true });
-        const blockedUser = await this.getUserId(blockedUsersId, { withFriends: true });
+        const blockedUser = await this.getUserId(blockedUsersId, {
+            withFriends: true,
+        });
         if (!found.blockedUsers)
             found.blockedUsers = [];
         if (found.blockedUsers.find((f) => f.id == blockedUser.id))
@@ -209,20 +216,12 @@ let UsersService = class UsersService {
         return blockedUser;
     }
     async uploadFile(id, file) {
-        const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        if (!file)
-            throw new common_1.NotFoundException(`Avatar not found`);
         const response = {
             originalname: file.originalname,
             filename: file.filename,
         };
-        if (found.avatar != "default/img_avatar.png") {
-            this.deleteAvatar(id);
-        }
-        found.avatar = file.filename;
-        this.UserRepository.save(found);
+        id.avatar = file.filename;
+        this.UserRepository.save(id);
         return response;
     }
     async deleteUser(id) {
@@ -236,18 +235,14 @@ let UsersService = class UsersService {
     }
     async deleteAvatar(id) {
         const found = await this.getUserId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`User \`${id}' not found`);
-        if (found.avatar == "default/img_avatar.png")
-            throw new common_1.UnauthorizedException(`Default avatar cannot be deleted`);
+        if (found.avatar == "default.png")
+            return false;
         try {
-            fs.unlinkSync("./files/" + found.avatar);
-            found.avatar = "default/img_avatar.png";
-            this.UserRepository.save(found);
+            fs.unlinkSync("image/" + found.avatar);
         }
-        catch (err) {
-            throw new common_1.NotFoundException(`Avatar \`${id}' not found`);
-        }
+        catch (err) { }
+        found.avatar = "default.png";
+        this.UserRepository.save(found);
         return true;
     }
     async removeFriend(id, friend_id) {
@@ -272,13 +267,17 @@ let UsersService = class UsersService {
         this.UserRepository.save(user);
         return blockedUser;
     }
-    async patchUser(id, query) {
-        const { firstname, lastname, email, status, ingame, win, loose, rank, ratio, } = query;
+    async patchUser(id, body) {
+        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
         if (lastname)
             found.last_name = lastname;
+        if (display_name)
+            found.display_name = display_name;
+        if (TwoFA != null)
+            found.TwoFA = TwoFA;
         if (email)
             found.email = email;
         if (status)
