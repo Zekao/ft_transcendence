@@ -6,6 +6,6 @@ export default Vue.extend({
   asyncData({ store, redirect }) {
     store.dispatch('logout')
     redirect('/login')
-  }
+  },
 })
 </script>

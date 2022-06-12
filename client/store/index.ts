@@ -38,9 +38,7 @@ export const actions: ActionTree<RootState, RootState> = {
   async login({ commit }, authCode: string) {
     commit('AUTH_REQUEST')
     try {
-      const res = await this.$axios.$get(
-        `/auth/callback?code=${authCode}`
-      )
+      const res = await this.$axios.$get(`/auth/callback?code=${authCode}`)
       const { accessToken } = res
       this.$cookies.set('access_token', accessToken)
       commit('AUTH_SUCCESS', res)

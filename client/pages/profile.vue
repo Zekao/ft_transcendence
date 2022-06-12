@@ -2,29 +2,26 @@
   <v-sheet height="100%">
     <v-toolbar>
       <v-tabs v-model="componentSelected">
-        <v-tab
-          v-for="component in componentList"
-          :key="component">
+        <v-tab v-for="component in componentList" :key="component">
           {{ component }}
         </v-tab>
       </v-tabs>
     </v-toolbar>
-    <v-tabs-items v-model="componentSelected" :key="componentSelected">
+    <v-tabs-items :key="componentSelected" v-model="componentSelected">
       <v-tab-item key="Infos">
-        <ProfileInfos/>
+        <ProfileInfos />
       </v-tab-item>
       <v-tab-item key="Friends">
-        <ProfileFriends/>
+        <ProfileFriends />
       </v-tab-item>
       <v-tab-item key="Blocked">
-        <ProfileBlocked/>
+        <ProfileBlocked />
       </v-tab-item>
       <v-tab-item key="Match history">
-        <ProfileMatchhistory/>
+        <ProfileMatchhistory />
       </v-tab-item>
     </v-tabs-items>
   </v-sheet>
-
 </template>
 
 <script lang="ts">
@@ -36,15 +33,15 @@ export default Vue.extend({
 
   data: () => ({
     componentSelected: '',
-    componentList: [
-      'Infos', 'Friends', 'Blocked', 'Match history'
-    ]
-  })
+    componentList: ['Infos', 'Friends', 'Blocked', 'Match history'],
+  }),
 })
 </script>
 
 <style>
-.v-window, .v-window__container, .v-window-item {
-  height: inherit
+.v-window,
+.v-window__container,
+.v-window-item {
+  height: inherit;
 }
 </style>
