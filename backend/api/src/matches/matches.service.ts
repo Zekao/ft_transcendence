@@ -13,6 +13,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Matches } from "./matches.entity";
 import { ChannelFilteDto } from "../channels/dto/channels-filter.dto";
+import { MatchesFilteDto } from "./dto/matches-filter.dto";
+import { MatchDto } from "./dto/matches.dto";
 
 function isMatches(id: string): boolean {
   const splited: string[] = id.split("-");
@@ -42,25 +44,97 @@ export class MatchesService {
     if (!matches) throw new NotFoundException(`Matches not found`);
     return matches;
   }
-  async getMatchesByFilter(filter: ChannelFilteDto): Promise<Matches[]> {
-    const { name, permissions, status } = filter;
-    const matches = await this.getMatches();
-    // if (name) channels = channels.filter((channel) => channel.name === name);
-    // if (status)
-    //   channels = channels.filter((channel) => channel.status === status);
-    // if (permissions)
-    //   channels = channels.filter(
-    //     (channel) => channel.permissions === permissions
-    //   );
-    // if (!channels) throw new NotFoundException(`Channel not found`);
+  async getMatchesByFilter(filter: MatchesFilteDto): Promise<Matches[]> {
+    const {
+      FirstPlayer,
+      SecondPlayer,
+      scoreFirstPlayer,
+      scoreSecondPlayer,
+      winner,
+    } = filter;
+    let matches = await this.getMatches();
+    if (FirstPlayer)
+      matches = matches.filter(
+        (channel) => channel.FirstPlayer === FirstPlayer
+      );
+    if (SecondPlayer)
+      matches = matches.filter(
+        (channel) => channel.SecondPlayer === SecondPlayer
+      );
+    if (scoreFirstPlayer)
+      matches = matches.filter(
+        (channel) => channel.scoreFirstPlayer === scoreFirstPlayer
+      );
+    if (scoreSecondPlayer)
+      matches = matches.filter(
+        (channel) => channel.scoreSecondPlayer === scoreSecondPlayer
+      );
+    if (winner)
+      matches = matches.filter((channel) => channel.winner === winner);
+    if (!matches) throw new NotFoundException(`Channel not found`);
     return matches;
+  }
+  async getMatchesId(id: string): Promise<Matches> {
+    let found = null;
+    if (isMatches(id))
+      found = await this.matchesRepository.findOne({ where: { id: id } });
+    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
+    return found;
+  }
+  /* ************************************************************************** */
+  /*                   POST                                                     */
+  /* ************************************************************************** */
+
+  async createMatch(matchDto: MatchDto): Promise<Matches> {
+    const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer } =
+      matchDto;
+    const match = this.matchesRepository.create({
+      FirstPlayer,
+      SecondPlayer,
+      scoreFirstPlayer,
+      scoreSecondPlayer,
+    });
+    try {
+      await this.matchesRepository.save(match);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+    return match;
   }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
 
+  async deleteMatch(id: string): Promise<boolean> {
+    const found = await this.getMatchesId(id);
+    if (!found) throw new NotFoundException(`Match \`${id}' not found`);
+    const target = await this.matchesRepository.delete(found);
+    if (target.affected === 0)
+      throw new NotFoundException(`Match \`${id}' not found`);
+    return true;
+  }
+
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
+
+  async editMatch(id: string, matchDto: MatchDto): Promise<Matches> {
+    const {
+      FirstPlayer,
+      SecondPlayer,
+      scoreFirstPlayer,
+      scoreSecondPlayer,
+      winner,
+    } = matchDto;
+    const found = await this.getMatchesId(id);
+    if (FirstPlayer) found.FirstPlayer = FirstPlayer;
+    if (SecondPlayer) found.SecondPlayer = SecondPlayer;
+    if (scoreFirstPlayer) found.scoreFirstPlayer = scoreFirstPlayer;
+    if (scoreSecondPlayer) found.scoreSecondPlayer = scoreSecondPlayer;
+    if (winner) found.winner = winner;
+    this.matchesRepository.save(found);
+    return found;
+  }
 }

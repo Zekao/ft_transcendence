@@ -27,6 +27,7 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
+
   @Get()
   @ApiOperation({ summary: "Return list of all existing channels" })
   getUsers(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
@@ -34,20 +35,7 @@ export class ChannelsController {
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
   }
-  @Get("/:id/status")
-  @ApiOperation({
-    summary: "Return the status of a specified channel",
-  })
-  getChannelStatus(@Param("id") id: string): Promise<string> {
-    return this.channelService.getChannelStatus(id);
-  }
-  @Get("/:id/permission")
-  @ApiOperation({
-    summary: "Return the permission of a specified channel",
-  })
-  getChannelPermission(@Param("id") id: string): Promise<string> {
-    return this.channelService.getChannelPermissions(id);
-  }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
@@ -66,6 +54,7 @@ export class ChannelsController {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
+
   @Delete("/:id")
   @ApiOperation({
     summary: "Delete a specified channel",

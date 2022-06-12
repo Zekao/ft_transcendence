@@ -38,9 +38,71 @@ let MatchesService = class MatchesService {
         return matches;
     }
     async getMatchesByFilter(filter) {
-        const { name, permissions, status } = filter;
-        const matches = await this.getMatches();
+        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, } = filter;
+        let matches = await this.getMatches();
+        if (FirstPlayer)
+            matches = matches.filter((channel) => channel.FirstPlayer === FirstPlayer);
+        if (SecondPlayer)
+            matches = matches.filter((channel) => channel.SecondPlayer === SecondPlayer);
+        if (scoreFirstPlayer)
+            matches = matches.filter((channel) => channel.scoreFirstPlayer === scoreFirstPlayer);
+        if (scoreSecondPlayer)
+            matches = matches.filter((channel) => channel.scoreSecondPlayer === scoreSecondPlayer);
+        if (winner)
+            matches = matches.filter((channel) => channel.winner === winner);
+        if (!matches)
+            throw new common_1.NotFoundException(`Channel not found`);
         return matches;
+    }
+    async getMatchesId(id) {
+        let found = null;
+        if (isMatches(id))
+            found = await this.matchesRepository.findOne({ where: { id: id } });
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return found;
+    }
+    async createMatch(matchDto) {
+        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer } = matchDto;
+        const match = this.matchesRepository.create({
+            FirstPlayer,
+            SecondPlayer,
+            scoreFirstPlayer,
+            scoreSecondPlayer,
+        });
+        try {
+            await this.matchesRepository.save(match);
+        }
+        catch (error) {
+            console.log(error);
+            throw new common_1.InternalServerErrorException();
+        }
+        return match;
+    }
+    async deleteMatch(id) {
+        const found = await this.getMatchesId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`Match \`${id}' not found`);
+        const target = await this.matchesRepository.delete(found);
+        if (target.affected === 0)
+            throw new common_1.NotFoundException(`Match \`${id}' not found`);
+        return true;
+    }
+    async editMatch(id, matchDto) {
+        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, } = matchDto;
+        const found = await this.getMatchesId(id);
+        if (FirstPlayer)
+            found.FirstPlayer = FirstPlayer;
+        if (SecondPlayer)
+            found.SecondPlayer = SecondPlayer;
+        if (scoreFirstPlayer)
+            found.scoreFirstPlayer = scoreFirstPlayer;
+        if (scoreSecondPlayer)
+            found.scoreSecondPlayer = scoreSecondPlayer;
+        if (winner)
+            found.winner = winner;
+        this.matchesRepository.save(found);
+        return found;
     }
 };
 MatchesService = __decorate([
