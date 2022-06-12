@@ -25,6 +25,7 @@ import * as bcrypt from "bcrypt";
 export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
+  myMatches?: boolean;
 }
 
 @Injectable()
@@ -93,6 +94,7 @@ export class UsersService {
     if (RelationsPicker) {
       RelationsPicker.withFriends && relations.push("friends");
       RelationsPicker.withBlocked && relations.push("blockedUsers");
+      RelationsPicker.myMatches && relations.push("myMatches");
     }
     let found = null;
     if (isUuid(id))

@@ -9,6 +9,7 @@ import { UserDto } from "./dto/user.dto";
 export declare class UserRelationsPicker {
     withFriends?: boolean;
     withBlocked?: boolean;
+    myMatches?: boolean;
 }
 export declare class UsersService {
     private UserRepository;

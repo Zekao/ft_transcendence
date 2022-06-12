@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const matches_entity_1 = require("./matches.entity");
+const users_service_1 = require("../users/users.service");
 function isMatches(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
@@ -28,8 +29,9 @@ function isMatches(id) {
         splited[4].length === 12);
 }
 let MatchesService = class MatchesService {
-    constructor(matchesRepository) {
+    constructor(matchesRepository, userService) {
         this.matchesRepository = matchesRepository;
+        this.userService = userService;
     }
     async getMatches() {
         const matches = await this.matchesRepository.find();
@@ -108,7 +110,8 @@ let MatchesService = class MatchesService {
 MatchesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(matches_entity_1.Matches)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        users_service_1.UsersService])
 ], MatchesService);
 exports.MatchesService = MatchesService;
 //# sourceMappingURL=matches.service.js.map

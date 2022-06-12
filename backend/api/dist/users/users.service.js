@@ -89,6 +89,7 @@ let UsersService = class UsersService {
         if (RelationsPicker) {
             RelationsPicker.withFriends && relations.push("friends");
             RelationsPicker.withBlocked && relations.push("blockedUsers");
+            RelationsPicker.myMatches && relations.push("myMatches");
         }
         let found = null;
         if ((0, utils_1.isUuid)(id))
