@@ -13,6 +13,7 @@ exports.Matches = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const typeorm_1 = require("typeorm");
 const users_entity_1 = require("../users/users.entity");
+const matches_enum_1 = require("./matches.enum");
 let Matches = class Matches {
 };
 __decorate([
@@ -21,11 +22,11 @@ __decorate([
     __metadata("design:type", String)
 ], Matches.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Matches.prototype, "FirstPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Matches.prototype, "SecondPlayer", void 0);
 __decorate([
@@ -40,6 +41,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Matches.prototype, "winner", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Matches.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matches),

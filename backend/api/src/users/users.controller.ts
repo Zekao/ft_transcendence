@@ -125,6 +125,18 @@ export class UsersController {
     return this.UsersService.getFriends(user.id);
   }
 
+  @Get("/:id/matches")
+  @ApiOperation({
+    summary: "Return the list of matches of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getMatch(@Request() req, @Param("id") id: string) {
+    return this.UsersService.getMatches(id);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get("/me/matches")
   @ApiOperation({

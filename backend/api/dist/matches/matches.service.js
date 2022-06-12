@@ -18,6 +18,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const matches_entity_1 = require("./matches.entity");
 const users_service_1 = require("../users/users.service");
+const matches_enum_1 = require("./matches.enum");
 function isMatches(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
@@ -40,16 +41,18 @@ let MatchesService = class MatchesService {
         return matches;
     }
     async getMatchesByFilter(filter) {
-        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, } = filter;
+        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, status, } = filter;
         let matches = await this.getMatches();
         if (FirstPlayer)
-            matches = matches.filter((channel) => channel.FirstPlayer === FirstPlayer);
+            matches = matches.filter((matches) => matches.FirstPlayer === FirstPlayer);
         if (SecondPlayer)
-            matches = matches.filter((channel) => channel.SecondPlayer === SecondPlayer);
+            matches = matches.filter((matches) => matches.SecondPlayer === SecondPlayer);
         if (scoreFirstPlayer)
-            matches = matches.filter((channel) => channel.scoreFirstPlayer === scoreFirstPlayer);
+            matches = matches.filter((matches) => matches.scoreFirstPlayer === scoreFirstPlayer);
         if (scoreSecondPlayer)
-            matches = matches.filter((channel) => channel.scoreSecondPlayer === scoreSecondPlayer);
+            matches = matches.filter((matches) => matches.scoreSecondPlayer === scoreSecondPlayer);
+        if (status)
+            matches = matches.filter((channel) => channel.status === status);
         if (winner)
             matches = matches.filter((channel) => channel.winner === winner);
         if (!matches)
@@ -64,15 +67,14 @@ let MatchesService = class MatchesService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
-    async createMatch(matchDto) {
-        const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer } = matchDto;
+    async createMatch(user) {
         const match = this.matchesRepository.create({
-            FirstPlayer,
-            SecondPlayer,
-            scoreFirstPlayer,
-            scoreSecondPlayer,
+            FirstPlayer: user.id,
         });
+        match.player = [];
+        match.player.push(user);
         try {
+            match.status = matches_enum_1.MatchStatus.PENDING;
             await this.matchesRepository.save(match);
         }
         catch (error) {
@@ -81,13 +83,37 @@ let MatchesService = class MatchesService {
         }
         return match;
     }
-    async addPlayerToMatch(id, match_id) {
-        const found = await this.userService.getUserId(id, { myMatches: true });
-        const match = await this.getMatchesId(match_id);
-        if (!found.matches)
-            found.matches = [];
-        found.matches.push(match);
-        await this.userService.saveUser(found);
+    async addMatchToPlayer(player, match) {
+        player.matches.push(match);
+        await this.userService.saveUser(player);
+        return match;
+    }
+    async addPlayerToMatch(player, match) {
+        if (!match.SecondPlayer)
+            match.SecondPlayer = player.id;
+        else
+            throw new common_1.UnauthorizedException("Match is full");
+        match.player.push(player);
+        this.matchesRepository.save(match);
+        return match;
+    }
+    async findMatch() {
+        let Allmatches = await this.getMatches();
+        Allmatches = Allmatches.filter((Allmatches) => Allmatches.status === matches_enum_1.MatchStatus.PENDING);
+        if (!Allmatches)
+            new common_1.NotFoundException("No match are available");
+        return Allmatches.at[0].id;
+    }
+    async defineMatch(id) {
+        let match;
+        try {
+            match = await this.findMatch();
+            const player = await this.userService.getUserId(id);
+            await this.addPlayerToMatch(player, match);
+        }
+        catch (err) {
+            console.log(err);
+        }
         return match;
     }
     async deleteMatch(id) {

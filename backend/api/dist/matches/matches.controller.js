@@ -28,12 +28,13 @@ let MatchesController = class MatchesController {
             return this.matchService.getMatchesByFilter(filters);
         return this.matchService.getMatches();
     }
-    createMatch(matchesDto) {
-        return this.matchService.createMatch(matchesDto);
-    }
-    addUserToMatchMatch(req, id) {
+    createMatch(req) {
         const user = req.user;
-        return this.matchService.addPlayerToMatch(user.id, id);
+        return this.matchService.createMatch(user);
+    }
+    addUserToMatchMatch(req) {
+        const user = req.user;
+        return this.matchService.defineMatch(user.id);
     }
     deleteUser(id) {
         return this.matchService.deleteMatch(id);
@@ -51,25 +52,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "getMatches", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/create"),
     (0, swagger_1.ApiOperation)({
         summary: "Create a new match",
     }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [matches_dto_1.MatchDto]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "createMatch", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)("/:id"),
+    (0, common_1.Post)("/join"),
     (0, swagger_1.ApiOperation)({
-        summary: "Add a user to the match",
+        summary: "Join a match",
     }),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MatchesController.prototype, "addUserToMatchMatch", null);
 __decorate([

@@ -13,6 +13,7 @@ export declare class UsersController {
     getUserId(req: any, id: string): Promise<User>;
     getAvatar(req: any, id: string, res: any): Promise<any>;
     getFriends(req: any, id: string): Promise<UserDto[]>;
+    getMatch(req: any, id: string): Promise<MatchDto[]>;
     getMatches(req: any): Promise<MatchDto[]>;
     getBlocked(req: any, id: string): Promise<UserDto[]>;
     addFriend(req: any, id: string, query: any): Promise<User>;
