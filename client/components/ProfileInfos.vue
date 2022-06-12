@@ -52,10 +52,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-
 export default Vue.extend({
   name: 'ProfileInfos',
-
+  middleware: 'auth',
   data: () => ({
     file: null as Blob | null,
     isLoginValid: false,
@@ -112,3 +111,4 @@ export default Vue.extend({
   },
 })
 </script>
+
