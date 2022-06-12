@@ -159,7 +159,7 @@ let UsersService = class UsersService {
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name: user_name,
-            display_name: user_name,
+            display_name: null,
             email: user_name + "@transcendence.com",
             first_name: first_name,
             last_name: last_name,

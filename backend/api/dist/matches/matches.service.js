@@ -17,6 +17,16 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const matches_entity_1 = require("./matches.entity");
+function isMatches(id) {
+    const splited = id.split("-");
+    return (id.length === 36 &&
+        splited.length === 5 &&
+        splited[0].length === 8 &&
+        splited[1].length === 4 &&
+        splited[2].length === 4 &&
+        splited[3].length === 4 &&
+        splited[4].length === 12);
+}
 let MatchesService = class MatchesService {
     constructor(matchesRepository) {
         this.matchesRepository = matchesRepository;
