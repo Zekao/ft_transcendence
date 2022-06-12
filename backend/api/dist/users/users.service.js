@@ -152,7 +152,7 @@ let UsersService = class UsersService {
         return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
     }
     async createUsers(authCredentialsDto) {
-        const { FortyTwoID, user_name, first_name, last_name, avatar } = authCredentialsDto;
+        const { FortyTwoID, user_name, first_name, last_name } = authCredentialsDto;
         const stat = users_enum_1.UserStatus.ONLINE;
         const user = this.UserRepository.create({
             FortyTwoID: FortyTwoID,
@@ -220,7 +220,6 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
-        await this.deleteAvatar(id.user_name);
         id.avatar = file.filename;
         this.UserRepository.save(id);
         return response;
@@ -240,11 +239,9 @@ let UsersService = class UsersService {
             return false;
         try {
             fs.unlinkSync("image/" + found.avatar);
-            found.avatar = "default.png";
         }
-        catch (err) {
-            return false;
-        }
+        catch (err) { }
+        found.avatar = "default.png";
         this.UserRepository.save(found);
         return true;
     }
