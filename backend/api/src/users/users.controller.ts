@@ -138,6 +138,7 @@ export class UsersController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Post("/me/friends/")
   @ApiOperation({
     summary: "Add a friend to a specified user profile",

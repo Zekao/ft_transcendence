@@ -185,6 +185,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getBlocked", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/me/friends/"),
     (0, swagger_1.ApiOperation)({
         summary: "Add a friend to a specified user profile",
