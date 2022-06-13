@@ -26,8 +26,6 @@
                 <v-icon color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'" >  mdi-message-outline </v-icon>
             </v-btn>
         </v-list-item-icon>
-         <!-- :disabled="friend.status === 'OFFLINE'"> mdi-sword-cross </v-list-item-icon> -->
-        <!-- <v-list-item-icon :color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'"> mdi-message-outline </v-list-item-icon>  -->
       </v-list>
     </v-menu>
 
@@ -76,22 +74,8 @@ export default Vue.extend({
         return this.authUserBlocked.find(friend => friend.id === this.friend.id) !== undefined
     },
     },
- 
-    // isFriend() {
-    //     for (let i = 0; i < this.authUserFriends.length; i++) {
-    //         if (this.authUserFriends[i].user_name === this.friend.user_name) {
-    //             this.isfriend = true;
-    //         }
-    //         }
-    // },
-    //},
+
     
-    // methods: { 
-    //    @arg: this.friend.id => this.userID
-    //     isAuthUserFriendWith(userID: string): boolean {
-    //       return this.authUserFriends.filter(el => el.id === userID).length === 1
-    //     }
-    // },
 
 })
 </script>
