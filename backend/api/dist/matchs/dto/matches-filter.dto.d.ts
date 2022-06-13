@@ -1,4 +1,4 @@
-import { MatchStatus } from "../matches.enum";
+import { MatchStatus } from "../matchs.enum";
 export declare class MatchsFilteDto {
     FirstPlayer?: string;
     SecondPlayer?: string;

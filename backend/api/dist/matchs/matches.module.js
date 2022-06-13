@@ -13,7 +13,7 @@ const auth_module_1 = require("../auth/auth.module");
 const jwt_1 = require("@nestjs/jwt");
 const matchs_entity_1 = require("./matchs.entity");
 const matchs_controller_1 = require("./matchs.controller");
-const matches_service_1 = require("./matches.service");
+const matchs_service_1 = require("./matchs.service");
 const users_module_1 = require("../users/users.module");
 let MatchsModule = class MatchsModule {
 };
@@ -21,8 +21,8 @@ MatchsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([matchs_entity_1.Matchs]), auth_module_1.AuthModule, users_module_1.UsersModule],
         controllers: [matchs_controller_1.MatchsController],
-        providers: [matches_service_1.MatchsService, jwt_1.JwtService],
+        providers: [matchs_service_1.MatchsService, jwt_1.JwtService],
     })
 ], MatchsModule);
 exports.MatchsModule = MatchsModule;
-//# sourceMappingURL=matches.module.js.map
+//# sourceMappingURL=matchs.module.js.map

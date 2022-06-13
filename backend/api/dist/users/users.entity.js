@@ -95,10 +95,10 @@ __decorate([
 ], User.prototype, "ratio", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => matchs_entity_1.Matchs, (matches) => matches.player),
+    (0, typeorm_1.ManyToMany)(() => matchs_entity_1.Matchs, (matchs) => matchs.FirstPlayer || matchs.SecondPlayer),
     (0, typeorm_1.JoinTable)({ name: "MatchHistory" }),
     __metadata("design:type", Array)
-], User.prototype, "matches", void 0);
+], User.prototype, "matchs", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => User_1, (user) => user.friends),
@@ -113,19 +113,19 @@ __decorate([
 ], User.prototype, "blockedUsers", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.members),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.members, { nullable: true }),
     __metadata("design:type", Array)
 ], User.prototype, "joined_channels", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.admins),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.admins, { nullable: true }),
     __metadata("design:type", Array)
 ], User.prototype, "admined_channels", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToOne)(() => channels_entity_1.Channel, (channel) => channel.owner),
+    (0, typeorm_1.ManyToOne)(() => channels_entity_1.Channel, (channel) => channel.owner, { nullable: true }),
+    (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
     __metadata("design:type", Array)
-], User.prototype, "ownered_channel", void 0);
+], User.prototype, "ownered_channels", void 0);
 User = User_1 = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

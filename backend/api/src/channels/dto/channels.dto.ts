@@ -7,9 +7,30 @@ import {
   IsEnum,
   Matches,
 } from "class-validator";
+import { Channel } from "../channels.entity";
+import { UserDto } from "src/users/dto/user.dto";
 import { ChannelPermissions, ChannelStatus } from "../channels.enum";
 
 export class ChannelsDto {
+
+  constructor(channel?: Channel) {
+    if (channel) {
+      this.id = channel.id;
+      this.name = channel.name;
+      this.status = channel.status;
+      this.permissions = channel.permissions;
+      this.password = channel.password;
+      this.members = channel.members;
+      this.admins = channel.admins;
+      this.owner = channel.owner;
+    }
+  }
+
+
+  @IsNotEmpty()
+  @ApiProperty()
+  id: string;
+
   @IsEnum(ChannelPermissions, {
     message: "permissions must be: ON_INVITE, OPEN",
   })
@@ -27,6 +48,18 @@ export class ChannelsDto {
   @MaxLength(8)
   @ApiProperty()
   name: string;
+
+  @ApiProperty()
+  password: string;
+
+  @ApiProperty()
+  members: UserDto[];
+
+  @ApiProperty()
+  admins: UserDto[];
+
+  @ApiProperty({ type: () => UserDto })
+  owner: UserDto;
 }
 
 export class ChannelPasswordDto {

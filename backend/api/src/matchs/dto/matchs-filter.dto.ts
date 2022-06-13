@@ -1,10 +1,11 @@
+import { User } from "src/users/users.entity";
 import { MatchStatus } from "../matchs.enum";
 
 export class MatchsFilteDto {
-  FirstPlayer?: string;
-  SecondPlayer?: string;
+  FirstPlayer?: User;
+  SecondPlayer?: User;
   scoreFirstPlayer?: number;
   scoreSecondPlayer?: number;
-  winner?: string;
+  winner?: User;
   status?: MatchStatus;
 }

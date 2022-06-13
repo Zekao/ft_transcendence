@@ -309,8 +309,8 @@ async function render (to, from, next) {
   this._hadError = Boolean(app.nuxt.err)
 
   // Get route's matched components
-  const matches = []
-  const Components = getMatchedComponents(to, matches)
+  const matchs = []
+  const Components = getMatchedComponents(to, matchs)
 
   // If no Components matched, generate 404
   if (!Components.length) {
@@ -408,7 +408,7 @@ async function render (to, from, next) {
     // Call asyncData & fetch hooks on components matched by the route.
     await Promise.all(Components.map(async (Component, i) => {
       // Check if only children route changed
-      Component._path = compile(to.matched[matches[i]].path)(to.params)
+      Component._path = compile(to.matched[matchs[i]].path)(to.params)
       Component._dataRefresh = false
       const childPathChanged = Component._path !== _lastPaths[i]
       // Refresh component (call asyncData & fetch) when:

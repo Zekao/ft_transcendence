@@ -11,21 +11,21 @@ export interface IMatch {
 }
 
 export const state = () => ({
-  matches: [] as IMatch[],
+  matchs: [] as IMatch[],
 })
 
 export type MatchState = ReturnType<typeof state>
 
 export const mutations: MutationTree<MatchState> = {
-  FETCH: (state, matches: IMatch[]) => {
-    state.matches = matches
+  FETCH: (state, matchs: IMatch[]) => {
+    state.matchs = matchs
   },
 }
 
 export const actions: ActionTree<MatchState, RootState> = {
   async fetch({ commit }) {
     try {
-      const res = await this.$axios.$get('/matches')
+      const res = await this.$axios.$get('/matchs')
       commit('FETCH', res)
       return res
     } catch(err) {

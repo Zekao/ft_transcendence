@@ -171,9 +171,9 @@ __decorate([
 ], UsersController.prototype, "getFriends", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)("/:id/matches"),
+    (0, common_1.Get)("/:id/matchs"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return the list of matches of a specified user profile",
+        summary: "Return the list of matchs of a specified user profile",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",

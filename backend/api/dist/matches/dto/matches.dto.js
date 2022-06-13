@@ -20,4 +20,4 @@ class MatchDto {
     }
 }
 exports.MatchDto = MatchDto;
-//# sourceMappingURL=matches.dto.js.map
+//# sourceMappingURL=matchs.dto.js.map

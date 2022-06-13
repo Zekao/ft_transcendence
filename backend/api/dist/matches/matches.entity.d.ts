@@ -1,5 +1,5 @@
 import { User } from "../users/users.entity";
-import { MatchStatus } from "./matches.enum";
+import { MatchStatus } from "./matchs.enum";
 export declare class Matchs {
     id: string;
     FirstPlayer: string;

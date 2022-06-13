@@ -16,9 +16,9 @@ exports.MatchsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const matches_entity_1 = require("./matches.entity");
+const matchs_entity_1 = require("./matchs.entity");
 const users_service_1 = require("../users/users.service");
-const matches_enum_1 = require("./matches.enum");
+const matchs_enum_1 = require("./matchs.enum");
 function isMatchs(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
@@ -30,51 +30,51 @@ function isMatchs(id) {
         splited[4].length === 12);
 }
 let MatchsService = class MatchsService {
-    constructor(matchesRepository, userService) {
-        this.matchesRepository = matchesRepository;
+    constructor(matchsRepository, userService) {
+        this.matchsRepository = matchsRepository;
         this.userService = userService;
     }
     async getMatchs() {
-        const matches = await this.matchesRepository.find();
-        if (!matches)
+        const matchs = await this.matchsRepository.find();
+        if (!matchs)
             throw new common_1.NotFoundException(`Matchs not found`);
-        return matches;
+        return matchs;
     }
     async getMatchsByFilter(filter) {
         const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, status, } = filter;
-        let matches = await this.getMatchs();
+        let matchs = await this.getMatchs();
         if (FirstPlayer)
-            matches = matches.filter((matches) => matches.FirstPlayer === FirstPlayer);
+            matchs = matchs.filter((matchs) => matchs.FirstPlayer === FirstPlayer);
         if (SecondPlayer)
-            matches = matches.filter((matches) => matches.SecondPlayer === SecondPlayer);
+            matchs = matchs.filter((matchs) => matchs.SecondPlayer === SecondPlayer);
         if (scoreFirstPlayer)
-            matches = matches.filter((matches) => matches.scoreFirstPlayer === scoreFirstPlayer);
+            matchs = matchs.filter((matchs) => matchs.scoreFirstPlayer === scoreFirstPlayer);
         if (scoreSecondPlayer)
-            matches = matches.filter((matches) => matches.scoreSecondPlayer === scoreSecondPlayer);
+            matchs = matchs.filter((matchs) => matchs.scoreSecondPlayer === scoreSecondPlayer);
         if (status)
-            matches = matches.filter((channel) => channel.status === status);
+            matchs = matchs.filter((channel) => channel.status === status);
         if (winner)
-            matches = matches.filter((channel) => channel.winner === winner);
-        if (!matches)
+            matchs = matchs.filter((channel) => channel.winner === winner);
+        if (!matchs)
             throw new common_1.NotFoundException(`Channel not found`);
-        return matches;
+        return matchs;
     }
     async getMatchsId(id) {
         let found = null;
         if (isMatchs(id))
-            found = await this.matchesRepository.findOne({ where: { id: id } });
+            found = await this.matchsRepository.findOne({ where: { id: id } });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-        const match = this.matchesRepository.create({
+        const match = this.matchsRepository.create({
             FirstPlayer: user.id,
         });
         try {
-            match.status = matches_enum_1.MatchStatus.PENDING;
-            await this.matchesRepository.save(match);
+            match.status = matchs_enum_1.MatchStatus.PENDING;
+            await this.matchsRepository.save(match);
             match.player = [];
             match.player.push(user);
         }
@@ -85,9 +85,9 @@ let MatchsService = class MatchsService {
         return match;
     }
     async addMatchToPlayer(player, match) {
-        if (!player.matches)
-            player.matches = [];
-        player.matches.push(match);
+        if (!player.matchs)
+            player.matchs = [];
+        player.matchs.push(match);
         await this.userService.saveUser(player);
         return match;
     }
@@ -98,17 +98,17 @@ let MatchsService = class MatchsService {
             throw new common_1.UnauthorizedException("Match is full");
         if (match.FirstPlayer == player.id)
             throw new common_1.NotFoundException("Cannot join same match");
-        this.matchesRepository.save(match);
+        this.matchsRepository.save(match);
         return match;
     }
     async findMatch() {
-        let Allmatches = await this.getMatchs();
-        if (!Allmatches.length)
+        let Allmatchs = await this.getMatchs();
+        if (!Allmatchs.length)
             throw new common_1.NotFoundException("No match are available");
-        Allmatches = Allmatches.filter((Allmatches) => Allmatches.status === matches_enum_1.MatchStatus.PENDING);
-        if (!Allmatches)
+        Allmatchs = Allmatchs.filter((Allmatchs) => Allmatchs.status === matchs_enum_1.MatchStatus.PENDING);
+        if (!Allmatchs)
             throw new common_1.NotFoundException("No match are available");
-        return Allmatches.at(0);
+        return Allmatchs.at(0);
     }
     async defineMatch(player) {
         let match = null;
@@ -116,8 +116,8 @@ let MatchsService = class MatchsService {
             match = await this.findMatch();
             await this.addPlayerToMatch(player, match);
             await this.addMatchToPlayer(player, match);
-            match.status = matches_enum_1.MatchStatus.STARTED;
-            this.matchesRepository.save(match);
+            match.status = matchs_enum_1.MatchStatus.STARTED;
+            this.matchsRepository.save(match);
         }
         catch (err) {
             return err;
@@ -128,7 +128,7 @@ let MatchsService = class MatchsService {
         const found = await this.getMatchsId(id);
         if (!found)
             throw new common_1.NotFoundException(`Match \`${id}' not found`);
-        const target = await this.matchesRepository.delete(found);
+        const target = await this.matchsRepository.delete(found);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`Match \`${id}' not found`);
         return true;
@@ -146,15 +146,15 @@ let MatchsService = class MatchsService {
             found.scoreSecondPlayer = scoreSecondPlayer;
         if (winner)
             found.winner = winner;
-        this.matchesRepository.save(found);
+        this.matchsRepository.save(found);
         return found;
     }
 };
 MatchsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(matches_entity_1.Matchs)),
+    __param(0, (0, typeorm_1.InjectRepository)(matchs_entity_1.Matchs)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         users_service_1.UsersService])
 ], MatchsService);
 exports.MatchsService = MatchsService;
-//# sourceMappingURL=matches.service.js.map
+//# sourceMappingURL=matchs.service.js.map

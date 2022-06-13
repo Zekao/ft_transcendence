@@ -41,8 +41,10 @@ let ChannelsGateway = class ChannelsGateway {
                 return;
             const sockets = Array.from(this.server.sockets.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                if (channel.ConnectedChannel == socket.data.ConnectedChannel) {
+                    console.log("sended");
                     socket.emit(event, ...args);
+                }
             });
         }
         catch (_a) { }
@@ -51,7 +53,6 @@ let ChannelsGateway = class ChannelsGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async handleConnection(client, ...args) {
-        console.log("HEllo");
         try {
             const user = await this.authService.getUserFromSocket(client);
             const allchan = await this.channelService.getChannel();

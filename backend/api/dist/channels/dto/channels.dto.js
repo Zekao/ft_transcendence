@@ -12,9 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelPasswordDto = exports.ChannelsDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const user_dto_1 = require("../../users/dto/user.dto");
 const channels_enum_1 = require("../channels.enum");
 class ChannelsDto {
+    constructor(channel) {
+        if (channel) {
+            this.id = channel.id;
+            this.name = channel.name;
+            this.status = channel.status;
+            this.permissions = channel.permissions;
+            this.password = channel.password;
+            this.members = channel.members;
+            this.admins = channel.admins;
+            this.owner = channel.owner;
+        }
+    }
 }
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], ChannelsDto.prototype, "id", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(channels_enum_1.ChannelPermissions, {
         message: "permissions must be: ON_INVITE, OPEN",
@@ -38,6 +56,22 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], ChannelsDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Array)
+], ChannelsDto.prototype, "members", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Array)
+], ChannelsDto.prototype, "admins", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: () => user_dto_1.UserDto }),
+    __metadata("design:type", user_dto_1.UserDto)
+], ChannelsDto.prototype, "owner", void 0);
 exports.ChannelsDto = ChannelsDto;
 class ChannelPasswordDto {
 }

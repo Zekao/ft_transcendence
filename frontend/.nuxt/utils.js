@@ -112,17 +112,17 @@ export function sanitizeComponent (Component) {
   return Component
 }
 
-export function getMatchedComponents (route, matches = false, prop = 'components') {
+export function getMatchedComponents (route, matchs = false, prop = 'components') {
   return Array.prototype.concat.apply([], route.matched.map((m, index) => {
     return Object.keys(m[prop]).map((key) => {
-      matches && matches.push(index)
+      matchs && matchs.push(index)
       return m[prop][key]
     })
   }))
 }
 
-export function getMatchedComponentsInstances (route, matches = false) {
-  return getMatchedComponents(route, matches, 'instances')
+export function getMatchedComponentsInstances (route, matchs = false) {
+  return getMatchedComponents(route, matchs, 'instances')
 }
 
 export function flatMapComponents (route, fn) {
@@ -386,7 +386,7 @@ export function normalizeError (err) {
  * @type {RegExp}
  */
 const PATH_REGEXP = new RegExp([
-  // Match escaped characters that would otherwise appear in future matches.
+  // Match escaped characters that would otherwise appear in future matchs.
   // This allows the user to escape special characters that won't transform.
   '(\\\\.)',
   // Match Express-style parameters and un-named parameters with a prefix
@@ -519,12 +519,12 @@ function escapeGroup (group) {
  */
 function tokensToFunction (tokens, options) {
   // Compile all the tokens into regexps.
-  const matches = new Array(tokens.length)
+  const matchs = new Array(tokens.length)
 
   // Compile all the patterns before compilation.
   for (let i = 0; i < tokens.length; i++) {
     if (typeof tokens[i] === 'object') {
-      matches[i] = new RegExp('^(?:' + tokens[i].pattern + ')$', flags(options))
+      matchs[i] = new RegExp('^(?:' + tokens[i].pattern + ')$', flags(options))
     }
   }
 
@@ -575,7 +575,7 @@ function tokensToFunction (tokens, options) {
         for (let j = 0; j < value.length; j++) {
           segment = encode(value[j])
 
-          if (!matches[i].test(segment)) {
+          if (!matchs[i].test(segment)) {
             throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '", but received `' + JSON.stringify(segment) + '`')
           }
 
@@ -587,7 +587,7 @@ function tokensToFunction (tokens, options) {
 
       segment = token.asterisk ? encodeAsterisk(value) : encode(value)
 
-      if (!matches[i].test(segment)) {
+      if (!matchs[i].test(segment)) {
         throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
       }
 

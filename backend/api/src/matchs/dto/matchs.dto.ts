@@ -6,6 +6,7 @@ import {
   MinLength,
   IsEnum,
 } from "class-validator";
+import { User } from "src/users/users.entity";
 import { UserDto } from "../../users/dto/user.dto";
 import { Matchs } from "../matchs.entity";
 import { MatchStatus } from "../matchs.enum";
@@ -20,18 +21,18 @@ export class MatchDto {
       this.scoreSecondPlayer = match.scoreSecondPlayer;
       this.winner = match.winner;
       this.status = match.status;
-      if (match.player)
-        this.player = match.player.map((play) => {
+      if (match.specs)
+        this.specs = match.specs.map((play) => {
           return new UserDto(play);
         });
     }
   }
   id: string;
-  FirstPlayer: string;
-  SecondPlayer: string;
+  FirstPlayer: UserDto;
+  SecondPlayer: UserDto;
   scoreFirstPlayer: number;
   scoreSecondPlayer: number;
-  winner: string;
+  winner: UserDto;
   status: MatchStatus;
-  player: UserDto[];
+  specs: UserDto[];
 }

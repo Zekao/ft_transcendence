@@ -6,7 +6,7 @@
 #    By: unknow <unknow@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/13 14:58:21 by unknow           ###   ########.fr        #
+#    Updated: 2022/06/13 20:59:10 by unknow           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,10 @@ DIR=.
 C=api
 
 up:
-	@docker-compose -f docker-compose.yaml up --build -d
+	@docker-compose -f docker-compose.yaml up -d
 
 show-logs:
-	@docker-compose -f docker-compose.yaml up --build
+	@docker-compose -f docker-compose.yaml up
 
 re-show-logs: rm show-logs
 

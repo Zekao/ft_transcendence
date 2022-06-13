@@ -1,11 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Channel } from "src/channels/channels.entity";
+import { ChannelsDto } from "src/channels/dto/channels.dto";
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Matchs } from "../matchs/matchs.entity";
@@ -60,9 +62,9 @@ export class User {
   ratio: number;
 
   @ApiProperty()
-  @ManyToMany(() => Matchs, (matches) => matches.player)
+  @ManyToMany(() => Matchs, (matchs) => matchs.FirstPlayer || matchs.SecondPlayer)
   @JoinTable({ name: "MatchHistory" })
-  matches: Matchs[];
+  matchs: Matchs[];
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.friends)
@@ -75,14 +77,14 @@ export class User {
   blockedUsers: User[];
 
   @ApiProperty()
-  @ManyToMany(() => Channel, (channel) => channel.members)
+  @ManyToMany(() => Channel, (channel) => channel.members, { nullable: true })
   joined_channels: Channel[];
 
   @ApiProperty()
-  @ManyToMany(() => Channel, (channel) => channel.admins)
+  @ManyToMany(() => Channel, (channel) => channel.admins, { nullable: true })
   admined_channels: Channel[];
 
-  @ApiProperty()
-  @ManyToOne(() => Channel, (channel) => channel.owner)
-  ownered_channel: Channel[];
+  @ManyToOne(() => Channel, (channel) => channel.owner, { nullable: true })
+  @ApiProperty({ type: () => Channel })
+  ownered_channels: ChannelsDto[];
 }
