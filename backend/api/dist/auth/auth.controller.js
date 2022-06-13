@@ -87,7 +87,6 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Debugging purpose / Generate token for specified user",
     }),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
@@ -105,7 +104,7 @@ __decorate([
 ], AuthController.prototype, "qrcode", null);
 AuthController = __decorate([
     (0, swagger_1.ApiTags)("auth"),
-    (0, common_1.Controller)("api/auth"),
+    (0, common_1.Controller)("auth"),
     __metadata("design:paramtypes", [auth_services_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;

@@ -31,18 +31,17 @@ let ChannelsGateway = class ChannelsGateway {
     async connectToSocket(client, msg) {
         try {
             const message = client.data.user.user_name + ": " + msg;
-            this.emitChannel(this.server, "Hello");
+            this.emitChannel(client.data, "Hello", message);
         }
         catch (_a) { }
     }
     emitChannel(channel, event, ...args) {
         try {
-            console.log(channel);
-            if (!channel.users)
+            if (!channel.user)
                 return;
-            const sockets = Array.from(this.server.sockets.values());
+            const sockets = Array.from(this.server.sockets.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.users.find((user) => user.data.channel == socket.data.channel))
+                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
                     socket.emit(event, ...args);
             });
         }
@@ -78,7 +77,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "connectToSocket", null);
 ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(),
+    (0, websockets_1.WebSocketGateway)(4500),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,

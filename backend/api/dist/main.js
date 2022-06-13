@@ -13,7 +13,7 @@ async function bootstrap() {
         .setVersion("1.0")
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup("api/doc", app, document);
+    swagger_1.SwaggerModule.setup("doc", app, document);
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.enableCors({
         origin: true,

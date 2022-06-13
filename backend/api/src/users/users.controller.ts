@@ -45,7 +45,7 @@ import { UserDto } from "./dto/user.dto";
 import { MatchDto } from "../matches/dto/matches.dto";
 
 @ApiTags("users")
-@Controller("api/users")
+@Controller("users")
 export class UsersController {
   constructor(private UsersService: UsersService) {}
 

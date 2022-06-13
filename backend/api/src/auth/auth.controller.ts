@@ -21,7 +21,7 @@ import {
 import * as fs from "fs";
 
 @ApiTags("auth")
-@Controller("api/auth")
+@Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -62,7 +62,6 @@ export class AuthController {
   @ApiOperation({
     summary: "Debugging purpose / Generate token for specified user",
   })
-  @UseGuards(JwtAuthGuard)
   tokenGen(@Req() req, @Param("id") id: number) {
     return this.authService.GenerateJwtToken(id);
   }
