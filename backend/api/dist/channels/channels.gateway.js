@@ -78,7 +78,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "connectToSocket", null);
 ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(),
+    (0, websockets_1.WebSocketGateway)({ namespace: "chat" }),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,

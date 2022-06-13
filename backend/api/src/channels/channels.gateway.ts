@@ -15,7 +15,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 
-@WebSocketGateway()
+@WebSocketGateway( {namespace: "chat"} )
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {

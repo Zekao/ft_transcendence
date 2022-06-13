@@ -85,8 +85,8 @@ export default {
   io: {
     // module options
     sockets: [{
-      name: 'main',
-      url: 'https://ft.localhost:4500'
+      name: 'webSocket',
+      url: "/chat"
     }]
   }
 }
