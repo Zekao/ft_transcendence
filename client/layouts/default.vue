@@ -108,6 +108,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IChannel } from '@/store/channel'
+import { NuxtSocket } from 'nuxt-socket-io'
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -146,6 +147,7 @@ export default Vue.extend({
     channelPermissionRules: [
       (v: string) => !!v || 'Channel permission is required',
     ],
+    socket: null as NuxtSocket | null,
   }),
 
   computed: {
@@ -154,6 +156,7 @@ export default Vue.extend({
       username: (state: any): string => state.user.authUser.user_name,
       avatar: (state: any): string => state.user.authUser.avatar,
       channels: (state: any): IChannel[] => state.channel.channels,
+      accessToken: (state: any): string => state.token.accessToken
     }),
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
@@ -162,6 +165,13 @@ export default Vue.extend({
 
   mounted() {
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
+    this.socket = this.$nuxtSocket({
+      extraHeaders: {
+        Authorization: this.accessToken,
+        channel: "status",
+      },
+      path: "/api/socket.io/",
+    })
   },
 
   async fetch() {
