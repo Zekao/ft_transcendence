@@ -38,7 +38,7 @@ let UsersService = class UsersService {
             for (const relation of RelationsPicker) {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
-                relation.withMatchs && relations.push("matches");
+                relation.withMatchs && relations.push("matchs");
             }
         }
         const users = await this.UserRepository.find({ relations });
@@ -65,13 +65,13 @@ let UsersService = class UsersService {
     }
     async getMatchs(id) {
         const user = await this.getUserId(id, [{ withMatchs: true }]);
-        if (!user.matches)
+        if (!user.matchs)
             return [];
-        console.log(user.matches);
-        const matches = user.matches.map((match) => {
+        console.log(user.matchs);
+        const matchs = user.matchs.map((match) => {
             return new matchs_dto_1.MatchDto(match);
         });
-        return matches;
+        return matchs;
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);
@@ -110,7 +110,7 @@ let UsersService = class UsersService {
             for (const relation of RelationsPicker) {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
-                relation.withMatchs && relations.push("matches");
+                relation.withMatchs && relations.push("matchs");
             }
         }
         let found = null;

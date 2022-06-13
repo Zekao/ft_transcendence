@@ -1,9 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { UserDto } from "src/users/dto/user.dto";
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "../users/users.entity";
@@ -15,11 +17,11 @@ export class Matchs {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ nullable: true })
-  FirstPlayer: string;
+  @OneToMany(() => User, (user) => (user.matchs))
+  FirstPlayer: User;
 
-  @Column({ nullable: true })
-  SecondPlayer: string;
+  @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
+  SecondPlayer: User;
 
   @Column({ nullable: true })
   scoreFirstPlayer: number;
@@ -27,14 +29,14 @@ export class Matchs {
   @Column({ nullable: true })
   scoreSecondPlayer: number;
 
-  @Column({ nullable: true })
-  winner: string;
+  @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
+  winner: User;
 
   @Column()
   status: MatchStatus;
 
   @ApiProperty()
-  @ManyToMany(() => User, (user) => user.matches)
-  @JoinTable({ name: "PlayerInTheMatch" })
-  player: User[];
+  @ManyToMany(() => User, (user) => user.matchs)
+  @JoinTable({ name: "Spectators" })
+  specs: User[];
 }

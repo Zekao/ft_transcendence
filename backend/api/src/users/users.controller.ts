@@ -136,9 +136,9 @@ export class UsersController {
   }
 
   // @UseGuards(JwtAuthGuard)
-  // @Get("/me/matches")
+  // @Get("/me/matchs")
   // @ApiOperation({
-  //   summary: "Return the list of matches of a specified user profile",
+  //   summary: "Return the list of matchs of a specified user profile",
   // })
   // @ApiOkResponse({
   //   description: "Ok.",
@@ -150,9 +150,9 @@ export class UsersController {
   // }
 
   @UseGuards(JwtAuthGuard)
-  @Get("/:id/matches")
+  @Get("/:id/matchs")
   @ApiOperation({
-    summary: "Return the list of matches of a specified user profile",
+    summary: "Return the list of matchs of a specified user profile",
   })
   @ApiOkResponse({
     description: "Ok.",

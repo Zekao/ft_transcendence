@@ -10,6 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Channel = void 0;
+const swagger_1 = require("@nestjs/swagger");
+const user_dto_1 = require("../users/dto/user.dto");
 const users_entity_1 = require("../users/users.entity");
 const typeorm_1 = require("typeorm");
 const channels_enum_1 = require("./channels.enum");
@@ -36,17 +38,18 @@ __decorate([
     __metadata("design:type", String)
 ], Channel.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.joined_channels, { nullable: true }),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Channel.prototype, "members", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.admined_channels),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.admined_channels, { nullable: true }),
     __metadata("design:type", Array)
 ], Channel.prototype, "admins", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.ownered_channel),
-    __metadata("design:type", users_entity_1.User)
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.ownered_channels),
+    (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
+    __metadata("design:type", user_dto_1.UserDto)
 ], Channel.prototype, "owner", void 0);
 Channel = __decorate([
     (0, typeorm_1.Entity)(),

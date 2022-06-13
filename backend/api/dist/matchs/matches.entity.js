@@ -13,7 +13,7 @@ exports.Matchs = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const typeorm_1 = require("typeorm");
 const users_entity_1 = require("../users/users.entity");
-const matches_enum_1 = require("./matches.enum");
+const matchs_enum_1 = require("./matchs.enum");
 let Matchs = class Matchs {
 };
 __decorate([
@@ -47,7 +47,7 @@ __decorate([
 ], Matchs.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matches),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matchs),
     (0, typeorm_1.JoinTable)({ name: "PlayerInTheMatch" }),
     __metadata("design:type", Array)
 ], Matchs.prototype, "player", void 0);
@@ -55,4 +55,4 @@ Matchs = __decorate([
     (0, typeorm_1.Entity)()
 ], Matchs);
 exports.Matchs = Matchs;
-//# sourceMappingURL=matches.entity.js.map
+//# sourceMappingURL=matchs.entity.js.map

@@ -44,7 +44,7 @@ let MatchsController = class MatchsController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing matches" }),
+    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing matchs" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [matchs_filter_dto_1.MatchsFilteDto]),
@@ -75,7 +75,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({
-        summary: "Delete the specified matches",
+        summary: "Delete the specified matchs",
     }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
@@ -85,7 +85,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)("/:id/edit"),
     (0, swagger_1.ApiOperation)({
-        summary: "Modify attribute of a specified matches",
+        summary: "Modify attribute of a specified matchs",
     }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
@@ -94,8 +94,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "editChannel", null);
 MatchsController = __decorate([
-    (0, swagger_1.ApiTags)("matches"),
-    (0, common_1.Controller)("matches"),
+    (0, swagger_1.ApiTags)("matchs"),
+    (0, common_1.Controller)("matchs"),
     __metadata("design:paramtypes", [matchs_service_1.MatchsService])
 ], MatchsController);
 exports.MatchsController = MatchsController;

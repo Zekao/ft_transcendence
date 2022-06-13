@@ -22,12 +22,12 @@ __decorate([
     __metadata("design:type", String)
 ], Matchs.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs)),
+    __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "FirstPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs), { nullable: true }),
+    __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "SecondPlayer", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
@@ -38,8 +38,8 @@ __decorate([
     __metadata("design:type", Number)
 ], Matchs.prototype, "scoreSecondPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs), { nullable: true }),
+    __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "winner", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
@@ -47,10 +47,10 @@ __decorate([
 ], Matchs.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matches),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.matchs),
     (0, typeorm_1.JoinTable)({ name: "PlayerInTheMatch" }),
     __metadata("design:type", Array)
-], Matchs.prototype, "player", void 0);
+], Matchs.prototype, "specs", void 0);
 Matchs = __decorate([
     (0, typeorm_1.Entity)()
 ], Matchs);

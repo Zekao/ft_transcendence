@@ -4,11 +4,11 @@ import { MatchStatus } from "../matchs.enum";
 export declare class MatchDto {
     constructor(match?: Matchs);
     id: string;
-    FirstPlayer: string;
-    SecondPlayer: string;
+    FirstPlayer: UserDto;
+    SecondPlayer: UserDto;
     scoreFirstPlayer: number;
     scoreSecondPlayer: number;
-    winner: string;
+    winner: UserDto;
     status: MatchStatus;
-    player: UserDto[];
+    specs: UserDto[];
 }
