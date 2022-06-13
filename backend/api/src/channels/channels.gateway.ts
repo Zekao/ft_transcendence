@@ -37,13 +37,14 @@ export class ChannelsGateway
   async connectToSocket(client: Socket, msg: string): Promise<void> {
     try {
       const message = client.data.user.user_name + ": " + msg;
-      this.emitChannel(client, "Hello");
+      this.emitChannel(this.server, "Hello");
       //client.emit('hello', message);
     } catch {}
   }
 
   emitChannel(channel: any, event: string, ...args: any): void {
     try {
+      console.log(channel);
       if (!channel.users) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {

@@ -31,12 +31,13 @@ let ChannelsGateway = class ChannelsGateway {
     async connectToSocket(client, msg) {
         try {
             const message = client.data.user.user_name + ": " + msg;
-            this.emitChannel(client, "Hello");
+            this.emitChannel(this.server, "Hello");
         }
         catch (_a) { }
     }
     emitChannel(channel, event, ...args) {
         try {
+            console.log(channel);
             if (!channel.users)
                 return;
             const sockets = Array.from(this.server.sockets.values());
