@@ -5,7 +5,7 @@
       <v-divider />
       <v-stepper-step :complete="e1 > 2" step="2"> Game </v-stepper-step>
       <v-divider />
-      <v-stepper-step step="3"> Result </v-stepper-step>
+      <v-stepper-step :complete="e1 > 2" step="3"> Result </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>

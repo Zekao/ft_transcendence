@@ -42,6 +42,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
+import { MatchDto } from "../matches/dto/matches.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -110,7 +111,8 @@ export class UsersController {
     return this.UsersService.getAvatar(id, res);
   }
 
-  @Get("/:id/friends")
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/friends")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
   })
@@ -119,10 +121,38 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
-    return this.UsersService.getFriends(id);
+    const user = req.user;
+    return this.UsersService.getFriends(user.id);
   }
 
-  @Get("/:id/blocked")
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/matches")
+  @ApiOperation({
+    summary: "Return the list of matches of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getMatches(@Request() req): Promise<MatchDto[]> {
+    const user = req.user;
+    return this.UsersService.getMatches(user.id);
+  }
+
+  @Get("/:id/matches")
+  @ApiOperation({
+    summary: "Return the list of matches of a specified user profile",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getMatch(@Request() req, @Param("id") id: string) {
+    return this.UsersService.getMatches(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/blocked")
   @ApiOperation({
     summary: "Return the list of friends of a specified user profile",
   })
@@ -131,7 +161,8 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
-    return this.UsersService.getBlocked(id);
+    const user = req.user;
+    return this.UsersService.getBlocked(user.id);
   }
 
   /* ************************************************************************** */
@@ -139,7 +170,7 @@ export class UsersController {
   /* ************************************************************************** */
 
   @UseGuards(JwtAuthGuard)
-  @Post("/me/friends/")
+  @Post("/me/friends")
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
@@ -163,7 +194,7 @@ export class UsersController {
     @Query() query
   ): Promise<User> {
     const user = req.user;
-    return this.UsersService.addBlocked(user, query.blocked);
+    return this.UsersService.addBlocked(user.id, query.blocked);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -224,7 +255,8 @@ export class UsersController {
     return this.UsersService.deleteAvatar(id);
   }
 
-  @Delete("/:id/friends/")
+  @UseGuards(JwtAuthGuard)
+  @Delete("/me/friends")
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
@@ -234,10 +266,11 @@ export class UsersController {
     @Query() query
   ): Promise<User> {
     const user = req.user;
-    return this.UsersService.removeFriend(user, query.friend);
+    return this.UsersService.removeFriend(user.id, query.friend);
   }
 
-  @Delete("/:id/blocked/")
+  @UseGuards(JwtAuthGuard)
+  @Delete("/me/blocked")
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
@@ -246,7 +279,8 @@ export class UsersController {
     @Param("id") id: string,
     @Query() query
   ): Promise<User> {
-    return this.UsersService.removeBlocked(id, query.blocked);
+    const user = req.user;
+    return this.UsersService.removeBlocked(user.id, query.blocked);
   }
 
   /* ************************************************************************** */

@@ -2,10 +2,10 @@
   <v-card
     height="calc(100% - 114px)"
     color="grey lighten-1"
-    class="d-flex justify-center align-center ma-6"
+    class="d-flex justify-center align-center ma-6 pa-4"
   >
     <v-list width="40%">
-      <v-list-item class="justify-center mb-4">
+      <v-list-item class="justify-center my-4">
         <v-avatar size="360"><v-img :src="imagePath" /></v-avatar>
       </v-list-item>
       <v-list-item>
@@ -28,6 +28,7 @@
             :rules="loginRules"
             :counter="24"
             label="Login"
+            prepend-icon="mdi-account"
             required
             @input="(val) => (newLogin = val)"
           >
@@ -56,7 +57,7 @@ export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
   data: () => ({
-    file: null as Blob | null,
+    file: {} as Blob,
     isLoginValid: false,
     newLogin: '',
     loginRules: [
@@ -68,7 +69,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      login: (state: any): string => state.user.authUser.display_name,
+      login: (state: any): string => state.user.authUser.display_name || '',
       avatar: (state: any): string => state.user.authUser.avatar,
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
     }),
@@ -84,7 +85,7 @@ export default Vue.extend({
         formData.append('image', this.file)
         try {
           await this.$store.dispatch('user/updateAuthAvatar', formData)
-          this.file = null
+          this.file = {} as Blob
         } catch (err) {
           console.log(err)
         }

@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gameStatus = void 0;
-var gameStatus;
-(function (gameStatus) {
-    gameStatus["IN_GAME"] = "IN_GAME";
-    gameStatus["OUT_GAME"] = "OUT_GAME";
-})(gameStatus = exports.gameStatus || (exports.gameStatus = {}));
+exports.MatchStatus = void 0;
+var MatchStatus;
+(function (MatchStatus) {
+    MatchStatus["PENDING"] = "PENDING";
+    MatchStatus["STARTED"] = "STARTED";
+    MatchStatus["ENDED"] = "ENDED";
+})(MatchStatus = exports.MatchStatus || (exports.MatchStatus = {}));
 //# sourceMappingURL=matches.enum.js.map

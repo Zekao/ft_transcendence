@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "../users/users.entity";
-import { gameStatus } from "./matches.enum";
+import { MatchStatus } from "./matches.enum";
 
 @Entity()
 export class Matches {
@@ -15,23 +15,26 @@ export class Matches {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   FirstPlayer: string;
 
-  @Column()
+  @Column({ nullable: true })
   SecondPlayer: string;
 
-  @Column()
+  @Column({ nullable: true })
   scoreFirstPlayer: number;
 
-  @Column()
+  @Column({ nullable: true })
   scoreSecondPlayer: number;
 
-  @Column()
+  @Column({ nullable: true })
   winner: string;
+
+  @Column()
+  status: MatchStatus;
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.matches)
-  @JoinTable({ name: "player" })
+  @JoinTable({ name: "PlayerInTheMatch" })
   player: User[];
 }

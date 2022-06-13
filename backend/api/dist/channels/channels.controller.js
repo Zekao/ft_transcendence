@@ -27,12 +27,6 @@ let ChannelsController = class ChannelsController {
             return this.channelService.getChannelByFilter(filters);
         return this.channelService.getChannel();
     }
-    getChannelStatus(id) {
-        return this.channelService.getChannelStatus(id);
-    }
-    getChannelPermission(id) {
-        return this.channelService.getChannelPermissions(id);
-    }
     createChannel(ChannelsDtos, channelPasswordDto) {
         return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
     }
@@ -51,26 +45,6 @@ __decorate([
     __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "getUsers", null);
-__decorate([
-    (0, common_1.Get)("/:id/status"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the status of a specified channel",
-    }),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], ChannelsController.prototype, "getChannelStatus", null);
-__decorate([
-    (0, common_1.Get)("/:id/permission"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the permission of a specified channel",
-    }),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], ChannelsController.prototype, "getChannelPermission", null);
 __decorate([
     (0, common_1.Post)("/create"),
     (0, swagger_1.ApiOperation)({
@@ -94,7 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
 __decorate([
-    (0, common_1.Patch)("/:id/edit"),
+    (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Modify attribute of a specified channel",
     }),

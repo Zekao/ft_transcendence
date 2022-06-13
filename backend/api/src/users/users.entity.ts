@@ -4,6 +4,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Matches } from "../matches/matches.entity";
@@ -59,7 +60,7 @@ export class User {
 
   @ApiProperty()
   @ManyToMany(() => Matches, (matches) => matches.player)
-  @JoinTable({ name: "users" })
+  @JoinTable({ name: "MatchHistory" })
   matches: Matches[];
 
   @ApiProperty()

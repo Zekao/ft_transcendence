@@ -32,6 +32,9 @@ let AuthController = class AuthController {
         this.authService.GenerateJwtToken(req.user);
         console.log(req.user);
     }
+    tokenGen(req, id) {
+        return this.authService.GenerateJwtToken(id);
+    }
     async qrcode() {
         const Test = this.authService.generateQR();
         const file = fs;
@@ -79,6 +82,18 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "test", null);
+__decorate([
+    (0, common_1.Get)("/:id/token"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Debugging purpose / Generate token for specified user",
+    }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "tokenGen", null);
 __decorate([
     (0, common_1.Get)("/qrcode"),
     (0, swagger_1.ApiOperation)({

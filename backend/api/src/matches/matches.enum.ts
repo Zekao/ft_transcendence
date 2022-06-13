@@ -1,4 +1,5 @@
-export enum gameStatus {
-  IN_GAME = "IN_GAME",
-  OUT_GAME = "OUT_GAME",
+export enum MatchStatus {
+  PENDING = "PENDING",
+  STARTED = "STARTED",
+  ENDED = "ENDED",
 }

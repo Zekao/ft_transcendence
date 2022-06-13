@@ -21,10 +21,14 @@ import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
 import { UserDto } from "./dto/user.dto";
 import * as bcrypt from "bcrypt";
+import { MatchesService } from "../matches/matches.service";
+import { Matches } from "../matches/matches.entity";
+import { MatchDto } from "../matches/dto/matches.dto";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
+  myMatches?: boolean;
 }
 
 @Injectable()
@@ -60,6 +64,17 @@ export class UsersService {
     return friends;
   }
 
+  async getMatches(id: string): Promise<MatchDto[]> {
+
+    const user = await this.getUserId(id, { myMatches: true });
+    if (!user.matches) return [];
+    console.log(user.matches);
+    const matches: MatchDto[] = user.matches.map((match) => {
+      return new MatchDto(match);
+    });
+    return matches;
+  }
+
   async getBlocked(id: string): Promise<UserDto[]> {
     const user = await this.getUserId(id, { withBlocked: true });
     if (!user.blockedUsers) return [];
@@ -93,6 +108,7 @@ export class UsersService {
     if (RelationsPicker) {
       RelationsPicker.withFriends && relations.push("friends");
       RelationsPicker.withBlocked && relations.push("blockedUsers");
+      RelationsPicker.myMatches && relations.push("matches");
     }
     let found = null;
     if (isUuid(id))
@@ -106,7 +122,11 @@ export class UsersService {
         relations,
       });
     if (!found)
-      if (!found) throw new NotFoundException(`User \`${id}' not found`);
+      found = await this.UserRepository.findOne({
+        where: { display_name: id },
+        relations,
+      });
+    if (!found) throw new NotFoundException(`User \`${id}' not found`);
     return found;
   }
 
@@ -165,6 +185,11 @@ export class UsersService {
 
   async getAvatar(id: string, @Res() res) {
     return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
+  }
+
+  async saveUser(id: User): Promise<boolean> {
+    this.UserRepository.save(id);
+    return true;
   }
 
   /* ************************************************************************** */
