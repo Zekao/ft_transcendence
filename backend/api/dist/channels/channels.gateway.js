@@ -28,17 +28,10 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async getChannel(client, id) {
+    async connectToSocket(client, msg) {
         try {
-            const channel = await this.channelService.getChannelId(id);
-            console.log("fddf");
-            client.emit("channel", channel);
-        }
-        catch (_a) { }
-    }
-    async getChannelMe(client) {
-        try {
-            client.emit('MyChannel', "chann info");
+            const message = client.data.user.user_name + ": " + msg;
+            this.emitChannel(client, "Hello");
         }
         catch (_a) { }
     }
@@ -48,7 +41,7 @@ let ChannelsGateway = class ChannelsGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.users.find((user) => user.id == socket.data.user.id))
+                if (channel.users.find((user) => user.data.channel == socket.data.channel))
                     socket.emit(event, ...args);
             });
         }
@@ -59,9 +52,12 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async handleConnection(client, ...args) {
         try {
-            const user = await this.authService.getUserIDFromSocket(client);
+            const user = await this.authService.getUserFromSocket(client);
             const allchan = await this.channelService.getChannel();
             client.data.user = user;
+            client.data.ConnectedChannel = client.handshake.headers.channel;
+            if (!client.data.ConnectedChannel)
+                throw new common_1.UnauthorizedException("You must specify a channel");
             client.emit("info", { user, allchan });
             this.logger.log(`Client connected: ${client.id}`);
         }
@@ -79,13 +75,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "getChannel", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("MyChannel"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "getChannelMe", null);
+], ChannelsGateway.prototype, "connectToSocket", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
