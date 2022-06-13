@@ -42,7 +42,7 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -144,9 +144,9 @@ export class UsersController {
   //   description: "Ok.",
   // })
   // @UserApiException(() => NotFoundException)
-  // getMatches(@Request() req): Promise<MatchDto[]> {
+  // getMatchs(@Request() req): Promise<MatchDto[]> {
   //   const user = req.user;
-  //   return this.UsersService.getMatches(user.id);
+  //   return this.UsersService.getMatchs(user.id);
   // }
 
   @UseGuards(JwtAuthGuard)
@@ -159,7 +159,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getMatch(@Request() req, @Param("id") id: string) {
-    return this.UsersService.getMatches((id === 'me') ? req.user.id : id);
+    return this.UsersService.getMatchs((id === 'me') ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)

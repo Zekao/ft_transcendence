@@ -12,14 +12,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MatchesService = void 0;
+exports.MatchsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const matches_entity_1 = require("./matches.entity");
 const users_service_1 = require("../users/users.service");
 const matches_enum_1 = require("./matches.enum");
-function isMatches(id) {
+function isMatchs(id) {
     const splited = id.split("-");
     return (id.length === 36 &&
         splited.length === 5 &&
@@ -29,20 +29,20 @@ function isMatches(id) {
         splited[3].length === 4 &&
         splited[4].length === 12);
 }
-let MatchesService = class MatchesService {
+let MatchsService = class MatchsService {
     constructor(matchesRepository, userService) {
         this.matchesRepository = matchesRepository;
         this.userService = userService;
     }
-    async getMatches() {
+    async getMatchs() {
         const matches = await this.matchesRepository.find();
         if (!matches)
-            throw new common_1.NotFoundException(`Matches not found`);
+            throw new common_1.NotFoundException(`Matchs not found`);
         return matches;
     }
-    async getMatchesByFilter(filter) {
+    async getMatchsByFilter(filter) {
         const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, status, } = filter;
-        let matches = await this.getMatches();
+        let matches = await this.getMatchs();
         if (FirstPlayer)
             matches = matches.filter((matches) => matches.FirstPlayer === FirstPlayer);
         if (SecondPlayer)
@@ -59,15 +59,16 @@ let MatchesService = class MatchesService {
             throw new common_1.NotFoundException(`Channel not found`);
         return matches;
     }
-    async getMatchesId(id) {
+    async getMatchsId(id) {
         let found = null;
-        if (isMatches(id))
+        if (isMatchs(id))
             found = await this.matchesRepository.findOne({ where: { id: id } });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
-    async createMatch(user) {
+    async createMatch(id) {
+        const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
         const match = this.matchesRepository.create({
             FirstPlayer: user.id,
         });
@@ -101,7 +102,7 @@ let MatchesService = class MatchesService {
         return match;
     }
     async findMatch() {
-        let Allmatches = await this.getMatches();
+        let Allmatches = await this.getMatchs();
         if (!Allmatches.length)
             throw new common_1.NotFoundException("No match are available");
         Allmatches = Allmatches.filter((Allmatches) => Allmatches.status === matches_enum_1.MatchStatus.PENDING);
@@ -124,7 +125,7 @@ let MatchesService = class MatchesService {
         return match;
     }
     async deleteMatch(id) {
-        const found = await this.getMatchesId(id);
+        const found = await this.getMatchsId(id);
         if (!found)
             throw new common_1.NotFoundException(`Match \`${id}' not found`);
         const target = await this.matchesRepository.delete(found);
@@ -134,7 +135,7 @@ let MatchesService = class MatchesService {
     }
     async editMatch(id, matchDto) {
         const { FirstPlayer, SecondPlayer, scoreFirstPlayer, scoreSecondPlayer, winner, } = matchDto;
-        const found = await this.getMatchesId(id);
+        const found = await this.getMatchsId(id);
         if (FirstPlayer)
             found.FirstPlayer = FirstPlayer;
         if (SecondPlayer)
@@ -149,11 +150,11 @@ let MatchesService = class MatchesService {
         return found;
     }
 };
-MatchesService = __decorate([
+MatchsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(matches_entity_1.Matches)),
+    __param(0, (0, typeorm_1.InjectRepository)(matches_entity_1.Matchs)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         users_service_1.UsersService])
-], MatchesService);
-exports.MatchesService = MatchesService;
+], MatchsService);
+exports.MatchsService = MatchsService;
 //# sourceMappingURL=matches.service.js.map

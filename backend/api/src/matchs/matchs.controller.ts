@@ -16,16 +16,16 @@ import {
   Body,
 } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { MatchesFilteDto } from "./dto/matches-filter.dto";
-import { Matches } from "./matches.entity";
-import { MatchesService } from "./matches.service";
-import { MatchDto } from "./dto/matches.dto";
+import { MatchsFilteDto } from "./dto/matchs-filter.dto";
+import { Matchs } from "./matchs.entity";
+import { MatchsService } from "./matchs.service";
+import { MatchDto } from "./dto/matchs.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
 @ApiTags("matches")
 @Controller("matches")
-export class MatchesController {
-  constructor(private matchService: MatchesService) {}
+export class MatchsController {
+  constructor(private matchService: MatchsService) {}
 
   /* ************************************************************************** */
   /*                   GET                                                      */
@@ -33,10 +33,10 @@ export class MatchesController {
 
   @Get()
   @ApiOperation({ summary: "Return list of all existing matches" })
-  getMatches(@Query() filters: MatchesFilteDto): Promise<Matches[]> {
+  getMatchs(@Query() filters: MatchsFilteDto): Promise<Matchs[]> {
     if (Object.keys(filters).length)
-      return this.matchService.getMatchesByFilter(filters);
-    return this.matchService.getMatches();
+      return this.matchService.getMatchsByFilter(filters);
+    return this.matchService.getMatchs();
   }
 
   /* ************************************************************************** */
@@ -48,9 +48,8 @@ export class MatchesController {
   @ApiOperation({
     summary: "Create a new match",
   })
-  createMatch(@Request() req): Promise<Matches> {
-    const user = req.user;
-    return this.matchService.createMatch(user);
+  createMatch(@Request() req): Promise<Matchs> {
+    return this.matchService.createMatch(req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -58,7 +57,7 @@ export class MatchesController {
   @ApiOperation({
     summary: "Join a match",
   })
-  addUserToMatchMatch(@Request() req): Promise<Matches> {
+  addUserToMatchMatch(@Request() req): Promise<Matchs> {
     const user = req.user;
     return this.matchService.defineMatch(user);
   }
@@ -86,7 +85,7 @@ export class MatchesController {
   editChannel(
     @Param("id") id: string,
     @Query() edit: MatchDto
-  ): Promise<Matches> {
+  ): Promise<Matchs> {
     return this.matchService.editMatch(id, edit);
   }
 }

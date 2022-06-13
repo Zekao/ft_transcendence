@@ -274,9 +274,9 @@ async function render (to, from, next) {
     _lastPaths = []
     spaFallback = true
   } else {
-    const fromMatches = []
-    _lastPaths = getMatchedComponents(from, fromMatches).map((Component, i) => {
-      return compile(from.matched[fromMatches[i]].path)(from.params)
+    const fromMatchs = []
+    _lastPaths = getMatchedComponents(from, fromMatchs).map((Component, i) => {
+      return compile(from.matched[fromMatchs[i]].path)(from.params)
     })
   }
 

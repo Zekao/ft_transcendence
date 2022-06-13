@@ -22,7 +22,7 @@ const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
-const matches_dto_1 = require("../matches/dto/matches.dto");
+const matchs_dto_1 = require("../matchs/dto/matchs.dto");
 const path_1 = require("path");
 class UserRelationsPicker {
 }
@@ -38,7 +38,7 @@ let UsersService = class UsersService {
             for (const relation of RelationsPicker) {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
-                relation.myMatches && relations.push("matches");
+                relation.withMatchs && relations.push("matches");
             }
         }
         const users = await this.UserRepository.find({ relations });
@@ -63,13 +63,13 @@ let UsersService = class UsersService {
         });
         return friends;
     }
-    async getMatches(id) {
-        const user = await this.getUserId(id, [{ myMatches: true }]);
+    async getMatchs(id) {
+        const user = await this.getUserId(id, [{ withMatchs: true }]);
         if (!user.matches)
             return [];
         console.log(user.matches);
         const matches = user.matches.map((match) => {
-            return new matches_dto_1.MatchDto(match);
+            return new matchs_dto_1.MatchDto(match);
         });
         return matches;
     }
@@ -110,7 +110,7 @@ let UsersService = class UsersService {
             for (const relation of RelationsPicker) {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
-                relation.myMatches && relations.push("matches");
+                relation.withMatchs && relations.push("matches");
             }
         }
         let found = null;

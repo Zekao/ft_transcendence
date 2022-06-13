@@ -3,7 +3,7 @@ import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 export declare class UsersController {
     private UsersService;
     constructor(UsersService: UsersService);

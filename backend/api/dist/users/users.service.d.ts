@@ -6,11 +6,11 @@ import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 export declare class UserRelationsPicker {
     withFriends?: boolean;
     withBlocked?: boolean;
-    myMatches?: boolean;
+    withMatchs?: boolean;
 }
 export declare class UsersService {
     private UserRepository;
@@ -19,7 +19,7 @@ export declare class UsersService {
     getUsers(RelationsPicker?: UserRelationsPicker[]): Promise<User[]>;
     getUserFortyTwo(FortyTwoID: number): Promise<User>;
     getFriends(id: string): Promise<UserDto[]>;
-    getMatches(id: string): Promise<MatchDto[]>;
+    getMatchs(id: string): Promise<MatchDto[]>;
     getBlocked(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string, RelationsPicker?: UserRelationsPicker[]): Promise<User>;

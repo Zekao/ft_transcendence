@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { ChannelsModule } from "./channels/channels.module";
-import { MatchesModule } from "./matches/matches.module";
+import { MatchsModule } from "./matchs/matchs.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 
@@ -12,7 +12,7 @@ import { join } from "path";
     UsersModule,
     AuthModule,
     ChannelsModule,
-    MatchesModule,
+    MatchsModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "image"),
       serveRoot: "/image",

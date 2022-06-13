@@ -49,7 +49,7 @@ let UsersController = class UsersController {
         return this.UsersService.getFriends(user.id);
     }
     getMatch(req, id) {
-        return this.UsersService.getMatches((id === 'me') ? req.user.id : id);
+        return this.UsersService.getMatchs((id === 'me') ? req.user.id : id);
     }
     getBlocked(req, id) {
         const user = req.user;
