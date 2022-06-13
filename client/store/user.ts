@@ -23,7 +23,7 @@ export const state = () => ({
   authUser: {} as IUser,
   authUserFriends: [] as IUser[],
   authUserBlocked: [] as IUser[],
-  authUserMatchs: [] as IMatch[],
+  authUserMatches: [] as IMatch[],
   selectedUserMatchs: [] as IMatch[],
   users: [] as IUser[],
   // rankList: [] as IUser[],
@@ -58,7 +58,7 @@ export const mutations: MutationTree<UserState> = {
     )
   },
   FETCH_AUTH_MATCHES: (state, matches: IMatch[]) => {
-    state.authUserMatchs = matches
+    state.authUserMatches = matches
   },
   FETCH: (state, users: IUser[]) => {
     state.users = users

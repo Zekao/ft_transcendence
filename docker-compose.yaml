@@ -17,7 +17,7 @@ services:
     image: "traefik:v2.4"
     command:
       # Set log level and enable API
-      - "--api.insecure"
+      - "--api.insecure=true"
       # Disable SSL verification on backend
       - "--serverstransport.insecureskipverify=true"
       # Route
@@ -59,8 +59,9 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`ft.localhost`)"
+      - "traefik."
       - "traefik.http.services.client.loadbalancer.server.port=4500"
+      - "traefik.http.routers.client.rule=Host(`ft.localhost`)"
       - "traefik.http.routers.client.entrypoints=websecure"
       - "traefik.http.routers.client.tls=true"
       - "traefik.http.routers.client.tls.certresolver=leresolver"
@@ -81,9 +82,10 @@ services:
       - database
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`ft.localhost`) && PathPrefix(`/api`)"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
+      - "traefik.http.routers.api.rule=Host(`ft.localhost`) && PathPrefix(`/api/`)"
       - "traefik.http.middlewares.pathstrip.stripprefix.prefixes=/api"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.api.middlewares=pathstrip@docker"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls=true"
