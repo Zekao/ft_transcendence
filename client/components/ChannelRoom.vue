@@ -32,7 +32,7 @@ export default Vue.extend({
       },
       path: "/api/socket.io/",
     })
-    this.socket.on('Hello', (msg, cb) => {
+    this.socket.on('channel', (msg, cb) => {
       console.log(msg)
       console.log(cb)
     })
@@ -41,9 +41,7 @@ export default Vue.extend({
   methods: {
     emitHelloWorld() {
       if (this.socket) {
-        this.socket.emit('Hello', {
-            hello: 'world'
-          }, (resp: any) => {
+        this.socket.emit('channel', 'Hello World!', (resp: any) => {
             console.log(resp)
         })
       }
