@@ -71,9 +71,7 @@ export class ChannelsGateway
       const allchanel = await this.channelService.getChannel();
       client.data.user = user;
       client.data.status = client.handshake.headers.status
-      console.log(client.data.status);
       if (client.data.status) {
-        console.log("aa");
         user.status = UserStatus.ONLINE;
         this.userService.saveUser(user);
         return ;
