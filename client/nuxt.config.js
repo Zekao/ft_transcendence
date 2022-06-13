@@ -85,13 +85,8 @@ export default {
   io: {
     // module options
     sockets: [{
-<<<<<<< HEAD
-      name: 'main',
-      url: 'http://localhost:3000'
-=======
       default: true,
-      url: "https://ft.localhost:4500/",
->>>>>>> d5508d04bcf5d010e9b7c06d23706818c9353eee
+      url: "https://ft.localhost:4500",
     }]
   }
 }
