@@ -6,7 +6,7 @@
 #    By: robriard <robriard@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/08 11:41:07 by robriard          #+#    #+#              #
-#    Updated: 2022/06/11 17:00:28 by robriard         ###   ########.fr        #
+#    Updated: 2022/06/13 11:30:58 by robriard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ C=api
 up:
 	@docker-compose -f docker-compose.yaml up --build -d
 
-show-logs: ################################################################
+show-logs:
 	@docker-compose -f docker-compose.yaml up --build
 
 all: up
@@ -54,8 +54,8 @@ ps:
 	@docker-compose -f docker-compose.yaml ps
 
 rm: down
-	@docker volume prune -f
 	@docker system prune -af
+	@docker volume prune -f
 
 logs:
 	@docker logs ${C}
