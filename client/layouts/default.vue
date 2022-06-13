@@ -93,12 +93,7 @@
             </v-list-item-content>
           </template>
           <v-list-item>
-            <v-list-item-action>
-              <v-icon>{{ channel.name }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title v-text="channel.name" />
-            </v-list-item-content>
+            <ChannelRoom :channelName="channel.name" :key="i"/>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -208,8 +203,8 @@ export default Vue.extend({
       try {
         const channel = {
           name: this.channelName,
-          status: (this as any).convertChannelStatus(this.channelStatus),
-          permissions: (this as any).convertChannelPermission(this.channelPermission),
+          status: this.convertChannelStatus(this.channelStatus),
+          permissions: this.convertChannelPermission(this.channelPermission),
           password: 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)

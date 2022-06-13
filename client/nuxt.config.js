@@ -41,6 +41,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'nuxt-socket-io',
     'cookie-universal-nuxt',
   ],
 
@@ -80,4 +81,12 @@ export default {
   publicRuntimeConfig: {
     serverLogin: 'https://ft.localhost:4500/api/auth/login',
   },
+
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'https://ft.localhost:4500/api'
+    }]
+  }
 }
