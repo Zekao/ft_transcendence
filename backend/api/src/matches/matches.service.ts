@@ -111,6 +111,7 @@ export class MatchesService {
   }
 
   async addMatchToPlayer(player: User, match: Matches): Promise<Matches> {
+    if (!player.matches) player.matches = [];
     player.matches.push(match);
     await this.userService.saveUser(player);
     return match;
@@ -121,7 +122,6 @@ export class MatchesService {
     else throw new UnauthorizedException("Match is full");
     if (match.FirstPlayer == player.id)
       throw new NotFoundException("Cannot join same match");
-    console.log(player);
     this.matchesRepository.save(match);
     return match;
   }
@@ -138,15 +138,16 @@ export class MatchesService {
   }
 
   async defineMatch(player: User): Promise<Matches> {
-    let match;
+    let match = null;
     try {
       match = await this.findMatch();
       await this.addPlayerToMatch(player, match);
+      await this.addMatchToPlayer(player, match);
+      match.status = MatchStatus.STARTED;
+      this.matchesRepository.save(match);
     } catch (err) {
       return err;
     }
-    // await this.addMatchToPlayer(player, match);
-
     return match;
   }
 

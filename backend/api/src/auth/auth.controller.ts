@@ -6,6 +6,7 @@ import {
   Req,
   UseGuards,
   Res,
+  Param,
 } from "@nestjs/common";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
@@ -55,6 +56,15 @@ export class AuthController {
     // generer la jwt
     // rediriger la personne vers le front
     console.log(req.user);
+  }
+
+  @Get("/:id/token") // to check that request can be made with the jwt
+  @ApiOperation({
+    summary: "Debugging purpose / Generate token for specified user",
+  })
+  @UseGuards(JwtAuthGuard)
+  tokenGen(@Req() req, @Param("id") id: number) {
+    return this.authService.GenerateJwtToken(id);
   }
 
   @Get("/qrcode") // to check that request can be made with the jwt

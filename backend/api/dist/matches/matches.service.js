@@ -84,6 +84,8 @@ let MatchesService = class MatchesService {
         return match;
     }
     async addMatchToPlayer(player, match) {
+        if (!player.matches)
+            player.matches = [];
         player.matches.push(match);
         await this.userService.saveUser(player);
         return match;
@@ -95,7 +97,6 @@ let MatchesService = class MatchesService {
             throw new common_1.UnauthorizedException("Match is full");
         if (match.FirstPlayer == player.id)
             throw new common_1.NotFoundException("Cannot join same match");
-        console.log(player);
         this.matchesRepository.save(match);
         return match;
     }
@@ -109,10 +110,13 @@ let MatchesService = class MatchesService {
         return Allmatches.at(0);
     }
     async defineMatch(player) {
-        let match;
+        let match = null;
         try {
             match = await this.findMatch();
             await this.addPlayerToMatch(player, match);
+            await this.addMatchToPlayer(player, match);
+            match.status = matches_enum_1.MatchStatus.STARTED;
+            this.matchesRepository.save(match);
         }
         catch (err) {
             return err;
