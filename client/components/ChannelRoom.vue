@@ -29,6 +29,7 @@ export default Vue.extend({
       extraHeaders: {
         Authorization: this.accessToken,
       },
+      path: "/api/socket.io",
     })
     this.socket.on('Hello', (msg, cb) => {
       console.log(msg)

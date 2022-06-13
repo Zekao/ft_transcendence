@@ -86,7 +86,7 @@ export default {
     // module options
     sockets: [{
       name: 'main',
-      url: 'https://ft.localhost:4500/api'
+      url: 'https://ft.localhost:4500'
     }]
   }
 }
