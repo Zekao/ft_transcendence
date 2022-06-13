@@ -17,6 +17,7 @@ const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
+const users_enum_1 = require("../users/users.enum");
 let ChannelsGateway = class ChannelsGateway {
     constructor(jwtService, userService, authService, channelService) {
         this.jwtService = jwtService;
@@ -49,17 +50,28 @@ let ChannelsGateway = class ChannelsGateway {
         catch (_a) { }
     }
     handleDisconnect(client) {
+        const user = client.data.user;
+        console.log(user);
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.OFFLINE;
+            this.userService.saveUser(user);
+        }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
-            const allchan = await this.channelService.getChannel();
+            const allchanel = await this.channelService.getChannel();
             client.data.user = user;
+            if (client.data.status) {
+                user.status = users_enum_1.UserStatus.ONLINE;
+                this.userService.saveUser(user);
+                return;
+            }
             client.data.ConnectedChannel = client.handshake.headers.channel;
             if (!client.data.ConnectedChannel)
                 throw new common_1.UnauthorizedException("You must specify a channel");
-            client.emit("info", { user, allchan });
+            client.emit("info", { user, allchanel });
             this.logger.log(`Client connected: ${client.id}`);
         }
         catch (err) {

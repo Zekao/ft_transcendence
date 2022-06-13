@@ -14,6 +14,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
+import { UserStatus } from "../users/users.enum";
 
 @WebSocketGateway()
 export class ChannelsGateway
@@ -54,19 +55,30 @@ export class ChannelsGateway
   }
 
   handleDisconnect(client: Socket) {
+    const user = client.data.user;
+    console.log(user);
+    if (client.data.status)
+    {
+      user.status = UserStatus.OFFLINE;
+      this.userService.saveUser(user);
+    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
       const user = await this.authService.getUserFromSocket(client);
-
-      const allchan = await this.channelService.getChannel();
+      const allchanel = await this.channelService.getChannel();
       client.data.user = user;
+      if (client.data.status) {
+        user.status = UserStatus.ONLINE;
+        this.userService.saveUser(user);
+        return ;
+      }
       client.data.ConnectedChannel = client.handshake.headers.channel;
       if (!client.data.ConnectedChannel)
         throw new UnauthorizedException("You must specify a channel");
-      client.emit("info", { user, allchan });
+      client.emit("info", { user, allchanel });
       this.logger.log(`Client connected: ${client.id}`);
     } catch (err) {
       return client.disconnect();
