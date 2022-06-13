@@ -1471,7 +1471,7 @@
 
 "@nuxtjs/vuetify@^1.12.3":
   version "1.12.3"
-  resolved "https://registry.npmjs.org/@nuxtjs/vuetify/-/vuetify-1.12.3.tgz"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/vuetify/-/vuetify-1.12.3.tgz#d4adf84e18fd474044bf971e7cc978e25eb16ba1"
   integrity sha512-6uVL3cfESMB00eVjJTNkyU4jvuPTGPn1yteo7lQTH6v+fxHcPaOgvzVYHIKSHIz1DecuOiB5c9b+YjsRP5+C8A==
   dependencies:
     deepmerge "^4.2.2"
@@ -2834,7 +2834,7 @@ caller-path@^2.0.0:
 
 callsite@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/callsite/-/callsite-1.0.0.tgz#280398e5d664bd74038b6f0905153e6e8af1bc20"
   integrity sha512-0vdNRFXn5q+dtOqjfFtmtlI9N2eVZ7LMyEV2iKC5mEEFvSg/69Ml6b/WU2qF8W1nLRa0wiSrDT3Y5jOHZCwKPQ==
 
 callsites@^2.0.0:
@@ -3584,7 +3584,7 @@ debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
 
 decache@^4.6.0:
   version "4.6.1"
-  resolved "https://registry.npmjs.org/decache/-/decache-4.6.1.tgz"
+  resolved "https://registry.yarnpkg.com/decache/-/decache-4.6.1.tgz#5928bfab97a6fcf22a65047a3d07999af36efaf0"
   integrity sha512-ohApBM8u9ygepJCjgBrEZSSxPjc0T/PJkD+uNyxXPkqudyUpdXpwJYp0VISm2WrPVzASU6DZyIi6BWdyw7uJ2Q==
   dependencies:
     callsite "^1.0.0"
@@ -7952,7 +7952,7 @@ sass-loader@10.1.1:
 
 sass-loader@^10.2.0:
   version "10.2.1"
-  resolved "https://registry.npmjs.org/sass-loader/-/sass-loader-10.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-10.2.1.tgz#17e51df313f1a7a203889ce8ff91be362651276e"
   integrity sha512-RRvWl+3K2LSMezIsd008ErK4rk6CulIMSwrcc2aZvjymUgKo/vjXGp1rSWmfTUX7bblEOz8tst4wBwWtCGBqKA==
   dependencies:
     klona "^2.0.4"
@@ -7963,7 +7963,7 @@ sass-loader@^10.2.0:
 
 sass@~1.32.13:
   version "1.32.13"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.32.13.tgz"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.32.13.tgz#8d29c849e625a415bce71609c7cf95e15f74ed00"
   integrity sha512-dEgI9nShraqP7cXQH+lEXVf73WOPCse0QlFzSD8k+1TcOxCMwVXfQlr0jtoluZysQOyJGnfr21dLvYKDJq8HkA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
@@ -9154,7 +9154,7 @@ vue@^2.6.12, vue@^2.6.14:
 
 vuetify-loader@^1.7.3:
   version "1.7.3"
-  resolved "https://registry.npmjs.org/vuetify-loader/-/vuetify-loader-1.7.3.tgz"
+  resolved "https://registry.yarnpkg.com/vuetify-loader/-/vuetify-loader-1.7.3.tgz#404657f4925c828f400fe3269003421d586835c6"
   integrity sha512-1Kt6Rfvuw3i9BBlxC9WTMnU3WEU7IBWQmDX+fYGAVGpzWCX7oHythUIwPCZGShHSYcPMKSDbXTPP8UvT5RNw8Q==
   dependencies:
     decache "^4.6.0"

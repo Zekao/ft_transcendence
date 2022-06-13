@@ -2,10 +2,10 @@
   <v-card
     height="calc(100% - 114px)"
     color="grey lighten-1"
-    class="d-flex justify-center align-center ma-6"
+    class="d-flex justify-center align-center ma-6 pa-4"
   >
     <v-list width="40%">
-      <v-list-item class="justify-center mb-4">
+      <v-list-item class="justify-center my-4">
         <v-avatar size="360"><v-img :src="imagePath" /></v-avatar>
       </v-list-item>
       <v-list-item>
@@ -28,6 +28,7 @@
             :rules="loginRules"
             :counter="24"
             label="Login"
+            prepend-icon="mdi-account"
             required
             @input="(val) => (newLogin = val)"
           >

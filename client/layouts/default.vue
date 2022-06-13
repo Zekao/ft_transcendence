@@ -160,9 +160,13 @@ export default Vue.extend({
       avatar: (state: any): string => state.user.authUser.avatar,
       channels: (state: any): IChannel[] => state.channel.channels,
     }),
-    imagePath() {
+    imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
     },
+  },
+
+  mounted() {
+    if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
   },
 
   async fetch() {

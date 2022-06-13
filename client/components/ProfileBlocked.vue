@@ -17,7 +17,15 @@
     </v-list>
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserBlocked" :key="i">
-        {{ user.name }}
+        <v-list-item-avatar>
+          <v-img :src="user.avatar" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-btn> {{ user.display_name }} </v-btn>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-btn @click="unblocked(user.id)">Unblocked</v-btn>
+        </v-list-item-action>
       </v-list-item>
     </v-list>
   </v-card>
@@ -31,6 +39,13 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileBlocked',
 
+  // data: () => ({
+  //   authUserBlocked: [
+  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
+  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
+  //   ],
+  // }),
+
   computed: {
     ...mapState({
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
@@ -40,5 +55,15 @@ export default Vue.extend({
   async fetch() {
     await this.$store.dispatch('user/fetchAuthBlocked')
   },
+
+  methods: {
+    async unblocked(userID: string) {
+      try {
+        await this.$store.dispatch('user/deleteAuthBlocked', userID)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 })
 </script>
