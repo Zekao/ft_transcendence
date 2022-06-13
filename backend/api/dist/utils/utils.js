@@ -4,7 +4,7 @@ exports.isUuid = void 0;
 const class_validator_1 = require("class-validator");
 function isUuid(id) {
     const splited = id.split("-");
-    for (const s in splited) {
+    for (const s of splited) {
         if (!(0, class_validator_1.isAlphanumeric)(s))
             return false;
     }

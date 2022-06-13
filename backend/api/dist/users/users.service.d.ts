@@ -48,7 +48,7 @@ export declare class UsersService {
     deleteAvatar(id: string): Promise<boolean>;
     deleteAvatarID(user: User): Promise<boolean>;
     removeFriend(id: string, friend_id: string): Promise<User>;
-    removeBlocked(id: string, blockedUsersId: string): Promise<User>;
+    removeBlocked(id: string, blockedUserId: string): Promise<User>;
     patchUser(id: string, body: UsersFiltesDTO): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }

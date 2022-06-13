@@ -2,7 +2,7 @@ import { isAlphanumeric } from "class-validator";
 
 export function isUuid(id: string): boolean {
   const splited: string[] = id.split("-");
-  for (const s in splited) {
+  for (const s of splited) {
     if (!isAlphanumeric(s)) return false;
   }
   return (
