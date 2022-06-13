@@ -1,5 +1,5 @@
 <template>
-  <div> {{ channelName }} </div>
+  <div> {{ channelName }} <v-btn icon @click="emitHelloWorld"><v-icon>mdi-pencil</v-icon></v-btn></div>
 </template>
 
 <script lang="ts">
@@ -41,7 +41,7 @@ export default Vue.extend({
   methods: {
     emitHelloWorld() {
       if (this.socket) {
-        this.socket.emit('Hello', {
+        this.socket.emit('channel', {
             hello: 'world'
           }, (resp: any) => {
             console.log(resp)
