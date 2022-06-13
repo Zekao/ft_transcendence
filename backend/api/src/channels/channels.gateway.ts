@@ -70,7 +70,8 @@ export class ChannelsGateway
       const user = await this.authService.getUserFromSocket(client);
       const allchanel = await this.channelService.getChannel();
       client.data.user = user;
-      console.log(client.data);
+      client.data.status = client.handshake.headers.status
+      console.log(client.data.status);
       if (client.data.status) {
         console.log("aa");
         user.status = UserStatus.ONLINE;
