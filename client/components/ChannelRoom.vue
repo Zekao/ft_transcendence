@@ -25,7 +25,6 @@ export default Vue.extend({
 
   mounted() {
     this.socket = this.$nuxtSocket({
-      channel: '/chat',
       extraHeaders: {
         Authorization: this.accessToken,
         channel: "Hello",
