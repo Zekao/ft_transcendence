@@ -4,6 +4,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   TableInheritance,
 } from "typeorm";
@@ -15,9 +16,6 @@ export class Channel {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  users: User[];
   @Column({ unique: true })
   name: string;
   @Column()
@@ -26,4 +24,14 @@ export class Channel {
   permissions: ChannelPermissions;
   @Column({ nullable: true })
   password: string;
+  
+  @ManyToMany(() => User)
+  @JoinTable()
+  members: User[];
+
+  @ManyToMany(() => User, (user) => user.admined_channels)
+  admins: User[];
+
+  @OneToMany(() => User, (user) => user.ownered_channel)
+  owner: User;
 }

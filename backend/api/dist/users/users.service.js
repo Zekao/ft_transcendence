@@ -97,10 +97,12 @@ let UsersService = class UsersService {
     }
     async getUserId(id, RelationsPicker) {
         const relations = [];
-        for (const relation of RelationsPicker) {
-            relation.withFriends && relations.push("friends");
-            relation.withBlocked && relations.push("blockedUsers");
-            relation.myMatches && relations.push("matches");
+        if (RelationsPicker) {
+            for (const relation of RelationsPicker) {
+                relation.withFriends && relations.push("friends");
+                relation.withBlocked && relations.push("blockedUsers");
+                relation.myMatches && relations.push("matches");
+            }
         }
         let found = null;
         if ((0, utils_1.isUuid)(id))
@@ -214,13 +216,15 @@ let UsersService = class UsersService {
             throw new common_1.ConflictException(`You are blocked by \`${friend_id}'`);
         if (found.friends.find((f) => f.id == friend.id))
             throw new common_1.ConflictException("Already friend");
+        if (found.blockedUsers.find((f) => f.id === friend.id))
+            throw new common_1.ConflictException(`You are blocked \`${friend_id}'`);
         found.friends.push(friend);
         this.UserRepository.save(found);
         return friend;
     }
     async addBlocked(id, blockedUsersId) {
-        if (blockedUsersId === id)
-            throw new common_1.BadRequestException("You can't add yourself");
+        if ((await this.getUserId(blockedUsersId)) === (await this.getUserId(id)))
+            throw new common_1.BadRequestException("You can't block yourself");
         const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
         const blockedUser = await this.getUserId(blockedUsersId, [{ withFriends: true, }]);
         if (!found.blockedUsers)
@@ -276,14 +280,14 @@ let UsersService = class UsersService {
         this.UserRepository.save(user);
         return friend;
     }
-    async removeBlocked(id, blockedUsersId) {
+    async removeBlocked(id, blockedUserId) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);
         if (!user.blockedUsers || !user.blockedUsers.length)
             throw new common_1.NotFoundException(`User \`${id}' has no blocked users`);
-        const blockedUser = await this.getUserId(id);
+        const blockedUser = await this.getUserId(blockedUserId);
         if (!user.blockedUsers.find((f) => f.id == blockedUser.id))
-            throw new common_1.NotFoundException(`User \`${id}' has no blocked user \`${blockedUsersId}'`);
-        user.blockedUsers = user.blockedUsers.filter((f) => f.id == blockedUser.id);
+            throw new common_1.NotFoundException(`User \`${user.user_name}' has no blocked user \`${blockedUser.user_name}'`);
+        user.blockedUsers = user.blockedUsers.filter((f) => f.id != blockedUser.id);
         this.UserRepository.save(user);
         return blockedUser;
     }
