@@ -222,7 +222,7 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File
   ) {
     const user = req.user;
-    return this.UsersService.uploadFile(user.id, file);
+    return this.UsersService.uploadFile(user, file);
   }
 
   /* ************************************************************************** */

@@ -72,7 +72,7 @@ let UsersController = class UsersController {
     }
     async uploadedFile(req, file) {
         const user = req.user;
-        return this.UsersService.uploadFile(user.id, file);
+        return this.UsersService.uploadFile(user, file);
     }
     deleteUser(req, id) {
         return this.UsersService.deleteUser(id);
