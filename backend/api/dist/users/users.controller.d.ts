@@ -9,11 +9,9 @@ export declare class UsersController {
     constructor(UsersService: UsersService);
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
     getRankedUsers(): Promise<User[]>;
-    getProfile(req: any): any;
     getUserId(req: any, id: string): Promise<User>;
     getAvatar(req: any, id: string, res: any): Promise<any>;
     getFriends(req: any): Promise<UserDto[]>;
-    getMatches(req: any): Promise<MatchDto[]>;
     getMatch(req: any, id: string): Promise<MatchDto[]>;
     getBlocked(req: any, id: string): Promise<UserDto[]>;
     addFriend(req: any, query: any): Promise<User>;

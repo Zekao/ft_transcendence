@@ -22,7 +22,7 @@ export declare class UsersService {
     getMatches(id: string): Promise<MatchDto[]>;
     getBlocked(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
-    getUserId(id: string, RelationsPicker?: UserRelationsPicker): Promise<User>;
+    getUserId(id: string, RelationsPicker?: UserRelationsPicker[]): Promise<User>;
     getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;

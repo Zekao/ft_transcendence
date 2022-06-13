@@ -56,7 +56,7 @@ export class UsersService {
   }
 
   async getFriends(id: string): Promise<UserDto[]> {
-    const user = await this.getUserId(id, { withFriends: true });
+    const user = await this.getUserId(id, [{ withFriends: true }]);
     if (!user.friends) return [];
     const friends: UserDto[] = user.friends.map((friend) => {
       return new UserDto(friend);
@@ -66,7 +66,7 @@ export class UsersService {
 
   async getMatches(id: string): Promise<MatchDto[]> {
 
-    const user = await this.getUserId(id, { myMatches: true });
+    const user = await this.getUserId(id, [{ myMatches: true }]);
     if (!user.matches) return [];
     console.log(user.matches);
     const matches: MatchDto[] = user.matches.map((match) => {
@@ -76,7 +76,7 @@ export class UsersService {
   }
 
   async getBlocked(id: string): Promise<UserDto[]> {
-    const user = await this.getUserId(id, { withBlocked: true });
+    const user = await this.getUserId(id, [{ withBlocked: true }]);
     if (!user.blockedUsers) return [];
     const blocked: UserDto[] = user.blockedUsers.map((blocked) => {
       return new UserDto(blocked);
@@ -102,13 +102,13 @@ export class UsersService {
 
   async getUserId(
     id: string,
-    RelationsPicker?: UserRelationsPicker
+    RelationsPicker?: UserRelationsPicker[]
   ): Promise<User> {
     const relations = [];
-    if (RelationsPicker) {
-      RelationsPicker.withFriends && relations.push("friends");
-      RelationsPicker.withBlocked && relations.push("blockedUsers");
-      RelationsPicker.myMatches && relations.push("matches");
+    for (const relation of RelationsPicker) {
+      relation.withFriends && relations.push("friends");
+      relation.withBlocked && relations.push("blockedUsers");
+      relation.myMatches && relations.push("matches");
     }
     let found = null;
     if (isUuid(id))
@@ -231,8 +231,8 @@ export class UsersService {
   async addFriend(id: string, friend_id: string): Promise<User> {
     if (friend_id == id)
       throw new BadRequestException("You can't add yourself");
-    const found = await this.getUserId(id, { withFriends: true });
-    const friend = await this.getUserId(friend_id, { withBlocked: true });
+    const found = await this.getUserId(id, [{ withFriends: true }, { withBlocked: true }]);
+    const friend = await this.getUserId(friend_id, [{ withBlocked: true }]);
     if (!found.friends) found.friends = [];
     if (friend.blockedUsers.find((f) => f.id === found.id))
       throw new ConflictException(`You are blocked by \`${friend_id}'`);
@@ -246,15 +246,15 @@ export class UsersService {
   async addBlocked(id: string, blockedUsersId: string): Promise<User> {
     if (blockedUsersId === id)
       throw new BadRequestException("You can't add yourself");
-    const found = await this.getUserId(id, { withBlocked: true });
-    const blockedUser = await this.getUserId(blockedUsersId, {
-      withFriends: true,
-    });
+    const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
+    const blockedUser = await this.getUserId(blockedUsersId, [{withFriends: true,}]);
     if (!found.blockedUsers) found.blockedUsers = [];
     if (found.blockedUsers.find((f) => f.id == blockedUser.id))
       throw new ConflictException("Already blocked");
     found.blockedUsers.push(blockedUser);
     this.UserRepository.save(found);
+    if (found.friends.find((f) => f.id == blockedUser.id))
+      this.removeFriend(id, blockedUsersId);
     if (blockedUser.friends.find((f) => f.id == found.id))
       this.removeFriend(blockedUsersId, id);
     return blockedUser;
@@ -294,7 +294,7 @@ export class UsersService {
   }
 
   async removeFriend(id: string, friend_id: string): Promise<User> {
-    const user = await this.getUserId(id, { withFriends: true });
+    const user = await this.getUserId(id, [{ withFriends: true }]);
     if (!user.friends || !user.friends.length)
       throw new NotFoundException(`User \`${id}' has no friends`);
     const friend = await this.getUserId(friend_id);
@@ -308,7 +308,7 @@ export class UsersService {
   }
 
   async removeBlocked(id: string, blockedUsersId: string): Promise<User> {
-    const user = await this.getUserId(id, { withBlocked: true });
+    const user = await this.getUserId(id, [{ withBlocked: true }]);
     if (!user.blockedUsers || !user.blockedUsers.length)
       throw new NotFoundException(`User \`${id}' has no blocked users`);
     const blockedUser = await this.getUserId(id);

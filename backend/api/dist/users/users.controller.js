@@ -38,25 +38,18 @@ let UsersController = class UsersController {
     getRankedUsers() {
         return this.UsersService.getRankedUsers();
     }
-    getProfile(req) {
-        return req.user;
-    }
     getUserId(req, id) {
-        return this.UsersService.getUserId(id);
+        return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
     }
     getAvatar(req, id, res) {
-        return this.UsersService.getAvatar(id, res);
+        return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
     }
     getFriends(req) {
         const user = req.user;
         return this.UsersService.getFriends(user.id);
     }
-    getMatches(req) {
-        const user = req.user;
-        return this.UsersService.getMatches(user.id);
-    }
     getMatch(req, id) {
-        return this.UsersService.getMatches(id);
+        return this.UsersService.getMatches((id === 'me') ? req.user.id : id);
     }
     getBlocked(req, id) {
         const user = req.user;
@@ -75,10 +68,10 @@ let UsersController = class UsersController {
         return this.UsersService.uploadFile(user, file);
     }
     deleteUser(req, id) {
-        return this.UsersService.deleteUser(id);
+        return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
     }
     deleteAvatar(req, id) {
-        return this.UsersService.deleteAvatar(id);
+        return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
     }
     removeFriend(req, query) {
         const user = req.user;
@@ -89,7 +82,7 @@ let UsersController = class UsersController {
         return this.UsersService.removeBlocked(user.id, query.blocked);
     }
     patchUser(req, id, body) {
-        return this.UsersService.patchUser(id, body);
+        return this.UsersService.patchUser((id === 'me') ? req.user.id : id, body);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();
@@ -120,22 +113,15 @@ __decorate([
 ], UsersController.prototype, "getRankedUsers", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)("/me"),
+    (0, common_1.Get)("/:id"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return profile of user associated with his credential",
+        summary: "Return profile of user associated with :id",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
         type: [users_entity_1.User],
     }),
     (0, nestjs_swagger_api_exception_decorator_1.ApiException)(() => common_1.UnauthorizedException, { description: "Unauthorized" }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "getProfile", null);
-__decorate([
-    (0, common_1.Get)("/:id"),
     (0, swagger_1.ApiOperation)({ summary: "Return specifc user profile" }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
@@ -149,6 +135,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserId", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/:id/avatar"),
     (0, swagger_1.ApiOperation)({
         summary: "Return the avatar of a specified user profile",
@@ -181,20 +168,6 @@ __decorate([
 ], UsersController.prototype, "getFriends", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)("/me/matches"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return the list of matches of a specified user profile",
-    }),
-    (0, swagger_1.ApiOkResponse)({
-        description: "Ok.",
-    }),
-    (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getMatches", null);
-__decorate([
     (0, common_1.Get)("/:id/matches"),
     (0, swagger_1.ApiOperation)({
         summary: "Return the list of matches of a specified user profile",
@@ -241,7 +214,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
-        summary: "Add a friend to a specified user profile",
+        summary: "Add a blocked user to a specified user profile",
     }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
@@ -275,6 +248,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "uploadedFile", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Delete the specified user profile",
@@ -291,6 +265,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteUser", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)("/:id/avatar"),
     (0, swagger_1.ApiOperation)({
         summary: "Delete the specified avatar for the specified user profile",
@@ -333,6 +308,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "removeBlocked", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Update the specified user profile",
