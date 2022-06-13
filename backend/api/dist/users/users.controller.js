@@ -47,7 +47,7 @@ let UsersController = class UsersController {
     getAvatar(req, id, res) {
         return this.UsersService.getAvatar(id, res);
     }
-    getFriends(req, id) {
+    getFriends(req) {
         const user = req.user;
         return this.UsersService.getFriends(user.id);
     }
@@ -62,11 +62,11 @@ let UsersController = class UsersController {
         const user = req.user;
         return this.UsersService.getBlocked(user.id);
     }
-    addFriend(req, id, query) {
+    addFriend(req, query) {
         const user = req.user;
-        return this.UsersService.addFriend(user, query.friend);
+        return this.UsersService.addFriend(user.id, query.friend);
     }
-    addBlocked(req, id, query) {
+    addBlocked(req, query) {
         const user = req.user;
         return this.UsersService.addBlocked(user.id, query.blocked);
     }
@@ -80,7 +80,7 @@ let UsersController = class UsersController {
     deleteAvatar(req, id) {
         return this.UsersService.deleteAvatar(id);
     }
-    removeFriend(req, id, query) {
+    removeFriend(req, query) {
         const user = req.user;
         return this.UsersService.removeFriend(user.id, query.friend);
     }
@@ -175,9 +175,8 @@ __decorate([
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
@@ -233,10 +232,9 @@ __decorate([
         summary: "Add a friend to a specified user profile",
     }),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addFriend", null);
 __decorate([
@@ -246,10 +244,9 @@ __decorate([
         summary: "Add a friend to a specified user profile",
     }),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addBlocked", null);
 __decorate([
@@ -317,10 +314,9 @@ __decorate([
         summary: "delete a friend to a specified user profile",
     }),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
-    __param(2, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "removeFriend", null);
 __decorate([

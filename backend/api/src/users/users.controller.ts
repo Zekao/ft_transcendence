@@ -120,7 +120,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
+  getFriends(@Request() req): Promise<UserDto[]> {
     const user = req.user;
     return this.UsersService.getFriends(user.id);
   }
@@ -176,11 +176,10 @@ export class UsersController {
   })
   addFriend(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;
-    return this.UsersService.addFriend(user, query.friend);
+    return this.UsersService.addFriend(user.id, query.friend);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -190,7 +189,6 @@ export class UsersController {
   })
   addBlocked(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;
@@ -262,7 +260,6 @@ export class UsersController {
   })
   removeFriend(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;

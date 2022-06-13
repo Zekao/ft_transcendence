@@ -12,19 +12,19 @@ export declare class UsersController {
     getProfile(req: any): any;
     getUserId(req: any, id: string): Promise<User>;
     getAvatar(req: any, id: string, res: any): Promise<any>;
-    getFriends(req: any, id: string): Promise<UserDto[]>;
+    getFriends(req: any): Promise<UserDto[]>;
     getMatches(req: any): Promise<MatchDto[]>;
     getMatch(req: any, id: string): Promise<MatchDto[]>;
     getBlocked(req: any, id: string): Promise<UserDto[]>;
-    addFriend(req: any, id: string, query: any): Promise<User>;
-    addBlocked(req: any, id: string, query: any): Promise<User>;
+    addFriend(req: any, query: any): Promise<User>;
+    addBlocked(req: any, query: any): Promise<User>;
     uploadedFile(req: any, file: Express.Multer.File): Promise<{
         originalname: string;
         filename: string;
     }>;
     deleteUser(req: any, id: string): Promise<boolean>;
     deleteAvatar(req: any, id: string): Promise<boolean>;
-    removeFriend(req: any, id: string, query: any): Promise<User>;
+    removeFriend(req: any, query: any): Promise<User>;
     removeBlocked(req: any, id: string, query: any): Promise<User>;
     patchUser(req: any, id: string, body: any): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
