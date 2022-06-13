@@ -21,7 +21,7 @@
           <v-img :src="user.avatar" />
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-btn> {{ user.display_name }} </v-btn>
+           {{ user.display_name }} 
         </v-list-item-content>
         <v-list-item-action>
           <v-btn @click="unblocked(user.id)">Unblocked</v-btn>

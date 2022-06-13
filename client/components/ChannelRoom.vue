@@ -41,9 +41,7 @@ export default Vue.extend({
   methods: {
     emitHelloWorld() {
       if (this.socket) {
-        this.socket.emit('channel', {
-            hello: 'world'
-          }, (resp: any) => {
+        this.socket.emit('channel', 'Hello World!', (resp: any) => {
             console.log(resp)
         })
       }
