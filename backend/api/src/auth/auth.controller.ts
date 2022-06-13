@@ -21,7 +21,7 @@ import {
 import * as fs from "fs";
 
 @ApiTags("auth")
-@Controller("api/auth")
+@Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 

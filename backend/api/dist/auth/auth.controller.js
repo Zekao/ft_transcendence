@@ -104,7 +104,7 @@ __decorate([
 ], AuthController.prototype, "qrcode", null);
 AuthController = __decorate([
     (0, swagger_1.ApiTags)("auth"),
-    (0, common_1.Controller)("api/auth"),
+    (0, common_1.Controller)("auth"),
     __metadata("design:paramtypes", [auth_services_1.AuthService])
 ], AuthController);
 exports.AuthController = AuthController;
