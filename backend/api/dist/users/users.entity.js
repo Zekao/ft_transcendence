@@ -12,6 +12,7 @@ var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const channels_entity_1 = require("../channels/channels.entity");
 const typeorm_1 = require("typeorm");
 const matches_entity_1 = require("../matches/matches.entity");
 const users_enum_1 = require("./users.enum");
@@ -110,6 +111,21 @@ __decorate([
     (0, typeorm_1.JoinTable)({ name: "blockedUsers" }),
     __metadata("design:type", Array)
 ], User.prototype, "blockedUsers", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.members),
+    __metadata("design:type", Array)
+], User.prototype, "joined_channels", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.admins),
+    __metadata("design:type", Array)
+], User.prototype, "admined_channels", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.ManyToOne)(() => channels_entity_1.Channel, (channel) => channel.owner),
+    __metadata("design:type", Array)
+], User.prototype, "ownered_channel", void 0);
 User = User_1 = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

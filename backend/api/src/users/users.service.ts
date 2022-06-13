@@ -241,14 +241,16 @@ export class UsersService {
       throw new ConflictException(`You are blocked by \`${friend_id}'`);
     if (found.friends.find((f) => f.id == friend.id))
       throw new ConflictException("Already friend");
+    if (found.blockedUsers.find((f) => f.id === friend.id))
+      throw new ConflictException(`You are blocked \`${friend_id}'`);
     found.friends.push(friend);
     this.UserRepository.save(found);
     return friend;
   }
 
   async addBlocked(id: string, blockedUsersId: string): Promise<User> {
-    if (blockedUsersId === id)
-      throw new BadRequestException("You can't add yourself");
+    if ((await this.getUserId(blockedUsersId)) === (await this.getUserId(id)))
+      throw new BadRequestException("You can't block yourself");
     const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
     const blockedUser = await this.getUserId(blockedUsersId, [{withFriends: true,}]);
     if (!found.blockedUsers) found.blockedUsers = [];
@@ -328,16 +330,14 @@ export class UsersService {
     return friend;
   }
 
-  async removeBlocked(id: string, blockedUsersId: string): Promise<User> {
+  async removeBlocked(id: string, blockedUserId: string): Promise<User> {
     const user = await this.getUserId(id, [{ withBlocked: true }]);
     if (!user.blockedUsers || !user.blockedUsers.length)
       throw new NotFoundException(`User \`${id}' has no blocked users`);
-    const blockedUser = await this.getUserId(id);
+    const blockedUser = await this.getUserId(blockedUserId);
     if (!user.blockedUsers.find((f) => f.id == blockedUser.id))
-      throw new NotFoundException(
-        `User \`${id}' has no blocked user \`${blockedUsersId}'`
-      );
-    user.blockedUsers = user.blockedUsers.filter((f) => f.id == blockedUser.id);
+      throw new NotFoundException(`User \`${user.user_name}' has no blocked user \`${blockedUser.user_name}'`);
+    user.blockedUsers = user.blockedUsers.filter((f) => f.id != blockedUser.id);
     this.UserRepository.save(user);
     return blockedUser;
   }
