@@ -20,7 +20,6 @@ import { MatchesFilteDto } from "./dto/matches-filter.dto";
 import { Matches } from "./matches.entity";
 import { MatchesService } from "./matches.service";
 import { MatchDto } from "./dto/matches.dto";
-import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
 @ApiTags("matches")

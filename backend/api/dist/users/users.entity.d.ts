@@ -1,3 +1,4 @@
+import { Channel } from "src/channels/channels.entity";
 import { Matches } from "../matches/matches.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 export declare class User {
@@ -19,4 +20,7 @@ export declare class User {
     matches: Matches[];
     friends: User[];
     blockedUsers: User[];
+    joined_channels: Channel[];
+    admined_channels: Channel[];
+    ownered_channel: Channel[];
 }

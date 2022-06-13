@@ -1,10 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Channel } from "src/channels/channels.entity";
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Matches } from "../matches/matches.entity";
@@ -72,4 +73,16 @@ export class User {
   @ManyToMany(() => User, (user) => user.blockedUsers)
   @JoinTable({ name: "blockedUsers" })
   blockedUsers: User[];
+
+  @ApiProperty()
+  @ManyToMany(() => Channel, (channel) => channel.members)
+  joined_channels: Channel[];
+
+  @ApiProperty()
+  @ManyToMany(() => Channel, (channel) => channel.admins)
+  admined_channels: Channel[];
+
+  @ApiProperty()
+  @ManyToOne(() => Channel, (channel) => channel.owner)
+  ownered_channel: Channel[];
 }

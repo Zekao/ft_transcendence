@@ -20,11 +20,6 @@ __decorate([
     __metadata("design:type", String)
 ], Channel.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User),
-    (0, typeorm_1.JoinTable)(),
-    __metadata("design:type", Array)
-], Channel.prototype, "users", void 0);
-__decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], Channel.prototype, "name", void 0);
@@ -40,6 +35,19 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Channel.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], Channel.prototype, "members", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.admined_channels),
+    __metadata("design:type", Array)
+], Channel.prototype, "admins", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.ownered_channel),
+    __metadata("design:type", users_entity_1.User)
+], Channel.prototype, "owner", void 0);
 Channel = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.TableInheritance)({ column: { type: "varchar", name: "type" } })

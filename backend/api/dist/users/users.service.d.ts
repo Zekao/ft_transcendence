@@ -22,7 +22,7 @@ export declare class UsersService {
     getMatches(id: string): Promise<MatchDto[]>;
     getBlocked(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
-    getUserId(id: string, RelationsPicker?: UserRelationsPicker): Promise<User>;
+    getUserId(id: string, RelationsPicker?: UserRelationsPicker[]): Promise<User>;
     getRankedUsers(): Promise<User[]>;
     getFirstName(id: string): Promise<string>;
     getLastName(id: string): Promise<string>;
@@ -46,8 +46,9 @@ export declare class UsersService {
     }>;
     deleteUser(id: string): Promise<boolean>;
     deleteAvatar(id: string): Promise<boolean>;
+    deleteAvatarID(user: User): Promise<boolean>;
     removeFriend(id: string, friend_id: string): Promise<User>;
-    removeBlocked(id: string, blockedUsersId: string): Promise<User>;
+    removeBlocked(id: string, blockedUserId: string): Promise<User>;
     patchUser(id: string, body: UsersFiltesDTO): Promise<User>;
     patchUpdateRank(): Promise<User[]>;
 }

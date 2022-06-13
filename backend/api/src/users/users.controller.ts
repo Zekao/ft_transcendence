@@ -74,21 +74,30 @@ export class UsersController {
     return this.UsersService.getRankedUsers();
   }
 
+  // @UseGuards(JwtAuthGuard)
+  // @Get("/me")
+  // @ApiOperation({
+  //   summary: "Return profile of user associated with his credential",
+  // })
+  // @ApiOkResponse({
+  //   description: "Ok.",
+  //   type: [User],
+  // })
+  // @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
+  // getProfile(@Request() req) {
+  //   return req.user;
+  // }
+
   @UseGuards(JwtAuthGuard)
-  @Get("/me")
+  @Get("/:id")
   @ApiOperation({
-    summary: "Return profile of user associated with his credential",
+    summary: "Return profile of user associated with :id",
   })
   @ApiOkResponse({
     description: "Ok.",
     type: [User],
   })
   @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
-  getProfile(@Request() req) {
-    return req.user;
-  }
-
-  @Get("/:id")
   @ApiOperation({ summary: "Return specifc user profile" })
   @ApiOkResponse({
     description: "Ok.",
@@ -96,9 +105,10 @@ export class UsersController {
   })
   @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
   getUserId(@Request() req, @Param("id") id: string): Promise<User> {
-    return this.UsersService.getUserId(id);
+    return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/:id/avatar")
   @ApiOperation({
     summary: "Return the avatar of a specified user profile",
@@ -108,7 +118,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getAvatar(@Request() req, @Param("id") id: string, @Res() res) {
-    return this.UsersService.getAvatar(id, res);
+    return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -120,25 +130,26 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getFriends(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
+  getFriends(@Request() req): Promise<UserDto[]> {
     const user = req.user;
     return this.UsersService.getFriends(user.id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get("/me/matches")
-  @ApiOperation({
-    summary: "Return the list of matches of a specified user profile",
-  })
-  @ApiOkResponse({
-    description: "Ok.",
-  })
-  @UserApiException(() => NotFoundException)
-  getMatches(@Request() req): Promise<MatchDto[]> {
-    const user = req.user;
-    return this.UsersService.getMatches(user.id);
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get("/me/matches")
+  // @ApiOperation({
+  //   summary: "Return the list of matches of a specified user profile",
+  // })
+  // @ApiOkResponse({
+  //   description: "Ok.",
+  // })
+  // @UserApiException(() => NotFoundException)
+  // getMatches(@Request() req): Promise<MatchDto[]> {
+  //   const user = req.user;
+  //   return this.UsersService.getMatches(user.id);
+  // }
 
+  @UseGuards(JwtAuthGuard)
   @Get("/:id/matches")
   @ApiOperation({
     summary: "Return the list of matches of a specified user profile",
@@ -148,7 +159,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getMatch(@Request() req, @Param("id") id: string) {
-    return this.UsersService.getMatches(id);
+    return this.UsersService.getMatches((id === 'me') ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -176,21 +187,19 @@ export class UsersController {
   })
   addFriend(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;
-    return this.UsersService.addFriend(user, query.friend);
+    return this.UsersService.addFriend(user.id, query.friend);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("/me/blocked")
   @ApiOperation({
-    summary: "Add a friend to a specified user profile",
+    summary: "Add a blocked user to a specified user profile",
   })
   addBlocked(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;
@@ -228,6 +237,7 @@ export class UsersController {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
+  @UseGuards(JwtAuthGuard)
   @Delete("/:id")
   @ApiOperation({
     summary: "Delete the specified user profile",
@@ -238,9 +248,10 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   deleteUser(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteUser(id);
+    return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete("/:id/avatar")
   @ApiOperation({
     summary: "Delete the specified avatar for the specified user profile",
@@ -252,7 +263,7 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   @AvatarApiException(() => UnauthorizedException)
   deleteAvatar(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteAvatar(id);
+    return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -262,7 +273,6 @@ export class UsersController {
   })
   removeFriend(
     @Request() req,
-    @Param("id") id: string,
     @Query() query
   ): Promise<User> {
     const user = req.user;
@@ -287,6 +297,7 @@ export class UsersController {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Patch("/:id")
   @ApiOperation({
     summary: "Update the specified user profile",
@@ -301,7 +312,7 @@ export class UsersController {
     @Param("id") id: string,
     @Body() body
   ): Promise<User> {
-    return this.UsersService.patchUser(id, body);
+    return this.UsersService.patchUser((id === 'me') ? req.user.id : id, body);
   }
 
   @Patch("/updateRank")
