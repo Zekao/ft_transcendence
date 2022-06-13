@@ -28,6 +28,7 @@ export default Vue.extend({
       channel: '/chat',
       extraHeaders: {
         Authorization: this.accessToken,
+        channel: "Hello",
       },
       path: "/api/socket.io/",
     })
