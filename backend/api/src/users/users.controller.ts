@@ -176,6 +176,19 @@ export class UsersController {
     return this.UsersService.getBlocked(user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/whofollowme")
+  @ApiOperation({
+    summary: "Return all users who have you in friends list",
+  })
+  @ApiOkResponse({
+    description: "Ok.",
+  })
+  @UserApiException(() => NotFoundException)
+  getWhoFollowMe(@Request() req): Promise<UserDto[]> {
+    return this.UsersService.getWhoFollowMe(req.user.id);
+  }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */

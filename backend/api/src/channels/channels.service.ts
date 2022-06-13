@@ -5,30 +5,20 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { UsersService } from "src/users/users.service";
 import { Socket } from "dgram";
+import { isUuid } from "src/utils/utils";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 
-function isChannel(id: string): boolean {
-  const splited: string[] = id.split("-");
-  return (
-    id.length === 36 &&
-    splited.length === 5 &&
-    splited[0].length === 8 &&
-    splited[1].length === 4 &&
-    splited[2].length === 4 &&
-    splited[3].length === 4 &&
-    splited[4].length === 12
-  );
-}
-
 @Injectable()
 export class ChannelsService {
   constructor(
-    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>
+    @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>,
+    private UsersService: UsersService,
   ) {}
 
   /* ************************************************************************** */
@@ -54,7 +44,7 @@ export class ChannelsService {
   }
   async getChannelId(id: string): Promise<Channel> {
     let found = null;
-    if (isChannel(id))
+    if (isUuid(id))
       found = await this.ChannelsRepository.findOne({ where: { id: id } });
     else found = await this.ChannelsRepository.findOne({ where: { name: id } });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);

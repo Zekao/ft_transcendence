@@ -32,8 +32,16 @@ let UsersService = class UsersService {
         this.UserRepository = UserRepository;
         this.JwtService = JwtService;
     }
-    async getUsers() {
-        const users = await this.UserRepository.find();
+    async getUsers(RelationsPicker) {
+        const relations = [];
+        if (RelationsPicker) {
+            for (const relation of RelationsPicker) {
+                relation.withFriends && relations.push("friends");
+                relation.withBlocked && relations.push("blockedUsers");
+                relation.myMatches && relations.push("matches");
+            }
+        }
+        const users = await this.UserRepository.find({ relations });
         if (!users)
             throw new common_1.NotFoundException(`Users not found`);
         return users;
@@ -173,6 +181,24 @@ let UsersService = class UsersService {
     async saveUser(id) {
         this.UserRepository.save(id);
         return true;
+    }
+    async getWhoFollowMe(id) {
+        const users = (await this.getUsers([{ withFriends: true }])).filter((user) => user.id !== id);
+        var whoFollowMe = [];
+        for (const user of users) {
+            if (user.friends.find((f) => f.id === id))
+                whoFollowMe.push((await this.getUserId(user.id)));
+        }
+        return whoFollowMe;
+    }
+    async getWhoBlockMe(id) {
+        const users = (await this.getUsers([{ withBlocked: true }])).filter((user) => user.id !== id);
+        var whoBlockMe = [];
+        for (const user of users) {
+            if (user.blockedUsers.find((f) => f.id === id))
+                whoBlockMe.push((await this.getUserId(user.id)));
+        }
+        return whoBlockMe;
     }
     async createUsers(authCredentialsDto) {
         const { FortyTwoID, user_name, first_name, last_name } = authCredentialsDto;
