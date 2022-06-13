@@ -1,5 +1,5 @@
 <template>
-  <div> {{ channelName }} </div>
+  <div> {{ channelName }} <v-btn icon @click="emitHelloWorld"><v-icon>mdi-pencil</v-icon></v-btn></div>
 </template>
 
 <script lang="ts">
