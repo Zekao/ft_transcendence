@@ -23,6 +23,7 @@ const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
 const matches_dto_1 = require("../matches/dto/matches.dto");
+const path_1 = require("path");
 class UserRelationsPicker {
 }
 exports.UserRelationsPicker = UserRelationsPicker;
@@ -97,10 +98,12 @@ let UsersService = class UsersService {
     }
     async getUserId(id, RelationsPicker) {
         const relations = [];
-        for (const relation of RelationsPicker) {
-            relation.withFriends && relations.push("friends");
-            relation.withBlocked && relations.push("blockedUsers");
-            relation.myMatches && relations.push("matches");
+        if (RelationsPicker) {
+            for (const relation of RelationsPicker) {
+                relation.withFriends && relations.push("friends");
+                relation.withBlocked && relations.push("blockedUsers");
+                relation.myMatches && relations.push("matches");
+            }
         }
         let found = null;
         if ((0, utils_1.isUuid)(id))
@@ -240,6 +243,13 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
+        const split = id.avatar.split('?');
+        const name = split[split.length - 2];
+        const extfile = (0, path_1.extname)(name);
+        if (extfile != (0, path_1.extname)(file.filename)) {
+            id.avatar = name;
+            this.deleteAvatarID(id);
+        }
         id.avatar = file.filename + "?" + new Date().getTime();
         this.UserRepository.save(id);
         return response;
@@ -263,6 +273,17 @@ let UsersService = class UsersService {
         catch (err) { }
         found.avatar = "default.png";
         this.UserRepository.save(found);
+        return true;
+    }
+    async deleteAvatarID(user) {
+        if (user.avatar == "default.png")
+            return false;
+        try {
+            fs.unlinkSync("image/" + user.avatar);
+        }
+        catch (err) { }
+        user.avatar = "default.png";
+        this.UserRepository.save(user);
         return true;
     }
     async removeFriend(id, friend_id) {

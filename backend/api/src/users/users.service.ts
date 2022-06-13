@@ -24,6 +24,7 @@ import * as bcrypt from "bcrypt";
 import { MatchesService } from "../matches/matches.service";
 import { Matches } from "../matches/matches.entity";
 import { MatchDto } from "../matches/dto/matches.dto";
+import { extname } from "path";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
@@ -105,10 +106,12 @@ export class UsersService {
     RelationsPicker?: UserRelationsPicker[]
   ): Promise<User> {
     const relations = [];
-    for (const relation of RelationsPicker) {
-      relation.withFriends && relations.push("friends");
-      relation.withBlocked && relations.push("blockedUsers");
-      relation.myMatches && relations.push("matches");
+    if (RelationsPicker) {
+      for (const relation of RelationsPicker) {
+        relation.withFriends && relations.push("friends");
+        relation.withBlocked && relations.push("blockedUsers");
+        relation.myMatches && relations.push("matches");
+      }
     }
     let found = null;
     if (isUuid(id))
@@ -265,6 +268,14 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
+    const split = id.avatar.split('?');
+    const name = split[split.length - 2]
+    const extfile = extname(name);
+    if (extfile != extname(file.filename))
+    {
+      id.avatar = name;
+      this.deleteAvatarID(id);
+    }
     id.avatar = file.filename + "?" + new Date().getTime();
     this.UserRepository.save(id);
     return response;
@@ -290,6 +301,16 @@ export class UsersService {
     } catch (err) {}
     found.avatar = "default.png";
     this.UserRepository.save(found);
+    return true;
+  }
+
+  async deleteAvatarID(user: User): Promise<boolean> {
+    if (user.avatar == "default.png") return false;
+    try {
+      fs.unlinkSync("image/" + user.avatar);
+    } catch (err) {}
+    user.avatar = "default.png";
+    this.UserRepository.save(user);
     return true;
   }
 
