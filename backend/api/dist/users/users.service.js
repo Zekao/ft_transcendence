@@ -23,6 +23,7 @@ const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
 const matches_dto_1 = require("../matches/dto/matches.dto");
+const path_1 = require("path");
 class UserRelationsPicker {
 }
 exports.UserRelationsPicker = UserRelationsPicker;
@@ -46,7 +47,7 @@ let UsersService = class UsersService {
         return users;
     }
     async getFriends(id) {
-        const user = await this.getUserId(id, { withFriends: true });
+        const user = await this.getUserId(id, [{ withFriends: true }]);
         if (!user.friends)
             return [];
         const friends = user.friends.map((friend) => {
@@ -55,7 +56,7 @@ let UsersService = class UsersService {
         return friends;
     }
     async getMatches(id) {
-        const user = await this.getUserId(id, { myMatches: true });
+        const user = await this.getUserId(id, [{ myMatches: true }]);
         if (!user.matches)
             return [];
         console.log(user.matches);
@@ -65,7 +66,7 @@ let UsersService = class UsersService {
         return matches;
     }
     async getBlocked(id) {
-        const user = await this.getUserId(id, { withBlocked: true });
+        const user = await this.getUserId(id, [{ withBlocked: true }]);
         if (!user.blockedUsers)
             return [];
         const blocked = user.blockedUsers.map((blocked) => {
@@ -98,9 +99,11 @@ let UsersService = class UsersService {
     async getUserId(id, RelationsPicker) {
         const relations = [];
         if (RelationsPicker) {
-            RelationsPicker.withFriends && relations.push("friends");
-            RelationsPicker.withBlocked && relations.push("blockedUsers");
-            RelationsPicker.myMatches && relations.push("matches");
+            for (const relation of RelationsPicker) {
+                relation.withFriends && relations.push("friends");
+                relation.withBlocked && relations.push("blockedUsers");
+                relation.myMatches && relations.push("matches");
+            }
         }
         let found = null;
         if ((0, utils_1.isUuid)(id))
@@ -206,8 +209,8 @@ let UsersService = class UsersService {
     async addFriend(id, friend_id) {
         if (friend_id == id)
             throw new common_1.BadRequestException("You can't add yourself");
-        const found = await this.getUserId(id, { withFriends: true });
-        const friend = await this.getUserId(friend_id, { withBlocked: true });
+        const found = await this.getUserId(id, [{ withFriends: true }, { withBlocked: true }]);
+        const friend = await this.getUserId(friend_id, [{ withBlocked: true }]);
         if (!found.friends)
             found.friends = [];
         if (friend.blockedUsers.find((f) => f.id === found.id))
@@ -221,16 +224,16 @@ let UsersService = class UsersService {
     async addBlocked(id, blockedUsersId) {
         if (blockedUsersId === id)
             throw new common_1.BadRequestException("You can't add yourself");
-        const found = await this.getUserId(id, { withBlocked: true });
-        const blockedUser = await this.getUserId(blockedUsersId, {
-            withFriends: true,
-        });
+        const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
+        const blockedUser = await this.getUserId(blockedUsersId, [{ withFriends: true, }]);
         if (!found.blockedUsers)
             found.blockedUsers = [];
         if (found.blockedUsers.find((f) => f.id == blockedUser.id))
             throw new common_1.ConflictException("Already blocked");
         found.blockedUsers.push(blockedUser);
         this.UserRepository.save(found);
+        if (found.friends.find((f) => f.id == blockedUser.id))
+            this.removeFriend(id, blockedUsersId);
         if (blockedUser.friends.find((f) => f.id == found.id))
             this.removeFriend(blockedUsersId, id);
         return blockedUser;
@@ -240,6 +243,13 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
+        const split = id.avatar.split('?');
+        const name = split[split.length - 2];
+        const extfile = (0, path_1.extname)(name);
+        if (extfile != (0, path_1.extname)(file.filename)) {
+            id.avatar = name;
+            this.deleteAvatarID(id);
+        }
         id.avatar = file.filename + "?" + new Date().getTime();
         this.UserRepository.save(id);
         return response;
@@ -265,8 +275,19 @@ let UsersService = class UsersService {
         this.UserRepository.save(found);
         return true;
     }
+    async deleteAvatarID(user) {
+        if (user.avatar == "default.png")
+            return false;
+        try {
+            fs.unlinkSync("image/" + user.avatar);
+        }
+        catch (err) { }
+        user.avatar = "default.png";
+        this.UserRepository.save(user);
+        return true;
+    }
     async removeFriend(id, friend_id) {
-        const user = await this.getUserId(id, { withFriends: true });
+        const user = await this.getUserId(id, [{ withFriends: true }]);
         if (!user.friends || !user.friends.length)
             throw new common_1.NotFoundException(`User \`${id}' has no friends`);
         const friend = await this.getUserId(friend_id);
@@ -277,7 +298,7 @@ let UsersService = class UsersService {
         return friend;
     }
     async removeBlocked(id, blockedUsersId) {
-        const user = await this.getUserId(id, { withBlocked: true });
+        const user = await this.getUserId(id, [{ withBlocked: true }]);
         if (!user.blockedUsers || !user.blockedUsers.length)
             throw new common_1.NotFoundException(`User \`${id}' has no blocked users`);
         const blockedUser = await this.getUserId(id);
