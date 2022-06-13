@@ -85,8 +85,8 @@ export default {
   io: {
     // module options
     sockets: [{
-      name: 'webSocket',
-      url: "/chat"
+      name: 'main',
+      url: 'http://localhost:3000'
     }]
   }
 }
