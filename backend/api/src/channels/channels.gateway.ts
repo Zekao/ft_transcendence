@@ -46,8 +46,10 @@ export class ChannelsGateway
       if (!channel.user) return;
       const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+        if (channel.ConnectedChannel == socket.data.ConnectedChannel) {
+          console.log("sended");
           socket.emit(event, ...args);
+        }
       });
     } catch {}
   }
@@ -57,7 +59,6 @@ export class ChannelsGateway
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log("HEllo");
     try {
       const user = await this.authService.getUserFromSocket(client);
 

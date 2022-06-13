@@ -32,7 +32,7 @@ export default Vue.extend({
       },
       path: "/api/socket.io/",
     })
-    this.socket.on('Hello', (msg, cb) => {
+    this.socket.on('channel', (msg, cb) => {
       console.log(msg)
       console.log(cb)
     })
