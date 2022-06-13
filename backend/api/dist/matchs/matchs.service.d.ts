@@ -5,9 +5,9 @@ import { MatchDto } from "./dto/matchs.dto";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/users.entity";
 export declare class MatchsService {
-    private matchesRepository;
+    private matchsRepository;
     private userService;
-    constructor(matchesRepository: Repository<Matchs>, userService: UsersService);
+    constructor(matchsRepository: Repository<Matchs>, userService: UsersService);
     getMatchs(): Promise<Matchs[]>;
     getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
     getMatchsId(id: string): Promise<Matchs>;

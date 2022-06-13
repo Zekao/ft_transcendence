@@ -7,6 +7,8 @@ import {
   UnauthorizedException,
   Res,
   Req,
+  Inject,
+  forwardRef,
 } from "@nestjs/common";
 import * as fs from "fs";
 import { UserStatus, UserGameStatus } from "./users.enum";
@@ -48,7 +50,7 @@ export class UsersService {
       for (const relation of RelationsPicker) {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
-        relation.withMatchs && relations.push("matches");
+        relation.withMatchs && relations.push("matchs");
       }
     }
     const users = await this.UserRepository.find({ relations });
@@ -76,12 +78,12 @@ export class UsersService {
   async getMatchs(id: string): Promise<MatchDto[]> {
 
     const user = await this.getUserId(id, [{ withMatchs: true }]);
-    if (!user.matches) return [];
-    console.log(user.matches);
-    const matches: MatchDto[] = user.matches.map((match) => {
+    if (!user.matchs) return [];
+    console.log(user.matchs);
+    const matchs: MatchDto[] = user.matchs.map((match) => {
       return new MatchDto(match);
     });
-    return matches;
+    return matchs;
   }
 
   async getBlocked(id: string): Promise<UserDto[]> {
@@ -118,7 +120,7 @@ export class UsersService {
       for (const relation of RelationsPicker) {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
-        relation.withMatchs && relations.push("matches");
+        relation.withMatchs && relations.push("matchs");
       }
     }
     let found = null;

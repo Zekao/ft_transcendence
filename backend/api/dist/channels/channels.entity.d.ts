@@ -1,3 +1,4 @@
+import { UserDto } from "src/users/dto/user.dto";
 import { User } from "src/users/users.entity";
 import { ChannelPermissions, ChannelStatus } from "./channels.enum";
 export declare class Channel {
@@ -8,5 +9,5 @@ export declare class Channel {
     password: string;
     members: User[];
     admins: User[];
-    owner: User;
+    owner: UserDto;
 }

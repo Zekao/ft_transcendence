@@ -1,7 +1,7 @@
-import { MatchsFilteDto } from "./dto/matches-filter.dto";
-import { Matchs } from "./matches.entity";
-import { MatchsService } from "./matches.service";
-import { MatchDto } from "./dto/matches.dto";
+import { MatchsFilteDto } from "./dto/matchs-filter.dto";
+import { Matchs } from "./matchs.entity";
+import { MatchsService } from "./matchs.service";
+import { MatchDto } from "./dto/matchs.dto";
 export declare class MatchsController {
     private matchService;
     constructor(matchService: MatchsService);

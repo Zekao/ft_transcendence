@@ -22,8 +22,8 @@ import { MatchsService } from "./matchs.service";
 import { MatchDto } from "./dto/matchs.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
-@ApiTags("matches")
-@Controller("matches")
+@ApiTags("matchs")
+@Controller("matchs")
 export class MatchsController {
   constructor(private matchService: MatchsService) {}
 
@@ -32,7 +32,7 @@ export class MatchsController {
   /* ************************************************************************** */
 
   @Get()
-  @ApiOperation({ summary: "Return list of all existing matches" })
+  @ApiOperation({ summary: "Return list of all existing matchs" })
   getMatchs(@Query() filters: MatchsFilteDto): Promise<Matchs[]> {
     if (Object.keys(filters).length)
       return this.matchService.getMatchsByFilter(filters);
@@ -68,7 +68,7 @@ export class MatchsController {
 
   @Delete("/:id")
   @ApiOperation({
-    summary: "Delete the specified matches",
+    summary: "Delete the specified matchs",
   })
   deleteUser(@Param("id") id: string): Promise<boolean> {
     return this.matchService.deleteMatch(id);
@@ -80,7 +80,7 @@ export class MatchsController {
 
   @Patch("/:id/edit")
   @ApiOperation({
-    summary: "Modify attribute of a specified matches",
+    summary: "Modify attribute of a specified matchs",
   })
   editChannel(
     @Param("id") id: string,

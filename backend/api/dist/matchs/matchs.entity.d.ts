@@ -2,11 +2,11 @@ import { User } from "../users/users.entity";
 import { MatchStatus } from "./matchs.enum";
 export declare class Matchs {
     id: string;
-    FirstPlayer: string;
-    SecondPlayer: string;
+    FirstPlayer: User;
+    SecondPlayer: User;
     scoreFirstPlayer: number;
     scoreSecondPlayer: number;
-    winner: string;
+    winner: User;
     status: MatchStatus;
-    player: User[];
+    specs: User[];
 }

@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatchsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
-const matches_filter_dto_1 = require("./dto/matches-filter.dto");
-const matches_service_1 = require("./matches.service");
-const matches_dto_1 = require("./dto/matches.dto");
+const matchs_filter_dto_1 = require("./dto/matchs-filter.dto");
+const matchs_service_1 = require("./matchs.service");
+const matchs_dto_1 = require("./dto/matchs.dto");
 const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 let MatchsController = class MatchsController {
     constructor(matchService) {
@@ -44,10 +44,10 @@ let MatchsController = class MatchsController {
 };
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing matches" }),
+    (0, swagger_1.ApiOperation)({ summary: "Return list of all existing matchs" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [matches_filter_dto_1.MatchsFilteDto]),
+    __metadata("design:paramtypes", [matchs_filter_dto_1.MatchsFilteDto]),
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "getMatchs", null);
 __decorate([
@@ -75,7 +75,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({
-        summary: "Delete the specified matches",
+        summary: "Delete the specified matchs",
     }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
@@ -85,18 +85,18 @@ __decorate([
 __decorate([
     (0, common_1.Patch)("/:id/edit"),
     (0, swagger_1.ApiOperation)({
-        summary: "Modify attribute of a specified matches",
+        summary: "Modify attribute of a specified matchs",
     }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, matches_dto_1.MatchDto]),
+    __metadata("design:paramtypes", [String, matchs_dto_1.MatchDto]),
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "editChannel", null);
 MatchsController = __decorate([
-    (0, swagger_1.ApiTags)("matches"),
-    (0, common_1.Controller)("matches"),
-    __metadata("design:paramtypes", [matches_service_1.MatchsService])
+    (0, swagger_1.ApiTags)("matchs"),
+    (0, common_1.Controller)("matchs"),
+    __metadata("design:paramtypes", [matchs_service_1.MatchsService])
 ], MatchsController);
 exports.MatchsController = MatchsController;
-//# sourceMappingURL=matches.controller.js.map
+//# sourceMappingURL=matchs.controller.js.map

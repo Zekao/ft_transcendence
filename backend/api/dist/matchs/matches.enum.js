@@ -7,4 +7,4 @@ var MatchStatus;
     MatchStatus["STARTED"] = "STARTED";
     MatchStatus["ENDED"] = "ENDED";
 })(MatchStatus = exports.MatchStatus || (exports.MatchStatus = {}));
-//# sourceMappingURL=matches.enum.js.map
+//# sourceMappingURL=matchs.enum.js.map
