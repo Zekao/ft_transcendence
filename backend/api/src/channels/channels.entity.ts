@@ -24,7 +24,7 @@ export class Channel {
   permissions: ChannelPermissions;
   @Column({ nullable: true })
   password: string;
-  
+
   @ManyToMany(() => User)
   @JoinTable()
   members: User[];

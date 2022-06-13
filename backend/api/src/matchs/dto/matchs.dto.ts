@@ -7,11 +7,11 @@ import {
   IsEnum,
 } from "class-validator";
 import { UserDto } from "../../users/dto/user.dto";
-import { Matches } from "../matches.entity";
-import { MatchStatus } from "../matches.enum";
+import { Matchs } from "../matchs.entity";
+import { MatchStatus } from "../matchs.enum";
 
 export class MatchDto {
-  constructor(match?: Matches) {
+  constructor(match?: Matchs) {
     if (match) {
       this.id = match.id;
       this.FirstPlayer = match.FirstPlayer;

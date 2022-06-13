@@ -24,7 +24,7 @@ export const state = () => ({
   authUserFriends: [] as IUser[],
   authUserBlocked: [] as IUser[],
   authUserMatches: [] as IMatch[],
-  selectedUserMatches: [] as IMatch[],
+  selectedUserMatchs: [] as IMatch[],
   users: [] as IUser[],
   // rankList: [] as IUser[],
 })
@@ -64,7 +64,7 @@ export const mutations: MutationTree<UserState> = {
     state.users = users
   },
   FETCH_MATCHES: (state, matches: IMatch[]) => {
-    state.selectedUserMatches = matches
+    state.selectedUserMatchs = matches
   },
   UPDATE_AUTH_AVATAR: (state, userAvatar: string) => {
     state.authUser.avatar = userAvatar + '#' + new Date().getTime()
@@ -152,7 +152,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async fetchAuthMatches({ state, commit }) {
+  async fetchAuthMatchs({ state, commit }) {
     try {
       const res = await this.$axios.$get(`/users/me/matches`)
       commit('FETCH_AUTH_MATCHES', res)
@@ -170,7 +170,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async fetchMatches({ commit }, userID: string) {
+  async fetchMatchs({ commit }, userID: string) {
     try {
       const res = await this.$axios.$get(`/users/${userID}/matches`)
       commit('FETCH_MATCHES', res)

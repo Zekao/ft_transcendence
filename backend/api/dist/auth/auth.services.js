@@ -73,7 +73,7 @@ let AuthService = class AuthService {
     async signUp(AuthCredentialsDto) {
         return this.userService.createUsers(AuthCredentialsDto);
     }
-    async getUserIDFromSocket(client) {
+    async getUserFromSocket(client) {
         const token = client.handshake.headers.authorization;
         if (!token)
             throw new common_1.UnauthorizedException("No token provided");

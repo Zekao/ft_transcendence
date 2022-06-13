@@ -13,8 +13,7 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     server: any;
     private logger;
     afterInit(server: Server): void;
-    getChannel(client: Socket, id: string): Promise<void>;
-    getChannelMe(client: Socket): Promise<void>;
+    connectToSocket(client: Socket, msg: string): Promise<void>;
     emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;

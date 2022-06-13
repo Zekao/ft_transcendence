@@ -390,7 +390,7 @@ const PATH_REGEXP = new RegExp([
   // This allows the user to escape special characters that won't transform.
   '(\\\\.)',
   // Match Express-style parameters and un-named parameters with a prefix
-  // and optional suffixes. Matches appear as:
+  // and optional suffixes. Matchs appear as:
   //
   // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?", undefined]
   // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined, undefined]

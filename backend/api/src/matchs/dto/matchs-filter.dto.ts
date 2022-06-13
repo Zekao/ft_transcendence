@@ -1,6 +1,6 @@
-import { MatchStatus } from "../matches.enum";
+import { MatchStatus } from "../matchs.enum";
 
-export class MatchesFilteDto {
+export class MatchsFilteDto {
   FirstPlayer?: string;
   SecondPlayer?: string;
   scoreFirstPlayer?: number;

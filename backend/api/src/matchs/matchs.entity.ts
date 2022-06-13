@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "../users/users.entity";
-import { MatchStatus } from "./matches.enum";
+import { MatchStatus } from "./matchs.enum";
 
 @Entity()
-export class Matches {
+export class Matchs {
   @ApiProperty()
   @PrimaryGeneratedColumn("uuid")
   id: string;

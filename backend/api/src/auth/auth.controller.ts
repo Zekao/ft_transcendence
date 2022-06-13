@@ -62,7 +62,6 @@ export class AuthController {
   @ApiOperation({
     summary: "Debugging purpose / Generate token for specified user",
   })
-  @UseGuards(JwtAuthGuard)
   tokenGen(@Req() req, @Param("id") id: number) {
     return this.authService.GenerateJwtToken(id);
   }

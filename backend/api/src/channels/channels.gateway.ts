@@ -8,14 +8,14 @@ import {
   MessageBody,
   ConnectedSocket,
 } from "@nestjs/websockets";
-import { Logger } from "@nestjs/common";
+import { Logger, UnauthorizedException } from "@nestjs/common";
 import { Socket, Server } from "socket.io";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 
-@WebSocketGateway()
+@WebSocketGateway( {namespace: "chat"} )
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -33,29 +33,20 @@ export class ChannelsGateway
     this.logger.log("Init");
   }
 
-  @SubscribeMessage("channel") // Return connected user to channel
-  async getChannel(client: Socket, id: string): Promise<void> {
+  @SubscribeMessage("channel") // Connect user to the channel
+  async connectToSocket(client: Socket, msg: string): Promise<void> {
     try {
-      const channel = await this.channelService.getChannelId(id);
-      console.log("fddf");
-      client.emit("channel", channel);
-    } catch {}
-  }
-
-  @SubscribeMessage("MyChannel")
-  async getChannelMe(client: Socket): Promise<void> {
-    try {
-      client.emit('MyChannel', "chann info");
+      const message = client.data.user.user_name + ": " + msg;
+      this.emitChannel(client.data, "Hello", message);
     } catch {}
   }
 
   emitChannel(channel: any, event: string, ...args: any): void {
     try {
-      if (!channel.users) return;
-
-      const sockets: any[] = Array.from(this.server.sockets.values());
+      if (!channel.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.users.find((user) => user.id == socket.data.user.id))
+        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
           socket.emit(event, ...args);
       });
     } catch {}
@@ -66,11 +57,15 @@ export class ChannelsGateway
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
+    console.log("HEllo");
     try {
-      const user = await this.authService.getUserIDFromSocket(client);
+      const user = await this.authService.getUserFromSocket(client);
 
       const allchan = await this.channelService.getChannel();
       client.data.user = user;
+      client.data.ConnectedChannel = client.handshake.headers.channel;
+      if (!client.data.ConnectedChannel)
+        throw new UnauthorizedException("You must specify a channel");
       client.emit("info", { user, allchan });
       this.logger.log(`Client connected: ${client.id}`);
     } catch (err) {

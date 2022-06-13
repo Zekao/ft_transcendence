@@ -8,7 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Matches } from "../matches/matches.entity";
+import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 
 @Entity()
@@ -60,9 +60,9 @@ export class User {
   ratio: number;
 
   @ApiProperty()
-  @ManyToMany(() => Matches, (matches) => matches.player)
+  @ManyToMany(() => Matchs, (matches) => matches.player)
   @JoinTable({ name: "MatchHistory" })
-  matches: Matches[];
+  matches: Matchs[];
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.friends)

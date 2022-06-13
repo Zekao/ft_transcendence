@@ -1,8 +1,8 @@
 import { UserDto } from "../../users/dto/user.dto";
-import { Matches } from "../matches.entity";
+import { Matchs } from "../matches.entity";
 import { MatchStatus } from "../matches.enum";
 export declare class MatchDto {
-    constructor(match?: Matches);
+    constructor(match?: Matchs);
     id: string;
     FirstPlayer: string;
     SecondPlayer: string;

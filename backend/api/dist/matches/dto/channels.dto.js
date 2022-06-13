@@ -46,7 +46,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(12),
     (0, class_validator_1.MaxLength)(32),
-    (0, class_validator_1.Matches)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    (0, class_validator_1.Matchs)(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
         message: "password is too weak",
     }),
     (0, swagger_1.ApiProperty)(),
