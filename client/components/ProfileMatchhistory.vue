@@ -61,7 +61,7 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
-    // authUserMatchs: [
+    // authUserMatches: [
     //   { FirstPlayer: 'nao', SecondPlayer: 'gaga', scoreFirstPlayer: 4, scoreSecondPlayer: 0 }
     // ],
   }),
@@ -69,11 +69,11 @@ export default Vue.extend({
   computed: {
     ...mapState({
       users: (state: any): IUser[] => state.user.users,
-      authUserMatchs: (state: any): IMatch[] => state.user.authUserMatchs,
+      authUserMatches: (state: any): IMatch[] => state.user.authUserMatches,
       selectedUserMatchs: (state: any): IMatch[] => state.user.selectedUserMatchs,
     }),
     userMatchs() {
-      return this.selectedLogin ? this.selectedUserMatchs : this.authUserMatchs
+      return this.selectedLogin ? this.selectedUserMatchs : this.authUserMatches
     }
   },
 

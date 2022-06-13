@@ -19,16 +19,18 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      accessToken: (state: any) => state.accessToken,
+      accessToken: (state: any) => state.token.accessToken,
     })
   },
 
   mounted() {
     this.socket = this.$nuxtSocket({
-      channel: 'Hello',
+      channel: '/chat',
       extraHeaders: {
         Authorization: this.accessToken,
+        channel: "Hello",
       },
+      path: "/api/socket.io/",
     })
     this.socket.on('Hello', (msg, cb) => {
       console.log(msg)
