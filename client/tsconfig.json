@@ -18,7 +18,7 @@
     "types": [
       "@nuxt/types",
       "@nuxtjs/axios",
-      "@nuxtjs/vuetify",
+      "vuetify",
       "@types/node",
       "cookie-universal-nuxt"
     ]

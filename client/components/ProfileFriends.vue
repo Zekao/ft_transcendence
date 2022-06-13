@@ -36,18 +36,18 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileFriends',
 
-  data: () => ({
-    authUserFriends: [
-      { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-      { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
-    ],
-  }),
+  // data: () => ({
+  //   authUserFriends: [
+  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
+  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
+  //   ],
+  // }),
 
-  // computed: {
-  //   ...mapState({
-  //     authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
-  //   }),
-  // },
+  computed: {
+    ...mapState({
+      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
+    }),
+  },
 
   async fetch() {
     await this.$store.dispatch('user/fetchAuthFriends')

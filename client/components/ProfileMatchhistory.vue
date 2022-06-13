@@ -32,9 +32,17 @@
       <v-list v-else-if="!userMatches.length">
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
-      <v-list v-else>
+      <v-list v-else width="40%">
         <v-list-item v-for="(match, i) in userMatches" :key="i">
-          {{ match.id }}
+          <v-list-item-content class="justify-center">
+            {{ match.FirstPlayer }}
+          </v-list-item-content>
+          <v-list-item-content class="justify-center">
+            {{ match.scoreFirstPlayer + ' - ' + match.scoreSecondPlayer }}
+          </v-list-item-content>
+          <v-list-item-content class="justify-center">
+            {{ match.SecondPlayer }}
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-card>
@@ -53,6 +61,9 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
+    // authUserMatches: [
+    //   { FirstPlayer: 'nao', SecondPlayer: 'gaga', scoreFirstPlayer: 4, scoreSecondPlayer: 0 }
+    // ],
   }),
 
   computed: {
@@ -82,6 +93,7 @@ export default Vue.extend({
     },
     clearSearch() {
       this.selectedLogin = ''
+      this.search = ''
     }
   }
 })

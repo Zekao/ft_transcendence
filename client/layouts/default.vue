@@ -165,7 +165,7 @@ export default Vue.extend({
     },
   },
 
-  created() {
+  mounted() {
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
   },
 
