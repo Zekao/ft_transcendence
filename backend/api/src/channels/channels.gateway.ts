@@ -35,7 +35,17 @@ export class ChannelsGateway
   }
 
   @SubscribeMessage("channel") // Connect user to the channel
-  async connectToSocket(client: Socket, msg: string): Promise<void> {
+  async SendMessageToChannel(client: Socket, msg: string): Promise<void> {
+    try {
+      const channel = client.data.ConnectedChannel;
+      const message = client.data.user.user_name + ": " + msg;
+      console.log(channel);
+      this.emitChannel(client.data, channel, message);
+    } catch {}
+  }
+
+  @SubscribeMessage("msg") // Connect user to the channel
+  async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
     try {
       const message = client.data.user.user_name + ": " + msg;
       console.log(client.data.ConnectedChannel);

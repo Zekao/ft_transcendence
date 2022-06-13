@@ -29,7 +29,16 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async connectToSocket(client, msg) {
+    async SendMessageToChannel(client, msg) {
+        try {
+            const channel = client.data.ConnectedChannel;
+            const message = client.data.user.user_name + ": " + msg;
+            console.log(channel);
+            this.emitChannel(client.data, channel, message);
+        }
+        catch (_a) { }
+    }
+    async SendPrivateMessage(client, msg) {
         try {
             const message = client.data.user.user_name + ": " + msg;
             console.log(client.data.ConnectedChannel);
@@ -89,7 +98,13 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "connectToSocket", null);
+], ChannelsGateway.prototype, "SendMessageToChannel", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("msg"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", Promise)
+], ChannelsGateway.prototype, "SendPrivateMessage", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
