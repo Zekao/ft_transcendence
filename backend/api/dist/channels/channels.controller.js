@@ -80,7 +80,7 @@ __decorate([
 ], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([
     (0, swagger_1.ApiTags)("channel"),
-    (0, common_1.Controller)("api/channel"),
+    (0, common_1.Controller)("channel"),
     __metadata("design:paramtypes", [channels_service_1.ChannelsService])
 ], ChannelsController);
 exports.ChannelsController = ChannelsController;

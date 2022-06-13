@@ -23,7 +23,7 @@ import { MatchDto } from "./dto/matches.dto";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
 @ApiTags("matches")
-@Controller("api/matches")
+@Controller("matches")
 export class MatchesController {
   constructor(private matchService: MatchesService) {}
 

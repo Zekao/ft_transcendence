@@ -16,12 +16,18 @@ services:
   reverse-proxy:
     image: "traefik:v2.4"
     command:
+      # Set log level and enable API
+      - "--api.insecure"
+      # Disable SSL verification on backend
+      - "--serverstransport.insecureskipverify=true"
+      # Route
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=default"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      # Certificate
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.leresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.leresolver.acme.email=gamarcha@student.42.fr"
@@ -48,8 +54,6 @@ services:
     volumes:
       - ./client:/app
       - ./.env:/.env
-    # ports:
-    #   - ${SERVER_PORT_FRONT}:${SERVER_PORT_FRONT}
     env_file:
       - .env
     restart: unless-stopped
@@ -70,8 +74,6 @@ services:
     volumes:
       - ./backend/api:/usr/src/app
       - /usr/src/app/node_modules
-    # ports:
-    #   - ${SERVER_PORT_BACK}:${SERVER_PORT_BACK}
     env_file:
       - .env
     restart: unless-stopped
