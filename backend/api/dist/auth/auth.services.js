@@ -77,10 +77,10 @@ let AuthService = class AuthService {
         const token = client.handshake.headers.authorization;
         if (!token)
             throw new common_1.UnauthorizedException("No token provided");
-        const payload = this.verifyJwtToken(token);
+        const payload = await this.verifyJwtToken(token);
         if (!payload)
             throw new common_1.UnauthorizedException("Invalid token provided");
-        return this.userService.getUserFortyTwo((await payload).FortyTwoID);
+        return this.userService.getUserFortyTwo(payload.FortyTwoID);
     }
     async generateQR() {
         const secret = speakeasy.generateSecret({
