@@ -4,6 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
+import { User } from "../users/users.entity";
 export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService;
     private readonly userService;
@@ -17,5 +18,8 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     SendPrivateMessage(client: Socket, msg: string): Promise<void>;
     emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
+    isStatus(client: Socket, user: User): boolean;
+    isMsg(client: Socket): boolean;
+    isChannel(client: Socket): boolean;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
 }

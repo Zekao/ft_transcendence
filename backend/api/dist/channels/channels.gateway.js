@@ -33,16 +33,15 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const channel = client.data.ConnectedChannel;
             const message = client.data.user.user_name + ": " + msg;
-            console.log(channel);
             this.emitChannel(client.data, channel, message);
         }
         catch (_a) { }
     }
     async SendPrivateMessage(client, msg) {
         try {
+            const receiver = client.data.msg;
             const message = client.data.user.user_name + ": " + msg;
-            console.log(client.data.ConnectedChannel);
-            this.emitChannel(client.data, "Hello", message);
+            this.emitChannel(client.data, receiver, message);
         }
         catch (_a) { }
     }
@@ -67,22 +66,44 @@ let ChannelsGateway = class ChannelsGateway {
         }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
+    isStatus(client, user) {
+        client.data.status = client.handshake.headers.status;
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.ONLINE;
+            this.userService.saveUser(user);
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
+    }
+    isMsg(client) {
+        client.data.msg = client.handshake.headers.msg;
+        if (client.data.msg) {
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
+    }
+    isChannel(client) {
+        client.data.ConnectedChannel = client.handshake.headers.channel;
+        if (client.data.ConnectedChannel) {
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
+    }
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
             const allchanel = await this.channelService.getChannel();
             client.data.user = user;
-            client.data.status = client.handshake.headers.status;
-            if (client.data.status) {
-                user.status = users_enum_1.UserStatus.ONLINE;
-                this.userService.saveUser(user);
+            if (this.isStatus(client, user))
                 return;
-            }
-            client.data.ConnectedChannel = client.handshake.headers.channel;
-            if (!client.data.ConnectedChannel)
-                throw new common_1.UnauthorizedException("You must specify a channel");
-            client.emit("info", { user, allchanel });
-            this.logger.log(`Client connected: ${client.id}`);
+            if (this.isMsg(client))
+                return;
+            if (this.isChannel(client))
+                return;
+            throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {
             return client.disconnect();
