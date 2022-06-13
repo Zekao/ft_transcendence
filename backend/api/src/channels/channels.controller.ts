@@ -20,7 +20,7 @@ import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 
 @ApiTags("channel")
-@Controller("channel")
+@Controller("api/channel")
 export class ChannelsController {
   constructor(private channelService: ChannelsService) {}
 

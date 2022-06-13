@@ -96,7 +96,7 @@ __decorate([
 ], MatchesController.prototype, "editChannel", null);
 MatchesController = __decorate([
     (0, swagger_1.ApiTags)("matches"),
-    (0, common_1.Controller)("matches"),
+    (0, common_1.Controller)("api/matches"),
     __metadata("design:paramtypes", [matches_service_1.MatchesService])
 ], MatchesController);
 exports.MatchesController = MatchesController;

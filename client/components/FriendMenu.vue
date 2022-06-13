@@ -6,7 +6,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           dark
-          v-bind="attrs"
+          v-bind="attrs" 
           v-on="on"
         >
           {{friend.user_name}}
@@ -25,8 +25,6 @@
                 <v-icon color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'">  mdi-message-outline </v-icon>
             </v-btn>
         </v-list-item-icon>
-         <!-- :disabled="friend.status === 'OFFLINE'"> mdi-sword-cross </v-list-item-icon> -->
-        <!-- <v-list-item-icon :color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'"> mdi-message-outline </v-list-item-icon>  -->
       </v-list>
     </v-menu>
 
