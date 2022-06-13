@@ -39,12 +39,10 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             if (!channel.user)
                 return;
-            const sockets = Array.from(this.server.sockets.sockets.values());
+            const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel) {
-                    console.log("sended");
+                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
                     socket.emit(event, ...args);
-                }
             });
         }
         catch (_a) { }

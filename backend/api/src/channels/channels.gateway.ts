@@ -44,12 +44,10 @@ export class ChannelsGateway
   emitChannel(channel: any, event: string, ...args: any): void {
     try {
       if (!channel.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
+      const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel) {
-          console.log("sended");
+        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
           socket.emit(event, ...args);
-        }
       });
     } catch {}
   }
