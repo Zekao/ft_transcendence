@@ -82,7 +82,6 @@ export class ChannelsService {
     try {
       await this.ChannelsRepository.save(channel);
     } catch (error) {
-      // 23505 = error code for duplicate username
       if (error.code == "23505") {
         throw new ConflictException("Channel already exist");
       } else {

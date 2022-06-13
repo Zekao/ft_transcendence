@@ -45,20 +45,7 @@ export class AuthController {
     return this.authService.GenerateJwtToken(req.user._json.id);
   }
 
-  @Post("/test") // to check that request can be made with the jwt
-  @ApiOperation({
-    summary: "Debugging purpose / Check if the token work",
-  })
-  @UseGuards(JwtAuthGuard)
-  test(@Req() req) {
-    console.log(req.user);
-    this.authService.GenerateJwtToken(req.user);
-    // generer la jwt
-    // rediriger la personne vers le front
-    console.log(req.user);
-  }
-
-  @Get("/:id/token") // to check that request can be made with the jwt
+  @Get("/:id/token")
   @ApiOperation({
     summary: "Debugging purpose / Generate token for specified user",
   })
@@ -66,17 +53,17 @@ export class AuthController {
     return this.authService.GenerateJwtToken(id);
   }
 
-  @Get("/qrcode") // to check that request can be made with the jwt
+  @Get("/qrcode")
   @ApiOperation({
     summary: "Get image of qrcode",
   })
   async qrcode(): Promise<string> {
-    const Test = this.authService.generateQR();
+    const Test = await this.authService.generateQR();
 
     const file = fs;
     file.writeFile(
       "qrcode_user.png",
-      (await Test).qrcode.substring(22),
+      Test.qrcode.substring(22),
       { encoding: "base64" },
       function (err) {
         if (err) {
@@ -86,6 +73,6 @@ export class AuthController {
         }
       }
     );
-    return (await Test).qrcode.substring(22);
+    return Test.qrcode.substring(22);
   }
 }

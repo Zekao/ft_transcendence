@@ -35,11 +35,11 @@ export class UserDto {
           return new MatchDto(match);
         });
       if (user.joined_channels)
-          this.joined_channels = user.joined_channels.map((channel) => {return new ChannelsDto()});
+          this.joined_channels = user.joined_channels.map((channel) => {return new Channel()});
       if (user.ownered_channels)
-          this.ownered_channels = user.ownered_channels.map((channel) => {return new ChannelsDto()});
+          this.ownered_channels = user.ownered_channels.map((channel) => {return new Channel()});
       if (user.admined_channels)
-          this.admined_channels = user.admined_channels.map((channel) => {return new ChannelsDto()});
+          this.admined_channels = user.admined_channels.map((channel) => {return new Channel()});
     }
   }
   id: string;
@@ -59,7 +59,7 @@ export class UserDto {
   TwoFA: boolean;
   matchs: MatchDto[];
   friends: UserDto[];
-  blockedUsers: UserDto[];
+  blockedUsers: User[];
   joined_channels: Channel[];
   ownered_channels: Channel[];
   admined_channels: Channel[];

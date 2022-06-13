@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserDto = void 0;
 const matchs_dto_1 = require("../../matchs/dto/matchs.dto");
-const channels_dto_1 = require("../../channels/dto/channels.dto");
+const channels_entity_1 = require("../../channels/channels.entity");
 class UserDto {
     constructor(user) {
         if (user) {
@@ -34,11 +34,11 @@ class UserDto {
                     return new matchs_dto_1.MatchDto(match);
                 });
             if (user.joined_channels)
-                this.joined_channels = user.joined_channels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
+                this.joined_channels = user.joined_channels.map((channel) => { return new channels_entity_1.Channel(); });
             if (user.ownered_channels)
-                this.ownered_channels = user.ownered_channels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
+                this.ownered_channels = user.ownered_channels.map((channel) => { return new channels_entity_1.Channel(); });
             if (user.admined_channels)
-                this.admined_channels = user.admined_channels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
+                this.admined_channels = user.admined_channels.map((channel) => { return new channels_entity_1.Channel(); });
         }
     }
 }

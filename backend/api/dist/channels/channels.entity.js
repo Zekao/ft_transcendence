@@ -38,6 +38,10 @@ __decorate([
     __metadata("design:type", String)
 ], Channel.prototype, "password", void 0);
 __decorate([
+    (0, typeorm_1.Column)("text", { array: true, nullable: true }),
+    __metadata("design:type", Array)
+], Channel.prototype, "history", void 0);
+__decorate([
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.joined_channels, { nullable: true }),
     (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)

@@ -14,7 +14,7 @@ export declare class UsersController {
     getFriends(req: any): Promise<UserDto[]>;
     getMatch(req: any, id: string): Promise<MatchDto[]>;
     getBlocked(req: any, id: string): Promise<UserDto[]>;
-    getWhoFollowMe(req: any): Promise<UserDto[]>;
+    getWhoFollowMe(req: any): Promise<User[]>;
     addFriend(req: any, query: any): Promise<User>;
     addBlocked(req: any, query: any): Promise<User>;
     uploadedFile(req: any, file: Express.Multer.File): Promise<{
