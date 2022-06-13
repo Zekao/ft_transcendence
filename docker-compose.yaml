@@ -33,6 +33,7 @@ services:
     ports:
       - "4499:80"
       - "4500:443"
+      - "8080:8080"
     restart: unless-stopped
 
       # *******************FRONTEND*******************
