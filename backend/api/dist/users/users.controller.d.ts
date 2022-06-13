@@ -3,7 +3,7 @@ import { UsersFiltesDTO } from "./dto/user-filter.dto";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 export declare class UsersController {
     private UsersService;
     constructor(UsersService: UsersService);
@@ -14,6 +14,7 @@ export declare class UsersController {
     getFriends(req: any): Promise<UserDto[]>;
     getMatch(req: any, id: string): Promise<MatchDto[]>;
     getBlocked(req: any, id: string): Promise<UserDto[]>;
+    getWhoFollowMe(req: any): Promise<UserDto[]>;
     addFriend(req: any, query: any): Promise<User>;
     addBlocked(req: any, query: any): Promise<User>;
     uploadedFile(req: any, file: Express.Multer.File): Promise<{

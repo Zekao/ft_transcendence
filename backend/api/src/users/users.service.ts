@@ -21,15 +21,15 @@ import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
 import { UserDto } from "./dto/user.dto";
 import * as bcrypt from "bcrypt";
-import { MatchesService } from "../matches/matches.service";
-import { Matches } from "../matches/matches.entity";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchsService } from "../matchs/matchs.service";
+import { Matchs } from "../matchs/matchs.entity";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 import { extname } from "path";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
-  myMatches?: boolean;
+  withMatchs?: boolean;
 }
 
 @Injectable()
@@ -42,8 +42,16 @@ export class UsersService {
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
-  async getUsers(): Promise<User[]> {
-    const users = await this.UserRepository.find();
+  async getUsers(RelationsPicker?: UserRelationsPicker[]): Promise<User[]> {
+    const relations = [];
+    if (RelationsPicker) {
+      for (const relation of RelationsPicker) {
+        relation.withFriends && relations.push("friends");
+        relation.withBlocked && relations.push("blockedUsers");
+        relation.withMatchs && relations.push("matches");
+      }
+    }
+    const users = await this.UserRepository.find({ relations });
     if (!users) throw new NotFoundException(`Users not found`);
     return users;
   }
@@ -65,9 +73,9 @@ export class UsersService {
     return friends;
   }
 
-  async getMatches(id: string): Promise<MatchDto[]> {
+  async getMatchs(id: string): Promise<MatchDto[]> {
 
-    const user = await this.getUserId(id, [{ myMatches: true }]);
+    const user = await this.getUserId(id, [{ withMatchs: true }]);
     if (!user.matches) return [];
     console.log(user.matches);
     const matches: MatchDto[] = user.matches.map((match) => {
@@ -110,7 +118,7 @@ export class UsersService {
       for (const relation of RelationsPicker) {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
-        relation.myMatches && relations.push("matches");
+        relation.withMatchs && relations.push("matches");
       }
     }
     let found = null;
@@ -194,6 +202,26 @@ export class UsersService {
     this.UserRepository.save(id);
     return true;
   }
+
+  async getWhoFollowMe(id: string): Promise<UserDto[]> {
+    const users: User[] = (await this.getUsers([{ withFriends: true }])).filter((user) => user.id !== id);
+    var whoFollowMe: User[] = [];
+    for (const user of users) {
+      if (user.friends.find((f) => f.id === id))
+        whoFollowMe.push((await this.getUserId(user.id)));
+    }
+    return whoFollowMe;
+    }
+
+    async getWhoBlockMe(id: string): Promise<UserDto[]> {
+      const users: User[] = (await this.getUsers([{ withBlocked: true }])).filter((user) => user.id !== id);
+      var whoBlockMe: User[] = [];
+      for (const user of users) {
+        if (user.blockedUsers.find((f) => f.id === id))
+          whoBlockMe.push((await this.getUserId(user.id)));
+      }
+      return whoBlockMe;
+      }
 
   /* ************************************************************************** */
   /*                   POST                                                     */

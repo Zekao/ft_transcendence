@@ -15,21 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const users_service_1 = require("../users/users.service");
+const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
-function isChannel(id) {
-    const splited = id.split("-");
-    return (id.length === 36 &&
-        splited.length === 5 &&
-        splited[0].length === 8 &&
-        splited[1].length === 4 &&
-        splited[2].length === 4 &&
-        splited[3].length === 4 &&
-        splited[4].length === 12);
-}
 let ChannelsService = class ChannelsService {
-    constructor(ChannelsRepository) {
+    constructor(ChannelsRepository, UsersService) {
         this.ChannelsRepository = ChannelsRepository;
+        this.UsersService = UsersService;
     }
     async getChannel() {
         const channel = await this.ChannelsRepository.find();
@@ -52,7 +45,7 @@ let ChannelsService = class ChannelsService {
     }
     async getChannelId(id) {
         let found = null;
-        if (isChannel(id))
+        if ((0, utils_1.isUuid)(id))
             found = await this.ChannelsRepository.findOne({ where: { id: id } });
         else
             found = await this.ChannelsRepository.findOne({ where: { name: id } });
@@ -120,7 +113,8 @@ let ChannelsService = class ChannelsService {
 ChannelsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(channels_entity_1.Channel)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        users_service_1.UsersService])
 ], ChannelsService);
 exports.ChannelsService = ChannelsService;
 //# sourceMappingURL=channels.service.js.map

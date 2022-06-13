@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserDto = void 0;
-const matches_dto_1 = require("../../matches/dto/matches.dto");
+const matchs_dto_1 = require("../../matchs/dto/matchs.dto");
 class UserDto {
     constructor(user) {
         if (user) {
@@ -27,7 +27,7 @@ class UserDto {
                 });
             if (user.matches)
                 this.matches = user.matches.map((match) => {
-                    return new matches_dto_1.MatchDto(match);
+                    return new matchs_dto_1.MatchDto(match);
                 });
         }
     }

@@ -15,7 +15,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 
-@WebSocketGateway(4500)
+@WebSocketGateway()
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -57,6 +57,7 @@ export class ChannelsGateway
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
+    console.log("HEllo");
     try {
       const user = await this.authService.getUserFromSocket(client);
 

@@ -10,7 +10,7 @@
         hide-details
         class="mr-2"
       />
-      <v-btn outlined class="mr-2" @click="searchUserMatches">
+      <v-btn outlined class="mr-2" @click="searchUserMatchs">
         Search
       </v-btn>
       <v-btn outlined @click="clearSearch"> Clear </v-btn>
@@ -29,11 +29,11 @@
       <v-list v-else-if="$fetchState.error">
         <v-list-item dense>Failed to load match history.</v-list-item>
       </v-list>
-      <v-list v-else-if="!userMatches.length">
+      <v-list v-else-if="!userMatchs.length">
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
       <v-list v-else width="40%">
-        <v-list-item v-for="(match, i) in userMatches" :key="i">
+        <v-list-item v-for="(match, i) in userMatchs" :key="i">
           <v-list-item-content class="justify-center">
             {{ match.FirstPlayer }}
           </v-list-item-content>
@@ -61,7 +61,7 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
-    // authUserMatches: [
+    // authUserMatchs: [
     //   { FirstPlayer: 'nao', SecondPlayer: 'gaga', scoreFirstPlayer: 4, scoreSecondPlayer: 0 }
     // ],
   }),
@@ -69,23 +69,23 @@ export default Vue.extend({
   computed: {
     ...mapState({
       users: (state: any): IUser[] => state.user.users,
-      authUserMatches: (state: any): IMatch[] => state.user.authUserMatches,
-      selectedUserMatches: (state: any): IMatch[] => state.user.selectedUserMatches,
+      authUserMatchs: (state: any): IMatch[] => state.user.authUserMatchs,
+      selectedUserMatchs: (state: any): IMatch[] => state.user.selectedUserMatchs,
     }),
-    userMatches() {
-      return this.selectedLogin ? this.selectedUserMatches : this.authUserMatches
+    userMatchs() {
+      return this.selectedLogin ? this.selectedUserMatchs : this.authUserMatchs
     }
   },
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthMatches')
+    await this.$store.dispatch('user/fetchAuthMatchs')
   },
 
   methods: {
-    async searchUserMatches() {
+    async searchUserMatchs() {
       const user = this.users.filter(el => el.display_name === this.search)
       try {
-        await this.$store.dispatch('user/fetchMatches', user[0] ? user[0].id : '0')
+        await this.$store.dispatch('user/fetchMatchs', user[0] ? user[0].id : '0')
         this.selectedLogin = this.search
       } catch(err) {
         console.log(err)

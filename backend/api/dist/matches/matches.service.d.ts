@@ -1,21 +1,21 @@
 import { Repository } from "typeorm";
-import { Matches } from "./matches.entity";
-import { MatchesFilteDto } from "./dto/matches-filter.dto";
+import { Matchs } from "./matches.entity";
+import { MatchsFilteDto } from "./dto/matches-filter.dto";
 import { MatchDto } from "./dto/matches.dto";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/users.entity";
-export declare class MatchesService {
+export declare class MatchsService {
     private matchesRepository;
     private userService;
-    constructor(matchesRepository: Repository<Matches>, userService: UsersService);
-    getMatches(): Promise<Matches[]>;
-    getMatchesByFilter(filter: MatchesFilteDto): Promise<Matches[]>;
-    getMatchesId(id: string): Promise<Matches>;
-    createMatch(user: User): Promise<Matches>;
-    addMatchToPlayer(player: User, match: Matches): Promise<Matches>;
-    addPlayerToMatch(player: User, match: Matches): Promise<Matches>;
-    findMatch(): Promise<Matches>;
-    defineMatch(player: User): Promise<Matches>;
+    constructor(matchesRepository: Repository<Matchs>, userService: UsersService);
+    getMatchs(): Promise<Matchs[]>;
+    getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
+    getMatchsId(id: string): Promise<Matchs>;
+    createMatch(id: string): Promise<Matchs>;
+    addMatchToPlayer(player: User, match: Matchs): Promise<Matchs>;
+    addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
+    findMatch(): Promise<Matchs>;
+    defineMatch(player: User): Promise<Matchs>;
     deleteMatch(id: string): Promise<boolean>;
-    editMatch(id: string, matchDto: MatchDto): Promise<Matches>;
+    editMatch(id: string, matchDto: MatchDto): Promise<Matchs>;
 }

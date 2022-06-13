@@ -6,20 +6,20 @@ import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matches/dto/matches.dto";
+import { MatchDto } from "../matchs/dto/matchs.dto";
 export declare class UserRelationsPicker {
     withFriends?: boolean;
     withBlocked?: boolean;
-    myMatches?: boolean;
+    withMatchs?: boolean;
 }
 export declare class UsersService {
     private UserRepository;
     private JwtService;
     constructor(UserRepository: Repository<User>, JwtService: JwtService);
-    getUsers(): Promise<User[]>;
+    getUsers(RelationsPicker?: UserRelationsPicker[]): Promise<User[]>;
     getUserFortyTwo(FortyTwoID: number): Promise<User>;
     getFriends(id: string): Promise<UserDto[]>;
-    getMatches(id: string): Promise<MatchDto[]>;
+    getMatchs(id: string): Promise<MatchDto[]>;
     getBlocked(id: string): Promise<UserDto[]>;
     getUserByFilter(filter: UsersFiltesDTO): Promise<User[]>;
     getUserId(id: string, RelationsPicker?: UserRelationsPicker[]): Promise<User>;
@@ -37,6 +37,8 @@ export declare class UsersService {
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
     saveUser(id: User): Promise<boolean>;
+    getWhoFollowMe(id: string): Promise<UserDto[]>;
+    getWhoBlockMe(id: string): Promise<UserDto[]>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(id: string, friend_id: string): Promise<User>;
     addBlocked(id: string, blockedUsersId: string): Promise<User>;
