@@ -39,13 +39,15 @@ export class ChannelsGateway
   @SubscribeMessage("channel")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
+      console.log(message)
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
-      if (message.type === "msg") {
-        const history = { login, message: message.message };
+      if (message[0] === "msg") {
+        console.log('test')
+        const history = { login, message: message[1] };
         channel.history.push(history);
         this.channelService.saveChannel(channel);
-        this.emitChannel(client.data, "channel", login, message.message);
+        this.emitChannel(client.data, "channel", login, message[1]);
       } else {
       }
     } catch {}

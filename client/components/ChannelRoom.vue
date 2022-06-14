@@ -3,7 +3,7 @@
   <v-toolbar v-if="locked">
     <v-toolbar>
       <v-text-field
-        v-model="messageText"
+        v-model="password"
         dense
         outlined
         hide-details
@@ -104,9 +104,10 @@ export default Vue.extend({
   },
 
   data: () => ({
-    owner: false,
-    admin: false,
+    owner: true,
+    admin: true,
     locked: true,
+    password: '',
     messageText: '',
     messages: [] as { login: string, message: string }[],
     admins: [] as IUser[],
@@ -170,9 +171,7 @@ export default Vue.extend({
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
       if (this.socket && messageTextFormated) {
-        this.socket.emit('channel', { type: 'msg', message: messageTextFormated }, (resp: any) => {
-            console.log(resp)
-        })
+        this.socket.emit('channel', 'msg', messageTextFormated)
         this.messageText = ''
       }
     },
@@ -185,14 +184,41 @@ export default Vue.extend({
         this.scrollToBottom()
       })
     },
-    removeAdmin() {
-      console.log(this.admins)
+    addAdmin(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'addAdmin', user)
+        this.messageText = ''
+      }
     },
-    unbanUser() {
-      console.log(this.banned)
+    removeAdmin(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'removeAdmin', user)
+        this.messageText = ''
+      }
     },
-    unmuteUser() {
-      console.log(this.muted)
+    banUser(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'banUser', user)
+        this.messageText = ''
+      }
+    },
+    unbanUser(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unbanUser', user)
+        this.messageText = ''
+      }
+    },
+    muteUser(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'muteUser', user)
+        this.messageText = ''
+      }
+    },
+    unmuteUser(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unmuteUser', user)
+        this.messageText = ''
+      }
     },
     fetchAdmin() {
       console.log(this.admins)
