@@ -58,6 +58,19 @@ export class ChannelsGateway
     } catch {}
   }
 
+  @SubscribeMessage("connection")
+  async gamecontrol(client: Socket, message: string): Promise<void> {
+    try {
+      const channel: Channel = client.data.channel;
+      const login: string = client.data.user.display_name;
+      if (!channel.history) channel.history = [];
+      const history = { login, message };
+      channel.history.push(history);
+      this.channelService.saveChannel(channel);
+      this.emitChannel(client.data, "channel", login, message);
+    } catch {}
+  }
+
   emitChannel(channel: any, event: string, ...args: any): void {
     try {
       if (!channel.user) return;
@@ -71,7 +84,6 @@ export class ChannelsGateway
 
   handleDisconnect(client: Socket) {
     const user = client.data.user;
-    console.log(user);
     if (client.data.status)
     {
       user.status = UserStatus.OFFLINE;
@@ -123,7 +135,6 @@ export class ChannelsGateway
         return ;
       if (await this.isChannel(client))
         return ;
-      console.log("dd")
       throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();
