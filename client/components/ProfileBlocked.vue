@@ -21,7 +21,7 @@
           <v-img :src="user.avatar" />
         </v-list-item-avatar>
         <v-list-item-content>
-           {{ user.display_name }} 
+          {{ user.display_name }}
         </v-list-item-content>
         <v-list-item-action>
           <v-btn @click="unblocked(user.id)">Unblocked</v-btn>
@@ -63,7 +63,7 @@ export default Vue.extend({
       } catch (err) {
         console.log(err)
       }
-    }
-  }
+    },
+  },
 })
 </script>
