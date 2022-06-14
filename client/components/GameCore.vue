@@ -19,7 +19,6 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-
 export default Vue.extend({
       name: 'BlockGame',
       data()  {
@@ -32,13 +31,11 @@ export default Vue.extend({
           }
         }
       },
-
       computed: {
         ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       })
       },
-
       mounted() {
         // this.context = this.$refs.game.getContext("2d");
         this.socket = this.$nuxtSocket({

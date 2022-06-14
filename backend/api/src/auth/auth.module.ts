@@ -22,9 +22,15 @@ import { Matchs } from "src/matchs/matchs.entity";
       },
     }),
     TypeOrmModule.forFeature([User, Matchs]),
-    MatchsModule
+    MatchsModule,
   ],
-  providers: [FortyTwoStrategy, JwtStrategy, UsersService, AuthService, MatchsService],
+  providers: [
+    FortyTwoStrategy,
+    JwtStrategy,
+    UsersService,
+    AuthService,
+    MatchsService,
+  ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
 })

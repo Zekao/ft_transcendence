@@ -15,9 +15,15 @@ import { GameGateway } from "./game.gateway";
   imports: [
     TypeOrmModule.forFeature([Matchs, User]),
     forwardRef(() => AuthModule),
-    forwardRef(() => UsersModule)
+    forwardRef(() => UsersModule),
   ],
   controllers: [MatchsController],
-  providers: [MatchsService, JwtService, UsersService, AuthService],
+  providers: [
+    MatchsService,
+    JwtService,
+    UsersService,
+    AuthService,
+    GameGateway,
+  ],
 })
 export class MatchsModule {}

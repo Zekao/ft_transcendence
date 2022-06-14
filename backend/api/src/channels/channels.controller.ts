@@ -44,7 +44,9 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Get message history of a channel",
   })
-  getHistory(@Param("id") id: string): Promise<{ login: string, message: string  }[]> {
+  getHistory(
+    @Param("id") id: string
+  ): Promise<{ login: string; message: string }[]> {
     return this.channelService.getChannelHistory(id);
   }
 

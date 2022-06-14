@@ -87,6 +87,7 @@ let GameGateway = class GameGateway {
     }
     async handleConnection(client, ...args) {
         try {
+            console.log("test");
             const user = await this.authService.getUserFromSocket(client);
             const match = await this.matchService.getMatchsId(client.handshake.headers.game);
             if (!match)

@@ -33,9 +33,15 @@ AuthModule = __decorate([
                 },
             }),
             typeorm_1.TypeOrmModule.forFeature([users_entity_1.User, matchs_entity_1.Matchs]),
-            matchs_module_1.MatchsModule
+            matchs_module_1.MatchsModule,
         ],
-        providers: [_42_strategy_1.FortyTwoStrategy, jwt_strategy_1.JwtStrategy, users_service_1.UsersService, auth_services_1.AuthService, matchs_service_1.MatchsService],
+        providers: [
+            _42_strategy_1.FortyTwoStrategy,
+            jwt_strategy_1.JwtStrategy,
+            users_service_1.UsersService,
+            auth_services_1.AuthService,
+            matchs_service_1.MatchsService,
+        ],
         controllers: [auth_controller_1.AuthController],
         exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule, auth_services_1.AuthService],
     })
