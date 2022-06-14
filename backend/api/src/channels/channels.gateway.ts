@@ -51,9 +51,9 @@ export class ChannelsGateway
   @SubscribeMessage("msg")
   async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
     try {
-      const receiver = client.data.msg;
-      const message = client.data.user.user_name + ": " + msg;
-      this.emitChannel(client.data, receiver, message);
+      // const receiver = client.data.msg;
+      const message = client.data.user.display_name + ": " + msg;
+      this.emitChannel(client.data, "msg", message);
     } catch {}
   }
 

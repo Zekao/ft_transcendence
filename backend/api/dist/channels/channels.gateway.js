@@ -43,9 +43,8 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async SendPrivateMessage(client, msg) {
         try {
-            const receiver = client.data.msg;
-            const message = client.data.user.user_name + ": " + msg;
-            this.emitChannel(client.data, receiver, message);
+            const message = client.data.user.display_name + ": " + msg;
+            this.emitChannel(client.data, "msg", message);
         }
         catch (_a) { }
     }
