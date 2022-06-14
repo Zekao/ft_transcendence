@@ -123,6 +123,13 @@ export default Vue.extend({
   },
 
   methods: {
+    scrollToBottom() {
+      const container = this.$el.querySelector('#' + this.channel.name)
+      if (container !== null) container.scrollTop = container.scrollHeight
+    },
+    async deleteChannel() {
+      console.log(this.channel.id)
+    },
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
       if (this.socket && messageTextFormated) {
@@ -131,13 +138,6 @@ export default Vue.extend({
         })
         this.messageText = ''
       }
-    },
-    scrollToBottom() {
-      const container = this.$el.querySelector('#' + this.channel.name)
-      if (container !== null) container.scrollTop = container.scrollHeight
-    },
-    async deleteChannel() {
-      console.log(this.channel.id)
     },
     removeAdmin() {
       console.log(this.admins)
