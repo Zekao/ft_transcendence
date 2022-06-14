@@ -33,8 +33,7 @@ class ChannelsDto {
                 this.members = channel.members.map((user) => { return new user_dto_1.UserDto(); });
             if (channel.admins)
                 this.admins = channel.admins.map((user) => { return new user_dto_1.UserDto(); });
-            if (channel.owner)
-                this.owner = new user_dto_1.UserDto(channel.owner);
+            this.owner = channel.owner;
         }
     }
 }

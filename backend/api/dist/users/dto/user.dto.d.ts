@@ -1,7 +1,7 @@
 import { UserGameStatus, UserStatus } from "../users.enum";
 import { User } from "../users.entity";
 import { MatchDto } from "../../matchs/dto/matchs.dto";
-import { Channel } from "src/channels/channels.entity";
+import { ChannelsDto } from "src/channels/dto/channels.dto";
 export declare class UserDto {
     constructor(user?: User);
     id: string;
@@ -21,10 +21,10 @@ export declare class UserDto {
     TwoFA: boolean;
     matchs: MatchDto[];
     friends: UserDto[];
-    blockedUsers: User[];
-    joined_channels: Channel[];
-    ownered_channels: Channel[];
-    admined_channels: Channel[];
-    mutedChannels: Channel[];
-    bannedChannels: Channel[];
+    blockedUsers: UserDto[];
+    joined_channels: ChannelsDto[];
+    ownered_channels: ChannelsDto[];
+    admined_channels: ChannelsDto[];
+    mutedChannels: ChannelsDto[];
+    bannedChannels: ChannelsDto[];
 }
