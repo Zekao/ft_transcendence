@@ -29,7 +29,6 @@ import { Matchs } from "src/matchs/matchs.entity";
     UsersService,
     AuthService,
     MatchsService,
-    JwtService,
   ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
