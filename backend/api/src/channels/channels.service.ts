@@ -59,7 +59,6 @@ export class ChannelsService {
   }
   async getChannelId(
     id: string,
-    password: ChannelPasswordDto,
     RelationsPicker?: ChannelRelationsPicker[]
   ): Promise<Channel> {
     const relations: string[] = [];
@@ -88,18 +87,13 @@ export class ChannelsService {
         relations,
       });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    if (
-      found.status === ChannelStatus.PROTECTED &&
-      (await bcrypt.compare(password, found.password))
-    )
-      throw new ForbiddenException("Incorrect Password");
     return found;
   }
 
   async getChannelHistory(
-    id: string, channelPasswordDto: ChannelPasswordDto
+    id: string
   ): Promise<{ login: string; message: string }[]> {
-    const found = await this.getChannelId(id, channelPasswordDto);
+    const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;
   }
@@ -135,11 +129,22 @@ export class ChannelsService {
     return channel;
   }
 
+  async validateChannelPassword(
+    id: string,
+    channelPasswordDto: ChannelPasswordDto
+  ) {
+    const found = await this.getChannelId(id);
+    const { password } = channelPasswordDto;
+    if (await bcrypt.compare(password, found.password))
+      throw new ForbiddenException("Incorrect Password");
+    return found;
+  }
+
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  async deleteChannel(id: string, query: ChannelPasswordDto): Promise<boolean> {
-    const found = await this.getChannelId(id, query);
+  async deleteChannel(id: string): Promise<boolean> {
+    const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     const target = await this.ChannelsRepository.delete(found.id);
     if (target.affected === 0)
@@ -151,9 +156,9 @@ export class ChannelsService {
   /*
   /*                   PATCH                                                    */
   /* ************************************************************************** */
-  async editChannel(id: string, ChannelDto: ChannelsDto, query: ChannelPasswordDto): Promise<Channel> {
+  async editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel> {
     const { name, status, permissions } = ChannelDto;
-    const found = await this.getChannelId(id, query);
+    const found = await this.getChannelId(id);
     if (name) found.name = name;
     if (status) found.status = status;
     if (permissions) found.permissions = permissions;

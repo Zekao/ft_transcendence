@@ -28,20 +28,23 @@ let ChannelsController = class ChannelsController {
             return this.channelService.getChannelByFilter(filters);
         return this.channelService.getChannel();
     }
-    getChannel(id, body) {
-        return this.channelService.getChannelId(id, body);
+    getChannel(id) {
+        return this.channelService.getChannelId(id);
     }
-    getHistory(id, query) {
-        return this.channelService.getChannelHistory(id, query);
+    getHistory(id) {
+        return this.channelService.getChannelHistory(id);
+    }
+    getChannelPassword(id, body) {
+        return this.channelService.validateChannelPassword(id, body);
     }
     createChannel(ChannelsDtos) {
         return this.channelService.createChannel(ChannelsDtos);
     }
-    deleteUser(id, query) {
-        return this.channelService.deleteChannel(id, query);
+    deleteUser(id) {
+        return this.channelService.deleteChannel(id);
     }
-    editChannel(id, edit, query) {
-        return this.channelService.editChannel(id, edit, query);
+    editChannel(id, edit) {
+        return this.channelService.editChannel(id, edit);
     }
 };
 __decorate([
@@ -59,9 +62,8 @@ __decorate([
         summary: "Get channel info",
     }),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "getChannel", null);
 __decorate([
@@ -71,11 +73,22 @@ __decorate([
         summary: "Get message history of a channel",
     }),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getHistory", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/:id/password"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Validate password of a channel",
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
-], ChannelsController.prototype, "getHistory", null);
+], ChannelsController.prototype, "getChannelPassword", null);
 __decorate([
     (0, common_1.Post)("/create"),
     (0, swagger_1.ApiOperation)({
@@ -92,9 +105,8 @@ __decorate([
         summary: "Delete a specified channel",
     }),
     __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
 __decorate([
@@ -104,9 +116,8 @@ __decorate([
     }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
-    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto, Object]),
+    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([

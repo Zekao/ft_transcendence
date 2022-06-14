@@ -17,13 +17,14 @@ export declare class ChannelsService {
     constructor(ChannelsRepository: Repository<Channel>, UsersService: UsersService);
     getChannel(): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
-    getChannelId(id: string, password: ChannelPasswordDto, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
-    getChannelHistory(id: string, channelPasswordDto: ChannelPasswordDto): Promise<{
+    getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
+    getChannelHistory(id: string): Promise<{
         login: string;
         message: string;
     }[]>;
     saveChannel(id: Channel): Promise<boolean>;
     createChannel(channelsDto: ChannelsDto): Promise<Channel>;
-    deleteChannel(id: string, query: ChannelPasswordDto): Promise<boolean>;
-    editChannel(id: string, ChannelDto: ChannelsDto, query: ChannelPasswordDto): Promise<Channel>;
+    validateChannelPassword(id: string, channelPasswordDto: ChannelPasswordDto): Promise<Channel>;
+    deleteChannel(id: string): Promise<boolean>;
+    editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel>;
 }

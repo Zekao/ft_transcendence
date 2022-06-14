@@ -44,8 +44,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Get channel info",
   })
-  getChannel(@Param("id") id: string, @Body() body): Promise<Channel> {
-    return this.channelService.getChannelId(id, body);
+  getChannel(@Param("id") id: string): Promise<Channel> {
+    return this.channelService.getChannelId(id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -54,10 +54,18 @@ export class ChannelsController {
     summary: "Get message history of a channel",
   })
   getHistory(
-    @Param("id") id: string,
-    @Query() query
+    @Param("id") id: string
   ): Promise<{ login: string; message: string }[]> {
-    return this.channelService.getChannelHistory(id, query);
+    return this.channelService.getChannelHistory(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/password")
+  @ApiOperation({
+    summary: "Validate password of a channel",
+  })
+  getChannelPassword(@Param("id") id: string, @Body() body): Promise<Channel> {
+    return this.channelService.validateChannelPassword(id, body);
   }
 
   /* ************************************************************************** */
@@ -80,8 +88,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Delete a specified channel",
   })
-  deleteUser(@Param("id") id: string, @Query() query): Promise<boolean> {
-    return this.channelService.deleteChannel(id, query);
+  deleteUser(@Param("id") id: string): Promise<boolean> {
+    return this.channelService.deleteChannel(id);
   }
 
   /* ************************************************************************** */
@@ -93,9 +101,8 @@ export class ChannelsController {
   })
   editChannel(
     @Param("id") id: string,
-    @Query() edit: ChannelsDto,
-    @Query() query
+    @Query() edit: ChannelsDto
   ): Promise<Channel> {
-    return this.channelService.editChannel(id, edit, query);
+    return this.channelService.editChannel(id, edit);
   }
 }

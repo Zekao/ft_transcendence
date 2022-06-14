@@ -19,7 +19,6 @@ const users_service_1 = require("../users/users.service");
 const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
-const channels_enum_1 = require("./channels.enum");
 const bcrypt = require("bcrypt");
 class ChannelRelationsPicker {
 }
@@ -48,7 +47,7 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel not found`);
         return channels;
     }
-    async getChannelId(id, password, RelationsPicker) {
+    async getChannelId(id, RelationsPicker) {
         const relations = [];
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
@@ -76,13 +75,10 @@ let ChannelsService = class ChannelsService {
             });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        if (found.status === channels_enum_1.ChannelStatus.PROTECTED &&
-            (await bcrypt.compare(password, found.password)))
-            throw new common_1.ForbiddenException("Incorrect Password");
         return found;
     }
-    async getChannelHistory(id, channelPasswordDto) {
-        const found = await this.getChannelId(id, channelPasswordDto);
+    async getChannelHistory(id) {
+        const found = await this.getChannelId(id);
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.history;
@@ -115,8 +111,15 @@ let ChannelsService = class ChannelsService {
         }
         return channel;
     }
-    async deleteChannel(id, query) {
-        const found = await this.getChannelId(id, query);
+    async validateChannelPassword(id, channelPasswordDto) {
+        const found = await this.getChannelId(id);
+        const { password } = channelPasswordDto;
+        if (await bcrypt.compare(password, found.password))
+            throw new common_1.ForbiddenException("Incorrect Password");
+        return found;
+    }
+    async deleteChannel(id) {
+        const found = await this.getChannelId(id);
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         const target = await this.ChannelsRepository.delete(found.id);
@@ -124,9 +127,9 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return true;
     }
-    async editChannel(id, ChannelDto, query) {
+    async editChannel(id, ChannelDto) {
         const { name, status, permissions } = ChannelDto;
-        const found = await this.getChannelId(id, query);
+        const found = await this.getChannelId(id);
         if (name)
             found.name = name;
         if (status)
