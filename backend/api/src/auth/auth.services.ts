@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   async getUserFromSocket(client: Socket): Promise<User> {
-    const token = client.handshake.headers.authorization;
+    const token = client.handshake.auth.authorization;
     if (!token) throw new UnauthorizedException("No token provided");
     const payload = await this.verifyJwtToken(token);
     if (!payload) throw new UnauthorizedException("Invalid token provided");

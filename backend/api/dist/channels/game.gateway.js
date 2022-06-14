@@ -73,7 +73,7 @@ let GameGateway = class GameGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async isInGame(client, user) {
-        client.data.game = client.handshake.headers.game;
+        client.data.game = client.handshake.auth.game;
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);

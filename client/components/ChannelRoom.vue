@@ -116,6 +116,18 @@ export default Vue.extend({
     socket: null as NuxtSocket | null,
   }),
 
+  async fetch() {
+    try {
+      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
+      this.messages = [...res.map((el: string) => el.charAt(0) === '{' ? JSON.parse(el) : el)]
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  },
+
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
@@ -129,23 +141,11 @@ export default Vue.extend({
     }
   },
 
-  async fetch() {
-    try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
-      this.messages = [...res.map((el: string) => el.charAt(0) === '{' ? JSON.parse(el) : el)]
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
-    } catch(err) {
-      console.log(err)
-    }
-  },
-
   mounted() {
     console.log(this.channel)
     this.socket = this.$nuxtSocket({
       channel: '/channel',
-      extraHeaders: {
+      auth: {
         Authorization: this.accessToken,
         channel: this.channel.name,
       },
