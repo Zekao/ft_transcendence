@@ -17,10 +17,14 @@ export class Matchs {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @ApiProperty({ type: () => User })
   @OneToMany(() => User, (user) => (user.matchs))
+  @JoinTable({ name: 'firstPlayer'})
   FirstPlayer: User;
 
+  @ApiProperty({ type: () => User })
   @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
+  @JoinTable({ name: 'secondPlayer'})
   SecondPlayer: User;
 
   @Column({ nullable: true })
@@ -29,13 +33,14 @@ export class Matchs {
   @Column({ nullable: true })
   scoreSecondPlayer: number;
 
+  @ApiProperty({ type: () => User })
   @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
   winner: User;
 
   @Column()
   status: MatchStatus;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => User })
   @ManyToMany(() => User, (user) => user.matchs)
   @JoinTable({ name: "Spectators" })
   specs: User[];

@@ -15,19 +15,23 @@ const users_service_1 = require("./users.service");
 const auth_module_1 = require("../auth/auth.module");
 const jwt_1 = require("@nestjs/jwt");
 const platform_express_1 = require("@nestjs/platform-express");
+const matchs_entity_1 = require("../matchs/matchs.entity");
+const matchs_module_1 = require("../matchs/matchs.module");
+const matchs_service_1 = require("../matchs/matchs.service");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([users_entity_1.User]),
+            typeorm_1.TypeOrmModule.forFeature([users_entity_1.User, matchs_entity_1.Matchs]),
             auth_module_1.AuthModule,
+            (0, common_1.forwardRef)(() => matchs_module_1.MatchsModule),
             platform_express_1.MulterModule.register({
                 dest: "./image",
             }),
         ],
         controllers: [users_controller_1.UsersController],
-        providers: [users_service_1.UsersService, jwt_1.JwtService],
+        providers: [users_service_1.UsersService, jwt_1.JwtService, matchs_service_1.MatchsService],
         exports: [users_service_1.UsersService],
     })
 ], UsersModule);
