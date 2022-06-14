@@ -15,13 +15,17 @@
     <v-list v-else-if="!authUserFriends.length">
       <v-list-item dense>No friends yet.</v-list-item>
     </v-list>
-    <v-list v-else >
+    <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i">
-        <v-badge :color="user.status === 'ONLINE' ? 'green' : 'red'" overlap class="mr-4">
+        <v-badge
+          :color="user.status === 'ONLINE' ? 'green' : 'red'"
+          overlap
+          class="mr-4"
+        >
           <v-avatar><v-img :src="user.avatar" /></v-avatar>
         </v-badge>
         <v-list-item-content>
-          <FriendMenu :friend = user />
+          <FriendMenu :friend="user" />
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -47,8 +51,6 @@ export default Vue.extend({
     ...mapState({
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
     }),
-
-    
   },
 
   async fetch() {

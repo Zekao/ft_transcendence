@@ -84,9 +84,11 @@ export default {
 
   io: {
     // module options
-    sockets: [{
-      default: true,
-      url: "https://ft.localhost:4500",
-    }]
-  }
+    sockets: [
+      {
+        default: true,
+        url: 'https://ft.localhost:4500',
+      },
+    ],
+  },
 }

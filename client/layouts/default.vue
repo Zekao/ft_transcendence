@@ -93,7 +93,7 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <ChannelRoom :channel="channel" :key="i"/>
+            <ChannelRoom :key="i" :channel="channel" />
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -115,7 +115,7 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <MessageRoom :user="user" :key="i"/>
+            <MessageRoom :key="i" :user="user" />
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -129,8 +129,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { IChannel } from '@/store/channel'
 import { NuxtSocket } from 'nuxt-socket-io'
+import { IChannel } from '@/store/channel'
 import { IUser } from '~/store/user'
 
 export default Vue.extend({
@@ -142,7 +142,7 @@ export default Vue.extend({
     channelVisible: false,
     channelName: '',
     channelStatus: '',
-    channelStatusList: ['Public', 'Protected' ],
+    channelStatusList: ['Public', 'Protected'],
     channelPassword: '',
     items: [
       {
@@ -192,13 +192,16 @@ export default Vue.extend({
       auth: {
         Authorization: this.accessToken,
       },
-      path: "/api/socket.io/",
+      path: '/api/socket.io/',
     } as any)
   },
 
   async fetch() {
     try {
-      await Promise.all([this.$store.dispatch('channel/fetch'), this.$store.dispatch('user/fetch')])
+      await Promise.all([
+        this.$store.dispatch('channel/fetch'),
+        this.$store.dispatch('user/fetch'),
+      ])
     } catch (err) {
       console.log(err)
     }
