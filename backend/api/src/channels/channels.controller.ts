@@ -54,9 +54,10 @@ export class ChannelsController {
     summary: "Get message history of a channel",
   })
   getHistory(
-    @Param("id") id: string
+    @Param("id") id: string,
+    @Query() query
   ): Promise<{ login: string; message: string }[]> {
-    return this.channelService.getChannelHistory(id);
+    return this.channelService.getChannelHistory(id, query);
   }
 
   /* ************************************************************************** */
@@ -79,8 +80,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Delete a specified channel",
   })
-  deleteUser(@Param("id") id: string): Promise<boolean> {
-    return this.channelService.deleteChannel(id);
+  deleteUser(@Param("id") id: string, @Query() query): Promise<boolean> {
+    return this.channelService.deleteChannel(id, query);
   }
 
   /* ************************************************************************** */
@@ -92,8 +93,9 @@ export class ChannelsController {
   })
   editChannel(
     @Param("id") id: string,
-    @Query() edit: ChannelsDto
+    @Query() edit: ChannelsDto,
+    @Query() query
   ): Promise<Channel> {
-    return this.channelService.editChannel(id, edit);
+    return this.channelService.editChannel(id, edit, query);
   }
 }

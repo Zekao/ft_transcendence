@@ -7,11 +7,11 @@ export declare class ChannelsController {
     constructor(channelService: ChannelsService);
     GetAllChannel(filters: ChannelFilteDto): Promise<Channel[]>;
     getChannel(id: string, body: any): Promise<Channel>;
-    getHistory(id: string): Promise<{
+    getHistory(id: string, query: any): Promise<{
         login: string;
         message: string;
     }[]>;
     createChannel(ChannelsDtos: ChannelsDto): Promise<Channel>;
-    deleteUser(id: string): Promise<boolean>;
-    editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
+    deleteUser(id: string, query: any): Promise<boolean>;
+    editChannel(id: string, edit: ChannelsDto, query: any): Promise<Channel>;
 }

@@ -96,27 +96,10 @@ export class ChannelsService {
     return found;
   }
 
-  async getChannelPermissions(id: string): Promise<string> {
-    const found = await this.getChannelId(id);
-    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    return found.permissions;
-  }
-  async getChannelStatus(id: string): Promise<string> {
-    const found = await this.getChannelId(id);
-    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    return found.status;
-  }
-  async getChannelMembers(id: string, role?: string): Promise<User[]> {
-    let members: User[];
-    if (!role) {
-      members.push(null);
-    }
-    return members;
-  }
   async getChannelHistory(
-    id: string
+    id: string, channelPasswordDto: ChannelPasswordDto
   ): Promise<{ login: string; message: string }[]> {
-    const found = await this.getChannelId(id);
+    const found = await this.getChannelId(id, channelPasswordDto);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;
   }
@@ -155,8 +138,8 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
-  async deleteChannel(id: string): Promise<boolean> {
-    const found = await this.getChannelId(id);
+  async deleteChannel(id: string, query: ChannelPasswordDto): Promise<boolean> {
+    const found = await this.getChannelId(id, query);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     const target = await this.ChannelsRepository.delete(found.id);
     if (target.affected === 0)
@@ -168,9 +151,9 @@ export class ChannelsService {
   /*
   /*                   PATCH                                                    */
   /* ************************************************************************** */
-  async editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel> {
+  async editChannel(id: string, ChannelDto: ChannelsDto, query: ChannelPasswordDto): Promise<Channel> {
     const { name, status, permissions } = ChannelDto;
-    const found = await this.getChannelId(id);
+    const found = await this.getChannelId(id, query);
     if (name) found.name = name;
     if (status) found.status = status;
     if (permissions) found.permissions = permissions;
