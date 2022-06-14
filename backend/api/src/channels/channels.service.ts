@@ -97,7 +97,7 @@ export class ChannelsService {
     }
     return members;
   }
-  async getChannelHistory(id: string): Promise<string[][]> {
+  async getChannelHistory(id: string): Promise<{ login: string, message: string  }[]> {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;

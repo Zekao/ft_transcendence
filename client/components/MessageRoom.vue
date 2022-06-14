@@ -10,7 +10,10 @@
     <v-toolbar>
       <v-text-field
         v-model="messageText"
+        dense
+        outlined
         hide-details
+        class="mr-2"
       ></v-text-field>
       <v-btn icon @click="emitMessageOnChannel"><v-icon>mdi-pencil</v-icon></v-btn>
     </v-toolbar>
