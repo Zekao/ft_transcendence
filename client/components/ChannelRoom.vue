@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="100%">
-    <v-toolbar v-if="locked">
+    <v-toolbar v-if="isLocked">
       <v-toolbar>
         <v-text-field
           v-model="password"
@@ -75,10 +75,10 @@
             <v-list-item-content>
               {{ message.login }}
             </v-list-item-content>
-            <v-btn v-if="isAuthUserAdmin" x-small icon class="mr-2">
+            <v-btn v-if="isAuthUserAdmin" x-small icon class="mr-2" @click="setBan(message.login)">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-btn v-if="isAuthUserAdmin" x-small icon>
+            <v-btn v-if="isAuthUserAdmin" x-small icon @click="setMute(message.login)">
               <v-icon>mdi-volume-off</v-icon>
             </v-btn>
             <v-list-item-content class="text-right">
@@ -127,7 +127,7 @@ export default Vue.extend({
   data: () => ({
     owner: true,
     admin: true,
-    locked: true,
+    unlocked: false,
     password: '',
     messageText: '',
     messages: [] as { login: string; message: string }[],
@@ -139,7 +139,7 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history&password=${this.channel.password}`)
+      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
       this.messages = [
         ...res.map((el: string) =>
           el.charAt(0) === '{' ? JSON.parse(el) : el
@@ -164,6 +164,9 @@ export default Vue.extend({
     isAuthUserAdmin() {
       return this.admin
     },
+    isLocked() {
+      return this.channel.status === 'PROTECTED' ? !this.unlocked : false
+    }
   },
 
   mounted() {
@@ -202,48 +205,34 @@ export default Vue.extend({
       }
     },
     emitLogoutOnChannel() {
-      console.log(this.channel.id)
-    },
-    emitPassword() {
-      this.locked = false
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
-    },
-    addAdmin(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'addAdmin', user)
-        this.messageText = ''
+      if (this.socket) {
+        this.socket.emit('channel', 'action', 'logout')
       }
     },
-    removeAdmin(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'removeAdmin', user)
-        this.messageText = ''
+    async emitPassword() {
+      try {
+        await this.$axios.$post(`/channel/${this.channel.id}/password`, { password: this.password })
+        this.unlocked = true
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
+      } catch(err) {
+        this.password = ''
       }
     },
-    banUser(user: string) {
+    setAdmin(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'banUser', user)
-        this.messageText = ''
+        this.socket.emit('channel', 'action', 'admin', user)
       }
     },
-    unbanUser(user: string) {
+    setBan(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'unbanUser', user)
-        this.messageText = ''
+        this.socket.emit('channel', 'action', 'ban', user)
       }
     },
-    muteUser(user: string) {
+    setMute(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'muteUser', user)
-        this.messageText = ''
-      }
-    },
-    unmuteUser(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'unmuteUser', user)
-        this.messageText = ''
+        this.socket.emit('channel', 'action', 'mute', user)
       }
     },
     fetchAdmin() {
