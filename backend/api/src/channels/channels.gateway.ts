@@ -40,11 +40,12 @@ export class ChannelsGateway
   async SendMessageToChannel(client: Socket, msg: string): Promise<void> {
     try {
       const channel: Channel = client.data.channel;
-      const message: string = client.data.user.display_name + ": " + msg;
+      const sender: string = client.data.user.display_name;
+      const message: string = sender + ": " + msg;
       if (!channel.history) channel.history = [];
       channel.history.push(message);
       this.channelService.saveChannel(channel);
-      this.emitChannel(client.data, "channel", message);
+      this.emitChannel(client.data, "channel", sender, msg);
     } catch {}
   }
 
