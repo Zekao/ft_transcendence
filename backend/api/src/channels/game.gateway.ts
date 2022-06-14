@@ -10,15 +10,14 @@ import {
 } from "@nestjs/websockets";
 import { Logger, UnauthorizedException } from "@nestjs/common";
 import { Socket, Server } from "socket.io";
-import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
-import { ChannelsService } from "../channels/channels.service";
+import { ChannelsService } from "./channels.service";
 import { UserGameStatus, UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
-import { Channel } from "../channels/channels.entity";
-import { MatchsService } from "./matchs.service";
-import { Matchs } from "./matchs.entity";
+import { Channel } from "./channels.entity";
+import { MatchsService } from "../matchs/matchs.service";
+import { Matchs } from "../matchs/matchs.entity";
 
 @WebSocketGateway({ namespace: "game" })
 export class GameGateway
@@ -97,7 +96,6 @@ export class GameGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
-      console.log(client.handshake.headers.authorization);
       const user = await this.authService.getUserFromSocket(client);
       const match = await this.matchService.getMatchsId(
         client.handshake.headers.game

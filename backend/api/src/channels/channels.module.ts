@@ -9,9 +9,16 @@ import { UsersModule } from "../users/users.module";
 import { AuthModule } from "src/auth/auth.module";
 import { ChatGateway } from "./chat.gateway";
 import { StatusGateway } from "./status.gateway";
+import { GameGateway } from "./game.gateway";
+import { MatchsModule } from "../matchs/matchs.module";
 
 @Module({
-  imports: [UsersModule, AuthModule, TypeOrmModule.forFeature([Channel])],
+  imports: [
+    MatchsModule,
+    UsersModule,
+    AuthModule,
+    TypeOrmModule.forFeature([Channel]),
+  ],
   controllers: [ChannelsController],
   providers: [
     ChannelsService,
@@ -19,6 +26,7 @@ import { StatusGateway } from "./status.gateway";
     ChatGateway,
     StatusGateway,
     JwtService,
+    GameGateway,
   ],
 })
 export class ChannelsModule {}

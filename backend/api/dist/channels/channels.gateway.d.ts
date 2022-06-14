@@ -1,15 +1,13 @@
 import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
-import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    private readonly jwtService;
     private readonly userService;
     private readonly authService;
     private readonly channelService;
-    constructor(jwtService: JwtService, userService: UsersService, authService: AuthService, channelService: ChannelsService);
+    constructor(userService: UsersService, authService: AuthService, channelService: ChannelsService);
     server: any;
     private logger;
     afterInit(server: Server): void;

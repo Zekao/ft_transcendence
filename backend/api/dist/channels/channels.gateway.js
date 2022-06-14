@@ -13,14 +13,12 @@ exports.ChannelsGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
-const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
 const users_enum_1 = require("../users/users.enum");
 let ChannelsGateway = class ChannelsGateway {
-    constructor(jwtService, userService, authService, channelService) {
-        this.jwtService = jwtService;
+    constructor(userService, authService, channelService) {
         this.userService = userService;
         this.authService = authService;
         this.channelService = channelService;
@@ -82,7 +80,9 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async handleConnection(client, ...args) {
         try {
+            console.log(client.handshake.headers.authorization);
             const user = await this.authService.getUserFromSocket(client);
+            console.log("TEST");
             client.data.user = user;
             if (await this.isChannel(client))
                 return;
@@ -105,8 +105,7 @@ __decorate([
 ], ChannelsGateway.prototype, "SendMessageToChannel", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: "channel" }),
-    __metadata("design:paramtypes", [jwt_1.JwtService,
-        users_service_1.UsersService,
+    __metadata("design:paramtypes", [users_service_1.UsersService,
         auth_services_1.AuthService,
         channels_service_1.ChannelsService])
 ], ChannelsGateway);

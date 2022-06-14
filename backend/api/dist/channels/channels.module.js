@@ -18,11 +18,18 @@ const users_module_1 = require("../users/users.module");
 const auth_module_1 = require("../auth/auth.module");
 const chat_gateway_1 = require("./chat.gateway");
 const status_gateway_1 = require("./status.gateway");
+const game_gateway_1 = require("./game.gateway");
+const matchs_module_1 = require("../matchs/matchs.module");
 let ChannelsModule = class ChannelsModule {
 };
 ChannelsModule = __decorate([
     (0, common_1.Module)({
-        imports: [users_module_1.UsersModule, auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forFeature([channels_entity_1.Channel])],
+        imports: [
+            matchs_module_1.MatchsModule,
+            users_module_1.UsersModule,
+            auth_module_1.AuthModule,
+            typeorm_1.TypeOrmModule.forFeature([channels_entity_1.Channel]),
+        ],
         controllers: [channels_controller_1.ChannelsController],
         providers: [
             channels_service_1.ChannelsService,
@@ -30,6 +37,7 @@ ChannelsModule = __decorate([
             chat_gateway_1.ChatGateway,
             status_gateway_1.StatusGateway,
             jwt_1.JwtService,
+            game_gateway_1.GameGateway,
         ],
     })
 ], ChannelsModule);
