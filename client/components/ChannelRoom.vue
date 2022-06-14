@@ -1,6 +1,12 @@
 <template>
   <v-sheet width="100%">
-    <v-card height="320px"></v-card>
+    <v-card :id="channelName" height="320px" class="overflow-y-auto">
+      <v-list>
+        <v-list-item v-for="(message, i) in messages" :key="i">
+          {{ message }}
+        </v-list-item>
+      </v-list>
+    </v-card>
     <v-toolbar>
       <v-text-field
         v-model="messageText"
@@ -43,9 +49,10 @@ export default Vue.extend({
       path: "/api/socket.io/",
     })
     this.socket.on('channel', (msg, cb) => {
-      console.log('hey')
-      console.log(msg)
-      console.log(cb)
+      this.messages.push(msg)
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
     })
   },
 
@@ -56,6 +63,10 @@ export default Vue.extend({
             console.log(resp)
         })
       }
+    },
+    scrollToBottom() {
+      const container = this.$el.querySelector('#' + this.channelName) || {} as Element
+      container.scrollTop = container.scrollHeight
     }
   }
 })
