@@ -3,7 +3,7 @@
     <v-card :id="channel.name" height="320px" class="overflow-y-auto">
       <v-list>
         <v-list-item v-for="(message, i) in messages" :key="i">
-          {{ message.login }} - {{ message.content }}
+          {{ message.login }} - {{ message.message }}
         </v-list-item>
       </v-list>
     </v-card>
@@ -34,7 +34,7 @@ export default Vue.extend({
 
   data: () => ({
     messageText: '',
-    messages: [] as { login: string, content: string }[],
+    messages: [] as { login: string, message: string }[],
     socket: null as NuxtSocket | null,
   }),
 
@@ -47,8 +47,7 @@ export default Vue.extend({
   async fetch() {
     try {
       const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
-      console.log(res)
-      this.messages = [...res]
+      this.messages = [...res.map((el: string) => el.charAt(0) === '{' ? JSON.parse(el) : el)]
       this.$nextTick(() => {
         this.scrollToBottom()
       })
@@ -67,7 +66,7 @@ export default Vue.extend({
       path: "/api/socket.io/",
     })
     this.socket.on('channel', (login, message) => {
-      this.messages.push({login, content: message})
+      this.messages.push({login, message})
       this.$nextTick(() => {
         this.scrollToBottom()
       })
