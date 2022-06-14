@@ -20,6 +20,6 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     handleDisconnect(client: Socket): void;
     isStatus(client: Socket, user: User): boolean;
     isMsg(client: Socket): boolean;
-    isChannel(client: Socket): boolean;
+    isChannel(client: Socket): Promise<boolean>;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
 }

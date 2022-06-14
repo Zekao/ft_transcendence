@@ -31,9 +31,13 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async SendMessageToChannel(client, msg) {
         try {
-            const channel = client.data.ConnectedChannel;
+            const channel = client.data.channel;
             const message = client.data.user.user_name + ": " + msg;
-            this.emitChannel(client.data, channel, message);
+            if (!channel.history)
+                channel.history = [];
+            channel.history.push(message);
+            this.channelService.saveChannel(channel);
+            this.emitChannel(client.data, channel.name, message);
         }
         catch (_a) { }
     }
@@ -84,25 +88,30 @@ let ChannelsGateway = class ChannelsGateway {
         }
         return false;
     }
-    isChannel(client) {
+    async isChannel(client) {
         client.data.ConnectedChannel = client.handshake.headers.channel;
         if (client.data.ConnectedChannel) {
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
+            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
+            if (client.data.channel == false)
+                return false;
+            else {
+                this.logger.log(`Client connected: ${client.id}`);
+                return true;
+            }
         }
         return false;
     }
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
-            const allchanel = await this.channelService.getChannel();
             client.data.user = user;
             if (this.isStatus(client, user))
                 return;
             if (this.isMsg(client))
                 return;
-            if (this.isChannel(client))
+            if (await this.isChannel(client))
                 return;
+            console.log("dd");
             throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {

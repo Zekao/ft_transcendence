@@ -27,8 +27,6 @@ export class ChannelsDto {
     }
   }
 
-
-  @IsNotEmpty()
   @ApiProperty()
   id: string;
 

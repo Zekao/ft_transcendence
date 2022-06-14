@@ -52,6 +52,7 @@ export class ChannelsService {
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
+
   async getChannelPermissions(id: string): Promise<string> {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
@@ -61,6 +62,15 @@ export class ChannelsService {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.status;
+  }
+  async getChannelHistory(id: string): Promise<string[]> {
+    const found = await this.getChannelId(id);
+    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
+    return found.history;
+  }
+  async saveChannel(id: Channel): Promise<boolean> {
+    this.ChannelsRepository.save(id);
+    return true;
   }
 
   /* ************************************************************************** */
