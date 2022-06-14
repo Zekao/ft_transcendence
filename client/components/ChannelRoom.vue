@@ -139,7 +139,7 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
+      const res = await this.$axios.$get(`/channel/${this.channel.id}/history&password=${this.channel.password}`)
       this.messages = [
         ...res.map((el: string) =>
           el.charAt(0) === '{' ? JSON.parse(el) : el
