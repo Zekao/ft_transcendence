@@ -191,7 +191,6 @@ export default Vue.extend({
     this.socket = this.$nuxtSocket({
       auth: {
         Authorization: this.accessToken,
-        status: "1",
       },
       path: "/api/socket.io/",
     } as any)
