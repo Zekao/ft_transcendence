@@ -31,11 +31,12 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async SendMessageToChannel(client, message) {
         try {
-            console.log(message);
             const channel = client.data.channel;
             const login = client.data.user.display_name;
             if (message[0] === "msg") {
                 console.log('test');
+                if (!channel.history)
+                    channel.history = [];
                 const history = { login, message: message[1] };
                 if (!channel.history)
                     channel.history = [];

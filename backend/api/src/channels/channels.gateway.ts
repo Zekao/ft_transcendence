@@ -39,11 +39,11 @@ export class ChannelsGateway
   @SubscribeMessage("channel")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
-      console.log(message)
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
       if (message[0] === "msg") {
         console.log('test')
+        if (!channel.history) channel.history = [];
         const history = { login, message: message[1] };
         if (!channel.history) channel.history = []
         channel.history.push(history);
