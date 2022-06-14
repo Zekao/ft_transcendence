@@ -43,7 +43,7 @@ __decorate([
 ], Channel.prototype, "history", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.joined_channels, { nullable: true }),
-    (0, typeorm_1.JoinTable)({ name: "members" }),
+    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Channel.prototype, "members", void 0);
 __decorate([

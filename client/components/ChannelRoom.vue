@@ -10,7 +10,10 @@
     <v-toolbar>
       <v-text-field
         v-model="messageText"
+        dense
+        outlined
         hide-details
+        class="mr-2"
       ></v-text-field>
       <v-btn icon @click="emitMessageOnChannel"><v-icon>mdi-pencil</v-icon></v-btn>
     </v-toolbar>
@@ -54,6 +57,7 @@ export default Vue.extend({
   },
 
   mounted() {
+    console.log(this.channel)
     this.socket = this.$nuxtSocket({
       extraHeaders: {
         Authorization: this.accessToken,
