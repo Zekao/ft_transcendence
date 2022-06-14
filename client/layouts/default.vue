@@ -224,7 +224,7 @@ export default Vue.extend({
           name: this.channelName,
           status: this.convertChannelStatus(this.channelStatus),
           permissions: 'OPEN',
-          password: 'Hello World!',
+          password: this.channelStatus === 'Protected' ? this.channelPassword : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
       } catch (err) {
