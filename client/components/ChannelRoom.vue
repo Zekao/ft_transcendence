@@ -227,7 +227,7 @@ export default Vue.extend({
     },
     setBan(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'user', user)
+        this.socket.emit('channel', 'action', 'ban', user)
       }
     },
     setMute(user: string) {
