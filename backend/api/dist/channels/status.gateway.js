@@ -30,21 +30,15 @@ let StatusGateway = class StatusGateway {
     }
     handleDisconnect(client) {
         const user = client.data.user;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.OFFLINE;
-            this.userService.saveUser(user);
-        }
+        user.status = users_enum_1.UserStatus.OFFLINE;
+        this.userService.saveUser(user);
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     isStatus(client, user) {
-        client.data.status = client.handshake.headers.status;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.ONLINE;
-            this.userService.saveUser(user);
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
-        }
-        return false;
+        user.status = users_enum_1.UserStatus.ONLINE;
+        this.userService.saveUser(user);
+        this.logger.log(`Client connected: ${client.id}`);
+        return true;
     }
     async handleConnection(client, ...args) {
         try {

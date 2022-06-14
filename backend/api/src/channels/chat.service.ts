@@ -14,7 +14,7 @@ import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 
 @Injectable()

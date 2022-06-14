@@ -13,7 +13,6 @@ import { ChannelPermissions, ChannelStatus } from "../channels.enum";
 import { User } from "../../users/users.entity";
 
 export class ChannelsDto {
-
   constructor(channel?: Channel) {
     if (channel) {
       this.id = channel.id;
@@ -25,13 +24,21 @@ export class ChannelsDto {
       this.admins = channel.admins;
       this.owner = channel.owner;
       if (channel.mutedUsers)
-        this.mutedUsers = channel.mutedUsers.map((user) => {return new UserDto()});
+        this.mutedUsers = channel.mutedUsers.map((user) => {
+          return new UserDto();
+        });
       if (channel.bannedUsers)
-        this.bannedUsers = channel.bannedUsers.map((user) => {return new UserDto()});
+        this.bannedUsers = channel.bannedUsers.map((user) => {
+          return new UserDto();
+        });
       if (channel.members)
-        this.members = channel.members.map((user) => {return new UserDto()});
+        this.members = channel.members.map((user) => {
+          return new UserDto();
+        });
       if (channel.admins)
-        this.admins = channel.admins.map((user) => {return new UserDto()});
+        this.admins = channel.admins.map((user) => {
+          return new UserDto();
+        });
       this.owner = channel.owner;
     }
   }
@@ -57,6 +64,12 @@ export class ChannelsDto {
   @ApiProperty()
   name: string;
 
+  @IsString()
+  @MinLength(8)
+  @MaxLength(32)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: "password is too weak",
+  })
   @ApiProperty()
   password: string;
 
@@ -78,7 +91,7 @@ export class ChannelsDto {
 
 export class ChannelPasswordDto {
   @IsString()
-  @MinLength(12)
+  @MinLength(8)
   @MaxLength(32)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: "password is too weak",

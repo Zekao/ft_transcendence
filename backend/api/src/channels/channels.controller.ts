@@ -20,7 +20,7 @@ import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { ChannelsDto } from "./dto/channels.dto";
 
 @ApiTags("channel")
 @Controller("channel")
@@ -33,10 +33,19 @@ export class ChannelsController {
 
   @Get()
   @ApiOperation({ summary: "Return list of all existing channels" })
-  getUsers(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
+  GetAllChannel(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
     if (Object.keys(filters).length)
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id")
+  @ApiOperation({
+    summary: "Get channel info",
+  })
+  getChannel(@Param("id") id: string, @Body() body): Promise<Channel> {
+    return this.channelService.getChannelId(id, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -58,11 +67,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(
-    @Body() ChannelsDtos: ChannelsDto,
-    @Body() channelPasswordDto: ChannelPasswordDto
-  ): Promise<Channel> {
-    return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
+  createChannel(@Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+    return this.channelService.createChannel(ChannelsDtos);
   }
 
   /* ************************************************************************** */

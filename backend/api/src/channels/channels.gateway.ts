@@ -68,9 +68,10 @@ export class ChannelsGateway
 
   async isChannel(client: Socket) {
     client.data.ConnectedChannel = client.handshake.auth.channel;
-    if (client.data.ConnectedChannel) {
+    client.data.password = client.handshake.auth.password;
+    if (client.data.ConnectedChannel && client.data.password) {
         client.data.channel = await this.channelService.getChannelId(
-        client.data.ConnectedChannel
+        client.data.ConnectedChannel, client.data.password
       );
       if (client.data.channel == false) return false;
       else {

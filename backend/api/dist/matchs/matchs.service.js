@@ -66,12 +66,17 @@ let MatchsService = class MatchsService {
         const relations = [];
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
-                relation.withUsers && relations.push("firstPlayer") && relations.push("secondPlayer");
+                relation.withUsers &&
+                    relations.push("firstPlayer") &&
+                    relations.push("secondPlayer");
             }
         }
         let found = null;
         if (isMatchs(id))
-            found = await this.MatchsRepository.findOne({ where: { id: id }, relations });
+            found = await this.MatchsRepository.findOne({
+                where: { id: id },
+                relations,
+            });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;

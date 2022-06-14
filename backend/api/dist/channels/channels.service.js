@@ -19,6 +19,8 @@ const users_service_1 = require("../users/users.service");
 const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
+const channels_enum_1 = require("./channels.enum");
+const bcrypt = require("bcrypt");
 class ChannelRelationsPicker {
 }
 exports.ChannelRelationsPicker = ChannelRelationsPicker;
@@ -46,7 +48,7 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel not found`);
         return channels;
     }
-    async getChannelId(id, RelationsPicker) {
+    async getChannelId(id, password, RelationsPicker) {
         const relations = [];
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
@@ -74,6 +76,9 @@ let ChannelsService = class ChannelsService {
             });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        if (found.status === channels_enum_1.ChannelStatus.PROTECTED &&
+            (await bcrypt.compare(password, found.password)))
+            throw new common_1.ForbiddenException("Incorrect Password");
         return found;
     }
     async getChannelPermissions(id) {
@@ -105,14 +110,15 @@ let ChannelsService = class ChannelsService {
         this.ChannelsRepository.save(id);
         return true;
     }
-    async createChannel(channelsDto, channelPasswordDto) {
-        const { name, status, permissions } = channelsDto;
-        const { password } = channelPasswordDto;
+    async createChannel(channelsDto) {
+        const { name, status, permissions, password } = channelsDto;
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
         const channel = this.ChannelsRepository.create({
             name,
             status,
             permissions,
-            password,
+            password: hashedPassword,
         });
         try {
             await this.ChannelsRepository.save(channel);
