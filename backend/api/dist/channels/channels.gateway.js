@@ -16,7 +16,6 @@ const socket_io_1 = require("socket.io");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
-const users_enum_1 = require("../users/users.enum");
 let ChannelsGateway = class ChannelsGateway {
     constructor(userService, authService, channelService) {
         this.userService = userService;
@@ -57,15 +56,10 @@ let ChannelsGateway = class ChannelsGateway {
         catch (_a) { }
     }
     handleDisconnect(client) {
-        const user = client.data.user;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.OFFLINE;
-            this.userService.saveUser(user);
-        }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async isChannel(client) {
-        client.data.ConnectedChannel = client.handshake.headers.channel;
+        client.data.ConnectedChannel = client.handshake.auth.channel;
         if (client.data.ConnectedChannel) {
             client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
             if (client.data.channel == false)

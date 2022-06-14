@@ -41,6 +41,10 @@ export class ChannelsGateway
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
       if (message[0] === "msg") {
+<<<<<<< HEAD
+=======
+        console.log('MSG')
+>>>>>>> d8a53ab1822b24869c7fd46e6dccfb724859dd28
         if (!channel.history) channel.history = [];
         const history = { login, message: message[1] };
         channel.history.push(history);
@@ -63,18 +67,13 @@ export class ChannelsGateway
   }
 
   handleDisconnect(client: Socket) {
-    const user = client.data.user;
-    if (client.data.status) {
-      user.status = UserStatus.OFFLINE;
-      this.userService.saveUser(user);
-    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   async isChannel(client: Socket) {
-    client.data.ConnectedChannel = client.handshake.headers.channel;
+    client.data.ConnectedChannel = client.handshake.auth.channel;
     if (client.data.ConnectedChannel) {
-      client.data.channel = await this.channelService.getChannelId(
+        client.data.channel = await this.channelService.getChannelId(
         client.data.ConnectedChannel
       );
       if (client.data.channel == false) return false;

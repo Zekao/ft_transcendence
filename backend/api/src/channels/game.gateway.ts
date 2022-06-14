@@ -81,7 +81,7 @@ export class GameGateway
   }
 
   async isInGame(client: Socket, user: User) {
-    client.data.game = client.handshake.headers.game;
+    client.data.game = client.handshake.auth.game;
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);

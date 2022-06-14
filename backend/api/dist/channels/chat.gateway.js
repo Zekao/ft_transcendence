@@ -51,7 +51,7 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     isMsg(client) {
-        client.data.msg = client.handshake.headers.msg;
+        client.data.msg = client.handshake.auth.msg;
         if (client.data.msg) {
             this.logger.log(`Client connected: ${client.id}`);
             return true;
