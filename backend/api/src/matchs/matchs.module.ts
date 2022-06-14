@@ -6,10 +6,11 @@ import { Matchs } from "./matchs.entity";
 import { MatchsController } from "./matchs.controller";
 import { MatchsService } from "./matchs.service";
 import { UsersModule } from "../users/users.module";
+import { GameGateway } from "./game.gateway";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Matchs]), AuthModule, UsersModule],
   controllers: [MatchsController],
-  providers: [MatchsService, JwtService],
+  providers: [MatchsService, JwtService, GameGateway],
 })
 export class MatchsModule {}

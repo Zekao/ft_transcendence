@@ -7,6 +7,7 @@ export declare class Matchs {
     scoreFirstPlayer: number;
     scoreSecondPlayer: number;
     posFirstPlayer: number;
+    posSecondPlayer: number;
     winner: User;
     status: MatchStatus;
     specs: User[];

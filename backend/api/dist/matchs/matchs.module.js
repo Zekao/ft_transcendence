@@ -15,13 +15,14 @@ const matchs_entity_1 = require("./matchs.entity");
 const matchs_controller_1 = require("./matchs.controller");
 const matchs_service_1 = require("./matchs.service");
 const users_module_1 = require("../users/users.module");
+const game_gateway_1 = require("./game.gateway");
 let MatchsModule = class MatchsModule {
 };
 MatchsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([matchs_entity_1.Matchs]), auth_module_1.AuthModule, users_module_1.UsersModule],
         controllers: [matchs_controller_1.MatchsController],
-        providers: [matchs_service_1.MatchsService, jwt_1.JwtService],
+        providers: [matchs_service_1.MatchsService, jwt_1.JwtService, game_gateway_1.GameGateway],
     })
 ], MatchsModule);
 exports.MatchsModule = MatchsModule;
