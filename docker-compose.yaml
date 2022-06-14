@@ -59,7 +59,6 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik."
       - "traefik.http.services.client.loadbalancer.server.port=4500"
       - "traefik.http.routers.client.rule=Host(`ft.localhost`)"
       - "traefik.http.routers.client.entrypoints=websecure"
