@@ -18,8 +18,8 @@ import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
-@WebSocketGateway({ namespace: "chat" })
-export class ChatGateway
+@WebSocketGateway({ namespace: "channel" })
+export class StatusGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
@@ -30,39 +30,26 @@ export class ChatGateway
   ) {}
 
   @WebSocketServer() server: any;
-  private logger: Logger = new Logger("ChatGateway");
+  private logger: Logger = new Logger("StatusGateway");
 
   afterInit(server: Server) {
     this.logger.log("Init");
   }
 
-  @SubscribeMessage("msg")
-  async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
-    try {
-      // const receiver = client.data.msg;
-      const message = client.data.user.display_name + ": " + msg;
-      this.emitChannel(client.data, "msg", message);
-    } catch {}
-  }
-
-  emitChannel(channel: any, event: string, ...args: any): void {
-    try {
-      if (!channel.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
-      sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
-      });
-    } catch {}
-  }
-
   handleDisconnect(client: Socket) {
+    const user = client.data.user;
+    if (client.data.status) {
+      user.status = UserStatus.OFFLINE;
+      this.userService.saveUser(user);
+    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  isMsg(client: Socket) {
-    client.data.msg = client.handshake.headers.msg;
-    if (client.data.msg) {
+  isStatus(client: Socket, user: User) {
+    client.data.status = client.handshake.headers.status;
+    if (client.data.status) {
+      user.status = UserStatus.ONLINE;
+      this.userService.saveUser(user);
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -73,8 +60,8 @@ export class ChatGateway
     try {
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
-      if (this.isMsg(client)) return;
-      throw new UnauthorizedException("You must specify a chat");
+      if (this.isStatus(client, user)) return;
+      throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();
     }

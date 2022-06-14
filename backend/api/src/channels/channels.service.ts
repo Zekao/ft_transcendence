@@ -30,7 +30,7 @@ export class ChannelRelationsPicker {
 export class ChannelsService {
   constructor(
     @InjectRepository(Channel) private ChannelsRepository: Repository<Channel>,
-    private UsersService: UsersService,
+    private UsersService: UsersService
   ) {}
 
   /* ************************************************************************** */
@@ -54,11 +54,17 @@ export class ChannelsService {
     if (!channels) throw new NotFoundException(`Channel not found`);
     return channels;
   }
-  async getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel> {
-    var relations: string[] = [];
+  async getChannelId(
+    id: string,
+    RelationsPicker?: ChannelRelationsPicker[]
+  ): Promise<Channel> {
+    const relations: string[] = [];
     if (RelationsPicker) {
       for (const relation of RelationsPicker) {
-        relation.withAllMembers && relations.push("members") && relations.push("admins") && relations.push("owners");
+        relation.withAllMembers &&
+          relations.push("members") &&
+          relations.push("admins") &&
+          relations.push("owners");
         relation.withMembersOnly && relations.push("members");
         relation.withAdminOnly && relations.push("admins");
         relation.withOwnerOnly && relations.push("owners");
@@ -70,12 +76,13 @@ export class ChannelsService {
     if (isUuid(id))
       found = await this.ChannelsRepository.findOne({
         where: { id: id },
-        relations
+        relations,
       });
-    else found = await this.ChannelsRepository.findOne({
-      where: { name: id },
-      relations
-    });
+    else
+      found = await this.ChannelsRepository.findOne({
+        where: { name: id },
+        relations,
+      });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
@@ -91,13 +98,15 @@ export class ChannelsService {
     return found.status;
   }
   async getChannelMembers(id: string, role?: string): Promise<User[]> {
-    var members: User[];
+    let members: User[];
     if (!role) {
       members.push(null);
     }
     return members;
   }
-  async getChannelHistory(id: string): Promise<{ login: string, message: string  }[]> {
+  async getChannelHistory(
+    id: string
+  ): Promise<{ login: string; message: string }[]> {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;

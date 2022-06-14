@@ -47,10 +47,13 @@ let ChannelsService = class ChannelsService {
         return channels;
     }
     async getChannelId(id, RelationsPicker) {
-        var relations = [];
+        const relations = [];
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
-                relation.withAllMembers && relations.push("members") && relations.push("admins") && relations.push("owners");
+                relation.withAllMembers &&
+                    relations.push("members") &&
+                    relations.push("admins") &&
+                    relations.push("owners");
                 relation.withMembersOnly && relations.push("members");
                 relation.withAdminOnly && relations.push("admins");
                 relation.withOwnerOnly && relations.push("owners");
@@ -62,12 +65,12 @@ let ChannelsService = class ChannelsService {
         if ((0, utils_1.isUuid)(id))
             found = await this.ChannelsRepository.findOne({
                 where: { id: id },
-                relations
+                relations,
             });
         else
             found = await this.ChannelsRepository.findOne({
                 where: { name: id },
-                relations
+                relations,
             });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
@@ -86,7 +89,7 @@ let ChannelsService = class ChannelsService {
         return found.status;
     }
     async getChannelMembers(id, role) {
-        var members;
+        let members;
         if (!role) {
             members.push(null);
         }
