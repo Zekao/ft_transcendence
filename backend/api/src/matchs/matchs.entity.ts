@@ -29,6 +29,9 @@ export class Matchs {
   @Column({ nullable: true })
   scoreSecondPlayer: number;
 
+  @Column({ nullable: true })
+  posFirstPlayer: number;
+
   @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
   winner: User;
 
