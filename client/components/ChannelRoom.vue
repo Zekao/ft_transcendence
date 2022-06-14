@@ -211,9 +211,7 @@ export default Vue.extend({
     },
     async emitPassword() {
       try {
-        const form = new FormData()
-        form.append('password', this.password)
-        await this.$axios.$post(`/channel/${this.channel.id}/password`, form)
+        await this.$axios.$post(`/channel/${this.channel.id}/password`, { password: this.password })
         // this.unlocked = true
         this.$nextTick(() => {
           this.scrollToBottom()

@@ -79,7 +79,7 @@ __decorate([
 ], ChannelsController.prototype, "getHistory", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)("/:id/password"),
+    (0, common_1.Post)("/:id/password"),
     (0, swagger_1.ApiOperation)({
         summary: "Validate password of a channel",
     }),

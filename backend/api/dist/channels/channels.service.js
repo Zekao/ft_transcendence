@@ -114,7 +114,7 @@ let ChannelsService = class ChannelsService {
     async validateChannelPassword(id, channelPasswordDto) {
         const found = await this.getChannelId(id);
         const { password } = channelPasswordDto;
-        if (await bcrypt.compare(password, found.password))
+        if (!(await bcrypt.compare(password, found.password)))
             throw new common_1.ForbiddenException("Incorrect Password");
         return found;
     }
