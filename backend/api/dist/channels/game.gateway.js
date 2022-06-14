@@ -31,6 +31,7 @@ let GameGateway = class GameGateway {
     }
     async gamecontrol(client, message) {
         try {
+            console.log("dddd");
             this.emitChannel(client.data, "channel", message);
         }
         catch (_a) { }
@@ -85,7 +86,7 @@ __decorate([
     __metadata("design:type", Object)
 ], GameGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)("connection"),
+    (0, websockets_1.SubscribeMessage)("move"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)

@@ -36,7 +36,7 @@ import {
 	  this.logger.log("Init");
 	}
 
-	@SubscribeMessage("connection")
+	@SubscribeMessage("move")
 	async gamecontrol(client: Socket, message: string): Promise<void> {
 	  try {
 		// const channel: Channel = client.data.channel;
@@ -45,6 +45,7 @@ import {
 		// const history = { login, message };
 		// channel.history.push(history);
 		// this.channelService.saveChannel(channel);
+		console.log("dddd");
 		this.emitChannel(client.data, "channel", message);
 	  } catch {}
 	}
