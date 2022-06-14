@@ -37,14 +37,18 @@ export class ChannelsGateway
   }
 
   @SubscribeMessage("channel")
-  async SendMessageToChannel(client: Socket, msg: string): Promise<void> {
+  async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
       const channel: Channel = client.data.channel;
-      const sender: string = client.data.user.display_name;
-      if (!channel.history) channel.history = [];
-      channel.history.push(sender, msg);
-      this.channelService.saveChannel(channel);
-      this.emitChannel(client.data, "channel", sender, msg);
+      const login: string = client.data.user.display_name;
+      // if (!channel.history) channel.history = [];
+      if (message.type)
+      {
+        const history = { login, message };
+        channel.history.push(history);
+        this.channelService.saveChannel(channel);
+        this.emitChannel(client.data, "channel", login, message);
+      }
     } catch {}
   }
 
@@ -54,6 +58,19 @@ export class ChannelsGateway
       // const receiver = client.data.msg;
       const message = client.data.user.display_name + ": " + msg;
       this.emitChannel(client.data, "msg", message);
+    } catch {}
+  }
+
+  @SubscribeMessage("connection")
+  async gamecontrol(client: Socket, message: string): Promise<void> {
+    try {
+      const channel: Channel = client.data.channel;
+      const login: string = client.data.user.display_name;
+      if (!channel.history) channel.history = [];
+      const history = { login, message };
+      channel.history.push(history);
+      this.channelService.saveChannel(channel);
+      this.emitChannel(client.data, "channel", login, message);
     } catch {}
   }
 
@@ -70,7 +87,6 @@ export class ChannelsGateway
 
   handleDisconnect(client: Socket) {
     const user = client.data.user;
-    console.log(user);
     if (client.data.status)
     {
       user.status = UserStatus.OFFLINE;
@@ -122,7 +138,6 @@ export class ChannelsGateway
         return ;
       if (await this.isChannel(client))
         return ;
-      console.log("dd")
       throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();

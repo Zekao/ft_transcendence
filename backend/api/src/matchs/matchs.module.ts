@@ -9,6 +9,7 @@ import { UsersModule } from "../users/users.module";
 import { User } from "src/users/users.entity";
 import { UsersService } from "src/users/users.service";
 import { AuthService } from "src/auth/auth.services";
+import { GameGateway } from "./game.gateway";
 
 @Module({
   imports: [

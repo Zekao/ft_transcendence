@@ -69,7 +69,7 @@ export class ChannelsService {
     let found = null;
     if (isUuid(id))
       found = await this.ChannelsRepository.findOne({
-        where: { id: id }, 
+        where: { id: id },
         relations
       });
     else found = await this.ChannelsRepository.findOne({
@@ -97,7 +97,7 @@ export class ChannelsService {
     }
     return members;
   }
-  async getChannelHistory(id: string): Promise<string[]> {
+  async getChannelHistory(id: string): Promise<{ login: string, message: string  }[]> {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;

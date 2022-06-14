@@ -76,6 +76,22 @@ let MatchsService = class MatchsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
+    async getPosFirstPlayer(id) {
+        return id.posFirstPlayer;
+    }
+    async getPosSecondPlayer(id) {
+        return id.posSecondPlayer;
+    }
+    async setPosFirstPlayer(id, pos) {
+        id.posFirstPlayer = pos;
+        this.MatchsRepository.save(id);
+        return true;
+    }
+    async setPosSecondPlayer(id, pos) {
+        id.posSecondPlayer = pos;
+        this.MatchsRepository.save(id);
+        return true;
+    }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
         if (user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED))

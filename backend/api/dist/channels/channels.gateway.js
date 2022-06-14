@@ -29,15 +29,16 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async SendMessageToChannel(client, msg) {
+    async SendMessageToChannel(client, message) {
         try {
             const channel = client.data.channel;
-            const sender = client.data.user.display_name;
-            if (!channel.history)
-                channel.history = [];
-            channel.history.push(sender, msg);
-            this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", sender, msg);
+            const login = client.data.user.display_name;
+            if (message.type) {
+                const history = { login, message };
+                channel.history.push(history);
+                this.channelService.saveChannel(channel);
+                this.emitChannel(client.data, "channel", login, message);
+            }
         }
         catch (_a) { }
     }
@@ -45,6 +46,19 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const message = client.data.user.display_name + ": " + msg;
             this.emitChannel(client.data, "msg", message);
+        }
+        catch (_a) { }
+    }
+    async gamecontrol(client, message) {
+        try {
+            const channel = client.data.channel;
+            const login = client.data.user.display_name;
+            if (!channel.history)
+                channel.history = [];
+            const history = { login, message };
+            channel.history.push(history);
+            this.channelService.saveChannel(channel);
+            this.emitChannel(client.data, "channel", login, message);
         }
         catch (_a) { }
     }
@@ -62,7 +76,6 @@ let ChannelsGateway = class ChannelsGateway {
     }
     handleDisconnect(client) {
         const user = client.data.user;
-        console.log(user);
         if (client.data.status) {
             user.status = users_enum_1.UserStatus.OFFLINE;
             this.userService.saveUser(user);
@@ -110,7 +123,6 @@ let ChannelsGateway = class ChannelsGateway {
                 return;
             if (await this.isChannel(client))
                 return;
-            console.log("dd");
             throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {
@@ -125,7 +137,7 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)("channel"),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendMessageToChannel", null);
 __decorate([
@@ -134,6 +146,12 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendPrivateMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("connection"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", Promise)
+], ChannelsGateway.prototype, "gamecontrol", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,

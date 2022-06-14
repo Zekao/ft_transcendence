@@ -32,8 +32,7 @@ export class ChannelsDto {
         this.members = channel.members.map((user) => {return new UserDto()});
       if (channel.admins)
         this.admins = channel.admins.map((user) => {return new UserDto()});
-      if (channel.owner)
-        this.owner = new UserDto(channel.owner);
+      this.owner = channel.owner;
     }
   }
 
@@ -62,10 +61,10 @@ export class ChannelsDto {
   password: string;
 
   @ApiProperty()
-  members: User[];
+  members: UserDto[];
 
   @ApiProperty()
-  admins: User[];
+  admins: UserDto[];
 
   @ApiProperty({ type: () => UserDto })
   owner: UserDto;

@@ -33,7 +33,12 @@ export class Matchs {
   @Column({ nullable: true })
   scoreSecondPlayer: number;
 
-  @ApiProperty({ type: () => User })
+  @Column({ nullable: true })
+  posFirstPlayer: number;
+
+  @Column({ nullable: true })
+  posSecondPlayer: number;
+
   @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
   winner: User;
 
