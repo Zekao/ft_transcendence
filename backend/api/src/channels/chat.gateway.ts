@@ -19,7 +19,7 @@ import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
 @WebSocketGateway({ namespace: "chat" })
-export class ChannelsGateway
+export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
@@ -30,7 +30,7 @@ export class ChannelsGateway
   ) {}
 
   @WebSocketServer() server: any;
-  private logger: Logger = new Logger("ChannelsGateway");
+  private logger: Logger = new Logger("ChatGateway");
 
   afterInit(server: Server) {
     this.logger.log("Init");
@@ -57,11 +57,6 @@ export class ChannelsGateway
   }
 
   handleDisconnect(client: Socket) {
-    const user = client.data.user;
-    if (client.data.status) {
-      user.status = UserStatus.OFFLINE;
-      this.userService.saveUser(user);
-    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 

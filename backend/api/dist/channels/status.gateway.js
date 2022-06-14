@@ -9,50 +9,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatGateway = void 0;
+exports.StatusGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
-const socket_io_1 = require("socket.io");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
-let ChatGateway = class ChatGateway {
+const users_enum_1 = require("../users/users.enum");
+let StatusGateway = class StatusGateway {
     constructor(jwtService, userService, authService, channelService) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.authService = authService;
         this.channelService = channelService;
-        this.logger = new common_1.Logger("ChatGateway");
+        this.logger = new common_1.Logger("StatusGateway");
     }
     afterInit(server) {
         this.logger.log("Init");
     }
-    async SendPrivateMessage(client, msg) {
-        try {
-            const message = client.data.user.display_name + ": " + msg;
-            this.emitChannel(client.data, "msg", message);
-        }
-        catch (_a) { }
-    }
-    emitChannel(channel, event, ...args) {
-        try {
-            if (!channel.user)
-                return;
-            const sockets = Array.from(this.server.sockets.sockets.values());
-            sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-                    socket.emit(event, ...args);
-            });
-        }
-        catch (_a) { }
-    }
     handleDisconnect(client) {
+        const user = client.data.user;
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.OFFLINE;
+            this.userService.saveUser(user);
+        }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    isMsg(client) {
-        client.data.msg = client.handshake.headers.msg;
-        if (client.data.msg) {
+    isStatus(client, user) {
+        client.data.status = client.handshake.headers.status;
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.ONLINE;
+            this.userService.saveUser(user);
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
@@ -62,9 +50,9 @@ let ChatGateway = class ChatGateway {
         try {
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            if (this.isMsg(client))
+            if (this.isStatus(client, user))
                 return;
-            throw new common_1.UnauthorizedException("You must specify a chat");
+            throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {
             return client.disconnect();
@@ -74,19 +62,13 @@ let ChatGateway = class ChatGateway {
 __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
-], ChatGateway.prototype, "server", void 0);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("msg"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], ChatGateway.prototype, "SendPrivateMessage", null);
-ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: "chat" }),
+], StatusGateway.prototype, "server", void 0);
+StatusGateway = __decorate([
+    (0, websockets_1.WebSocketGateway)({ namespace: "channel" }),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,
         channels_service_1.ChannelsService])
-], ChatGateway);
-exports.ChatGateway = ChatGateway;
-//# sourceMappingURL=chat.gateway.js.map
+], StatusGateway);
+exports.StatusGateway = StatusGateway;
+//# sourceMappingURL=status.gateway.js.map

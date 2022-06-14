@@ -9,10 +9,10 @@
         hide-details
         class="mr-2"
       ></v-text-field>
-      <v-btn icon @click="emitPassword"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-btn icon @click="emitPassword"><v-icon>mdi-lock</v-icon></v-btn>
     </v-toolbar>
   </v-toolbar>
-  <v-sheet width="100%">
+  <v-sheet v-else width="100%">
     <v-toolbar class="d-flex justify-center">
       <v-menu>
         <template #activator="{ on }">
@@ -92,7 +92,7 @@ export default Vue.extend({
   },
 
   data: () => ({
-    locked: false,
+    locked: true,
     messageText: '',
     messages: [] as { login: string, message: string }[],
     admins: [] as IUser[],
@@ -155,6 +155,9 @@ export default Vue.extend({
         })
         this.messageText = ''
       }
+    },
+    emitPassword() {
+      this.locked = false
     },
     removeAdmin() {
       console.log(this.admins)

@@ -61,15 +61,6 @@
               required
             ></v-select>
           </v-list-item>
-          <v-list-item>
-            <v-select
-              v-model="channelPermission"
-              :items="channelPermissionList"
-              :rules="channelPermissionRules"
-              label="Channel permission"
-              required
-            ></v-select>
-          </v-list-item>
           <v-list-item class="justify-center">
             <v-btn :disabled="!valid" @click="createChannel"> Create </v-btn>
           </v-list-item>

@@ -19,7 +19,7 @@ import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
 @WebSocketGateway({ namespace: "channel" })
-export class ChannelsGateway
+export class StatusGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
@@ -30,36 +30,10 @@ export class ChannelsGateway
   ) {}
 
   @WebSocketServer() server: any;
-  private logger: Logger = new Logger("ChannelsGateway");
+  private logger: Logger = new Logger("StatusGateway");
 
   afterInit(server: Server) {
     this.logger.log("Init");
-  }
-
-  @SubscribeMessage("channel")
-  async SendMessageToChannel(client: Socket, message: any): Promise<void> {
-    try {
-      const channel: Channel = client.data.channel;
-      const login: string = client.data.user.display_name;
-      if (message.type === "msg") {
-        const history = { login, message: message.message };
-        channel.history.push(history);
-        this.channelService.saveChannel(channel);
-        this.emitChannel(client.data, "channel", login, message.message);
-      } else {
-      }
-    } catch {}
-  }
-
-  emitChannel(channel: any, event: string, ...args: any): void {
-    try {
-      if (!channel.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
-      sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
-      });
-    } catch {}
   }
 
   handleDisconnect(client: Socket) {
@@ -71,17 +45,13 @@ export class ChannelsGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  async isChannel(client: Socket) {
-    client.data.ConnectedChannel = client.handshake.headers.channel;
-    if (client.data.ConnectedChannel) {
-      client.data.channel = await this.channelService.getChannelId(
-        client.data.ConnectedChannel
-      );
-      if (client.data.channel == false) return false;
-      else {
-        this.logger.log(`Client connected: ${client.id}`);
-        return true;
-      }
+  isStatus(client: Socket, user: User) {
+    client.data.status = client.handshake.headers.status;
+    if (client.data.status) {
+      user.status = UserStatus.ONLINE;
+      this.userService.saveUser(user);
+      this.logger.log(`Client connected: ${client.id}`);
+      return true;
     }
     return false;
   }
@@ -90,7 +60,7 @@ export class ChannelsGateway
     try {
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
-      if (await this.isChannel(client)) return;
+      if (this.isStatus(client, user)) return;
       throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();
