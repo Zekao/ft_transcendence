@@ -49,6 +49,27 @@ export class ChannelsGateway
       } else if (message[0] == "action") {
         if (message[1] == "logout")
           client.disconnect();
+          if (message[1] == "mute")
+          {
+            const login = message[2];
+            const time = message[3];
+            this.emitChannel(client.data, "channel", login, " is mute for ", time, "minute");
+          }
+          if (message[1] == "unmute")
+          {
+            const login = message[2];
+            this.emitChannel(client.data, "channel", login, " is unmute");
+          }
+          if (message[1] == "ban")
+          {
+            const login = message[2];
+            this.emitChannel(client.data, "channel", login, " is ban");
+          }
+          if (message[1] == "unban")
+          {
+            const login = message[2];
+            this.emitChannel(client.data, "channel", login, " is unban");
+          }
       }
     } catch {}
   }
