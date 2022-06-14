@@ -85,14 +85,6 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.status;
     }
-<<<<<<< HEAD
-    async getChannelMembers(id, role) {
-        var members;
-        if (!role) {
-            members.push(null);
-        }
-        return members;
-=======
     async getChannelHistory(id) {
         const found = await this.getChannelId(id);
         if (!found)
@@ -102,7 +94,6 @@ let ChannelsService = class ChannelsService {
     async saveChannel(id) {
         this.ChannelsRepository.save(id);
         return true;
->>>>>>> 716d0c1d26af4c8b52461c3f1d615675bd837251
     }
     async createChannel(channelsDto, channelPasswordDto) {
         const { name, status, permissions } = channelsDto;
