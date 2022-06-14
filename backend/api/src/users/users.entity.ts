@@ -30,4 +30,9 @@ export class User {
   rank: number;
   @Column({ type: "real" })
   ratio: number;
+
+
+
+
+  
 }
