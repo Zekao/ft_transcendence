@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelsGateway = void 0;
+exports.GameGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
@@ -18,47 +18,20 @@ const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
 const users_enum_1 = require("../users/users.enum");
-let ChannelsGateway = class ChannelsGateway {
+let GameGateway = class GameGateway {
     constructor(jwtService, userService, authService, channelService) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.authService = authService;
         this.channelService = channelService;
-        this.logger = new common_1.Logger("ChannelsGateway");
+        this.logger = new common_1.Logger("GameGateway");
     }
     afterInit(server) {
         this.logger.log("Init");
     }
-    async SendMessageToChannel(client, message) {
-        try {
-            const channel = client.data.channel;
-            const login = client.data.user.display_name;
-            if (!channel.history)
-                channel.history = [];
-            const history = { login, message };
-            channel.history.push(history);
-            this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", login, message);
-        }
-        catch (_a) { }
-    }
-    async SendPrivateMessage(client, msg) {
-        try {
-            const message = client.data.user.display_name + ": " + msg;
-            this.emitChannel(client.data, "msg", message);
-        }
-        catch (_a) { }
-    }
     async gamecontrol(client, message) {
         try {
-            const channel = client.data.channel;
-            const login = client.data.user.display_name;
-            if (!channel.history)
-                channel.history = [];
-            const history = { login, message };
-            channel.history.push(history);
-            this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", login, message);
+            this.emitChannel(client.data, "channel", message);
         }
         catch (_a) { }
     }
@@ -76,40 +49,19 @@ let ChannelsGateway = class ChannelsGateway {
     }
     handleDisconnect(client) {
         const user = client.data.user;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.OFFLINE;
+        if (client.data.game) {
+            user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
             this.userService.saveUser(user);
         }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    isStatus(client, user) {
-        client.data.status = client.handshake.headers.status;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.ONLINE;
+    isInGame(client, user) {
+        client.data.game = client.handshake.headers.game;
+        if (client.data.game) {
+            user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
             this.logger.log(`Client connected: ${client.id}`);
             return true;
-        }
-        return false;
-    }
-    isMsg(client) {
-        client.data.msg = client.handshake.headers.msg;
-        if (client.data.msg) {
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
-        }
-        return false;
-    }
-    async isChannel(client) {
-        client.data.ConnectedChannel = client.handshake.headers.channel;
-        if (client.data.ConnectedChannel) {
-            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
-            if (client.data.channel == false)
-                return false;
-            else {
-                this.logger.log(`Client connected: ${client.id}`);
-                return true;
-            }
         }
         return false;
     }
@@ -117,11 +69,8 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            if (this.isStatus(client, user))
-                return;
-            if (this.isMsg(client))
-                return;
-            if (await this.isChannel(client))
+            console.log("IN_GAME");
+            if (this.isInGame(client, user))
                 return;
             throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
@@ -133,31 +82,19 @@ let ChannelsGateway = class ChannelsGateway {
 __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
-], ChannelsGateway.prototype, "server", void 0);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("channel"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "SendMessageToChannel", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("msg"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "SendPrivateMessage", null);
+], GameGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)("connection"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "gamecontrol", null);
-ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(),
+], GameGateway.prototype, "gamecontrol", null);
+GameGateway = __decorate([
+    (0, websockets_1.WebSocketGateway)({ namespace: "game" }),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,
         channels_service_1.ChannelsService])
-], ChannelsGateway);
-exports.ChannelsGateway = ChannelsGateway;
-//# sourceMappingURL=channels.gateway.js.map
+], GameGateway);
+exports.GameGateway = GameGateway;
+//# sourceMappingURL=game.gateway.js.map
