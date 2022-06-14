@@ -41,11 +41,13 @@ export class ChannelsGateway
     try {
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
-      if (message) {
-        const history = { login, message };
+      if (message.type === 'msg') {
+        const history = { login, message: message.message };
         channel.history.push(history);
         this.channelService.saveChannel(channel);
-        this.emitChannel(client.data, "channel", login, message);
+        this.emitChannel(client.data, "channel", login, message.message);
+      } else {
+
       }
     } catch {}
   }
