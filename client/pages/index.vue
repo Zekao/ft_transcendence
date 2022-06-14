@@ -14,6 +14,7 @@
       </v-stepper-content>
       <v-stepper-content step="2">
         <GameMatchmaking @next="e1 = 3" />
+        <GameCore></GameCore>
       </v-stepper-content>
       <v-stepper-content step="3">
         <GameMatchmaking @next="e1 = 1" />
