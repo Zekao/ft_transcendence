@@ -13,8 +13,8 @@
     </v-toolbar>
   </v-toolbar>
   <v-sheet v-else width="100%">
-    <v-toolbar class="d-flex justify-center">
-      <v-menu>
+    <v-toolbar v-if="isAuthUserAdmin" class="d-flex justify-center">
+      <v-menu v-if="isAuthUserOwner">
         <template #activator="{ on }">
           <v-btn small class="mr-2" v-on="on" @click="fetchAdmin">
             Admin
@@ -53,14 +53,25 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-btn small icon class="mr-2" @click="deleteChannel">
+      <v-btn v-if="isAuthUserOwner" small icon class="mr-2" @click="deleteChannel">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-toolbar>
     <v-card :id="channel.name" height="320px" class="overflow-y-auto">
       <v-list>
         <v-list-item v-for="(message, i) in messages" :key="i">
-          {{ message.login }} - {{ message.message }}
+          <v-list-item-content>
+            {{ message.login }}
+          </v-list-item-content>
+          <v-btn v-if="isAuthUserAdmin" x-small icon class="mr-2">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-btn v-if="isAuthUserAdmin" x-small icon>
+            <v-icon>mdi-volume-off</v-icon>
+          </v-btn>
+          <v-list-item-content class="text-right">
+            <div>{{ message.message }}</div>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-card>
@@ -73,6 +84,7 @@
         class="mr-2"
       ></v-text-field>
       <v-btn icon @click="emitMessageOnChannel"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-btn icon @click="emitLogoutOnChannel"><v-icon>mdi-logout</v-icon></v-btn>
     </v-toolbar>
   </v-sheet>
   </v-sheet>
@@ -92,6 +104,8 @@ export default Vue.extend({
   },
 
   data: () => ({
+    owner: false,
+    admin: false,
     locked: true,
     messageText: '',
     messages: [] as { login: string, message: string }[],
@@ -105,7 +119,13 @@ export default Vue.extend({
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       users: (state: any) => state.user.users,
-    })
+    }),
+    isAuthUserOwner() {
+      return this.owner
+    },
+    isAuthUserAdmin() {
+      return this.admin
+    }
   },
 
   async fetch() {
@@ -156,8 +176,14 @@ export default Vue.extend({
         this.messageText = ''
       }
     },
+    emitLogoutOnChannel() {
+      console.log(this.channel.id)
+    },
     emitPassword() {
       this.locked = false
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
     },
     removeAdmin() {
       console.log(this.admins)

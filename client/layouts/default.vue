@@ -219,6 +219,7 @@ export default Vue.extend({
         const channel = {
           name: this.channelName,
           status: this.convertChannelStatus(this.channelStatus),
+          permissions: 'OPEN',
           password: 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
