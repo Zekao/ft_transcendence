@@ -1,9 +1,22 @@
 <template>
   <v-sheet width="100%">
+  <v-toolbar v-if="locked">
+    <v-toolbar>
+      <v-text-field
+        v-model="messageText"
+        dense
+        outlined
+        hide-details
+        class="mr-2"
+      ></v-text-field>
+      <v-btn icon @click="emitPassword"><v-icon>mdi-pencil</v-icon></v-btn>
+    </v-toolbar>
+  </v-toolbar>
+  <v-sheet width="100%">
     <v-toolbar class="d-flex justify-center">
       <v-menu>
         <template #activator="{ on }">
-          <v-btn small class="mr-2" v-on="on">
+          <v-btn small class="mr-2" v-on="on" @click="fetchAdmin">
             Admin
           </v-btn>
         </template>
@@ -16,7 +29,7 @@
       </v-menu>
       <v-menu>
         <template #activator="{ on }">
-          <v-btn small class="mr-2" v-on="on">
+          <v-btn small class="mr-2" v-on="on" @click="fetchBanned">
             Banned
           </v-btn>
         </template>
@@ -29,7 +42,7 @@
       </v-menu>
       <v-menu>
         <template #activator="{ on }">
-          <v-btn small class="mr-2" v-on="on">
+          <v-btn small class="mr-2" v-on="on" @click="fetchMuted">
             Muted
           </v-btn>
         </template>
@@ -62,14 +75,15 @@
       <v-btn icon @click="emitMessageOnChannel"><v-icon>mdi-pencil</v-icon></v-btn>
     </v-toolbar>
   </v-sheet>
+  </v-sheet>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-import { IChannel } from '~/store/channel'
-import { IUser } from '~/store/user'
+import { IChannel } from '@/store/channel'
+import { IUser } from '@/store/user'
 
 export default Vue.extend({
 
@@ -78,6 +92,7 @@ export default Vue.extend({
   },
 
   data: () => ({
+    locked: false,
     messageText: '',
     messages: [] as { login: string, message: string }[],
     admins: [] as IUser[],
@@ -108,6 +123,7 @@ export default Vue.extend({
   mounted() {
     console.log(this.channel)
     this.socket = this.$nuxtSocket({
+      channel: '/channel',
       extraHeaders: {
         Authorization: this.accessToken,
         channel: this.channel.name,
@@ -115,6 +131,7 @@ export default Vue.extend({
       path: "/api/socket.io/",
     })
     this.socket.on('channel', (login, message) => {
+      console.log(login, message)
       this.messages.push({login, message})
       this.$nextTick(() => {
         this.scrollToBottom()
@@ -123,21 +140,21 @@ export default Vue.extend({
   },
 
   methods: {
-    emitMessageOnChannel() {
-      const messageTextFormated = this.messageText.trim()
-      if (this.socket && messageTextFormated) {
-        this.socket.emit('channel', messageTextFormated, (resp: any) => {
-            console.log(resp)
-        })
-        this.messageText = ''
-      }
-    },
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.channel.name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
     async deleteChannel() {
       console.log(this.channel.id)
+    },
+    emitMessageOnChannel() {
+      const messageTextFormated = this.messageText.trim()
+      if (this.socket && messageTextFormated) {
+        this.socket.emit('channel', { type: 'msg', message: messageTextFormated }, (resp: any) => {
+            console.log(resp)
+        })
+        this.messageText = ''
+      }
     },
     removeAdmin() {
       console.log(this.admins)
@@ -146,6 +163,15 @@ export default Vue.extend({
       console.log(this.banned)
     },
     unmuteUser() {
+      console.log(this.muted)
+    },
+    fetchAdmin() {
+      console.log(this.admins)
+    },
+    fetchBanned() {
+      console.log(this.banned)
+    },
+    fetchMuted() {
       console.log(this.muted)
     }
   }

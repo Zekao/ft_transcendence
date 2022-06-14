@@ -8,7 +8,8 @@
           dark
           v-bind= attrs 
           v-on= "on" 
-          :disabled="isBlockedByMe"
+          :disabled="isBlockedByMe" 
+
         >
           {{friend.user_name}}
         </v-btn>
@@ -40,15 +41,15 @@
             <v-icon> mdi-block-helper-remove </v-icon>
               </v-btn>
                         </v-list-item>
-          <v-list-item>
-            <v-btn :disabled="!isFriend" @click="addFriend(friend.id)">
+          <v-list-item :disabled="!isBlockedByMe">
+            <v-btn :disabled="isFriend" @click="addFriend(friend.id)">
               Add 
               <v-icon>
                 mdi-account-multiple-plus
               </v-icon>
                           </v-btn>
 
-               <v-btn :disabled="isFriend" @click="removeFriend(friend.id)">
+               <v-btn :disabled="!isFriend" @click="removeFriend(friend.id)">
               Remove 
               <v-icon>
                 mdi-account-multiple-plus
