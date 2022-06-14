@@ -13,7 +13,7 @@ export declare class MatchsService {
     constructor(MatchsRepository: Repository<Matchs>, userService: UsersService);
     getMatchs(): Promise<Matchs[]>;
     getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
-    getMatchsId(id: string, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs>;
+    getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs>;
     getPosFirstPlayer(id: Matchs): Promise<number>;
     getPosSecondPlayer(id: Matchs): Promise<number>;
     setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;

@@ -90,7 +90,7 @@ export class MatchsService {
     return matchs;
   }
 
-  async getMatchsId(id: string, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs> {
+  async getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs> {
     const relations = [];
     if (RelationsPicker) {
       for (const relation of RelationsPicker) {
