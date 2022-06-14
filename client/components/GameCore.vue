@@ -40,12 +40,12 @@ export default Vue.extend({
         // this.context = this.$refs.game.getContext("2d");
         this.socket = this.$nuxtSocket({
           channel: "/game",
-          extraHeaders: {
+          auth: {
             Authorization: this.accessToken,
             game: "7841e20c-1524-4354-8503-beda525d8feb",
           },
           path: "/api/socket.io/",
-        })
+        } as any)
         this.socket.on("position", data => {
           this.position = data;
           // this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
