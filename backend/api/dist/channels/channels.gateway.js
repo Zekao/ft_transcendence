@@ -44,13 +44,6 @@ let ChannelsGateway = class ChannelsGateway {
         }
         catch (_a) { }
     }
-    async SendPrivateMessage(client, msg) {
-        try {
-            const message = client.data.user.display_name + ": " + msg;
-            this.emitChannel(client.data, "msg", message);
-        }
-        catch (_a) { }
-    }
     emitChannel(channel, event, ...args) {
         try {
             if (!channel.user)
@@ -71,24 +64,6 @@ let ChannelsGateway = class ChannelsGateway {
         }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    isStatus(client, user) {
-        client.data.status = client.handshake.headers.status;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.ONLINE;
-            this.userService.saveUser(user);
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
-        }
-        return false;
-    }
-    isMsg(client) {
-        client.data.msg = client.handshake.headers.msg;
-        if (client.data.msg) {
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
-        }
-        return false;
-    }
     async isChannel(client) {
         client.data.ConnectedChannel = client.handshake.headers.channel;
         if (client.data.ConnectedChannel) {
@@ -106,10 +81,6 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            if (this.isStatus(client, user))
-                return;
-            if (this.isMsg(client))
-                return;
             if (await this.isChannel(client))
                 return;
             throw new common_1.UnauthorizedException("You must specify a channel, or msg");
@@ -129,12 +100,6 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendMessageToChannel", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("msg"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "SendPrivateMessage", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: "channel" }),
     __metadata("design:paramtypes", [jwt_1.JwtService,

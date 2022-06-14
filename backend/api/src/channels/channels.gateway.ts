@@ -51,15 +51,6 @@ export class ChannelsGateway
     } catch {}
   }
 
-  @SubscribeMessage("msg")
-  async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
-    try {
-      // const receiver = client.data.msg;
-      const message = client.data.user.display_name + ": " + msg;
-      this.emitChannel(client.data, "msg", message);
-    } catch {}
-  }
-
   emitChannel(channel: any, event: string, ...args: any): void {
     try {
       if (!channel.user) return;
@@ -78,26 +69,6 @@ export class ChannelsGateway
       this.userService.saveUser(user);
     }
     this.logger.log(`Client disconnected: ${client.id}`);
-  }
-
-  isStatus(client: Socket, user: User) {
-    client.data.status = client.handshake.headers.status;
-    if (client.data.status) {
-      user.status = UserStatus.ONLINE;
-      this.userService.saveUser(user);
-      this.logger.log(`Client connected: ${client.id}`);
-      return true;
-    }
-    return false;
-  }
-
-  isMsg(client: Socket) {
-    client.data.msg = client.handshake.headers.msg;
-    if (client.data.msg) {
-      this.logger.log(`Client connected: ${client.id}`);
-      return true;
-    }
-    return false;
   }
 
   async isChannel(client: Socket) {
@@ -119,8 +90,6 @@ export class ChannelsGateway
     try {
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
-      if (this.isStatus(client, user)) return;
-      if (this.isMsg(client)) return;
       if (await this.isChannel(client)) return;
       throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
