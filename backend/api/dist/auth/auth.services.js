@@ -74,7 +74,7 @@ let AuthService = class AuthService {
         return this.userService.createUsers(AuthCredentialsDto);
     }
     async getUserFromSocket(client) {
-        const token = client.handshake.auth.authorization;
+        const token = client.handshake.auth.Authorization;
         if (!token)
             throw new common_1.UnauthorizedException("No token provided");
         const payload = await this.verifyJwtToken(token);
