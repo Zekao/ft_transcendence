@@ -31,17 +31,17 @@ let ChannelsController = class ChannelsController {
     getChannel(id, body) {
         return this.channelService.getChannelId(id, body);
     }
-    getHistory(id) {
-        return this.channelService.getChannelHistory(id);
+    getHistory(id, query) {
+        return this.channelService.getChannelHistory(id, query);
     }
     createChannel(ChannelsDtos) {
         return this.channelService.createChannel(ChannelsDtos);
     }
-    deleteUser(id) {
-        return this.channelService.deleteChannel(id);
+    deleteUser(id, query) {
+        return this.channelService.deleteChannel(id, query);
     }
-    editChannel(id, edit) {
-        return this.channelService.editChannel(id, edit);
+    editChannel(id, edit, query) {
+        return this.channelService.editChannel(id, edit, query);
     }
 };
 __decorate([
@@ -71,8 +71,9 @@ __decorate([
         summary: "Get message history of a channel",
     }),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "getHistory", null);
 __decorate([
@@ -91,8 +92,9 @@ __decorate([
         summary: "Delete a specified channel",
     }),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
 __decorate([
@@ -102,8 +104,9 @@ __decorate([
     }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Query)()),
+    __param(2, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto]),
+    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([

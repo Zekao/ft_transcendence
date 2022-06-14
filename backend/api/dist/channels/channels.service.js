@@ -81,27 +81,8 @@ let ChannelsService = class ChannelsService {
             throw new common_1.ForbiddenException("Incorrect Password");
         return found;
     }
-    async getChannelPermissions(id) {
-        const found = await this.getChannelId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        return found.permissions;
-    }
-    async getChannelStatus(id) {
-        const found = await this.getChannelId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        return found.status;
-    }
-    async getChannelMembers(id, role) {
-        let members;
-        if (!role) {
-            members.push(null);
-        }
-        return members;
-    }
-    async getChannelHistory(id) {
-        const found = await this.getChannelId(id);
+    async getChannelHistory(id, channelPasswordDto) {
+        const found = await this.getChannelId(id, channelPasswordDto);
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.history;
@@ -134,8 +115,8 @@ let ChannelsService = class ChannelsService {
         }
         return channel;
     }
-    async deleteChannel(id) {
-        const found = await this.getChannelId(id);
+    async deleteChannel(id, query) {
+        const found = await this.getChannelId(id, query);
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         const target = await this.ChannelsRepository.delete(found.id);
@@ -143,9 +124,9 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return true;
     }
-    async editChannel(id, ChannelDto) {
+    async editChannel(id, ChannelDto, query) {
         const { name, status, permissions } = ChannelDto;
-        const found = await this.getChannelId(id);
+        const found = await this.getChannelId(id, query);
         if (name)
             found.name = name;
         if (status)
