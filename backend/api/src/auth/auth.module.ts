@@ -8,6 +8,9 @@ import { FortyTwoStrategy } from "./strategy/42.strategy";
 import { JwtStrategy } from "./strategy/jwt.strategy";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.services";
+import { MatchsService } from "src/matchs/matchs.service";
+import { MatchsModule } from "src/matchs/matchs.module";
+import { Matchs } from "src/matchs/matchs.entity";
 
 @Module({
   imports: [
@@ -18,9 +21,10 @@ import { AuthService } from "./auth.services";
         expiresIn: 3600,
       },
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Matchs]),
+    MatchsModule
   ],
-  providers: [FortyTwoStrategy, JwtStrategy, UsersService, AuthService],
+  providers: [FortyTwoStrategy, JwtStrategy, UsersService, AuthService, MatchsService],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],
 })

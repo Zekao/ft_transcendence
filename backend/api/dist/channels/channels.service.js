@@ -129,7 +129,7 @@ let ChannelsService = class ChannelsService {
         const found = await this.getChannelId(id);
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        const target = await this.ChannelsRepository.delete(found);
+        const target = await this.ChannelsRepository.delete(found.id);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return true;
