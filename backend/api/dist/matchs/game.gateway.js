@@ -33,7 +33,7 @@ let GameGateway = class GameGateway {
             const match = client.data.match;
             console.log(message);
             console.log(match);
-            console.log(player);
+            console.log(match.FirstPlayer);
             if (player == match.FirstPlayer)
                 console.log("FIRST");
             else if (player == match.SecondPlayer)

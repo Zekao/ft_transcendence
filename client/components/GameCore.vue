@@ -45,7 +45,7 @@ export default Vue.extend({
           channel: "/game",
           extraHeaders: {
             Authorization: this.accessToken,
-            game: "c69c46a9-9f73-44e8-8a74-04e34f1865fe",
+            game: "7841e20c-1524-4354-8503-beda525d8feb",
           },
           path: "/api/socket.io/",
         })
