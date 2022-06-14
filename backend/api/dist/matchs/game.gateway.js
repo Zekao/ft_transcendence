@@ -89,6 +89,7 @@ let GameGateway = class GameGateway {
         try {
             console.log(client.handshake.headers.authorization);
             const user = await this.authService.getUserFromSocket(client);
+            console.log("TEST");
             const match = await this.matchService.getMatchsId(client.handshake.headers.game);
             if (!match)
                 throw new common_1.UnauthorizedException("The match does not exist");

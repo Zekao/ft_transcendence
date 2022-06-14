@@ -18,7 +18,6 @@ const users_module_1 = require("../users/users.module");
 const users_entity_1 = require("../users/users.entity");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
-const game_gateway_1 = require("./game.gateway");
 let MatchsModule = class MatchsModule {
 };
 MatchsModule = __decorate([
@@ -30,13 +29,8 @@ MatchsModule = __decorate([
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
         ],
         controllers: [matchs_controller_1.MatchsController],
-        providers: [
-            matchs_service_1.MatchsService,
-            jwt_1.JwtService,
-            users_service_1.UsersService,
-            auth_services_1.AuthService,
-            game_gateway_1.GameGateway,
-        ],
+        providers: [matchs_service_1.MatchsService, jwt_1.JwtService, users_service_1.UsersService, auth_services_1.AuthService],
+        exports: [matchs_service_1.MatchsService],
     })
 ], MatchsModule);
 exports.MatchsModule = MatchsModule;
