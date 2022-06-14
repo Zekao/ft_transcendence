@@ -41,10 +41,6 @@ export class ChannelsGateway
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
       if (message[0] === "msg") {
-<<<<<<< HEAD
-=======
-        console.log('MSG')
->>>>>>> d8a53ab1822b24869c7fd46e6dccfb724859dd28
         if (!channel.history) channel.history = [];
         const history = { login, message: message[1] };
         channel.history.push(history);
