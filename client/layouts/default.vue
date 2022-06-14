@@ -189,12 +189,12 @@ export default Vue.extend({
   mounted() {
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
     this.socket = this.$nuxtSocket({
-      extraHeaders: {
+      auth: {
         Authorization: this.accessToken,
         status: "1",
       },
       path: "/api/socket.io/",
-    })
+    } as any)
   },
 
   async fetch() {

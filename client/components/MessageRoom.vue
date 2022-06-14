@@ -60,12 +60,12 @@ export default Vue.extend({
   mounted() {
     this.socket = this.$nuxtSocket({
       channel: '/chat',
-      extraHeaders: {
+      auth: {
         Authorization: this.accessToken,
         msg: this.user.display_name,
       },
       path: "/api/socket.io/",
-    })
+    } as any)
     this.socket.on('msg', (msg, cb) => {
       this.messages.push(msg)
       this.$nextTick(() => {
