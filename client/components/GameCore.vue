@@ -1,13 +1,13 @@
 <template>
   <div>
-    <canvas
-      ref="game"
-      height="720px"
-      width="1280px"
-      color="grey lighten-1"
-      class="d-flex justify-center align-center"
-      style="border: 2px solid black;">
-    </canvas>
+      <v-card :height="height" color="#B686D6">
+      <canvas
+        height="720"
+        width="1080"
+        ref="game"
+        color="blue lighten-1">
+      </canvas>
+    </v-card>      
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default Vue.extend({
           socket: null as NuxtSocket | null,
           context: {}, // canvas context
           position: {
-            x: 50,
+            x: 10,
             y: 50
           }
         }
@@ -45,7 +45,16 @@ export default Vue.extend({
       computed: {
           ...mapState({
         accessToken: (state: any) => state.token.accessToken,
-        })
+        }),
+        height () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 120
+          case 'sm': return 360
+          case 'md': return 720
+          case 'lg': return 720
+          case 'xl': return 720
+        }
+        }
       },
       mounted() {
           this.context = this.$refs.game.getContext("2d");
@@ -55,22 +64,22 @@ export default Vue.extend({
           channel: "/game",
           extraHeaders: {
             Authorization: this.accessToken,
-            game: "f51dda3b-b00d-47cc-a299-e252a738c876",
+            game: "cefe5e90-8d4d-4b2e-87fb-0b4790b12c05",
           },
           path: "/api/socket.io/",
         })
         this.socket.on('move', data => {
           console.log('data :', data);
-          if (data >= 0)
+          // if (data >= 0)
             this.position.y = data;
-          else
-            data = 0;
-          if (data <= 600)
-            this.position.y = data;
-          else
-            data = 600;
-          this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
-          this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
+          // else
+            // data = 0;
+          // if (data <= 600)
+            // this.position.y = data;
+          // else
+            // data = 600;
+          this.context.clearRect(0, 0, 720, 1080);
+          this.context.fillRect(this.position.x, this.position.y, 20, 120);
         });
         console.log("both values:", this.position.x, this.position.y);
       },
@@ -95,7 +104,7 @@ export default Vue.extend({
       },
        methods: {
         keyb(val) {
-            this.context.fillRect(this.position.x, this.position.y, 20, 20); // fonctionne pas va savoir pourquoi
+            this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
             console.log("both values:", this.position.x, this.position.y);
         this.socket.emit('customBinding', val);
         },

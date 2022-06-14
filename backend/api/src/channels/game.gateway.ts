@@ -41,9 +41,9 @@ export class GameGateway
     try {
       const player = client.data.user;
       const match: Matchs = client.data.match;
-      console.log(message);
-      console.log(match);
-      console.log(match.FirstPlayer);
+      // console.log(message);
+      // console.log(match);
+      console.log('FIRST PLAYER INFORMATIONS:', match.FirstPlayer);
       if (player == match.FirstPlayer) console.log("FIRST");
       else if (player == match.SecondPlayer) console.log("SECOND");
       const pos1 = await this.matchService.getPosFirstPlayer(match);
@@ -51,12 +51,12 @@ export class GameGateway
       console.log(pos1);
       console.log(pos2);
       if (message == "up") {
-        await this.matchService.setPosFirstPlayer(match, pos1 + 1);
+        await this.matchService.setPosFirstPlayer(match, pos1 - 5);
         this.emitChannel(client.data, match.id, pos1, pos2);
       }
       if (message == "down")
-      await this.matchService.setPosFirstPlayer(match, pos1 - 1);
-      this.emitChannel(client.data, match.id, pos1, pos2);
+      await this.matchService.setPosFirstPlayer(match, pos1 + 5);
+      this.emitChannel(client.data, "move", pos1);
     } catch {}
   }
 
