@@ -33,10 +33,9 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const channel = client.data.channel;
             const sender = client.data.user.display_name;
-            const message = sender + ": " + msg;
             if (!channel.history)
                 channel.history = [];
-            channel.history.push(message);
+            channel.history.push(sender, msg);
             this.channelService.saveChannel(channel);
             this.emitChannel(client.data, "channel", sender, msg);
         }
