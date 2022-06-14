@@ -97,6 +97,12 @@ import { NuxtSocket } from 'nuxt-socket-io'
 import { IChannel } from '@/store/channel'
 import { IUser } from '@/store/user'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    scrollToBottom: () => void
+  }
+}
+
 export default Vue.extend({
 
   props: {
@@ -142,7 +148,7 @@ export default Vue.extend({
   },
 
   mounted() {
-    console.log(this.channel)
+    console.log(this.channel.name)
     this.socket = this.$nuxtSocket({
       channel: '/channel',
       extraHeaders: {
@@ -161,10 +167,6 @@ export default Vue.extend({
   },
 
   methods: {
-    scrollToBottom() {
-      const container = this.$el.querySelector('#' + this.channel.name)
-      if (container !== null) container.scrollTop = container.scrollHeight
-    },
     async deleteChannel() {
       try {
         await this.$store.dispatch('channel/delete', this.channel.id)
@@ -232,7 +234,13 @@ export default Vue.extend({
     },
     fetchMuted() {
       console.log(this.muted)
-    }
+    },
+    scrollToBottom() {
+      const container = this.$el.querySelector('#' + this.channel.name)
+      if (container !== null) {
+        container.scrollTop = container.scrollHeight
+      }
+    },
   }
 })
 </script>
