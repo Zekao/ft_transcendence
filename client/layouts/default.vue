@@ -168,6 +168,8 @@ export default Vue.extend({
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
       (v: string) => !!v || 'Channel password is required',
+      (v: string) => v.length >= 8 || 'Channel password must be greater than 24 characters',
+      (v: string) => v.length <= 32 || 'Channel password must be less than 32 characters',
     ],
     socket: null as NuxtSocket | null,
   }),
