@@ -47,6 +47,8 @@ export default Vue.extend({
     ...mapState({
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
     }),
+
+    
   },
 
   async fetch() {

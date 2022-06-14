@@ -16,7 +16,6 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_services_1 = require("./auth.services");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
-const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 const fs = require("fs");
 let AuthController = class AuthController {
@@ -27,18 +26,13 @@ let AuthController = class AuthController {
     callbackfortytwo(req) {
         return this.authService.GenerateJwtToken(req.user._json.id);
     }
-    test(req) {
-        console.log(req.user);
-        this.authService.GenerateJwtToken(req.user);
-        console.log(req.user);
-    }
     tokenGen(req, id) {
         return this.authService.GenerateJwtToken(id);
     }
     async qrcode() {
-        const Test = this.authService.generateQR();
+        const Test = await this.authService.generateQR();
         const file = fs;
-        file.writeFile("qrcode_user.png", (await Test).qrcode.substring(22), { encoding: "base64" }, function (err) {
+        file.writeFile("qrcode_user.png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
             if (err) {
                 console.log(err);
             }
@@ -46,7 +40,7 @@ let AuthController = class AuthController {
                 console.log("The file was saved!");
             }
         });
-        return (await Test).qrcode.substring(22);
+        return Test.qrcode.substring(22);
     }
 };
 __decorate([
@@ -71,17 +65,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "callbackfortytwo", null);
-__decorate([
-    (0, common_1.Post)("/test"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Debugging purpose / Check if the token work",
-    }),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "test", null);
 __decorate([
     (0, common_1.Get)("/:id/token"),
     (0, swagger_1.ApiOperation)({

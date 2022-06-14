@@ -92,8 +92,30 @@
               <v-list-item-title>{{ channel.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item>
-            <ChannelRoom :channelName="channel.name" :key="i"/>
+          <v-list-item class="px-0">
+            <ChannelRoom :channel="channel" :key="i"/>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+      <v-divider />
+      <v-toolbar>
+        <v-icon class="mr-3"> mdi-account-supervisor </v-icon>
+        Private messages
+      </v-toolbar>
+      <v-list v-if="!users.length">
+        <v-list-item>
+          <v-list-item-subtitle> No user available. </v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-group v-for="(user, i) in users" :key="i">
+          <template #activator>
+            <v-list-item-content>
+              <v-list-item-title>{{ user.display_name }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item class="px-0">
+            <MessageRoom :user="user" :key="i"/>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -108,6 +130,8 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IChannel } from '@/store/channel'
+import { NuxtSocket } from 'nuxt-socket-io'
+import { IUser } from '~/store/user'
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -146,6 +170,7 @@ export default Vue.extend({
     channelPermissionRules: [
       (v: string) => !!v || 'Channel permission is required',
     ],
+    socket: null as NuxtSocket | null,
   }),
 
   computed: {
@@ -153,7 +178,9 @@ export default Vue.extend({
       login: (state: any): string => state.user.authUser.display_name,
       username: (state: any): string => state.user.authUser.user_name,
       avatar: (state: any): string => state.user.authUser.avatar,
+      accessToken: (state: any): string => state.token.accessToken,
       channels: (state: any): IChannel[] => state.channel.channels,
+      users: (state: any): IUser[] => state.user.users,
     }),
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
@@ -162,11 +189,18 @@ export default Vue.extend({
 
   mounted() {
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
+    this.socket = this.$nuxtSocket({
+      extraHeaders: {
+        Authorization: this.accessToken,
+        status: "1",
+      },
+      path: "/api/socket.io/",
+    })
   },
 
   async fetch() {
     try {
-      await this.$store.dispatch('channel/fetch')
+      await Promise.all([this.$store.dispatch('channel/fetch'), this.$store.dispatch('user/fetch')])
     } catch (err) {
       console.log(err)
     }

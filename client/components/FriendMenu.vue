@@ -18,16 +18,49 @@
         <v-list-item> Win : {{friend.win}} </v-list-item>
         <v-list-item> Lost : {{friend.loose}} </v-list-item>
         <v-list-item>  Rank : {{friend.rank}} </v-list-item>
-        <v-list-item-icon> 
-            <v-btn :disabled="isMe || isBlockedByMe">
+        <v-list-item> 
+            <v-btn :disabled="isMe">
+              Play with {{friend.user_name}} 
                 <v-icon :disabled="friend.status === 'OFFLINE'"> mdi-sword-cross</v-icon> 
             </v-btn>
-            <v-btn :disabled="isMe || isBlockedByMe">
+        </v-list-item>
+        <v-list-item>
+            <v-btn :disabled="isMe">
+            chat with {{friend.user_name}}
                 <v-icon color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'" >  mdi-message-outline </v-icon>
             </v-btn>
-        </v-list-item-icon>
-         <!-- :disabled="friend.status === 'OFFLINE'"> mdi-sword-cross </v-list-item-icon> -->
-        <!-- <v-list-item-icon :color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'"> mdi-message-outline </v-list-item-icon>  -->
+        </v-list-item>
+        <v-list-item>
+            <v-btn  :disabled="isBlockedByMe"  @click="block(friend.id)">
+            Block
+            <v-icon> mdi-block-helper </v-icon>
+             </v-btn>
+             <v-btn :disabled="!isBlockedByMe"  @click="unblocked(friend.id)">
+             Unblock
+            <v-icon> mdi-block-helper-remove </v-icon>
+              </v-btn>
+                        </v-list-item>
+          <v-list-item>
+            <v-btn :disabled="!isFriend" @click="addFriend(friend.id)">
+              Add 
+              <v-icon>
+                mdi-account-multiple-plus
+              </v-icon>
+                          </v-btn>
+
+               <v-btn :disabled="isFriend" @click="removeFriend(friend.id)">
+              Remove 
+              <v-icon>
+                mdi-account-multiple-plus
+              </v-icon>
+                            </v-btn>
+
+            </v-list-item>
+                <v-list-item>
+           
+            </v-list-item>
+
+
       </v-list>
     </v-menu>
 
@@ -76,22 +109,44 @@ export default Vue.extend({
         return this.authUserBlocked.find(friend => friend.id === this.friend.id) !== undefined
     },
     },
- 
-    // isFriend() {
-    //     for (let i = 0; i < this.authUserFriends.length; i++) {
-    //         if (this.authUserFriends[i].user_name === this.friend.user_name) {
-    //             this.isfriend = true;
-    //         }
-    //         }
-    // },
-    //},
+
+    methods: {
+  async block(userID: string)
+  {
+    try {
+    await this.$store.dispatch('user/createAuthBlocked', userID) 
+    }
+    catch(error) {
+      console.log(error)
+    }
+  
+  },
+      async unblocked(userID: string) {
+      try {
+        await this.$store.dispatch('user/deleteAuthBlocked', userID)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+      async addFriend(userID: string) {
+        try {
+            await this.$store.dispatch('user/createAuthFriends', userID)
+        } catch (err) {
+            console.log(err)
+        }
+    },
+
+    // function remove friend from authUserFriends
+    async removeFriend(userID: string) {
+        try {
+            await this.$store.dispatch('user/deleteAuthFriends', userID)
+        } catch (err) {
+            console.log(err)
+        }
+    },
+  },
     
-    // methods: { 
-    //    @arg: this.friend.id => this.userID
-    //     isAuthUserFriendWith(userID: string): boolean {
-    //       return this.authUserFriends.filter(el => el.id === userID).length === 1
-    //     }
-    // },
 
 })
 </script>

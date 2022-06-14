@@ -14,8 +14,11 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
+import { UserStatus } from "../users/users.enum";
+import { User } from "../users/users.entity";
+import { Channel } from "./channels.entity";
 
-@WebSocketGateway( {namespace: "chat"} )
+@WebSocketGateway()
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -33,11 +36,24 @@ export class ChannelsGateway
     this.logger.log("Init");
   }
 
-  @SubscribeMessage("channel") // Connect user to the channel
-  async connectToSocket(client: Socket, msg: string): Promise<void> {
+  @SubscribeMessage("channel")
+  async SendMessageToChannel(client: Socket, msg: string): Promise<void> {
     try {
-      const message = client.data.user.user_name + ": " + msg;
-      this.emitChannel(client.data, "Hello", message);
+      const channel: Channel = client.data.channel;
+      const message: string = client.data.user.display_name + ": " + msg;
+      if (!channel.history) channel.history = [];
+      channel.history.push(message);
+      this.channelService.saveChannel(channel);
+      this.emitChannel(client.data, "channel", message);
+    } catch {}
+  }
+
+  @SubscribeMessage("msg")
+  async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
+    try {
+      // const receiver = client.data.msg;
+      const message = client.data.user.display_name + ": " + msg;
+      this.emitChannel(client.data, "msg", message);
     } catch {}
   }
 
@@ -53,21 +69,61 @@ export class ChannelsGateway
   }
 
   handleDisconnect(client: Socket) {
+    const user = client.data.user;
+    console.log(user);
+    if (client.data.status)
+    {
+      user.status = UserStatus.OFFLINE;
+      this.userService.saveUser(user);
+    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
+  isStatus(client: Socket, user: User) {
+    client.data.status = client.handshake.headers.status
+    if (client.data.status) {
+      user.status = UserStatus.ONLINE;
+      this.userService.saveUser(user);
+      this.logger.log(`Client connected: ${client.id}`);
+      return true;
+    }
+    return false;
+  }
+
+  isMsg(client: Socket) {
+    client.data.msg = client.handshake.headers.msg
+    if (client.data.msg) {
+      this.logger.log(`Client connected: ${client.id}`);
+      return true;
+    }
+    return false;
+  }
+
+  async isChannel(client: Socket) {
+    client.data.ConnectedChannel = client.handshake.headers.channel;
+    if (client.data.ConnectedChannel) {
+      client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
+      if (client.data.channel == false) return false;
+      else {
+        this.logger.log(`Client connected: ${client.id}`);
+        return true;
+      }
+    }
+    return false;
+  }
+
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log("HEllo");
     try {
       const user = await this.authService.getUserFromSocket(client);
-
-      const allchan = await this.channelService.getChannel();
       client.data.user = user;
-      client.data.ConnectedChannel = client.handshake.headers.channel;
-      if (!client.data.ConnectedChannel)
-        throw new UnauthorizedException("You must specify a channel");
-      client.emit("info", { user, allchan });
-      this.logger.log(`Client connected: ${client.id}`);
+      if (this.isStatus(client, user))
+        return ;
+      if (this.isMsg(client))
+        return ;
+      if (await this.isChannel(client))
+        return ;
+      console.log("dd")
+      throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();
     }

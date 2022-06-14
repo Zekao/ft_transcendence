@@ -21,7 +21,7 @@ export declare class UserDto {
     TwoFA: boolean;
     matchs: MatchDto[];
     friends: UserDto[];
-    blockedUsers: UserDto[];
+    blockedUsers: User[];
     joined_channels: Channel[];
     ownered_channels: Channel[];
     admined_channels: Channel[];

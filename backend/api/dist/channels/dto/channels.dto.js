@@ -39,7 +39,6 @@ class ChannelsDto {
     }
 }
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "id", void 0);

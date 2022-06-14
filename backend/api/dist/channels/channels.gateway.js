@@ -17,6 +17,7 @@ const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
+const users_enum_1 = require("../users/users.enum");
 let ChannelsGateway = class ChannelsGateway {
     constructor(jwtService, userService, authService, channelService) {
         this.jwtService = jwtService;
@@ -28,10 +29,22 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async connectToSocket(client, msg) {
+    async SendMessageToChannel(client, msg) {
         try {
-            const message = client.data.user.user_name + ": " + msg;
-            this.emitChannel(client.data, "Hello", message);
+            const channel = client.data.channel;
+            const message = client.data.user.display_name + ": " + msg;
+            if (!channel.history)
+                channel.history = [];
+            channel.history.push(message);
+            this.channelService.saveChannel(channel);
+            this.emitChannel(client.data, "channel", message);
+        }
+        catch (_a) { }
+    }
+    async SendPrivateMessage(client, msg) {
+        try {
+            const message = client.data.user.display_name + ": " + msg;
+            this.emitChannel(client.data, "msg", message);
         }
         catch (_a) { }
     }
@@ -48,19 +61,57 @@ let ChannelsGateway = class ChannelsGateway {
         catch (_a) { }
     }
     handleDisconnect(client) {
+        const user = client.data.user;
+        console.log(user);
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.OFFLINE;
+            this.userService.saveUser(user);
+        }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
+    isStatus(client, user) {
+        client.data.status = client.handshake.headers.status;
+        if (client.data.status) {
+            user.status = users_enum_1.UserStatus.ONLINE;
+            this.userService.saveUser(user);
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
+    }
+    isMsg(client) {
+        client.data.msg = client.handshake.headers.msg;
+        if (client.data.msg) {
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
+    }
+    async isChannel(client) {
+        client.data.ConnectedChannel = client.handshake.headers.channel;
+        if (client.data.ConnectedChannel) {
+            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
+            if (client.data.channel == false)
+                return false;
+            else {
+                this.logger.log(`Client connected: ${client.id}`);
+                return true;
+            }
+        }
+        return false;
+    }
     async handleConnection(client, ...args) {
-        console.log("HEllo");
         try {
             const user = await this.authService.getUserFromSocket(client);
-            const allchan = await this.channelService.getChannel();
             client.data.user = user;
-            client.data.ConnectedChannel = client.handshake.headers.channel;
-            if (!client.data.ConnectedChannel)
-                throw new common_1.UnauthorizedException("You must specify a channel");
-            client.emit("info", { user, allchan });
-            this.logger.log(`Client connected: ${client.id}`);
+            if (this.isStatus(client, user))
+                return;
+            if (this.isMsg(client))
+                return;
+            if (await this.isChannel(client))
+                return;
+            console.log("dd");
+            throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {
             return client.disconnect();
@@ -76,9 +127,15 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "connectToSocket", null);
+], ChannelsGateway.prototype, "SendMessageToChannel", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("msg"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", Promise)
+], ChannelsGateway.prototype, "SendPrivateMessage", null);
 ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: "chat" }),
+    (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,

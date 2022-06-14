@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Patch,
+  UseGuards,
+  Req,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -14,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
@@ -34,6 +37,15 @@ export class ChannelsController {
     if (Object.keys(filters).length)
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/history")
+  @ApiOperation({
+    summary: "Get message history of a channel",
+  })
+  getHistory(@Param("id") id: string): Promise<string[]> {
+    return this.channelService.getChannelHistory(id);
   }
 
   /* ************************************************************************** */

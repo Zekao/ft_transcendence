@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="100%">
-    <v-card :id="channel.name" height="320px" class="overflow-y-auto">
+    <v-card :id="user.display_name" height="320px" class="overflow-y-auto">
       <v-list>
         <v-list-item v-for="(message, i) in messages" :key="i">
           {{ message }}
@@ -21,12 +21,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-import { IChannel } from '~/store/channel'
+import { IUser } from '@/store/user'
 
 export default Vue.extend({
 
   props: {
-    channel: Object as () => IChannel
+    user: Object as () => IUser
   },
 
   data: () => ({
@@ -37,31 +37,32 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      authUser: (state: any) => state.user.authUser,
       accessToken: (state: any) => state.token.accessToken,
     })
   },
 
-  async fetch() {
-    try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
-      this.messages = [...res]
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
-    } catch(err) {
-      console.log(err)
-    }
-  },
+  // async fetch() {
+  //   try {
+  //     const res = await this.$axios.$get(`/users/${this.authUser.id}/messages/${this.user.id}`)
+  //     this.messages = [...res]
+  //     this.$nextTick(() => {
+  //       this.scrollToBottom()
+  //     })
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
+  // },
 
   mounted() {
     this.socket = this.$nuxtSocket({
       extraHeaders: {
         Authorization: this.accessToken,
-        channel: this.channel.name,
+        msg: this.user.display_name,
       },
       path: "/api/socket.io/",
     })
-    this.socket.on('channel', (msg, cb) => {
+    this.socket.on('msg', (msg, cb) => {
       this.messages.push(msg)
       this.$nextTick(() => {
         this.scrollToBottom()
@@ -73,14 +74,14 @@ export default Vue.extend({
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
       if (this.socket && messageTextFormated) {
-        this.socket.emit('channel', messageTextFormated, (resp: any) => {
+        this.socket.emit('msg', messageTextFormated, (resp: any) => {
             console.log(resp)
         })
         this.messageText = ''
       }
     },
     scrollToBottom() {
-      const container = this.$el.querySelector('#' + this.channel.name)
+      const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     }
   }

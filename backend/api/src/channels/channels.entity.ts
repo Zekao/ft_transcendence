@@ -28,8 +28,11 @@ export class Channel {
   @Column({ nullable: true })
   password: string;
   
+  @Column("text", { array: true, nullable: true })
+  history: string[];
+
   @ManyToMany(() => User, (user) => user.joined_channels, { nullable: true })
-  @JoinTable({ name: "members" })
+  @JoinTable()
   members: User[];
 
   @ManyToMany(() => User, (user) => user.admined_channels, { nullable: true })

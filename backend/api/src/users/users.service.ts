@@ -205,7 +205,7 @@ export class UsersService {
     return true;
   }
 
-  async getWhoFollowMe(id: string): Promise<UserDto[]> {
+  async getWhoFollowMe(id: string): Promise<User[]> {
     const users: User[] = (await this.getUsers([{ withFriends: true }])).filter((user) => user.id !== id);
     var whoFollowMe: User[] = [];
     for (const user of users) {
@@ -215,7 +215,7 @@ export class UsersService {
     return whoFollowMe;
     }
 
-    async getWhoBlockMe(id: string): Promise<UserDto[]> {
+    async getWhoBlockMe(id: string): Promise<User[]> {
       const users: User[] = (await this.getUsers([{ withBlocked: true }])).filter((user) => user.id !== id);
       var whoBlockMe: User[] = [];
       for (const user of users) {

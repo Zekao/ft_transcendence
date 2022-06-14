@@ -6,7 +6,6 @@ export declare class AuthController {
     callbackfortytwo(req: any): {
         accessToken: string;
     };
-    test(req: any): void;
     tokenGen(req: any, id: number): {
         accessToken: string;
     };

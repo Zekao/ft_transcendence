@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChannelsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 const channels_service_1 = require("./channels.service");
 const channels_filter_dto_1 = require("./dto/channels-filter.dto");
 const channels_dto_1 = require("./dto/channels.dto");
@@ -26,6 +27,9 @@ let ChannelsController = class ChannelsController {
         if (Object.keys(filters).length)
             return this.channelService.getChannelByFilter(filters);
         return this.channelService.getChannel();
+    }
+    getHistory(id) {
+        return this.channelService.getChannelHistory(id);
     }
     createChannel(ChannelsDtos, channelPasswordDto) {
         return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
@@ -45,6 +49,17 @@ __decorate([
     __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "getUsers", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/:id/history"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Get message history of a channel",
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getHistory", null);
 __decorate([
     (0, common_1.Post)("/create"),
     (0, swagger_1.ApiOperation)({
