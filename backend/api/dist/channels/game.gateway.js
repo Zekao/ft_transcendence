@@ -53,6 +53,7 @@ let GameGateway = class GameGateway {
             user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
             this.userService.saveUser(user);
         }
+        console.log("OUT GAME");
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     isInGame(client, user) {
@@ -60,6 +61,7 @@ let GameGateway = class GameGateway {
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
+            console.log("IN_GAME");
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
@@ -69,7 +71,6 @@ let GameGateway = class GameGateway {
         try {
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            console.log("IN_GAME");
             if (this.isInGame(client, user))
                 return;
             throw new common_1.UnauthorizedException("You must specify a channel, or msg");

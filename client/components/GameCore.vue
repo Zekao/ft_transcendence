@@ -28,8 +28,11 @@ export default Vue.extend({
   },
 
   data: () => ({
-    messageText: '',
-    messages: [] as string[],
+    context: {},
+    position: {
+    x: 0,
+    y: 0
+    },
     socket: null as NuxtSocket | null,
   }),
 
@@ -45,17 +48,20 @@ export default Vue.extend({
       channel: "/game",
       extraHeaders: {
         Authorization: this.accessToken,
-        game: "a",
+        game: "1",
       },
       path: "/api/socket.io/",
     })
-    this.socket.on('msg', (msg, cb) => {
-      this.messages.push(msg)
-    })
+    this.socket.on("position", data => {
+    this.position = data;
+    console.log('new datas:', data);
+    // this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+    // this.context.fillRect(this.position.x, this.position.y, 20, 20);
+    });
   },
 
   methods: {
-    move(direction) {
+    move(direction: string) {
       this.socket.emit("move", direction);
     }
   }
