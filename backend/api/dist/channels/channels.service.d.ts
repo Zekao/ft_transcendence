@@ -22,7 +22,7 @@ export declare class ChannelsService {
     getChannelPermissions(id: string): Promise<string>;
     getChannelStatus(id: string): Promise<string>;
     getChannelMembers(id: string, role?: string): Promise<User[]>;
-    getChannelHistory(id: string): Promise<string[]>;
+    getChannelHistory(id: string): Promise<string[][]>;
     saveChannel(id: Channel): Promise<boolean>;
     createChannel(channelsDto: ChannelsDto, channelPasswordDto: ChannelPasswordDto): Promise<Channel>;
     deleteChannel(id: string): Promise<boolean>;

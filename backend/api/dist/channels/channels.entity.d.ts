@@ -7,7 +7,7 @@ export declare class Channel {
     status: ChannelStatus;
     permissions: ChannelPermissions;
     password: string;
-    history: string[];
+    history: string[][];
     members: User[];
     admins: User[];
     owner: UserDto;

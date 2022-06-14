@@ -27,9 +27,9 @@ export class Channel {
   permissions: ChannelPermissions;
   @Column({ nullable: true })
   password: string;
-  
+
   @Column("text", { array: true, nullable: true })
-  history: string[];
+  history: string[][];
 
   @ManyToMany(() => User, (user) => user.joined_channels, { nullable: true })
   @JoinTable()

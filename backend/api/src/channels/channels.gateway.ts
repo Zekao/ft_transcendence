@@ -42,7 +42,8 @@ export class ChannelsGateway
       const channel: Channel = client.data.channel;
       const sender: string = client.data.user.display_name;
       if (!channel.history) channel.history = [];
-      channel.history.push(sender, msg);
+      const history = [sender, msg];
+      channel.history.push(history);
       this.channelService.saveChannel(channel);
       this.emitChannel(client.data, "channel", sender, msg);
     } catch {}
