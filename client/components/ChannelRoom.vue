@@ -1,5 +1,49 @@
 <template>
   <v-sheet width="100%">
+    <v-toolbar class="d-flex justify-center">
+      <v-menu>
+        <template #activator="{ on }">
+          <v-btn small class="mr-2" v-on="on">
+            Admin
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(user, i) in users" :key="i">
+            <v-list-item-content class="mr-2"> {{ user.display_name }} </v-list-item-content>
+            <v-btn @click="removeAdmin">Remove</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu>
+        <template #activator="{ on }">
+          <v-btn small class="mr-2" v-on="on">
+            Banned
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(user, i) in users" :key="i">
+            <v-list-item-content class="mr-2"> {{ user.display_name }} </v-list-item-content>
+            <v-btn @click="unbanUser">Unban</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-menu>
+        <template #activator="{ on }">
+          <v-btn small class="mr-2" v-on="on">
+            Muted
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(user, i) in users" :key="i">
+            <v-list-item-content class="mr-2"> {{ user.display_name }} </v-list-item-content>
+            <v-btn @click="unmuteUser">Unmute</v-btn>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn small icon class="mr-2" @click="deleteChannel">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </v-toolbar>
     <v-card :id="channel.name" height="320px" class="overflow-y-auto">
       <v-list>
         <v-list-item v-for="(message, i) in messages" :key="i">
@@ -25,6 +69,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
 import { IChannel } from '~/store/channel'
+import { IUser } from '~/store/user'
 
 export default Vue.extend({
 
@@ -35,12 +80,16 @@ export default Vue.extend({
   data: () => ({
     messageText: '',
     messages: [] as { login: string, message: string }[],
+    admins: [] as IUser[],
+    banned: [] as IUser[],
+    muted: [] as IUser[],
     socket: null as NuxtSocket | null,
   }),
 
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
+      users: (state: any) => state.user.users,
     })
   },
 
@@ -86,6 +135,18 @@ export default Vue.extend({
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.channel.name)
       if (container !== null) container.scrollTop = container.scrollHeight
+    },
+    async deleteChannel() {
+      console.log(this.channel.id)
+    },
+    removeAdmin() {
+      console.log(this.admins)
+    },
+    unbanUser() {
+      console.log(this.banned)
+    },
+    unmuteUser() {
+      console.log(this.muted)
     }
   }
 })
