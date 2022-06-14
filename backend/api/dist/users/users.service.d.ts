@@ -37,8 +37,8 @@ export declare class UsersService {
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
     saveUser(id: User): Promise<boolean>;
-    getWhoFollowMe(id: string): Promise<UserDto[]>;
-    getWhoBlockMe(id: string): Promise<UserDto[]>;
+    getWhoFollowMe(id: string): Promise<User[]>;
+    getWhoBlockMe(id: string): Promise<User[]>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     addFriend(id: string, friend_id: string): Promise<User>;
     addBlocked(id: string, blockedUsersId: string): Promise<User>;

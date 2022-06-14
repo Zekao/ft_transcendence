@@ -74,20 +74,6 @@ export class UsersController {
     return this.UsersService.getRankedUsers();
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get("/me")
-  // @ApiOperation({
-  //   summary: "Return profile of user associated with his credential",
-  // })
-  // @ApiOkResponse({
-  //   description: "Ok.",
-  //   type: [User],
-  // })
-  // @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
-  // getProfile(@Request() req) {
-  //   return req.user;
-  // }
-
   @UseGuards(JwtAuthGuard)
   @Get("/:id")
   @ApiOperation({
@@ -135,20 +121,6 @@ export class UsersController {
     return this.UsersService.getFriends(user.id);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get("/me/matchs")
-  // @ApiOperation({
-  //   summary: "Return the list of matchs of a specified user profile",
-  // })
-  // @ApiOkResponse({
-  //   description: "Ok.",
-  // })
-  // @UserApiException(() => NotFoundException)
-  // getMatchs(@Request() req): Promise<MatchDto[]> {
-  //   const user = req.user;
-  //   return this.UsersService.getMatchs(user.id);
-  // }
-
   @UseGuards(JwtAuthGuard)
   @Get("/:id/matchs")
   @ApiOperation({
@@ -185,7 +157,7 @@ export class UsersController {
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getWhoFollowMe(@Request() req): Promise<UserDto[]> {
+  getWhoFollowMe(@Request() req): Promise<User[]> {
     return this.UsersService.getWhoFollowMe(req.user.id);
   }
 

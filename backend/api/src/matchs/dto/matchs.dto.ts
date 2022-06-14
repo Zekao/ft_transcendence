@@ -1,11 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-  MinLength,
-  IsEnum,
-} from "class-validator";
 import { User } from "src/users/users.entity";
 import { UserDto } from "../../users/dto/user.dto";
 import { Matchs } from "../matchs.entity";
@@ -28,11 +21,11 @@ export class MatchDto {
     }
   }
   id: string;
-  FirstPlayer: UserDto;
-  SecondPlayer: UserDto;
+  FirstPlayer: User;
+  SecondPlayer: User;
   scoreFirstPlayer: number;
   scoreSecondPlayer: number;
-  winner: UserDto;
+  winner: User;
   status: MatchStatus;
   specs: UserDto[];
 }

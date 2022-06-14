@@ -65,6 +65,16 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.status;
     }
+    async getChannelHistory(id) {
+        const found = await this.getChannelId(id);
+        if (!found)
+            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
+        return found.history;
+    }
+    async saveChannel(id) {
+        this.ChannelsRepository.save(id);
+        return true;
+    }
     async createChannel(channelsDto, channelPasswordDto) {
         const { name, status, permissions } = channelsDto;
         const { password } = channelPasswordDto;

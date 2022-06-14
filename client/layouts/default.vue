@@ -168,7 +168,7 @@ export default Vue.extend({
     this.socket = this.$nuxtSocket({
       extraHeaders: {
         Authorization: this.accessToken,
-        channel: "status",
+        status: "1",
       },
       path: "/api/socket.io/",
     })

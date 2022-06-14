@@ -10,6 +10,7 @@ import {
 import { Channel } from "../channels.entity";
 import { UserDto } from "src/users/dto/user.dto";
 import { ChannelPermissions, ChannelStatus } from "../channels.enum";
+import { User } from "../../users/users.entity";
 
 export class ChannelsDto {
 
@@ -26,8 +27,6 @@ export class ChannelsDto {
     }
   }
 
-
-  @IsNotEmpty()
   @ApiProperty()
   id: string;
 
@@ -53,10 +52,10 @@ export class ChannelsDto {
   password: string;
 
   @ApiProperty()
-  members: UserDto[];
+  members: User[];
 
   @ApiProperty()
-  admins: UserDto[];
+  admins: User[];
 
   @ApiProperty({ type: () => UserDto })
   owner: UserDto;
