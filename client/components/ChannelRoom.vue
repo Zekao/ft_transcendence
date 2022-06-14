@@ -212,7 +212,7 @@ export default Vue.extend({
     async emitPassword() {
       try {
         await this.$axios.$post(`/channel/${this.channel.id}/password`, { password: this.password })
-        // this.unlocked = true
+        this.unlocked = true
         this.$nextTick(() => {
           this.scrollToBottom()
         })
@@ -220,34 +220,19 @@ export default Vue.extend({
         this.password = ''
       }
     },
-    addAdmin(user: string) {
+    setAdmin(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'addAdmin', user)
+        this.socket.emit('channel', 'action', 'admin', user)
       }
     },
-    removeAdmin(user: string) {
+    setBan(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'removeAdmin', user)
+        this.socket.emit('channel', 'action', 'user', user)
       }
     },
-    banUser(user: string) {
+    setMute(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'banUser', user)
-      }
-    },
-    unbanUser(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'unbanUser', user)
-      }
-    },
-    muteUser(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'muteUser', user)
-      }
-    },
-    unmuteUser(user: string) {
-      if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'unmuteUser', user)
+        this.socket.emit('channel', 'action', 'mute', user)
       }
     },
     fetchAdmin() {
