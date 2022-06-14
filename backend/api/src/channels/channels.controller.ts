@@ -60,7 +60,7 @@ export class ChannelsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get("/:id/password")
+  @Post("/:id/password")
   @ApiOperation({
     summary: "Validate password of a channel",
   })

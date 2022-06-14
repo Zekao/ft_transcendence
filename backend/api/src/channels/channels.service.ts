@@ -135,7 +135,7 @@ export class ChannelsService {
   ) {
     const found = await this.getChannelId(id);
     const { password } = channelPasswordDto;
-    if (await bcrypt.compare(password, found.password))
+    if (!(await bcrypt.compare(password, found.password)))
       throw new ForbiddenException("Incorrect Password");
     return found;
   }
