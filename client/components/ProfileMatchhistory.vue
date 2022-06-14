@@ -35,13 +35,24 @@
       <v-list v-else width="40%">
         <v-list-item v-for="(match, i) in userMatchs" :key="i">
           <v-list-item-content class="justify-center">
-            {{ match.FirstPlayer }}
+            <!-- {{ match.FirstPlayer }}  -->
+             <v-badge centered
+                color="orange"
+                icon="mdi-crown"
+                overlap>
+             <v-avatar> <v-img :src="getUser(userMatchs.FirstPlayer).avatar"/> </v-avatar>
+             </v-badge>
+            <FriendMenu :friend = getUser(match.FirstPlayer) />
+
           </v-list-item-content>
           <v-list-item-content class="justify-center">
             {{ match.scoreFirstPlayer + ' - ' + match.scoreSecondPlayer }}
           </v-list-item-content>
           <v-list-item-content class="justify-center">
-            {{ match.SecondPlayer }}
+            <!-- {{ match.SecondPlayer }} -->
+              <v-avatar> <v-img :src="getUser(userMatchs.FirstPlayer).avatar"/> </v-avatar>
+            <FriendMenu :friend = getUser(match.SecondPlayer) />
+
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -73,6 +84,8 @@ export default Vue.extend({
       selectedUserMatchs: (state: any): IMatch[] => state.user.selectedUserMatchs,
     }),
     userMatchs() {
+
+      console.log(this.authUserMatches);
       return this.selectedLogin ? this.selectedUserMatchs : this.authUserMatches
     }
   },
@@ -91,6 +104,12 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+     
+    getUser(user_name: string) {
+      return this.users.filter(el => el.display_name === user_name)
+    },
+
     clearSearch() {
       this.selectedLogin = ''
       this.search = ''
