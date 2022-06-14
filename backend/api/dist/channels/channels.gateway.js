@@ -82,7 +82,6 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             console.log(client.handshake.headers.authorization);
             const user = await this.authService.getUserFromSocket(client);
-            console.log("TEST");
             client.data.user = user;
             if (await this.isChannel(client))
                 return;
