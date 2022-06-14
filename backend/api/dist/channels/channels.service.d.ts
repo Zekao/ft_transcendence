@@ -2,7 +2,7 @@ import { UsersService } from "src/users/users.service";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelsDto } from "./dto/channels.dto";
+import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 export declare class ChannelRelationsPicker {
     withAllMembers?: boolean;
@@ -18,7 +18,7 @@ export declare class ChannelsService {
     constructor(ChannelsRepository: Repository<Channel>, UsersService: UsersService);
     getChannel(): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
-    getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
+    getChannelId(id: string, password: ChannelPasswordDto, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
     getChannelPermissions(id: string): Promise<string>;
     getChannelStatus(id: string): Promise<string>;
     getChannelMembers(id: string, role?: string): Promise<User[]>;

@@ -33,10 +33,19 @@ export class ChannelsController {
 
   @Get()
   @ApiOperation({ summary: "Return list of all existing channels" })
-  getUsers(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
+  GetAllChannel(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
     if (Object.keys(filters).length)
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id")
+  @ApiOperation({
+    summary: "Get channel info",
+  })
+  getChannel(@Param("id") id: string, @Body() body): Promise<Channel> {
+    return this.channelService.getChannelId(id, body);
   }
 
   @UseGuards(JwtAuthGuard)

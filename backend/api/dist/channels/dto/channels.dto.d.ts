@@ -14,3 +14,6 @@ export declare class ChannelsDto {
     mutedUsers: UserDto[];
     bannedUsers: UserDto[];
 }
+export declare class ChannelPasswordDto {
+    password: string;
+}

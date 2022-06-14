@@ -23,10 +23,13 @@ let ChannelsController = class ChannelsController {
     constructor(channelService) {
         this.channelService = channelService;
     }
-    getUsers(filters) {
+    GetAllChannel(filters) {
         if (Object.keys(filters).length)
             return this.channelService.getChannelByFilter(filters);
         return this.channelService.getChannel();
+    }
+    getChannel(id, body) {
+        return this.channelService.getChannelId(id, body);
     }
     getHistory(id) {
         return this.channelService.getChannelHistory(id);
@@ -48,7 +51,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
     __metadata("design:returntype", Promise)
-], ChannelsController.prototype, "getUsers", null);
+], ChannelsController.prototype, "GetAllChannel", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/:id"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Get channel info",
+    }),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getChannel", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/:id/history"),

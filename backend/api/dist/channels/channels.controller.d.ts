@@ -5,7 +5,8 @@ import { ChannelsDto } from "./dto/channels.dto";
 export declare class ChannelsController {
     private channelService;
     constructor(channelService: ChannelsService);
-    getUsers(filters: ChannelFilteDto): Promise<Channel[]>;
+    GetAllChannel(filters: ChannelFilteDto): Promise<Channel[]>;
+    getChannel(id: string, body: any): Promise<Channel>;
     getHistory(id: string): Promise<{
         login: string;
         message: string;

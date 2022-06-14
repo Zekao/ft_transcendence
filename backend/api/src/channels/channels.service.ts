@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Inject,
   forwardRef,
+  ForbiddenException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersService } from "src/users/users.service";
@@ -14,9 +15,10 @@ import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelsDto } from "./dto/channels.dto";
+import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
+import * as bcrypt from "bcrypt";
 
 export class ChannelRelationsPicker {
   withAllMembers?: boolean;
@@ -57,6 +59,7 @@ export class ChannelsService {
   }
   async getChannelId(
     id: string,
+    password: ChannelPasswordDto,
     RelationsPicker?: ChannelRelationsPicker[]
   ): Promise<Channel> {
     const relations: string[] = [];
@@ -85,6 +88,11 @@ export class ChannelsService {
         relations,
       });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
+    if (
+      found.status === ChannelStatus.PROTECTED &&
+      (await bcrypt.compare(password, found.password))
+    )
+      throw new ForbiddenException("Incorrect Password");
     return found;
   }
 
@@ -123,11 +131,13 @@ export class ChannelsService {
 
   async createChannel(channelsDto: ChannelsDto): Promise<Channel> {
     const { name, status, permissions, password } = channelsDto;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
     const channel = this.ChannelsRepository.create({
       name,
       status,
       permissions,
-      password,
+      password: hashedPassword,
     });
     try {
       await this.ChannelsRepository.save(channel);
