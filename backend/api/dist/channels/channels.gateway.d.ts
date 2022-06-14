@@ -16,7 +16,6 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     afterInit(server: Server): void;
     SendMessageToChannel(client: Socket, message: any): Promise<void>;
     SendPrivateMessage(client: Socket, msg: string): Promise<void>;
-    gamecontrol(client: Socket, message: string): Promise<void>;
     emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     isStatus(client: Socket, user: User): boolean;

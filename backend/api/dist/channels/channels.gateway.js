@@ -33,7 +33,7 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const channel = client.data.channel;
             const login = client.data.user.display_name;
-            if (message.type) {
+            if (message) {
                 const history = { login, message };
                 channel.history.push(history);
                 this.channelService.saveChannel(channel);
@@ -46,19 +46,6 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const message = client.data.user.display_name + ": " + msg;
             this.emitChannel(client.data, "msg", message);
-        }
-        catch (_a) { }
-    }
-    async gamecontrol(client, message) {
-        try {
-            const channel = client.data.channel;
-            const login = client.data.user.display_name;
-            if (!channel.history)
-                channel.history = [];
-            const history = { login, message };
-            channel.history.push(history);
-            this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", login, message);
         }
         catch (_a) { }
     }
@@ -146,12 +133,6 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendPrivateMessage", null);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("connection"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "gamecontrol", null);
 ChannelsGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
