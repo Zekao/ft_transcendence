@@ -92,7 +92,7 @@
               <v-list-item-title>{{ channel.name }}</v-list-item-title>
             </v-list-item-content>
           </template>
-          <v-list-item>
+          <v-list-item class="px-0">
             <ChannelRoom :channelName="channel.name" :key="i"/>
           </v-list-item>
         </v-list-group>
