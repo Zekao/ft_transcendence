@@ -3,7 +3,7 @@ import { AuthController } from "./auth.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "../users/users.entity";
 import { PassportModule } from "@nestjs/passport";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import { FortyTwoStrategy } from "./strategy/42.strategy";
 import { JwtStrategy } from "./strategy/jwt.strategy";
 import { UsersService } from "../users/users.service";
@@ -22,7 +22,6 @@ import { Matchs } from "src/matchs/matchs.entity";
       },
     }),
     TypeOrmModule.forFeature([User, Matchs]),
-    MatchsModule,
   ],
   providers: [
     FortyTwoStrategy,
@@ -30,6 +29,7 @@ import { Matchs } from "src/matchs/matchs.entity";
     UsersService,
     AuthService,
     MatchsService,
+    JwtService,
   ],
   controllers: [AuthController],
   exports: [JwtStrategy, PassportModule, AuthService],

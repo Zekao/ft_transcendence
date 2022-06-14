@@ -22,21 +22,24 @@ const typeorm_2 = require("typeorm");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
 let AuthService = class AuthService {
-    constructor(JwtService, userRepository, userService) {
-        this.JwtService = JwtService;
+    constructor(jwtService, userRepository, userService) {
+        this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.userService = userService;
     }
     GenerateJwtToken(FortyTwoID) {
         const payload = { FortyTwoID };
-        const accessToken = this.JwtService.sign(payload);
+        const accessToken = this.jwtService.sign(payload);
         return { accessToken };
     }
     verifyJwtToken(token) {
         try {
-            return this.JwtService.verify(token);
+            console.log("TOKEN: ", token);
+            return this.jwtService.verify(token);
         }
-        catch (err) { }
+        catch (err) {
+            console.log(err);
+        }
     }
     async handleFortyTwo(Ftwo) {
         const user = await this.userRepository.findOne({
@@ -78,6 +81,8 @@ let AuthService = class AuthService {
         if (!token)
             throw new common_1.UnauthorizedException("No token provided");
         const payload = await this.verifyJwtToken(token);
+        console.log(token);
+        console.log(payload);
         if (!payload)
             throw new common_1.UnauthorizedException("Invalid token provided");
         return this.userService.getUserFortyTwo(payload.FortyTwoID);

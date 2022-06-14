@@ -130,13 +130,17 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "ownered_channels", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.mutedUsers, { nullable: true }),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.mutedUsers, {
+        nullable: true,
+    }),
     (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
     (0, typeorm_1.JoinTable)({ name: "mutedChannels" }),
     __metadata("design:type", Array)
 ], User.prototype, "mutedChannels", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.bannedUsers, { nullable: true }),
+    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.bannedUsers, {
+        nullable: true,
+    }),
     (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
     (0, typeorm_1.JoinTable)({ name: "bannedChannels" }),
     __metadata("design:type", Array)

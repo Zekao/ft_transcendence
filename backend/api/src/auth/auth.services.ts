@@ -20,19 +20,22 @@ import { Socket } from "socket.io";
 @Injectable()
 export class AuthService {
   constructor(
-    private JwtService: JwtService,
+    private jwtService: JwtService,
     @InjectRepository(User) private userRepository: Repository<User>,
     private userService: UsersService
   ) {}
   GenerateJwtToken(FortyTwoID: number) {
     const payload: FortyTwoUser = { FortyTwoID };
-    const accessToken: string = this.JwtService.sign(payload);
+    const accessToken: string = this.jwtService.sign(payload);
     return { accessToken };
   }
   verifyJwtToken(token: string): Promise<FortyTwoUser> {
     try {
-      return this.JwtService.verify(token);
-    } catch (err) {}
+      console.log("TOKEN: ", token);
+      return this.jwtService.verify(token);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
@@ -76,7 +79,9 @@ export class AuthService {
   async getUserFromSocket(client: Socket): Promise<User> {
     const token = client.handshake.headers.authorization;
     if (!token) throw new UnauthorizedException("No token provided");
-    const payload = await this.verifyJwtToken(token)
+    const payload = await this.verifyJwtToken(token);
+    console.log(token);
+    console.log(payload);
     if (!payload) throw new UnauthorizedException("Invalid token provided");
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
   }

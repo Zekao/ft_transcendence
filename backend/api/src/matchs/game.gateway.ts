@@ -97,7 +97,7 @@ export class GameGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
-      console.log("test");
+      console.log(client.handshake.headers.authorization);
       const user = await this.authService.getUserFromSocket(client);
       const match = await this.matchService.getMatchsId(
         client.handshake.headers.game

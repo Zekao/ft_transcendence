@@ -23,14 +23,14 @@ __decorate([
 ], Matchs.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
-    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs)),
-    (0, typeorm_1.JoinTable)({ name: 'firstPlayer' }),
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.matchs),
+    (0, typeorm_1.JoinTable)({ name: "firstPlayer" }),
     __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "FirstPlayer", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
-    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs), { nullable: true }),
-    (0, typeorm_1.JoinTable)({ name: 'secondPlayer' }),
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.matchs, { nullable: true }),
+    (0, typeorm_1.JoinTable)({ name: "secondPlayer" }),
     __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "SecondPlayer", void 0);
 __decorate([
@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Matchs.prototype, "posSecondPlayer", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs), { nullable: true }),
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.matchs, { nullable: true }),
     __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "winner", void 0);
 __decorate([
