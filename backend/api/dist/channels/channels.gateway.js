@@ -29,15 +29,16 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async SendMessageToChannel(client, msg) {
+    async SendMessageToChannel(client, message) {
         try {
             const channel = client.data.channel;
-            const sender = client.data.user.display_name;
+            const login = client.data.user.display_name;
             if (!channel.history)
                 channel.history = [];
-            channel.history.push(sender, msg);
+            const history = { login, message };
+            channel.history.push(history);
             this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", sender, msg);
+            this.emitChannel(client.data, "channel", login, message);
         }
         catch (_a) { }
     }
