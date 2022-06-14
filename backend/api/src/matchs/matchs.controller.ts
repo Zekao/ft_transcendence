@@ -39,6 +39,12 @@ export class MatchsController {
     return this.matchService.getMatchs();
   }
 
+  @Get("/:id")
+  @ApiOperation({ summary: "Return a match by id" })
+  getMatchsId(@Param("id") id: string): Promise<Matchs> {
+    return this.matchService.getMatchsId(id);
+  }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */

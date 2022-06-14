@@ -28,6 +28,9 @@ let MatchsController = class MatchsController {
             return this.matchService.getMatchsByFilter(filters);
         return this.matchService.getMatchs();
     }
+    getMatchsId(id) {
+        return this.matchService.getMatchsId(id);
+    }
     createMatch(req) {
         return this.matchService.createMatch(req.user.id);
     }
@@ -50,6 +53,14 @@ __decorate([
     __metadata("design:paramtypes", [matchs_filter_dto_1.MatchsFilteDto]),
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "getMatchs", null);
+__decorate([
+    (0, common_1.Get)("/:id"),
+    (0, swagger_1.ApiOperation)({ summary: "Return a match by id" }),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MatchsController.prototype, "getMatchsId", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/create"),

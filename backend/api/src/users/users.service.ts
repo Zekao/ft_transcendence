@@ -27,6 +27,7 @@ import { MatchsService } from "../matchs/matchs.service";
 import { Matchs } from "../matchs/matchs.entity";
 import { MatchDto } from "../matchs/dto/matchs.dto";
 import { extname } from "path";
+import { MatchsRelationPicker } from "../matchs/matchs.service";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
@@ -38,6 +39,8 @@ export class UserRelationsPicker {
 export class UsersService {
   constructor(
     @InjectRepository(User) private UserRepository: Repository<User>,
+    @Inject(forwardRef(() => MatchsService))
+    private MatchsService: MatchsService,
     private JwtService: JwtService
   ) {}
 
@@ -75,14 +78,15 @@ export class UsersService {
     return friends;
   }
 
-  async getMatchs(id: string): Promise<MatchDto[]> {
+  async getMatchs(id: string): Promise<Matchs[]> {
 
     const user = await this.getUserId(id, [{ withMatchs: true }]);
     if (!user.matchs) return [];
     console.log(user.matchs);
-    const matchs: MatchDto[] = user.matchs.map((match) => {
-      return new MatchDto(match);
-    });
+    var matchs : Matchs[] = [];
+    for (const match of user.matchs) {
+      matchs.push((await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])));
+    }
     return matchs;
   }
 
@@ -319,7 +323,7 @@ export class UsersService {
   async deleteUser(id: string): Promise<boolean> {
     const found = await this.getUserId(id);
     if (!found) throw new NotFoundException(`User \`${id}' not found`);
-    const target = await this.UserRepository.delete(found);
+    const target = await this.UserRepository.delete(found.id);
     if (target.affected === 0)
       throw new NotFoundException(`User \`${id}' not found`);
     return true;

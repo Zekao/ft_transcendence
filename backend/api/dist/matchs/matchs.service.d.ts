@@ -4,13 +4,16 @@ import { MatchsFilteDto } from "./dto/matchs-filter.dto";
 import { MatchDto } from "./dto/matchs.dto";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/users.entity";
+export declare class MatchsRelationPicker {
+    withUsers?: boolean;
+}
 export declare class MatchsService {
-    private matchsRepository;
+    private MatchsRepository;
     private userService;
-    constructor(matchsRepository: Repository<Matchs>, userService: UsersService);
+    constructor(MatchsRepository: Repository<Matchs>, userService: UsersService);
     getMatchs(): Promise<Matchs[]>;
     getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
-    getMatchsId(id: any): Promise<Matchs>;
+    getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs>;
     getPosFirstPlayer(id: Matchs): Promise<number>;
     getPosSecondPlayer(id: Matchs): Promise<number>;
     setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;

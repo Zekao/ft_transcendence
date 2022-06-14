@@ -6753,7 +6753,7 @@ postcss-preset-env@^6.7.0:
     postcss-place "^4.0.1"
     postcss-pseudo-class-any-link "^6.0.0"
     postcss-replace-overflow-wrap "^3.0.0"
-    postcss-selector-matchs "^4.0.0"
+    postcss-selector-matches "^4.0.0"
     postcss-selector-not "^4.0.0"
 
 postcss-pseudo-class-any-link@^6.0.0:
@@ -6791,9 +6791,9 @@ postcss-replace-overflow-wrap@^3.0.0:
   dependencies:
     postcss "^7.0.2"
 
-postcss-selector-matchs@^4.0.0:
+postcss-selector-matches@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-selector-matchs/-/postcss-selector-matchs-4.0.0.tgz#71c8248f917ba2cc93037c9637ee09c64436fcff"
+  resolved "https://registry.yarnpkg.com/postcss-selector-matches/-/postcss-selector-matches-4.0.0.tgz#71c8248f917ba2cc93037c9637ee09c64436fcff"
   integrity sha512-LgsHwQR/EsRYSqlwdGzeaPKVT0Ml7LAT6E75T8W8xLJY62CE4S/l03BWIt3jT8Taq22kXP08s2SfTSzaraoPww==
   dependencies:
     balanced-match "^1.0.0"

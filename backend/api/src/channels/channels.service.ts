@@ -142,7 +142,7 @@ export class ChannelsService {
   async deleteChannel(id: string): Promise<boolean> {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    const target = await this.ChannelsRepository.delete(found);
+    const target = await this.ChannelsRepository.delete(found.id);
     if (target.affected === 0)
       throw new NotFoundException(`Channel \`${id}' not found`);
     return true;

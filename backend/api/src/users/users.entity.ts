@@ -61,7 +61,7 @@ export class User {
   @Column({ type: "real" })
   ratio: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Matchs })
   @ManyToMany(() => Matchs, (matchs) => matchs.FirstPlayer || matchs.SecondPlayer)
   @JoinTable({ name: "MatchHistory" })
   matchs: Matchs[];

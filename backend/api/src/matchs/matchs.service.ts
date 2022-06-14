@@ -7,6 +7,8 @@ import {
   UnauthorizedException,
   Res,
   Req,
+  Inject,
+  forwardRef,
 } from "@nestjs/common";
 import * as fs from "fs";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -33,10 +35,15 @@ function isMatchs(id: string): boolean {
   );
 }
 
+export class MatchsRelationPicker {
+  withUsers?: boolean;
+}
+
 @Injectable()
 export class MatchsService {
   constructor(
-    @InjectRepository(Matchs) private matchsRepository: Repository<Matchs>,
+    @InjectRepository(Matchs) private MatchsRepository: Repository<Matchs>,
+    @Inject(forwardRef(() => UsersService))
     private userService: UsersService
   ) {}
 
@@ -45,7 +52,7 @@ export class MatchsService {
   /* ************************************************************************** */
 
   async getMatchs(): Promise<Matchs[]> {
-    const matchs = await this.matchsRepository.find();
+    const matchs = await this.MatchsRepository.find();
     if (!matchs) throw new NotFoundException(`Matchs not found`);
     return matchs;
   }
@@ -82,10 +89,17 @@ export class MatchsService {
     if (!matchs) throw new NotFoundException(`Channel not found`);
     return matchs;
   }
-  async getMatchsId(id: any): Promise<Matchs> {
+
+  async getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs> {
+    const relations = [];
+    if (RelationsPicker) {
+      for (const relation of RelationsPicker) {
+        relation.withUsers && relations.push("firstPlayer") && relations.push("secondPlayer");
+      }
+    }
     let found = null;
     if (isMatchs(id))
-      found = await this.matchsRepository.findOne({ where: { id: id } });
+      found = await this.MatchsRepository.findOne({ where: { id: id }, relations});
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
@@ -100,13 +114,13 @@ export class MatchsService {
 
   async setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posFirstPlayer = pos;
-    this.matchsRepository.save(id);
+    this.MatchsRepository.save(id);
     return true;
   }
 
   async setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posSecondPlayer = pos;
-    this.matchsRepository.save(id);
+    this.MatchsRepository.save(id);
     return true;
   }
 
@@ -118,7 +132,7 @@ export class MatchsService {
     const user = await this.userService.getUserId(id, [{withMatchs: true}]);
     if (user.matchs.find((m) => m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED))
       throw new ConflictException("You already have a match in progress");
-    const match = this.matchsRepository.create({
+    const match = this.MatchsRepository.create({
       FirstPlayer: user,
     });
     try {
@@ -128,7 +142,7 @@ export class MatchsService {
       console.log(error);
       throw new InternalServerErrorException();
     }
-    await this.matchsRepository.save(match);
+    await this.MatchsRepository.save(match);
     return match;
   }
 
@@ -144,7 +158,7 @@ export class MatchsService {
     else throw new UnauthorizedException("Match is full");
     if (match.FirstPlayer == player)
       throw new NotFoundException("Cannot join same match");
-    this.matchsRepository.save(match);
+    this.MatchsRepository.save(match);
     return match;
   }
 
@@ -166,7 +180,7 @@ export class MatchsService {
       await this.addPlayerToMatch(player, match);
       await this.addMatchToPlayer(player, match);
       match.status = MatchStatus.STARTED;
-      this.matchsRepository.save(match);
+      this.MatchsRepository.save(match);
     } catch (err) {
       return err;
     }
@@ -180,7 +194,7 @@ export class MatchsService {
   async deleteMatch(id: string): Promise<boolean> {
     const found = await this.getMatchsId(id);
     if (!found) throw new NotFoundException(`Match \`${id}' not found`);
-    const target = await this.matchsRepository.delete(found);
+    const target = await this.MatchsRepository.delete(found.id);
     if (target.affected === 0)
       throw new NotFoundException(`Match \`${id}' not found`);
     return true;
@@ -204,7 +218,7 @@ export class MatchsService {
     if (scoreFirstPlayer) found.scoreFirstPlayer = scoreFirstPlayer;
     if (scoreSecondPlayer) found.scoreSecondPlayer = scoreSecondPlayer;
     if (winner) found.winner = winner;
-    this.matchsRepository.save(found);
+    this.MatchsRepository.save(found);
     return found;
   }
 }

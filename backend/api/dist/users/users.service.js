@@ -22,14 +22,15 @@ const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
 const utils_1 = require("../utils/utils");
 const user_dto_1 = require("./dto/user.dto");
-const matchs_dto_1 = require("../matchs/dto/matchs.dto");
+const matchs_service_1 = require("../matchs/matchs.service");
 const path_1 = require("path");
 class UserRelationsPicker {
 }
 exports.UserRelationsPicker = UserRelationsPicker;
 let UsersService = class UsersService {
-    constructor(UserRepository, JwtService) {
+    constructor(UserRepository, MatchsService, JwtService) {
         this.UserRepository = UserRepository;
+        this.MatchsService = MatchsService;
         this.JwtService = JwtService;
     }
     async getUsers(RelationsPicker) {
@@ -68,9 +69,10 @@ let UsersService = class UsersService {
         if (!user.matchs)
             return [];
         console.log(user.matchs);
-        const matchs = user.matchs.map((match) => {
-            return new matchs_dto_1.MatchDto(match);
-        });
+        var matchs = [];
+        for (const match of user.matchs) {
+            matchs.push((await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])));
+        }
         return matchs;
     }
     async getBlocked(id) {
@@ -286,7 +288,7 @@ let UsersService = class UsersService {
         const found = await this.getUserId(id);
         if (!found)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
-        const target = await this.UserRepository.delete(found);
+        const target = await this.UserRepository.delete(found.id);
         if (target.affected === 0)
             throw new common_1.NotFoundException(`User \`${id}' not found`);
         return true;
@@ -382,7 +384,9 @@ __decorate([
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.User)),
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => matchs_service_1.MatchsService))),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        matchs_service_1.MatchsService,
         jwt_1.JwtService])
 ], UsersService);
 exports.UsersService = UsersService;
