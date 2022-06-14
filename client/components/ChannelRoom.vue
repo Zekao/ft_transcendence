@@ -75,10 +75,10 @@
             <v-list-item-content>
               {{ message.login }}
             </v-list-item-content>
-            <v-btn v-if="isAuthUserAdmin" x-small icon class="mr-2">
+            <v-btn v-if="isAuthUserAdmin" x-small icon class="mr-2" @click="setBan(message.login)">
               <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-btn v-if="isAuthUserAdmin" x-small icon>
+            <v-btn v-if="isAuthUserAdmin" x-small icon @click="setMute(message.login)">
               <v-icon>mdi-volume-off</v-icon>
             </v-btn>
             <v-list-item-content class="text-right">
