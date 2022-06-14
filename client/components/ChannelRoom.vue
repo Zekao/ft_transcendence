@@ -166,7 +166,11 @@ export default Vue.extend({
       if (container !== null) container.scrollTop = container.scrollHeight
     },
     async deleteChannel() {
-      console.log(this.channel.id)
+      try {
+        await this.$store.dispatch('channel/delete', this.channel.id)
+      } catch (err) {
+        console.log(err)
+      }
     },
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
