@@ -67,13 +67,9 @@ export class MatchsService {
     } = filter;
     let matchs = await this.getMatchs();
     if (FirstPlayer)
-      matchs = matchs.filter(
-        (matchs) => matchs.FirstPlayer === FirstPlayer
-      );
+      matchs = matchs.filter((matchs) => matchs.FirstPlayer === FirstPlayer);
     if (SecondPlayer)
-      matchs = matchs.filter(
-        (matchs) => matchs.SecondPlayer === SecondPlayer
-      );
+      matchs = matchs.filter((matchs) => matchs.SecondPlayer === SecondPlayer);
     if (scoreFirstPlayer)
       matchs = matchs.filter(
         (matchs) => matchs.scoreFirstPlayer === scoreFirstPlayer
@@ -82,24 +78,30 @@ export class MatchsService {
       matchs = matchs.filter(
         (matchs) => matchs.scoreSecondPlayer === scoreSecondPlayer
       );
-    if (status)
-      matchs = matchs.filter((channel) => channel.status === status);
-    if (winner)
-      matchs = matchs.filter((channel) => channel.winner === winner);
+    if (status) matchs = matchs.filter((channel) => channel.status === status);
+    if (winner) matchs = matchs.filter((channel) => channel.winner === winner);
     if (!matchs) throw new NotFoundException(`Channel not found`);
     return matchs;
   }
 
-  async getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs> {
+  async getMatchsId(
+    id: any,
+    RelationsPicker?: MatchsRelationPicker[]
+  ): Promise<Matchs> {
     const relations = [];
     if (RelationsPicker) {
       for (const relation of RelationsPicker) {
-        relation.withUsers && relations.push("firstPlayer") && relations.push("secondPlayer");
+        relation.withUsers &&
+          relations.push("firstPlayer") &&
+          relations.push("secondPlayer");
       }
     }
     let found = null;
     if (isMatchs(id))
-      found = await this.MatchsRepository.findOne({ where: { id: id }, relations});
+      found = await this.MatchsRepository.findOne({
+        where: { id: id },
+        relations,
+      });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
@@ -129,8 +131,13 @@ export class MatchsService {
   /* ************************************************************************** */
 
   async createMatch(id: string): Promise<Matchs> {
-    const user = await this.userService.getUserId(id, [{withMatchs: true}]);
-    if (user.matchs.find((m) => m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED))
+    const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
+    if (
+      user.matchs.find(
+        (m) =>
+          m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED
+      )
+    )
       throw new ConflictException("You already have a match in progress");
     const match = this.MatchsRepository.create({
       FirstPlayer: user,
