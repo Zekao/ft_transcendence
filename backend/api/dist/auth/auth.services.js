@@ -34,12 +34,9 @@ let AuthService = class AuthService {
     }
     verifyJwtToken(token) {
         try {
-            console.log("TOKEN: ", token);
             return this.jwtService.verify(token);
         }
-        catch (err) {
-            console.log(err);
-        }
+        catch (err) { }
     }
     async handleFortyTwo(Ftwo) {
         const user = await this.userRepository.findOne({
@@ -81,8 +78,6 @@ let AuthService = class AuthService {
         if (!token)
             throw new common_1.UnauthorizedException("No token provided");
         const payload = await this.verifyJwtToken(token);
-        console.log(token);
-        console.log(payload);
         if (!payload)
             throw new common_1.UnauthorizedException("Invalid token provided");
         return this.userService.getUserFortyTwo(payload.FortyTwoID);

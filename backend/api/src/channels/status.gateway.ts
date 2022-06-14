@@ -18,7 +18,7 @@ import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
-@WebSocketGateway({ namespace: "channel" })
+@WebSocketGateway()
 export class StatusGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {

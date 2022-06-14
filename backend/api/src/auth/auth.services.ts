@@ -31,11 +31,8 @@ export class AuthService {
   }
   verifyJwtToken(token: string): Promise<FortyTwoUser> {
     try {
-      console.log("TOKEN: ", token);
       return this.jwtService.verify(token);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }
 
   async handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any> {
@@ -80,8 +77,6 @@ export class AuthService {
     const token = client.handshake.headers.authorization;
     if (!token) throw new UnauthorizedException("No token provided");
     const payload = await this.verifyJwtToken(token);
-    console.log(token);
-    console.log(payload);
     if (!payload) throw new UnauthorizedException("Invalid token provided");
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
   }

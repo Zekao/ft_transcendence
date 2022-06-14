@@ -39,7 +39,6 @@ AuthModule = __decorate([
             users_service_1.UsersService,
             auth_services_1.AuthService,
             matchs_service_1.MatchsService,
-            jwt_1.JwtService,
         ],
         controllers: [auth_controller_1.AuthController],
         exports: [jwt_strategy_1.JwtStrategy, passport_1.PassportModule, auth_services_1.AuthService],

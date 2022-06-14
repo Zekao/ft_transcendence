@@ -64,7 +64,7 @@ __decorate([
     __metadata("design:type", Object)
 ], StatusGateway.prototype, "server", void 0);
 StatusGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: "channel" }),
+    (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,
