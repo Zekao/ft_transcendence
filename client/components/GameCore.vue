@@ -61,8 +61,9 @@ export default Vue.extend({
         })
         this.socket.on('move', data => {
           this.position = data;
-        this.context.fillRect(this.position.x, this.position.y, 20, 20);
+        this.context.fillRect(this.position.x, this.position.y, 20, 20); // fonctionne pas va savoir pourquoi
         });
+          // this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
         console.log("both values:", this.position.x, this.position.y);
       },
       shortcuts: {
