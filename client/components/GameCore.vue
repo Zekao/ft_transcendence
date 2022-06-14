@@ -2,15 +2,12 @@
   <div>
     <canvas
       ref="game"
-      height="calc(100% - 76px)"
-      width="600px"
+      height="720px"
+      width="1280px"
       color="grey lighten-1"
       class="d-flex justify-center align-center"
-      style="border: 3px solid black;">
+      style="border: 2px solid black;">
     </canvas>
-    <p>
-      <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
-    </p>
   </div>
 </template>
 
@@ -31,6 +28,9 @@ import VueKeybindings from 'vue-keybindings'
 // keybinds that the user will use
 
 export default Vue.extend({
+    // <p>
+    //   <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
+    // </p>
       name: 'BlockGame',
       data()  {
         return {
@@ -55,21 +55,29 @@ export default Vue.extend({
           channel: "/game",
           extraHeaders: {
             Authorization: this.accessToken,
-            game: "300349ec-86b8-48b0-af02-eb31e415fea3",
+            game: "f51dda3b-b00d-47cc-a299-e252a738c876",
           },
           path: "/api/socket.io/",
         })
         this.socket.on('move', data => {
-          this.position = data;
-        this.context.fillRect(this.position.x, this.position.y, 20, 20); // fonctionne pas va savoir pourquoi
+          console.log('data :', data);
+          if (data >= 0)
+            this.position.y = data;
+          else
+            data = 0;
+          if (data <= 600)
+            this.position.y = data;
+          else
+            data = 600;
+          this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
+          this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
         });
-          // this.context.clearRect(0, 0, this.$refs.game.width, this.$refs.game.height);
         console.log("both values:", this.position.x, this.position.y);
       },
       shortcuts: {
         keydown: function (event) {
           if (event.key === 'w') {
-            this.move('up');
+              this.move('up');
           }
           else if (event.key === 's') {
             this.move('down');
@@ -87,6 +95,7 @@ export default Vue.extend({
       },
        methods: {
         keyb(val) {
+            this.context.fillRect(this.position.x, this.position.y, 20, 20); // fonctionne pas va savoir pourquoi
             console.log("both values:", this.position.x, this.position.y);
         this.socket.emit('customBinding', val);
         },
