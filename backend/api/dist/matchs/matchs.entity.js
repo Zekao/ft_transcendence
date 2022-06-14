@@ -38,6 +38,14 @@ __decorate([
     __metadata("design:type", Number)
 ], Matchs.prototype, "scoreSecondPlayer", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], Matchs.prototype, "posFirstPlayer", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], Matchs.prototype, "posSecondPlayer", void 0);
+__decorate([
     (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => (user.matchs), { nullable: true }),
     __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "winner", void 0);

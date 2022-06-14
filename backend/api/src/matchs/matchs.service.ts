@@ -82,12 +82,32 @@ export class MatchsService {
     if (!matchs) throw new NotFoundException(`Channel not found`);
     return matchs;
   }
-  async getMatchsId(id: string): Promise<Matchs> {
+  async getMatchsId(id: any): Promise<Matchs> {
     let found = null;
     if (isMatchs(id))
       found = await this.matchsRepository.findOne({ where: { id: id } });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
+  }
+
+  async getPosFirstPlayer(id: Matchs): Promise<number> {
+    return id.posFirstPlayer;
+  }
+
+  async getPosSecondPlayer(id: Matchs): Promise<number> {
+    return id.posSecondPlayer;
+  }
+
+  async setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean> {
+    id.posFirstPlayer = pos;
+    this.matchsRepository.save(id);
+    return true;
+  }
+
+  async setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean> {
+    id.posSecondPlayer = pos;
+    this.matchsRepository.save(id);
+    return true;
   }
 
   /* ************************************************************************** */

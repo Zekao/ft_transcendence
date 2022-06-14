@@ -10,7 +10,11 @@ export declare class MatchsService {
     constructor(matchsRepository: Repository<Matchs>, userService: UsersService);
     getMatchs(): Promise<Matchs[]>;
     getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
-    getMatchsId(id: string): Promise<Matchs>;
+    getMatchsId(id: any): Promise<Matchs>;
+    getPosFirstPlayer(id: Matchs): Promise<number>;
+    getPosSecondPlayer(id: Matchs): Promise<number>;
+    setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;
+    setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean>;
     createMatch(id: string): Promise<Matchs>;
     addMatchToPlayer(player: User, match: Matchs): Promise<Matchs>;
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;

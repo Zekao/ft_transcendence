@@ -33,12 +33,12 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const channel = client.data.channel;
             const login = client.data.user.display_name;
-            if (!channel.history)
-                channel.history = [];
-            const history = { login, message };
-            channel.history.push(history);
-            this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", login, message);
+            if (message.type) {
+                const history = { login, message };
+                channel.history.push(history);
+                this.channelService.saveChannel(channel);
+                this.emitChannel(client.data, "channel", login, message);
+            }
         }
         catch (_a) { }
     }
@@ -137,7 +137,7 @@ __decorate([
 __decorate([
     (0, websockets_1.SubscribeMessage)("channel"),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendMessageToChannel", null);
 __decorate([
