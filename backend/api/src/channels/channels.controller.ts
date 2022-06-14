@@ -20,7 +20,7 @@ import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { ChannelsDto } from "./dto/channels.dto";
 
 @ApiTags("channel")
 @Controller("channel")
@@ -58,11 +58,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(
-    @Body() ChannelsDtos: ChannelsDto,
-    @Body() channelPasswordDto: ChannelPasswordDto
-  ): Promise<Channel> {
-    return this.channelService.createChannel(ChannelsDtos, channelPasswordDto);
+  createChannel(@Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+    return this.channelService.createChannel(ChannelsDtos);
   }
 
   /* ************************************************************************** */

@@ -2,7 +2,7 @@ import { UsersService } from "src/users/users.service";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 export declare class ChannelRelationsPicker {
     withAllMembers?: boolean;
@@ -27,7 +27,7 @@ export declare class ChannelsService {
         message: string;
     }[]>;
     saveChannel(id: Channel): Promise<boolean>;
-    createChannel(channelsDto: ChannelsDto, channelPasswordDto: ChannelPasswordDto): Promise<Channel>;
+    createChannel(channelsDto: ChannelsDto): Promise<Channel>;
     deleteChannel(id: string): Promise<boolean>;
     editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel>;
 }

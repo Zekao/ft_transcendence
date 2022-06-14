@@ -105,9 +105,8 @@ let ChannelsService = class ChannelsService {
         this.ChannelsRepository.save(id);
         return true;
     }
-    async createChannel(channelsDto, channelPasswordDto) {
-        const { name, status, permissions } = channelsDto;
-        const { password } = channelPasswordDto;
+    async createChannel(channelsDto) {
+        const { name, status, permissions, password } = channelsDto;
         const channel = this.ChannelsRepository.create({
             name,
             status,

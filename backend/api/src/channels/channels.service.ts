@@ -14,8 +14,9 @@ import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
-import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
+import { ChannelStatus } from "./channels.enum";
 
 export class ChannelRelationsPicker {
   withAllMembers?: boolean;
@@ -120,12 +121,8 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createChannel(
-    channelsDto: ChannelsDto,
-    channelPasswordDto: ChannelPasswordDto
-  ): Promise<Channel> {
-    const { name, status, permissions } = channelsDto;
-    const { password } = channelPasswordDto;
+  async createChannel(channelsDto: ChannelsDto): Promise<Channel> {
+    const { name, status, permissions, password } = channelsDto;
     const channel = this.ChannelsRepository.create({
       name,
       status,
