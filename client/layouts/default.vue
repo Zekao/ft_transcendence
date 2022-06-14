@@ -61,6 +61,15 @@
               required
             ></v-select>
           </v-list-item>
+          <v-list-item v-if="channelStatus === 'Protected'">
+            <v-text-field
+              v-model="channelPassword"
+              :rules="channelPasswordRules"
+              :counter="24"
+              label="Channel password"
+              required
+            ></v-text-field>
+          </v-list-item>
           <v-list-item class="justify-center">
             <v-btn :disabled="!valid" @click="createChannel"> Create </v-btn>
           </v-list-item>
@@ -133,9 +142,8 @@ export default Vue.extend({
     channelVisible: false,
     channelName: '',
     channelStatus: '',
-    channelStatusList: ['Public', 'Protected', 'Private'],
-    channelPermission: '',
-    channelPermissionList: ['Open', 'On invitation'],
+    channelStatusList: ['Public', 'Protected' ],
+    channelPassword: '',
     items: [
       {
         icon: 'mdi-gamepad-square',
@@ -158,8 +166,8 @@ export default Vue.extend({
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
     ],
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
-    channelPermissionRules: [
-      (v: string) => !!v || 'Channel permission is required',
+    channelPasswordRules: [
+      (v: string) => !!v || 'Channel password is required',
     ],
     socket: null as NuxtSocket | null,
   }),
@@ -229,7 +237,6 @@ export default Vue.extend({
         const channel = {
           name: this.channelName,
           status: this.convertChannelStatus(this.channelStatus),
-          permissions: this.convertChannelPermission(this.channelPermission),
           password: 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
