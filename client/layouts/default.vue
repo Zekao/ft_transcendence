@@ -211,26 +211,8 @@ export default Vue.extend({
       this.$router.replace('/login')
     },
     convertChannelStatus(channelStatus: string): string {
-      switch (channelStatus) {
-        case 'Public':
-          return 'PUBLIC'
-        case 'Protected':
-          return 'PROTECTED'
-        case 'Private':
-          return 'PRIVATE'
-        default:
-          return ''
-      }
-    },
-    convertChannelPermission(channelPermission: string): string {
-      switch (channelPermission) {
-        case 'Open':
-          return 'OPEN'
-        case 'On invitation':
-          return 'ON_INVITE'
-        default:
-          return ''
-      }
+      if (channelStatus === 'Protected') return 'PROTECTED'
+      return 'PUBLIC'
     },
     async createChannel() {
       try {
