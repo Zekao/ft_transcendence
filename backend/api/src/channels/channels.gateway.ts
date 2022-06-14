@@ -38,6 +38,7 @@ export class ChannelsGateway
   @SubscribeMessage("channel")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
+      console.log("TEST");
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
       if (message[0] === "msg") {
@@ -73,7 +74,7 @@ export class ChannelsGateway
   }
 
   async isChannel(client: Socket) {
-    client.data.ConnectedChannel = client.handshake.headers.channel;
+    client.data.ConnectedChannel = client.handshake.query.channel;
     if (client.data.ConnectedChannel) {
       client.data.channel = await this.channelService.getChannelId(
         client.data.ConnectedChannel

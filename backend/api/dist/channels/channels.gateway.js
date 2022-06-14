@@ -29,6 +29,7 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async SendMessageToChannel(client, message) {
         try {
+            console.log("TEST");
             const channel = client.data.channel;
             const login = client.data.user.display_name;
             if (message[0] === "msg") {
@@ -66,7 +67,7 @@ let ChannelsGateway = class ChannelsGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async isChannel(client) {
-        client.data.ConnectedChannel = client.handshake.headers.channel;
+        client.data.ConnectedChannel = client.handshake.query.channel;
         if (client.data.ConnectedChannel) {
             client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
             if (client.data.channel == false)
