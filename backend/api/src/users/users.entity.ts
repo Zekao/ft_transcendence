@@ -62,7 +62,10 @@ export class User {
   ratio: number;
 
   @ApiProperty({ type: () => Matchs })
-  @ManyToMany(() => Matchs, (matchs) => matchs.FirstPlayer || matchs.SecondPlayer)
+  @ManyToMany(
+    () => Matchs,
+    (matchs) => matchs.FirstPlayer || matchs.SecondPlayer
+  )
   @JoinTable({ name: "MatchHistory" })
   matchs: Matchs[];
 
@@ -91,12 +94,16 @@ export class User {
   @JoinTable({ name: "owneredChannels" })
   ownered_channels: ChannelsDto[];
 
-  @ManyToMany(() => Channel, (channel) => channel.mutedUsers, { nullable: true })
+  @ManyToMany(() => Channel, (channel) => channel.mutedUsers, {
+    nullable: true,
+  })
   @ApiProperty({ type: () => Channel })
   @JoinTable({ name: "mutedChannels" })
   mutedChannels: Channel[];
 
-  @ManyToMany(() => Channel, (channel) => channel.bannedUsers, { nullable: true })
+  @ManyToMany(() => Channel, (channel) => channel.bannedUsers, {
+    nullable: true,
+  })
   @ApiProperty({ type: () => Channel })
   @JoinTable({ name: "bannedChannels" })
   bannedChannels: Channel[];

@@ -27,6 +27,7 @@ MatchsModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([matchs_entity_1.Matchs, users_entity_1.User]),
             (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
             (0, common_1.forwardRef)(() => users_module_1.UsersModule),
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
         ],
         controllers: [matchs_controller_1.MatchsController],
         providers: [

@@ -16,6 +16,7 @@ import { GameGateway } from "./game.gateway";
     TypeOrmModule.forFeature([Matchs, User]),
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
+    forwardRef(() => AuthModule),
   ],
   controllers: [MatchsController],
   providers: [

@@ -18,13 +18,13 @@ export class Matchs {
   id: string;
 
   @ApiProperty({ type: () => User })
-  @OneToMany(() => User, (user) => (user.matchs))
-  @JoinTable({ name: 'firstPlayer'})
+  @OneToMany(() => User, (user) => user.matchs)
+  @JoinTable({ name: "firstPlayer" })
   FirstPlayer: User;
 
   @ApiProperty({ type: () => User })
-  @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
-  @JoinTable({ name: 'secondPlayer'})
+  @OneToMany(() => User, (user) => user.matchs, { nullable: true })
+  @JoinTable({ name: "secondPlayer" })
   SecondPlayer: User;
 
   @Column({ nullable: true })
@@ -39,7 +39,7 @@ export class Matchs {
   @Column({ nullable: true })
   posSecondPlayer: number;
 
-  @OneToMany(() => User, (user) => (user.matchs), { nullable: true })
+  @OneToMany(() => User, (user) => user.matchs, { nullable: true })
   winner: User;
 
   @Column()

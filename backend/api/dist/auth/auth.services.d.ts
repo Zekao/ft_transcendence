@@ -7,10 +7,10 @@ import { FortyTwoUser } from "./interface/42.interface";
 import { QRObjects } from "./dto/2fa.dto";
 import { Socket } from "socket.io";
 export declare class AuthService {
-    private JwtService;
+    private jwtService;
     private userRepository;
     private userService;
-    constructor(JwtService: JwtService, userRepository: Repository<User>, userService: UsersService);
+    constructor(jwtService: JwtService, userRepository: Repository<User>, userService: UsersService);
     GenerateJwtToken(FortyTwoID: number): {
         accessToken: string;
     };
