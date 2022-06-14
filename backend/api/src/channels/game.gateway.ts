@@ -51,11 +51,12 @@ export class GameGateway
       console.log(pos1);
       console.log(pos2);
       if (message == "up") {
-        await this.matchService.setPosFirstPlayer(match, pos1 + 2);
+        await this.matchService.setPosFirstPlayer(match, pos1 + 1);
         this.emitChannel(client.data, match.id, pos1, pos2);
       }
       if (message == "down")
-        this.emitChannel(client.data, match.id, pos1, pos2);
+      await this.matchService.setPosFirstPlayer(match, pos1 - 1);
+      this.emitChannel(client.data, match.id, pos1, pos2);
     } catch {}
   }
 
