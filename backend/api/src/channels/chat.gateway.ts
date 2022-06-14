@@ -18,7 +18,7 @@ import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
-@WebSocketGateway({ namespace: "channel" })
+@WebSocketGateway({ namespace: "chat" })
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -34,20 +34,6 @@ export class ChannelsGateway
 
   afterInit(server: Server) {
     this.logger.log("Init");
-  }
-
-  @SubscribeMessage("channel")
-  async SendMessageToChannel(client: Socket, message: any): Promise<void> {
-    try {
-      const channel: Channel = client.data.channel;
-      const login: string = client.data.user.display_name;
-      if (message.type == "msg") {
-        const history = { login, message };
-        channel.history.push(history);
-        this.channelService.saveChannel(channel);
-        this.emitChannel(client.data, "channel", login, message);
-      }
-    } catch {}
   }
 
   @SubscribeMessage("msg")
@@ -79,17 +65,6 @@ export class ChannelsGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  isStatus(client: Socket, user: User) {
-    client.data.status = client.handshake.headers.status;
-    if (client.data.status) {
-      user.status = UserStatus.ONLINE;
-      this.userService.saveUser(user);
-      this.logger.log(`Client connected: ${client.id}`);
-      return true;
-    }
-    return false;
-  }
-
   isMsg(client: Socket) {
     client.data.msg = client.handshake.headers.msg;
     if (client.data.msg) {
@@ -99,29 +74,12 @@ export class ChannelsGateway
     return false;
   }
 
-  async isChannel(client: Socket) {
-    client.data.ConnectedChannel = client.handshake.headers.channel;
-    if (client.data.ConnectedChannel) {
-      client.data.channel = await this.channelService.getChannelId(
-        client.data.ConnectedChannel
-      );
-      if (client.data.channel == false) return false;
-      else {
-        this.logger.log(`Client connected: ${client.id}`);
-        return true;
-      }
-    }
-    return false;
-  }
-
   async handleConnection(client: Socket, ...args: any[]) {
     try {
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
-      if (this.isStatus(client, user)) return;
       if (this.isMsg(client)) return;
-      if (await this.isChannel(client)) return;
-      throw new UnauthorizedException("You must specify a channel, or msg");
+      throw new UnauthorizedException("You must specify a chat");
     } catch (err) {
       return client.disconnect();
     }

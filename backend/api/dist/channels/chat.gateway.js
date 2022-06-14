@@ -29,19 +29,6 @@ let ChannelsGateway = class ChannelsGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async SendMessageToChannel(client, message) {
-        try {
-            const channel = client.data.channel;
-            const login = client.data.user.display_name;
-            if (message.type == "msg") {
-                const history = { login, message };
-                channel.history.push(history);
-                this.channelService.saveChannel(channel);
-                this.emitChannel(client.data, "channel", login, message);
-            }
-        }
-        catch (_a) { }
-    }
     async SendPrivateMessage(client, msg) {
         try {
             const message = client.data.user.display_name + ": " + msg;
@@ -69,16 +56,6 @@ let ChannelsGateway = class ChannelsGateway {
         }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    isStatus(client, user) {
-        client.data.status = client.handshake.headers.status;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.ONLINE;
-            this.userService.saveUser(user);
-            this.logger.log(`Client connected: ${client.id}`);
-            return true;
-        }
-        return false;
-    }
     isMsg(client) {
         client.data.msg = client.handshake.headers.msg;
         if (client.data.msg) {
@@ -87,30 +64,13 @@ let ChannelsGateway = class ChannelsGateway {
         }
         return false;
     }
-    async isChannel(client) {
-        client.data.ConnectedChannel = client.handshake.headers.channel;
-        if (client.data.ConnectedChannel) {
-            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
-            if (client.data.channel == false)
-                return false;
-            else {
-                this.logger.log(`Client connected: ${client.id}`);
-                return true;
-            }
-        }
-        return false;
-    }
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            if (this.isStatus(client, user))
-                return;
             if (this.isMsg(client))
                 return;
-            if (await this.isChannel(client))
-                return;
-            throw new common_1.UnauthorizedException("You must specify a channel, or msg");
+            throw new common_1.UnauthorizedException("You must specify a chat");
         }
         catch (err) {
             return client.disconnect();
@@ -122,23 +82,17 @@ __decorate([
     __metadata("design:type", Object)
 ], ChannelsGateway.prototype, "server", void 0);
 __decorate([
-    (0, websockets_1.SubscribeMessage)("channel"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
-    __metadata("design:returntype", Promise)
-], ChannelsGateway.prototype, "SendMessageToChannel", null);
-__decorate([
     (0, websockets_1.SubscribeMessage)("msg"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
 ], ChannelsGateway.prototype, "SendPrivateMessage", null);
 ChannelsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: "channel" }),
+    (0, websockets_1.WebSocketGateway)({ namespace: "chat" }),
     __metadata("design:paramtypes", [jwt_1.JwtService,
         users_service_1.UsersService,
         auth_services_1.AuthService,
         channels_service_1.ChannelsService])
 ], ChannelsGateway);
 exports.ChannelsGateway = ChannelsGateway;
-//# sourceMappingURL=channels.gateway.js.map
+//# sourceMappingURL=chat.gateway.js.map
