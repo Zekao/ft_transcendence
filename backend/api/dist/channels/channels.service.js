@@ -85,6 +85,13 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.status;
     }
+    async getChannelMembers(id, role) {
+        var members;
+        if (!role) {
+            members.push(null);
+        }
+        return members;
+    }
     async getChannelHistory(id) {
         const found = await this.getChannelId(id);
         if (!found)

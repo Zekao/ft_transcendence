@@ -32,12 +32,13 @@ let ChannelsGateway = class ChannelsGateway {
     async SendMessageToChannel(client, msg) {
         try {
             const channel = client.data.channel;
-            const message = client.data.user.display_name + ": " + msg;
+            const sender = client.data.user.display_name;
+            const message = sender + ": " + msg;
             if (!channel.history)
                 channel.history = [];
             channel.history.push(message);
             this.channelService.saveChannel(channel);
-            this.emitChannel(client.data, "channel", message);
+            this.emitChannel(client.data, "channel", sender, msg);
         }
         catch (_a) { }
     }
