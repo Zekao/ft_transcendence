@@ -10,4 +10,6 @@ export declare class Channel {
     members: User[];
     admins: User[];
     owner: UserDto;
+    mutedUsers: User[];
+    bannedUsers: User[];
 }

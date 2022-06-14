@@ -25,6 +25,16 @@ class ChannelsDto {
             this.members = channel.members;
             this.admins = channel.admins;
             this.owner = channel.owner;
+            if (channel.mutedUsers)
+                this.mutedUsers = channel.mutedUsers.map((user) => { return new user_dto_1.UserDto(); });
+            if (channel.bannedUsers)
+                this.bannedUsers = channel.bannedUsers.map((user) => { return new user_dto_1.UserDto(); });
+            if (channel.members)
+                this.members = channel.members.map((user) => { return new user_dto_1.UserDto(); });
+            if (channel.admins)
+                this.admins = channel.admins.map((user) => { return new user_dto_1.UserDto(); });
+            if (channel.owner)
+                this.owner = new user_dto_1.UserDto(channel.owner);
         }
     }
 }
@@ -72,6 +82,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: () => user_dto_1.UserDto }),
     __metadata("design:type", user_dto_1.UserDto)
 ], ChannelsDto.prototype, "owner", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Array)
+], ChannelsDto.prototype, "mutedUsers", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Array)
+], ChannelsDto.prototype, "bannedUsers", void 0);
 exports.ChannelsDto = ChannelsDto;
 class ChannelPasswordDto {
 }

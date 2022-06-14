@@ -39,6 +39,10 @@ class UserDto {
                 this.ownered_channels = user.ownered_channels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
             if (user.admined_channels)
                 this.admined_channels = user.admined_channels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
+            if (user.bannedChannels)
+                this.bannedChannels = user.bannedChannels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
+            if (user.mutedChannels)
+                this.mutedChannels = user.mutedChannels.map((channel) => { return new channels_dto_1.ChannelsDto(); });
         }
     }
 }

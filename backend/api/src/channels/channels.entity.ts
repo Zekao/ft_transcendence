@@ -29,14 +29,25 @@ export class Channel {
   password: string;
   
   @ManyToMany(() => User, (user) => user.joined_channels, { nullable: true })
-
-  @JoinTable()
+  @JoinTable({ name: "members" })
   members: User[];
 
   @ManyToMany(() => User, (user) => user.admined_channels, { nullable: true })
+  @JoinTable({ name: "admins" })
   admins: User[];
 
   @OneToMany(() => User, (user) => user.ownered_channels)
   @ApiProperty({ type: () => User })
+  @JoinTable({ name: "owner" })
   owner: UserDto;
+
+  @OneToMany(() => User, (user) => user.mutedChannels, { nullable: true })
+  @ApiProperty({ type: () => User })
+  @JoinTable({ name: "muted" })
+  mutedUsers: User[];
+
+  @OneToMany(() => User, (user) => user.bannedChannels, { nullable: true })
+  @ApiProperty({ type: () => User })
+  @JoinTable({ name: "banned" })
+  bannedUsers: User[];
 }

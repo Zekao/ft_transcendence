@@ -11,6 +11,8 @@ export declare class ChannelsDto {
     members: UserDto[];
     admins: UserDto[];
     owner: UserDto;
+    mutedUsers: UserDto[];
+    bannedUsers: UserDto[];
 }
 export declare class ChannelPasswordDto {
     password: string;

@@ -39,18 +39,32 @@ __decorate([
 ], Channel.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.joined_channels, { nullable: true }),
-    (0, typeorm_1.JoinTable)(),
+    (0, typeorm_1.JoinTable)({ name: "members" }),
     __metadata("design:type", Array)
 ], Channel.prototype, "members", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.admined_channels, { nullable: true }),
+    (0, typeorm_1.JoinTable)({ name: "admins" }),
     __metadata("design:type", Array)
 ], Channel.prototype, "admins", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.ownered_channels),
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
+    (0, typeorm_1.JoinTable)({ name: "owner" }),
     __metadata("design:type", user_dto_1.UserDto)
 ], Channel.prototype, "owner", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.mutedChannels, { nullable: true }),
+    (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
+    (0, typeorm_1.JoinTable)({ name: "muted" }),
+    __metadata("design:type", Array)
+], Channel.prototype, "mutedUsers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.bannedChannels, { nullable: true }),
+    (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
+    (0, typeorm_1.JoinTable)({ name: "banned" }),
+    __metadata("design:type", Array)
+], Channel.prototype, "bannedUsers", void 0);
 Channel = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.TableInheritance)({ column: { type: "varchar", name: "type" } })

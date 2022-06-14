@@ -78,13 +78,26 @@ export class User {
 
   @ApiProperty()
   @ManyToMany(() => Channel, (channel) => channel.members, { nullable: true })
+  @JoinTable({ name: "joinedChannels" })
   joined_channels: Channel[];
 
   @ApiProperty()
   @ManyToMany(() => Channel, (channel) => channel.admins, { nullable: true })
+  @JoinTable({ name: "adminedChannels" })
   admined_channels: Channel[];
 
   @ManyToOne(() => Channel, (channel) => channel.owner, { nullable: true })
   @ApiProperty({ type: () => Channel })
+  @JoinTable({ name: "owneredChannels" })
   ownered_channels: ChannelsDto[];
+
+  @ManyToMany(() => Channel, (channel) => channel.mutedUsers, { nullable: true })
+  @ApiProperty({ type: () => Channel })
+  @JoinTable({ name: "mutedChannels" })
+  mutedChannels: Channel[];
+
+  @ManyToMany(() => Channel, (channel) => channel.bannedUsers, { nullable: true })
+  @ApiProperty({ type: () => Channel })
+  @JoinTable({ name: "bannedChannels" })
+  bannedChannels: Channel[];
 }

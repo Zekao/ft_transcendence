@@ -40,6 +40,10 @@ export class UserDto {
           this.ownered_channels = user.ownered_channels.map((channel) => {return new ChannelsDto()});
       if (user.admined_channels)
           this.admined_channels = user.admined_channels.map((channel) => {return new ChannelsDto()});
+      if (user.bannedChannels)
+          this.bannedChannels = user.bannedChannels.map((channel) => {return new ChannelsDto()});
+      if (user.mutedChannels)
+          this.mutedChannels = user.mutedChannels.map((channel) => {return new ChannelsDto()});
     }
   }
   id: string;
@@ -63,4 +67,6 @@ export class UserDto {
   joined_channels: Channel[];
   ownered_channels: Channel[];
   admined_channels: Channel[];
+  mutedChannels: Channel[];
+  bannedChannels: Channel[];
 }

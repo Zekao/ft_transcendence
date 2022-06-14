@@ -12,13 +12,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelsService = void 0;
+exports.ChannelsService = exports.ChannelRelationsPicker = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_service_1 = require("../users/users.service");
 const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
+class ChannelRelationsPicker {
+}
+exports.ChannelRelationsPicker = ChannelRelationsPicker;
 let ChannelsService = class ChannelsService {
     constructor(ChannelsRepository, UsersService) {
         this.ChannelsRepository = ChannelsRepository;
@@ -43,12 +46,29 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel not found`);
         return channels;
     }
-    async getChannelId(id) {
+    async getChannelId(id, RelationsPicker) {
+        var relations = [];
+        if (RelationsPicker) {
+            for (const relation of RelationsPicker) {
+                relation.withAllMembers && relations.push("members") && relations.push("admins") && relations.push("owners");
+                relation.withMembersOnly && relations.push("members");
+                relation.withAdminOnly && relations.push("admins");
+                relation.withOwnerOnly && relations.push("owners");
+                relation.withMuted && relations.push("muted");
+                relation.withBanned && relations.push("banned");
+            }
+        }
         let found = null;
         if ((0, utils_1.isUuid)(id))
-            found = await this.ChannelsRepository.findOne({ where: { id: id } });
+            found = await this.ChannelsRepository.findOne({
+                where: { id: id },
+                relations
+            });
         else
-            found = await this.ChannelsRepository.findOne({ where: { name: id } });
+            found = await this.ChannelsRepository.findOne({
+                where: { name: id },
+                relations
+            });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
@@ -64,6 +84,13 @@ let ChannelsService = class ChannelsService {
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found.status;
+    }
+    async getChannelMembers(id, role) {
+        var members;
+        if (!role) {
+            members.push(null);
+        }
+        return members;
     }
     async createChannel(channelsDto, channelPasswordDto) {
         const { name, status, permissions } = channelsDto;

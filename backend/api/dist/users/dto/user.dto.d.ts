@@ -25,4 +25,6 @@ export declare class UserDto {
     joined_channels: Channel[];
     ownered_channels: Channel[];
     admined_channels: Channel[];
+    mutedChannels: Channel[];
+    bannedChannels: Channel[];
 }

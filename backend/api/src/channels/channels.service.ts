@@ -15,6 +15,16 @@ import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { User } from "src/users/users.entity";
+
+export class ChannelRelationsPicker {
+  withAllMembers?: boolean;
+  withMembersOnly?: boolean;
+  withAdminOnly?: boolean;
+  withOwnerOnly?: boolean;
+  withMuted?: boolean;
+  withBanned?: boolean;
+}
 
 @Injectable()
 export class ChannelsService {
@@ -44,11 +54,28 @@ export class ChannelsService {
     if (!channels) throw new NotFoundException(`Channel not found`);
     return channels;
   }
-  async getChannelId(id: string): Promise<Channel> {
+  async getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel> {
+    var relations: string[] = [];
+    if (RelationsPicker) {
+      for (const relation of RelationsPicker) {
+        relation.withAllMembers && relations.push("members") && relations.push("admins") && relations.push("owners");
+        relation.withMembersOnly && relations.push("members");
+        relation.withAdminOnly && relations.push("admins");
+        relation.withOwnerOnly && relations.push("owners");
+        relation.withMuted && relations.push("muted");
+        relation.withBanned && relations.push("banned");
+      }
+    }
     let found = null;
     if (isUuid(id))
-      found = await this.ChannelsRepository.findOne({ where: { id: id } });
-    else found = await this.ChannelsRepository.findOne({ where: { name: id } });
+      found = await this.ChannelsRepository.findOne({
+        where: { id: id }, 
+        relations
+      });
+    else found = await this.ChannelsRepository.findOne({
+      where: { name: id },
+      relations
+    });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
@@ -61,6 +88,13 @@ export class ChannelsService {
     const found = await this.getChannelId(id);
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.status;
+  }
+  async getChannelMembers(id: string, role?: string): Promise<User[]> {
+    var members: User[];
+    if (!role) {
+      members.push(null);
+    }
+    return members;
   }
 
   /* ************************************************************************** */

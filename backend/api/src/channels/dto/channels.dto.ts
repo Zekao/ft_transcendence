@@ -23,6 +23,16 @@ export class ChannelsDto {
       this.members = channel.members;
       this.admins = channel.admins;
       this.owner = channel.owner;
+      if (channel.mutedUsers)
+        this.mutedUsers = channel.mutedUsers.map((user) => {return new UserDto()});
+      if (channel.bannedUsers)
+        this.bannedUsers = channel.bannedUsers.map((user) => {return new UserDto()});
+      if (channel.members)
+        this.members = channel.members.map((user) => {return new UserDto()});
+      if (channel.admins)
+        this.admins = channel.admins.map((user) => {return new UserDto()});
+      if (channel.owner)
+        this.owner = new UserDto(channel.owner);
     }
   }
 
@@ -60,6 +70,12 @@ export class ChannelsDto {
 
   @ApiProperty({ type: () => UserDto })
   owner: UserDto;
+
+  @ApiProperty()
+  mutedUsers: UserDto[];
+
+  @ApiProperty()
+  bannedUsers: UserDto[];
 }
 
 export class ChannelPasswordDto {
