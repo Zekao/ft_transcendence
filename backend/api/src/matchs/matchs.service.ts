@@ -140,6 +140,7 @@ export class MatchsService {
     )
       throw new ConflictException("You already have a match in progress");
     const match = this.MatchsRepository.create({
+      FirstPlayer: user,
       scoreFirstPlayer: 0,
       scoreSecondPlayer: 0,
       posFirstPlayer: 0,
@@ -147,11 +148,10 @@ export class MatchsService {
       status: MatchStatus.PENDING,
       specs: [],
     });
+    // await this.addMatchToPlayer(user, match);
     await this.MatchsRepository.save(match);
     match.FirstPlayer = user;
     await this.MatchsRepository.save(match);
-    await this.addMatchToPlayer(user, match);
-
     return match;
   }
 
