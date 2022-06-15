@@ -5,6 +5,12 @@
   >
     <v-list>
       <v-list-item class="justify-center">
+          <v-avatar class="mr-4">
+            <v-img :src="'https://ft.localhost:4500/api/image/' + friend.avatar" />
+          </v-avatar>
+          <v-list-item-title> {{ friend.display_name }} </v-list-item-title>
+      </v-list-item>
+      <v-list-item class="justify-center">
         <v-list-item-content class="text-center">
           <v-list-item-title> Win : {{ friend.win }} </v-list-item-title>
         </v-list-item-content>
@@ -12,12 +18,12 @@
           <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item class="justify-center">
-        <v-btn :disabled="isMe" class="mr-2">
+      <v-list-item v-if="!isMe" class="justify-center">
+        <v-btn class="mr-2">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
         </v-btn>
-        <v-btn :disabled="isMe">
+        <v-btn>
           Chat with
           <v-icon>mdi-message-outline</v-icon>
         </v-btn>
