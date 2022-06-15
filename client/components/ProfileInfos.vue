@@ -139,7 +139,7 @@ export default Vue.extend({
       console.log('hey')
       this.is2FADialog = true
       try {
-        await this.$axios.$get('/qrcode')
+        await this.$axios.$get('/auth/qrcode')
       } catch(err) {
         console.log(err)
       }

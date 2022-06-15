@@ -8,7 +8,7 @@ const auth: Middleware = async ({ $axios, $cookies, redirect, store }) => {
     if (res.TwoFA === true) {
       const gToken = $cookies.get('g_token')
       if (!gToken) redirect('/login')
-      await $axios.$get('/qrcode/verify')
+      await $axios.$get('/auth/qrcode/verify')
     }
     store.commit('AUTH_SUCCESS', { accessToken })
     console.log(res)
