@@ -33,7 +33,6 @@
       <v-list v-else width="40%">
         <v-list-item v-for="(match, i) in userMatches" :key="i">
           <v-list-item-action class="justify-center align-center">
-            <!-- {{ match.FirstPlayer }}  -->
             <v-badge
               v-if="match.scoreFirstPlayer > match.scoreSecondPlayer"
               color="orange"
@@ -59,11 +58,9 @@
             <v-btn> {{ match.FirstPlayer.display_name }} {{match.scoreFirstPlayer}} </v-btn>
           </v-list-item-action>
           <v-list-item-content class="justify-center">
-            <!-- {{ match.scoreFirstPlayer + ' - ' + match.scoreSecondPlayer }} -->
             
           </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
-            <!-- {{ match.SecondPlayer }} -->
             <v-badge
               v-if="match.scoreSecondPlayer > match.scoreFirstPlayer"
               color="orange"
@@ -106,15 +103,7 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
-    // authUserMatches: [
-    //   {
-    //     FirstPlayer: 'gamarcha',
-    //     SecondPlayer: 'gamarcha',
-    //     scoreFirstPlayer: 4,
-    //     scoreSecondPlayer: 0,
-    //     winner: '',
-    //   },
-    // ],
+
   }),
 
   computed: {
@@ -150,14 +139,6 @@ export default Vue.extend({
         console.log(err)
       }
     },
-
-    getUserAvatar(userName: string): string {
-
-     const users = this.users.filter((el) => el.user_name === userName)
-      console.log(users.length)
-      return users.length ? users[0].avatar : ''
-    },
-
 
     getAvatarPath(userName: IUser): string {
 
