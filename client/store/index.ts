@@ -18,6 +18,9 @@ export const state = () => ({
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
+  SELECTED_MATCH_ID: (state, matchID: string) => {
+    state.selectedMatchId = matchID
+  },
   FRIEND_MENU: (state, value: boolean) => {
     state.isFriendMenu = value
   },
