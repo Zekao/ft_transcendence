@@ -349,6 +349,7 @@ let UsersService = class UsersService {
     }
     async patchUser(id, body) {
         const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
+        console.log("================+DEBUG==================");
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
