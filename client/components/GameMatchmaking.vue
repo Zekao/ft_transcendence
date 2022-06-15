@@ -42,8 +42,8 @@ export default Vue.extend({
     this.socket.on('wait', (msg, matchID) => {
       if (msg === 'ready') {
         this.$store.commit('SELECTED_MATCH_ID', matchID)
-        this.$emit('next')
         this.ready = true
+        this.$emit('next')
       }
     })
   },
