@@ -5,9 +5,13 @@
     class="d-flex justify-center align-center"
   >
     <v-list>
-      
+    <v-list-item>
+      MatchID: {{ selectedMatchId }}
+    </v-list-item>
+    <v-list-item>
+      <v-btn color="primary" @click="$emit('next')"> Continue </v-btn>
+    </v-list-item>
     </v-list>
-    <v-btn color="primary" @click="$emit('next')"> Continue </v-btn>
   </v-card>
 </template>
 

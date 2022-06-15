@@ -1,50 +1,47 @@
 <template>
-  <v-menu v-model="value" top>
-
+  <v-menu
+    v-model="value"
+    :close-on-content-click="false"
+  >
     <v-list>
-      <v-list-item> Win : {{ friend.win }} </v-list-item>
-      <v-list-item> Lost : {{ friend.loose }} </v-list-item>
-      <v-list-item> Rank : {{ friend.rank }} </v-list-item>
-      <v-list-item>
+      <v-list-item class="justify-center">
+        <v-list-item-content class="text-center">
+          <v-list-item-title> Win : {{ friend.win }} </v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content class="text-center">
+          <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item class="justify-center">
+        <v-btn :disabled="isMe" class="mr-2">
+          Play with
+          <v-icon>mdi-sword-cross</v-icon>
+        </v-btn>
         <v-btn :disabled="isMe">
-          Play with {{ friend.user_name }}
-          <v-icon :disabled="friend.status === 'OFFLINE'">
-            mdi-sword-cross</v-icon
-          >
+          Chat with
+          <v-icon>mdi-message-outline</v-icon>
         </v-btn>
       </v-list-item>
-      <v-list-item>
-        <v-btn :disabled="isMe">
-          chat with {{ friend.user_name }}
-          <v-icon
-            color="friend.status !== 'OFFLINE' ? 'deep-purple accent-4' : 'grey'"
-          >
-            mdi-message-outline
-          </v-icon>
+      <v-list-item :disabled="!isBlockedByMe" class="justify-center">
+        <v-btn :disabled="isFriend" class="mr-2" @click="addFriend(friend.id)">
+          Add
+          <v-icon class="ml-2"> mdi-account-multiple-plus </v-icon>
+        </v-btn>
+        <v-btn :disabled="!isFriend" @click="removeFriend(friend.id)">
+          Remove
+          <v-icon class="ml-2"> mdi-account-multiple-remove </v-icon>
         </v-btn>
       </v-list-item>
-      <v-list-item>
-        <v-btn :disabled="isBlockedByMe" @click="block(friend.id)">
+      <v-list-item class="justify-center">
+        <v-btn :disabled="isBlockedByMe" class="mr-2" @click="block(friend.id)">
           Block
-          <v-icon> mdi-block-helper </v-icon>
+          <v-icon class="ml-2"> mdi-account-cancel </v-icon>
         </v-btn>
         <v-btn :disabled="!isBlockedByMe" @click="unblocked(friend.id)">
           Unblock
-          <v-icon> mdi-block-helper-remove </v-icon>
+          <v-icon class="ml-2"> mdi-account-check </v-icon>
         </v-btn>
       </v-list-item>
-      <v-list-item :disabled="!isBlockedByMe">
-        <v-btn :disabled="isFriend" @click="addFriend(friend.id)">
-          Add
-          <v-icon> mdi-account-multiple-plus </v-icon>
-        </v-btn>
-
-        <v-btn :disabled="!isFriend" @click="removeFriend(friend.id)">
-          Remove
-          <v-icon> mdi-account-multiple-plus </v-icon>
-        </v-btn>
-      </v-list-item>
-      <v-list-item> </v-list-item>
     </v-list>
   </v-menu>
 </template>

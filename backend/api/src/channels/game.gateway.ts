@@ -41,22 +41,25 @@ export class GameGateway
   async waitingList(client: Socket, message: string): Promise<void> {
     try {
       const player: User = client.data.user;
-      if (!client.data.match) {
-        const match = await this.matchService.createMatch(player.id);
-        client.data.match = match;
-      }
       if (message == "join") {
-        this.matchService.defineMatch(client.data.user);
+        const findedMatch = await this.matchService.defineMatch(
+          client.data.user
+        );
+        if (findedMatch.id) {
+          console.log("OK");
+          this.emitChannel(client.data, "waitinglist", "ready", findedMatch.id);
+        } else {
+          const match = await this.matchService.createMatch(player.id);
+          client.data.match = match;
+        }
         console.log("JOIN");
       }
       if (message == "leave") {
-        console.log(client.data.match);
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
         client.data.match = null;
         console.log("LEAVE");
       }
-      // this.emitChannel(client.data, "waitinglist", "READY");
     } catch {}
   }
 

@@ -163,31 +163,23 @@ export class MatchsService {
     return match;
   }
 
-  async findMatch(): Promise<Matchs[]> {
-    let Allmatchs = await this.getMatchs();
-    if (!Allmatchs.length)
-      throw new NotFoundException("No match are available");
-    Allmatchs = Allmatchs.filter(
-      (Allmatchs) => Allmatchs.status === MatchStatus.PENDING
-    );
-    if (!Allmatchs) throw new NotFoundException("No match are available");
-    return Allmatchs;
-  }
-
   async defineMatch(player: User): Promise<Matchs> {
     let match = null;
     try {
-      match = await this.findMatch();
-      match.array.forEach((element) => {
-        if (element.id) {
-          console.log(element.id);
+      console.log("TEST");
+      match = await this.getMatchs();
+      console.log(match);
+      for (const el of match) {
+        if (el.status == MatchStatus.PENDING && el.FirstPlayer != player.id) {
+          console.log(el);
+          await this.addPlayerToMatch(player, el);
+          match.status = MatchStatus.STARTED;
+          this.MatchsRepository.save(el);
+          return el;
         }
-      });
-      await this.addPlayerToMatch(player, match);
-      match.status = MatchStatus.STARTED;
-      this.MatchsRepository.save(match);
+      }
     } catch (err) {
-      return err;
+      return null;
     }
     return match;
   }
