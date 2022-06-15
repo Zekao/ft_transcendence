@@ -16,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { User } from "src/users/users.entity";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
@@ -38,6 +39,14 @@ export class ChannelsController {
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/members")
+  @ApiOperation({ summary: "Return list of all members of channel" })
+  getChannelMembers(@Param("id") id: string, @Query() query?): Promise<User[]> {
+    return this.channelService.getChannelMembers(id, query);
+  }
+
 
   @UseGuards(JwtAuthGuard)
   @Get("/:id")

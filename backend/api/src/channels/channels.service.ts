@@ -29,6 +29,10 @@ export class ChannelRelationsPicker {
   withBanned?: boolean;
 }
 
+export class ChannelRoleDto{
+  role: string;
+}
+
 @Injectable()
 export class ChannelsService {
   constructor(
@@ -67,10 +71,10 @@ export class ChannelsService {
         relation.withAllMembers &&
           relations.push("members") &&
           relations.push("admins") &&
-          relations.push("owners");
+          relations.push("owner");
         relation.withMembersOnly && relations.push("members");
         relation.withAdminOnly && relations.push("admins");
-        relation.withOwnerOnly && relations.push("owners");
+        relation.withOwnerOnly && relations.push("owner");
         relation.withMuted && relations.push("muted");
         relation.withBanned && relations.push("banned");
       }
@@ -88,6 +92,39 @@ export class ChannelsService {
       });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
+  }
+
+  async getChannelMembers(id: string, Role?: ChannelRoleDto): Promise<User[]> {
+    const { role } = Role;
+    console.log(role);
+    var relations : ChannelRelationsPicker[] = [];
+    if (role) {
+      if (role === "all") relations.push({ withAllMembers: true });
+      if (role === "members") relations.push({ withMembersOnly: true });
+      if (role === "admins") relations.push({ withAdminOnly: true });
+      if (role === "owner") relations.push({ withOwnerOnly: true });
+      if (role === "muted") relations.push({ withMuted: true });
+      if (role === "banned") relations.push({ withBanned: true });
+    } else {
+      relations.push({ withAllMembers: true });
+    }
+    const channel = await this.getChannelId(id, relations);
+    var users = [] ;
+    if (channel.members) 
+      for (const member of channel.members)
+        users.push(member);
+    if (channel.admins)
+      for (const admin of channel.admins)
+        users.push(admin);
+    if (channel.owner)
+      users.push(channel.owner);
+    if (channel.mutedUsers)
+      for (const muted of channel.mutedUsers)
+        users.push(muted);
+    if (channel.bannedUsers)
+      for (const banned of channel.bannedUsers)
+        users.push(banned);
+    return users;
   }
 
   async getChannelHistory(

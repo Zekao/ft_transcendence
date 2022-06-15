@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelsService = exports.ChannelRelationsPicker = void 0;
+exports.ChannelsService = exports.ChannelRoleDto = exports.ChannelRelationsPicker = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_service_1 = require("../users/users.service");
@@ -23,6 +23,9 @@ const bcrypt = require("bcrypt");
 class ChannelRelationsPicker {
 }
 exports.ChannelRelationsPicker = ChannelRelationsPicker;
+class ChannelRoleDto {
+}
+exports.ChannelRoleDto = ChannelRoleDto;
 let ChannelsService = class ChannelsService {
     constructor(ChannelsRepository, UsersService) {
         this.ChannelsRepository = ChannelsRepository;
@@ -54,10 +57,10 @@ let ChannelsService = class ChannelsService {
                 relation.withAllMembers &&
                     relations.push("members") &&
                     relations.push("admins") &&
-                    relations.push("owners");
+                    relations.push("owner");
                 relation.withMembersOnly && relations.push("members");
                 relation.withAdminOnly && relations.push("admins");
-                relation.withOwnerOnly && relations.push("owners");
+                relation.withOwnerOnly && relations.push("owner");
                 relation.withMuted && relations.push("muted");
                 relation.withBanned && relations.push("banned");
             }
@@ -76,6 +79,45 @@ let ChannelsService = class ChannelsService {
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
+    }
+    async getChannelMembers(id, Role) {
+        const { role } = Role;
+        console.log(role);
+        var relations = [];
+        if (role) {
+            if (role === "all")
+                relations.push({ withAllMembers: true });
+            if (role === "members")
+                relations.push({ withMembersOnly: true });
+            if (role === "admins")
+                relations.push({ withAdminOnly: true });
+            if (role === "owner")
+                relations.push({ withOwnerOnly: true });
+            if (role === "muted")
+                relations.push({ withMuted: true });
+            if (role === "banned")
+                relations.push({ withBanned: true });
+        }
+        else {
+            relations.push({ withAllMembers: true });
+        }
+        const channel = await this.getChannelId(id, relations);
+        var users = [];
+        if (channel.members)
+            for (const member of channel.members)
+                users.push(member);
+        if (channel.admins)
+            for (const admin of channel.admins)
+                users.push(admin);
+        if (channel.owner)
+            users.push(channel.owner);
+        if (channel.mutedUsers)
+            for (const muted of channel.mutedUsers)
+                users.push(muted);
+        if (channel.bannedUsers)
+            for (const banned of channel.bannedUsers)
+                users.push(banned);
+        return users;
     }
     async getChannelHistory(id) {
         const found = await this.getChannelId(id);

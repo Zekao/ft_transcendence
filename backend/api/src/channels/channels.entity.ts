@@ -32,17 +32,17 @@ export class Channel {
   history: { login: string; message: string }[];
 
   @ManyToMany(() => User, (user) => user.joined_channels, { nullable: true })
-  @JoinTable()
+  @JoinTable({ name: 'members' })
   members: User[];
 
   @ManyToMany(() => User, (user) => user.admined_channels, { nullable: true })
   @JoinTable({ name: "admins" })
   admins: User[];
 
-  @OneToMany(() => User, (user) => user.ownered_channels)
+  @ManyToMany(() => User, (user) => user.ownered_channels)
   @ApiProperty({ type: () => User })
   @JoinTable({ name: "owner" })
-  owner: UserDto;
+  owner: User;
 
   @OneToMany(() => User, (user) => user.mutedChannels, { nullable: true })
   @ApiProperty({ type: () => User })

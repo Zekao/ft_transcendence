@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { User } from "src/users/users.entity";
 export declare class ChannelRelationsPicker {
     withAllMembers?: boolean;
     withMembersOnly?: boolean;
@@ -11,6 +12,9 @@ export declare class ChannelRelationsPicker {
     withMuted?: boolean;
     withBanned?: boolean;
 }
+export declare class ChannelRoleDto {
+    role: string;
+}
 export declare class ChannelsService {
     private ChannelsRepository;
     private UsersService;
@@ -18,6 +22,7 @@ export declare class ChannelsService {
     getChannel(): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
     getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
+    getChannelMembers(id: string, Role?: ChannelRoleDto): Promise<User[]>;
     getChannelHistory(id: string): Promise<{
         login: string;
         message: string;
