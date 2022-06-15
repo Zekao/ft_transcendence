@@ -125,26 +125,19 @@ let MatchsService = class MatchsService {
         this.MatchsRepository.save(match);
         return match;
     }
-    async findMatch() {
-        let Allmatchs = await this.getMatchs();
-        if (!Allmatchs.length)
-            throw new common_1.NotFoundException("No match are available");
-        Allmatchs = Allmatchs.filter((Allmatchs) => Allmatchs.status === matchs_enum_1.MatchStatus.PENDING);
-        if (!Allmatchs)
-            throw new common_1.NotFoundException("No match are available");
-        return Allmatchs;
-    }
     async defineMatch(player) {
         let match = null;
         try {
-            match = await this.findMatch();
+            console.log("TEST");
+            match = await this.getMatchs();
+            console.log(match);
             for (const el of match) {
                 if (el.status == matchs_enum_1.MatchStatus.PENDING && el.FirstPlayer != player.id) {
                     console.log(el);
                     await this.addPlayerToMatch(player, el);
                     match.status = matchs_enum_1.MatchStatus.STARTED;
-                    this.MatchsRepository.save(match);
-                    return match;
+                    this.MatchsRepository.save(el);
+                    return el;
                 }
             }
         }
