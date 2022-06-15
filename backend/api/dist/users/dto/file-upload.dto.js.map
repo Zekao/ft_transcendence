@@ -1,0 +1,1 @@
+{"version":3,"file":"file-upload.dto.js","sourceRoot":"","sources":["../../../src/users/dto/file-upload.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,qDAA0C;AAE1C,MAAa,aAAa;CAMzB;AADC;IAJC,IAAA,yBAAO,EAAC,uBAAuB,EAAE;QAChC,OAAO,EAAE,+BAA+B;KACzC,CAAC;IACD,IAAA,qBAAW,EAAC,EAAE,IAAI,EAAE,QAAQ,EAAE,MAAM,EAAE,QAAQ,EAAE,CAAC;;2CACxC;AALZ,sCAMC"}

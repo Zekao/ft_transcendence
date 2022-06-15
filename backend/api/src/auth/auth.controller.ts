@@ -1,0 +1,78 @@
+import {
+  Body,
+  Get,
+  Controller,
+  Post,
+  Req,
+  UseGuards,
+  Res,
+  Param,
+} from "@nestjs/common";
+import { AuthService } from "./auth.services";
+import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
+import { FortyTwoAuthGuard } from "./guard/42.auth.guard";
+import { JwtAuthGuard } from "./guard/jwt.auth.guard";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import * as fs from "fs";
+
+@ApiTags("auth")
+@Controller("auth")
+export class AuthController {
+  constructor(private authService: AuthService) {}
+
+  /* ************************************************************************** */
+  /*                   POST                                                     */
+  /* ************************************************************************** */
+
+  @Get("/login")
+  @ApiOperation({
+    summary: "Log into intra 42",
+  })
+  @UseGuards(FortyTwoAuthGuard)
+  logfortytwo(@Req() req) {}
+
+  @Get("/callback")
+  @ApiOperation({
+    summary: "Create or login with user 42",
+  })
+  @UseGuards(FortyTwoAuthGuard)
+  callbackfortytwo(@Req() req) {
+    return this.authService.GenerateJwtToken(req.user._json.id);
+  }
+
+  @Get("/:id/token")
+  @ApiOperation({
+    summary: "Debugging purpose / Generate token for specified user",
+  })
+  tokenGen(@Req() req, @Param("id") id: number) {
+    return this.authService.GenerateJwtToken(id);
+  }
+
+  @Get("/qrcode")
+  @ApiOperation({
+    summary: "Get image of qrcode",
+  })
+  async qrcode(): Promise<string> {
+    const Test = await this.authService.generateQR();
+
+    const file = fs;
+    file.writeFile(
+      "qrcode_user.png",
+      Test.qrcode.substring(22),
+      { encoding: "base64" },
+      function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("The file was saved!");
+        }
+      }
+    );
+    return Test.qrcode.substring(22);
+  }
+}
