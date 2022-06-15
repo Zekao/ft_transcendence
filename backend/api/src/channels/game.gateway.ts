@@ -47,7 +47,7 @@ export class GameGateway
         );
         if (findedMatch.id) {
           console.log("OK");
-          this.server.emit("waitinglist", "ready", findedMatch.id);
+          this.server.emit("wait", "ready", findedMatch.id);
           // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
         } else {
           const match = await this.matchService.createMatch(player.id);

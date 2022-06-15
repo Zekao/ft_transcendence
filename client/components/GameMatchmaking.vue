@@ -39,7 +39,7 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('waitinglist', (msg, matchID) => {
+    this.socket.on('wait', (msg, matchID) => {
       if (msg === 'ready') {
         this.$store.state.commit('SELECTED_MATCH_ID', matchID)
         this.$emit('next')

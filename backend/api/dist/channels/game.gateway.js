@@ -35,7 +35,7 @@ let GameGateway = class GameGateway {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
                     console.log("OK");
-                    this.server.emit("waitinglist", "ready", findedMatch.id);
+                    this.server.emit("wait", "ready", findedMatch.id);
                 }
                 else {
                     const match = await this.matchService.createMatch(player.id);
