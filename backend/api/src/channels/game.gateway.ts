@@ -46,7 +46,6 @@ export class GameGateway
           client.data.user
         );
         if (findedMatch.id) {
-          console.log("OK");
           this.server.emit("wait", "ready", findedMatch.id);
           // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
         } else {
