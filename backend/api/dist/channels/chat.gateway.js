@@ -30,8 +30,8 @@ let ChatGateway = class ChatGateway {
     }
     async SendPrivateMessage(client, msg) {
         try {
-            const message = client.data.user.display_name + ": " + msg;
-            this.emitChannel(client.data, "msg", message);
+            const login = client.data.user.display_name;
+            this.emitChannel(client.data, "msg", login, msg);
         }
         catch (_a) { }
     }

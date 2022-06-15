@@ -1,4 +1,4 @@
 declare module 'vue-keybindings' {
-    let VueKeybindings: any
-    export = VueKeybindings
-  }
+  let VueKeybindings: any
+  export = VueKeybindings
+}

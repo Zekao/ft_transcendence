@@ -8,33 +8,26 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import V from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-import VueKeybindings from 'vue-keybindings'
-Vue.use(VueKeybindings, {
-  alias: {
-    Up: ['w'],
-    Down: ['s'],
-    Escape: ['Escape'],
-  },
-})
+
 // keybinds that the user will use
-export default Vue.extend({
+export default V.extend({
   // <p>
   //   <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
   // </p>
   name: 'BlockGame',
-  data() {
-    return {
-      socket: null as NuxtSocket | null,
-      context: {} as any, // canvas context
-      position: {
-        x: 10,
-        y: 50,
-      },
-    }
-  },
+
+  data: () => ({
+    socket: null as NuxtSocket | null,
+    context: {} as any, // canvas context
+    position: {
+      x: 10,
+      y: 50,
+    },
+  }),
+
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
@@ -54,8 +47,9 @@ export default Vue.extend({
       }
     },
   },
+
   mounted() {
-    this.context = this.$refs.game.getContext('2d')
+    this.context = (this.$refs.game as any).getContext('2d')
     console.log('both values:', this.position.x, this.position.y)
     // this.context.fillRect(this.position.x, this.position.y, 20, 20);
     this.socket = this.$nuxtSocket({
@@ -81,29 +75,33 @@ export default Vue.extend({
     })
     console.log('both values:', this.position.x, this.position.y)
   },
-  shortcuts: {
-    keydown(event) {
-      if (event.key === 'w') {
-        this.move('up')
-      } else if (event.key === 's') {
-        this.move('down')
-      } else if (event.key === 'Escape') {
-        this.move('stop')
-      }
-      return false // stop alias calling
-    },
-    cancel() {
-      console.log('escape key pressed')
-      return false // stop propagation
-    },
-  },
+
+  // shortcuts: {
+  //   keydown(event) {
+  //     if (event.key === 'w') {
+  //       this.move('up')
+  //     } else if (event.key === 's') {
+  //       this.move('down')
+  //     } else if (event.key === 'Escape') {
+  //       this.move('stop')
+  //     }
+  //     return false // stop alias calling
+  //   },
+  //   cancel() {
+  //     console.log('escape key pressed')
+  //     return false // stop propagation
+  //   },
+  // },
+
   methods: {
-    keyb(val) {
-      this.context.fillRect(this.position.x, this.position.y, 20, 120) // fonctionne pas va savoir pourquoi
-      console.log('both values:', this.position.x, this.position.y)
-      this.socket.emit('customBinding', val)
+    keyb(val: any) {
+      if (this.socket) {
+        console.log('both values:', this.position.x, this.position.y)
+        this.context.fillRect(this.position.x, this.position.y, 20, 120) // fonctionne pas va savoir pourquoi
+        this.socket.emit('customBinding', val)
+      }
     },
-    move(direction) {
+    move(direction: string) {
       if (direction == 'up') {
         console.log('up pressed')
       } else if (direction == 'down') {
@@ -111,7 +109,9 @@ export default Vue.extend({
       } else if (direction == 'stop') {
         console.log('stop pressed -> user supposed to leave')
       }
-      this.socket.emit('move', direction)
+      if (this.socket) {
+        this.socket.emit('move', direction)
+      }
     },
   },
 })

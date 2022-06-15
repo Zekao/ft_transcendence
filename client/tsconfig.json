@@ -21,7 +21,7 @@
       "vuetify",
       "@types/node",
       "cookie-universal-nuxt",
-      "nuxt-socket-io",
+      "nuxt-socket-io"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
