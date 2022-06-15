@@ -30,9 +30,10 @@ let AuthController = class AuthController {
     tokenGen(req, id) {
         return this.authService.GenerateJwtToken(id);
     }
-    async verifyGToken(request) {
+    async verifyGToken(body) {
         try {
-            if (this.authService.verifyJwtToken(request.cookies.gcode))
+            console.log(body.g_code);
+            if (this.authService.verifyJwtToken(body.g_code))
                 return true;
         }
         catch (err) { }
@@ -97,12 +98,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "tokenGen", null);
 __decorate([
-    (0, common_1.Get)("/qrcode/verify"),
+    (0, common_1.Post)("/qrcode/verify"),
     (0, swagger_1.ApiOperation)({
         summary: "Verify if code is valid",
     }),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Req)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
