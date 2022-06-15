@@ -315,7 +315,6 @@ export class UsersService {
 
   async uploadFile(id: User, file: Express.Multer.File) {
     const response = {
-      originalname: file.originalname,
       filename: file.filename,
     };
     const split = id.avatar.split("?");

@@ -279,7 +279,6 @@ let UsersService = class UsersService {
     }
     async uploadFile(id, file) {
         const response = {
-            originalname: file.originalname,
             filename: file.filename,
         };
         const split = id.avatar.split("?");

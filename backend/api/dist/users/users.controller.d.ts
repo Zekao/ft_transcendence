@@ -17,7 +17,6 @@ export declare class UsersController {
     addFriend(req: any, query: any): Promise<User>;
     addBlocked(req: any, query: any): Promise<User>;
     uploadedFile(req: any, file: Express.Multer.File): Promise<{
-        originalname: string;
         filename: string;
     }>;
     deleteUser(req: any, id: string): Promise<boolean>;
