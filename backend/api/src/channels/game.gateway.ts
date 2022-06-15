@@ -59,7 +59,7 @@ export class GameGateway
         }
         if (message == "down")
           await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-        this.emitChannel(client.data, "move", pos1, pos2);
+        this.emitGame(client.data, "move", pos1, pos2);
         }
       else
       {
@@ -69,18 +69,17 @@ export class GameGateway
         if (message == "down"){
           await this.matchService.setPosSecondPlayer(match, pos2 + 5);
         }
-        this.emitChannel(client.data, "move", pos1, pos2);
+        this.emitGame(client.data, "move", pos1, pos2);
       }
     } catch {}
   }
 
-  emitChannel(channel: any, event: string, ...args: any): void {
+  emitGame(player: any, event: string, ...args: any): void {
     try {
-      if (!channel.user) return;
+      if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
+        if (player.game == socket.data.game) socket.emit(event, ...args);
       });
     } catch {}
   }

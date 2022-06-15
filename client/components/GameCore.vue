@@ -75,7 +75,7 @@ export default Vue.extend({
           channel: "/game",
           auth: {
             Authorization: this.accessToken,
-            game: "614d9a89-feff-44ac-be08-883735d1cde7",
+            game: "ed9f43d2-f0c0-43f9-918d-a108d05887ef",
           },
           path: "/api/socket.io/",
         })

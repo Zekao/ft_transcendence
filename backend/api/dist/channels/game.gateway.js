@@ -50,7 +50,7 @@ let GameGateway = class GameGateway {
                 }
                 if (message == "down")
                     await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-                this.emitChannel(client.data, "move", pos1, pos2);
+                this.emitGame(client.data, "move", pos1, pos2);
             }
             else {
                 if (message == "up") {
@@ -59,18 +59,18 @@ let GameGateway = class GameGateway {
                 if (message == "down") {
                     await this.matchService.setPosSecondPlayer(match, pos2 + 5);
                 }
-                this.emitChannel(client.data, "move", pos1, pos2);
+                this.emitGame(client.data, "move", pos1, pos2);
             }
         }
         catch (_a) { }
     }
-    emitChannel(channel, event, ...args) {
+    emitGame(player, event, ...args) {
         try {
-            if (!channel.user)
+            if (!player.user)
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                if (player.game == socket.data.game)
                     socket.emit(event, ...args);
             });
         }
