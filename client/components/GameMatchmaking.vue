@@ -4,9 +4,8 @@
     color="grey lighten-1"
     class="d-flex d-flex-column justify-center align-center"
   >
-    <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin"> Join </v-btn>
+    <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin"> Join queue </v-btn>
     <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
-    <p> {{ !ready ? 'Not ready' : 'READY' }} </p>
   </v-card>
 </template>
 

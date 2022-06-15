@@ -123,6 +123,9 @@
     <v-main>
       <Nuxt />
     </v-main>
+    <v-card v-if="true" style="position: fixed; bottom: 40px; right: 50px">
+        Hello World!
+    </v-card>
   </v-app>
 </template>
 

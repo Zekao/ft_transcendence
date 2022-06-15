@@ -22,9 +22,22 @@ export default V.extend({
   data: () => ({
     socket: null as NuxtSocket | null,
     context: {} as any, // canvas context
+    score: {
+      player1: 0,
+      player2: 0
+    },
     position: {
       x: 10,
-      y: 50,
+      y: 50
+    },
+    position2: {
+      x: 840,
+      y: 10
+    },
+    ball: {
+      x: 500,
+      y: 500,
+      radius: 10,
     },
   }),
 
@@ -60,19 +73,37 @@ export default V.extend({
          },
          path: '/api/socket.io/',
        } as any)
-       this.socket.on('move', (data) => {
-         console.log('data :', data)
-         // if (data >= 0)
-         this.position.y = data
-         // else
-         // data = 0;
-         // if (data <= 600)
-         // this.position.y = data;
-         // else
-         // data = 600;
-         this.context.clearRect(0, 0, 720, 1080)
-         this.context.fillRect(this.position.x, this.position.y, 20, 120)
-       })
+       this.socket.on('move', (data, data2) => {
+          // console.log('======== DIFFERENT VALUES ========');
+          // console.log('data is:', data);
+          // console.log('data2 is:', data2);
+          // console.log('======== DIFFERENT VALUES ========');
+            if (this.position.y != data) {
+                this.position.y = data;
+            }
+            else if (this.position2.y != data2) {
+                this.position2.y = data2;
+            }
+            // a voir pour mettre tout ca dans une fonction direct car c'est juste l'affichage //
+            this.context.clearRect(0, 0, 1080, 1920);
+            this.context.fillStyle = "white";
+            this.context.font = "30px Arial";
+            this.context.fillText(this.score.player1, 370, 50);
+            this.context.fillRect(420, 0, 3, 1000);
+            this.context.fillText(this.score.player2, 460, 50);
+            this.context.fillStyle = "grey";
+            this.context.fillRect(this.position.x, this.position.y, 20, 120);
+            this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
+            // a voir pour mettre tout ca dans une fonction direct car c'est juste l'affichage //
+            if (this.score.player1 >= 5) {
+                this.context.clearRect(0, 0, 1080, 1920);
+                this.$emit('next')
+            }
+            else if (this.score.player2 >= 5) {
+                this.context.clearRect(0, 0, 1080, 1920);
+                this.$emit('next')
+            }
+        })
       }
     }
   },
@@ -83,22 +114,22 @@ export default V.extend({
     console.log('both values:', this.position.x, this.position.y)
   },
 
-  // shortcuts: {
-  //   keydown(event) {
-  //     if (event.key === 'w') {
-  //       this.move('up')
-  //     } else if (event.key === 's') {
-  //       this.move('down')
-  //     } else if (event.key === 'Escape') {
-  //       this.move('stop')
-  //     }
-  //     return false // stop alias calling
-  //   },
-  //   cancel() {
-  //     console.log('escape key pressed')
-  //     return false // stop propagation
-  //   },
-  // },
+  shortcuts: {
+    keydown(event) {
+      if (event.key === 'w') {
+        this.move('up')
+      } else if (event.key === 's') {
+        this.move('down')
+      } else if (event.key === 'Escape') {
+        this.move('stop')
+      }
+      return false // stop alias calling
+    },
+    cancel() {
+      console.log('escape key pressed')
+      return false // stop propagation
+    },
+  },
 
   methods: {
     keyb(val: any) {
