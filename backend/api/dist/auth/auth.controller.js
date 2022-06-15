@@ -32,7 +32,8 @@ let AuthController = class AuthController {
     }
     async verifyGToken(request) {
         try {
-            console.log(request.cookies);
+            if (this.authService.verifyJwtToken(request.cookies.gcode))
+                return true;
         }
         catch (err) { }
         throw new common_1.UnauthorizedException("Acces token provided is not allowed");
@@ -96,7 +97,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "tokenGen", null);
 __decorate([
-    (0, common_1.Post)("/qrcode/verify"),
+    (0, common_1.Get)("/qrcode/verify"),
     (0, swagger_1.ApiOperation)({
         summary: "Verify if code is valid",
     }),

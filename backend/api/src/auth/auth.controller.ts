@@ -57,15 +57,14 @@ export class AuthController {
     return this.authService.GenerateJwtToken(id);
   }
 
-  @Post("/qrcode/verify")
+  @Get("/qrcode/verify")
   @ApiOperation({
     summary: "Verify if code is valid",
   })
   @UseGuards(JwtAuthGuard)
   async verifyGToken(@Req() request): Promise<boolean> {
     try {
-      console.log(request.cookies);
-      // if (this.authService.verifyJwtToken()) return true;
+      if (this.authService.verifyJwtToken(request.cookies.gcode)) return true;
     } catch (err) {}
     throw new UnauthorizedException("Acces token provided is not allowed");
   }
