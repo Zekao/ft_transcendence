@@ -45,7 +45,6 @@ export declare class UsersService {
     addFriend(id: string, friend_id: string): Promise<User>;
     addBlocked(id: string, blockedUsersId: string): Promise<User>;
     uploadFile(id: User, file: Express.Multer.File): Promise<{
-        originalname: string;
         filename: string;
     }>;
     deleteUser(id: string): Promise<boolean>;
