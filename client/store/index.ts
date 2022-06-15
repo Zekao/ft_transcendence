@@ -78,9 +78,10 @@ export const actions: ActionTree<RootState, RootState> = {
     commit('TWO_FACTOR_REQUEST')
     try {
       const res = await this.$axios.$post(`/auth/qrcode?gcode=${code}`)
-      const { gToken } = res
-      this.$cookies.set('g_token', gToken)
-      commit('TWO_FACTOR_SUCCESS', gToken)
+      console.log(res)
+      const { gtoken } = res
+      this.$cookies.set('g_token', gtoken)
+      commit('TWO_FACTOR_SUCCESS', gtoken)
       return res
     } catch(err) {
       this.$cookies.removeAll()
