@@ -49,31 +49,37 @@ export default V.extend({
     },
   },
 
+  watch: {
+    selectedMatchId(value: string) {
+      if (value) {
+        this.socket = this.$nuxtSocket({
+         channel: '/game',
+         auth: {
+           Authorization: this.accessToken,
+           game: this.selectedMatchId,
+         },
+         path: '/api/socket.io/',
+       } as any)
+       this.socket.on('move', (data) => {
+         console.log('data :', data)
+         // if (data >= 0)
+         this.position.y = data
+         // else
+         // data = 0;
+         // if (data <= 600)
+         // this.position.y = data;
+         // else
+         // data = 600;
+         this.context.clearRect(0, 0, 720, 1080)
+         this.context.fillRect(this.position.x, this.position.y, 20, 120)
+       })
+      }
+    }
+  },
+
   mounted() {
     this.context = (this.$refs.game as any).getContext('2d')
-    console.log('both values:', this.position.x, this.position.y)
     // this.context.fillRect(this.position.x, this.position.y, 20, 20);
-    this.socket = this.$nuxtSocket({
-      channel: '/game',
-      auth: {
-        Authorization: this.accessToken,
-        game: this.selectedMatchId,
-      },
-      path: '/api/socket.io/',
-    } as any)
-    this.socket.on('move', (data) => {
-      console.log('data :', data)
-      // if (data >= 0)
-      this.position.y = data
-      // else
-      // data = 0;
-      // if (data <= 600)
-      // this.position.y = data;
-      // else
-      // data = 600;
-      this.context.clearRect(0, 0, 720, 1080)
-      this.context.fillRect(this.position.x, this.position.y, 20, 120)
-    })
     console.log('both values:', this.position.x, this.position.y)
   },
 
