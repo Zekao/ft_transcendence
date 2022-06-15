@@ -112,11 +112,10 @@ let MatchsService = class MatchsService {
         await this.MatchsRepository.save(match);
         match.FirstPlayer = user;
         await this.MatchsRepository.save(match);
+        await this.addMatchToPlayer(user, match);
         return match;
     }
     async addMatchToPlayer(player, match) {
-        if (!player.matchs)
-            player.matchs = [];
         player.matchs.push(match);
         await this.userService.saveUser(player);
         return match;
