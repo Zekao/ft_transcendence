@@ -2,6 +2,7 @@
   <v-menu
     v-model="value"
     :close-on-content-click="false"
+    bottom
   >
     <v-list>
       <v-list-item class="justify-center">
