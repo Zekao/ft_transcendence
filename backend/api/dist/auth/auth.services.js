@@ -89,11 +89,6 @@ let AuthService = class AuthService {
         return this.userService.getUserFortyTwo(payload.FortyTwoID);
     }
     async verifyGToken(user_token, user) {
-        const file = user.user_name + ".png";
-        try {
-            fs.unlinkSync("image/googe/" + file);
-        }
-        catch (err) { }
         const verified = speakeasy.totp.verify({
             secret: user.TwoFAVerify,
             encoding: "ascii",
@@ -116,7 +111,7 @@ let AuthService = class AuthService {
     async verifyQR(user_token, user) {
         const file = user.user_name + ".png";
         try {
-            fs.unlinkSync("image/googe/" + file);
+            fs.unlinkSync("image/google/" + file);
         }
         catch (err) { }
         const verified = speakeasy.totp.verify({
