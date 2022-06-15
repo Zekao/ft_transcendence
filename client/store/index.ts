@@ -77,7 +77,7 @@ export const actions: ActionTree<RootState, RootState> = {
   async authTwoFactor({ commit }, code: string) {
     commit('TWO_FACTOR_REQUEST')
     try {
-      const res = await this.$axios.$post(`/qrcode&gcode=${code}`)
+      const res = await this.$axios.$post(`/auth/qrcode&gcode=${code}`)
       const { gToken } = res
       this.$cookies.set('g_token', gToken)
       commit('TWO_FACTOR_SUCCESS', gToken)
