@@ -7,6 +7,7 @@ export declare class ChannelFilteDto {
 export declare class ChannelStatusDto {
     status: ChannelStatus;
 }
-export declare class ChannelRoleDto {
+export declare class ChannelMembersDto {
     role: string;
+    id: string;
 }

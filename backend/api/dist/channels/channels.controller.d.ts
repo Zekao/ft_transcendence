@@ -14,7 +14,7 @@ export declare class ChannelsController {
         message: string;
     }[]>;
     getChannelPassword(id: string, body: any): Promise<Channel>;
-    createChannel(ChannelsDtos: ChannelsDto): Promise<Channel>;
+    createChannel(req: any, ChannelsDtos: ChannelsDto): Promise<Channel>;
     deleteUser(id: string): Promise<boolean>;
     editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
 }

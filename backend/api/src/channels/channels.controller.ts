@@ -8,7 +8,7 @@ import {
   Delete,
   Patch,
   UseGuards,
-  Req,
+  Request,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -53,7 +53,7 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Get channel info",
   })
-  getChannel(@Param("id") id: string): Promise<Channel> {
+  getChannel(@Param("id") id: string, ): Promise<Channel> {
     return this.channelService.getChannelId(id);
   }
 
@@ -81,12 +81,13 @@ export class ChannelsController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Post("/create")
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(@Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
-    return this.channelService.createChannel(ChannelsDtos);
+  createChannel(@Request() req, @Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+    return this.channelService.createChannel(req.user.id, ChannelsDtos);
   }
 
   /* ************************************************************************** */

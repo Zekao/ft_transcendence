@@ -14,7 +14,7 @@ import { isUuid } from "src/utils/utils";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
-import { ChannelFilteDto, ChannelRoleDto, ChannelStatusDto } from "./dto/channels-filter.dto";
+import { ChannelFilteDto, ChannelMembersDto, ChannelStatusDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
@@ -98,9 +98,8 @@ export class ChannelsService {
     return found;
   }
 
-  async getChannelMembers(id: string, Role?: ChannelRoleDto): Promise<User[]> {
-    const { role } = Role;
-    console.log(role);
+  async getChannelMembers(channelId: string, Role?: ChannelMembersDto): Promise<User[]> {
+    const { role, id } = Role;
     var relations : ChannelRelationsPicker[] = [];
     if (role) {
       if (role === "all") relations.push({ withAllMembers: true });
@@ -112,22 +111,28 @@ export class ChannelsService {
     } else {
       relations.push({ withAllMembers: true });
     }
-    const channel = await this.getChannelId(id, relations);
-    var users = [] ;
-    if (channel.members) 
+    const channel = await this.getChannelId(channelId, relations);
+    console.log(channel);
+    var users: User[] = [] ;
+    if (channel.members){ 
       for (const member of channel.members)
         users.push(member);
-    if (channel.admins)
+    }
+    if (channel.admins) {
       for (const admin of channel.admins)
         users.push(admin);
-    if (channel.owner)
+    }
+    if (channel.owner) {
       users.push(channel.owner);
-    if (channel.mutedUsers)
+    }
+    if (channel.mutedUsers) {
       for (const muted of channel.mutedUsers)
         users.push(muted);
-    if (channel.bannedUsers)
+    }
+    if (channel.bannedUsers) {
       for (const banned of channel.bannedUsers)
         users.push(banned);
+    }
     return users;
   }
 
@@ -147,7 +152,8 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createChannel(channelsDto: ChannelsDto): Promise<Channel> {
+  async createChannel(id:string, channelsDto: ChannelsDto): Promise<Channel> {
+    const owner = await this.UsersService.getUserId(id);
     const { name, status, permissions, password } = channelsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -158,6 +164,8 @@ export class ChannelsService {
       password: hashedPassword,
     });
     try {
+      await this.ChannelsRepository.save(channel);
+      channel.owner = owner;
       await this.ChannelsRepository.save(channel);
     } catch (error) {
       if (error.code == "23505") {

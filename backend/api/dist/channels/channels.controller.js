@@ -40,8 +40,8 @@ let ChannelsController = class ChannelsController {
     getChannelPassword(id, body) {
         return this.channelService.validateChannelPassword(id, body);
     }
-    createChannel(ChannelsDtos) {
-        return this.channelService.createChannel(ChannelsDtos);
+    createChannel(req, ChannelsDtos) {
+        return this.channelService.createChannel(req.user.id, ChannelsDtos);
     }
     deleteUser(id) {
         return this.channelService.deleteChannel(id);
@@ -103,13 +103,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "getChannelPassword", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/create"),
     (0, swagger_1.ApiOperation)({
         summary: "Create a new channel",
     }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [channels_dto_1.ChannelsDto]),
+    __metadata("design:paramtypes", [Object, channels_dto_1.ChannelsDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([

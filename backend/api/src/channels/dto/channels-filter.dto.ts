@@ -10,6 +10,7 @@ export class ChannelStatusDto {
   status: ChannelStatus;
 }
 
-export class ChannelRoleDto{
+export class ChannelMembersDto{
   role: string;
+  id: string;
 }

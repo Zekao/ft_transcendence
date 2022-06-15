@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelRoleDto = exports.ChannelStatusDto = exports.ChannelFilteDto = void 0;
+exports.ChannelMembersDto = exports.ChannelStatusDto = exports.ChannelFilteDto = void 0;
 class ChannelFilteDto {
 }
 exports.ChannelFilteDto = ChannelFilteDto;
 class ChannelStatusDto {
 }
 exports.ChannelStatusDto = ChannelStatusDto;
-class ChannelRoleDto {
+class ChannelMembersDto {
 }
-exports.ChannelRoleDto = ChannelRoleDto;
+exports.ChannelMembersDto = ChannelMembersDto;
 //# sourceMappingURL=channels-filter.dto.js.map

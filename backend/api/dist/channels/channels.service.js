@@ -86,9 +86,8 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
-    async getChannelMembers(id, Role) {
-        const { role } = Role;
-        console.log(role);
+    async getChannelMembers(channelId, Role) {
+        const { role, id } = Role;
         var relations = [];
         if (role) {
             if (role === "all")
@@ -107,22 +106,28 @@ let ChannelsService = class ChannelsService {
         else {
             relations.push({ withAllMembers: true });
         }
-        const channel = await this.getChannelId(id, relations);
+        const channel = await this.getChannelId(channelId, relations);
+        console.log(channel);
         var users = [];
-        if (channel.members)
+        if (channel.members) {
             for (const member of channel.members)
                 users.push(member);
-        if (channel.admins)
+        }
+        if (channel.admins) {
             for (const admin of channel.admins)
                 users.push(admin);
-        if (channel.owner)
+        }
+        if (channel.owner) {
             users.push(channel.owner);
-        if (channel.mutedUsers)
+        }
+        if (channel.mutedUsers) {
             for (const muted of channel.mutedUsers)
                 users.push(muted);
-        if (channel.bannedUsers)
+        }
+        if (channel.bannedUsers) {
             for (const banned of channel.bannedUsers)
                 users.push(banned);
+        }
         return users;
     }
     async getChannelHistory(id) {
@@ -135,7 +140,8 @@ let ChannelsService = class ChannelsService {
         this.ChannelsRepository.save(id);
         return true;
     }
-    async createChannel(channelsDto) {
+    async createChannel(id, channelsDto) {
+        const owner = await this.UsersService.getUserId(id);
         const { name, status, permissions, password } = channelsDto;
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -146,6 +152,8 @@ let ChannelsService = class ChannelsService {
             password: hashedPassword,
         });
         try {
+            await this.ChannelsRepository.save(channel);
+            channel.owner = owner;
             await this.ChannelsRepository.save(channel);
         }
         catch (error) {
