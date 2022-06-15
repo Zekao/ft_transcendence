@@ -43,6 +43,7 @@ let GameGateway = class GameGateway {
                 console.log(client.data.match);
                 if (client.data.match)
                     await this.matchService.deleteMatch(client.data.match.id);
+                client.data.match = null;
                 console.log("LEAVE");
             }
         }
@@ -86,7 +87,7 @@ let GameGateway = class GameGateway {
     async handleDisconnect(client) {
         const waiting = client.data.waiting;
         const user = client.data.user;
-        if (client.data.match && client.data.match.status == matchs_enum_1.MatchStatus.PENDING)
+        if (client.data.match && client.data.match.status === matchs_enum_1.MatchStatus.PENDING)
             await this.matchService.deleteMatch(client.data.match.id);
         if (user || waiting) {
             user.in_game = users_enum_1.UserGameStatus.OUT_GAME;

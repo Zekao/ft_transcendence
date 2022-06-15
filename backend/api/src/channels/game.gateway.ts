@@ -53,6 +53,7 @@ export class GameGateway
         console.log(client.data.match);
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
+        client.data.match = null;
         console.log("LEAVE");
       }
       // this.emitChannel(client.data, "waitinglist", "READY");
@@ -97,7 +98,7 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const waiting = client.data.waiting;
     const user = client.data.user;
-    if (client.data.match && client.data.match.status == MatchStatus.PENDING)
+    if (client.data.match && client.data.match.status === MatchStatus.PENDING)
       await this.matchService.deleteMatch(client.data.match.id);
     if (user || waiting) {
       user.in_game = UserGameStatus.OUT_GAME;
