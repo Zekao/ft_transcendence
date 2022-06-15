@@ -31,6 +31,7 @@ export default V.extend({
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
+      selectedMatchId: (state: any) => state.selectedMatchId,
     }),
     height() {
       switch (this.$vuetify.breakpoint.name) {
@@ -56,7 +57,7 @@ export default V.extend({
       channel: '/game',
       auth: {
         Authorization: this.accessToken,
-        game: '07efe7b3-207e-48f5-a47d-b64a22a9d37c',
+        game: this.selectedMatchId,
       },
       path: '/api/socket.io/',
     } as any)
