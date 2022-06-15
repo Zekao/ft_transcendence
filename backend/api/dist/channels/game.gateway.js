@@ -30,12 +30,14 @@ let GameGateway = class GameGateway {
     async waitingList(client, message) {
         try {
             const player = client.data.user;
-            const match = this.matchService.createMatch(player.id);
-            client.data.match = match;
-            if (message[0] == "join") {
+            if (!client.data.match) {
+                const match = this.matchService.createMatch(player.id);
+                client.data.match = match;
+            }
+            if (message == "join") {
                 console.log("JOIN");
             }
-            if (message[0] == "leave") {
+            if (message == "leave") {
                 if (client.data.match)
                     this.matchService.deleteMatch(client.data.match.id);
                 console.log("LEAVE");
