@@ -47,7 +47,8 @@ export class GameGateway
         );
         if (findedMatch.id) {
           console.log("OK");
-          this.emitChannel(client.data, "waitinglist", "ready", findedMatch.id);
+          this.server.emit("waitinglist", "ready", findedMatch.id);
+          // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
         } else {
           const match = await this.matchService.createMatch(player.id);
           client.data.match = match;
@@ -79,21 +80,20 @@ export class GameGateway
       console.log(pos2);
       if (message == "up") {
         await this.matchService.setPosFirstPlayer(match, pos1 - 5);
-        this.emitChannel(client.data, match.id, pos1, pos2);
+        this.emitGame(client.data, match.id, pos1, pos2);
       }
       if (message == "down")
         await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-      this.emitChannel(client.data, "move", pos1);
+      this.emitGame(client.data, "move", pos1);
     } catch {}
   }
 
-  emitChannel(channel: any, event: string, ...args: any): void {
+  emitGame(player: any, event: string, ...args: any): void {
     try {
-      if (!channel.user) return;
+      if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
+        if (player.game == socket.data.game) socket.emit(event, ...args);
       });
     } catch {}
   }

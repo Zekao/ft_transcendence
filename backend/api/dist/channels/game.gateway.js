@@ -35,7 +35,7 @@ let GameGateway = class GameGateway {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
                     console.log("OK");
-                    this.emitChannel(client.data, "waitinglist", "ready", findedMatch.id);
+                    this.server.emit("waitinglist", "ready", findedMatch.id);
                 }
                 else {
                     const match = await this.matchService.createMatch(player.id);
@@ -67,21 +67,21 @@ let GameGateway = class GameGateway {
             console.log(pos2);
             if (message == "up") {
                 await this.matchService.setPosFirstPlayer(match, pos1 - 5);
-                this.emitChannel(client.data, match.id, pos1, pos2);
+                this.emitGame(client.data, match.id, pos1, pos2);
             }
             if (message == "down")
                 await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-            this.emitChannel(client.data, "move", pos1);
+            this.emitGame(client.data, "move", pos1);
         }
         catch (_a) { }
     }
-    emitChannel(channel, event, ...args) {
+    emitGame(player, event, ...args) {
         try {
-            if (!channel.user)
+            if (!player.user)
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                if (player.game == socket.data.game)
                     socket.emit(event, ...args);
             });
         }

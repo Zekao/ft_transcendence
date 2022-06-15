@@ -14,7 +14,7 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     afterInit(server: Server): void;
     waitingList(client: Socket, message: string): Promise<void>;
     gamecontrol(client: Socket, message: string): Promise<void>;
-    emitChannel(channel: any, event: string, ...args: any): void;
+    emitGame(player: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): Promise<void>;
     isWaitinglist(client: Socket, user: User): Promise<boolean>;
     isInGame(client: Socket, user: User): Promise<boolean>;
