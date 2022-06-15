@@ -256,7 +256,7 @@ export class UsersService {
       loose: 0,
       rank: 0,
       ratio: 1,
-      avatar: "default.png",
+      avatar: "default.png" + "?" + new Date().getTime(),
     });
     try {
       await this.UserRepository.save(user);
@@ -319,6 +319,7 @@ export class UsersService {
       filename: file.filename,
     };
     const split = id.avatar.split("?");
+    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {
