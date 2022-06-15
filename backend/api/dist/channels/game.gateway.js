@@ -55,22 +55,36 @@ let GameGateway = class GameGateway {
         try {
             const player = client.data.user;
             const match = client.data.match;
-            console.log("FIRST PLAYER INFORMATIONS:", match.FirstPlayer);
-            if (player == match.FirstPlayer)
+            console.log("============ DEBUG ============");
+            console.log(" first player :", match.FirstPlayer.user_name);
+            console.log("============ PLAYING ============");
+            console.log(player.user_name);
+            console.log("============ WHO ============");
+            if (player.user_name == match.FirstPlayer.user_name)
                 console.log("FIRST");
-            else if (player == match.SecondPlayer)
+            else
                 console.log("SECOND");
             const pos1 = await this.matchService.getPosFirstPlayer(match);
             const pos2 = await this.matchService.getPosSecondPlayer(match);
             console.log(pos1);
             console.log(pos2);
-            if (message == "up") {
-                await this.matchService.setPosFirstPlayer(match, pos1 - 5);
-                this.emitGame(client.data, match.id, pos1, pos2);
+            if (player.user_name == match.FirstPlayer.user_name) {
+                if (message == "up") {
+                    await this.matchService.setPosFirstPlayer(match, pos1 - 5);
+                }
+                if (message == "down")
+                    await this.matchService.setPosFirstPlayer(match, pos1 + 5);
+                this.emitGame(client.data, "move", pos1, pos2);
             }
-            if (message == "down")
-                await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-            this.emitGame(client.data, "move", pos1);
+            else {
+                if (message == "up") {
+                    await this.matchService.setPosSecondPlayer(match, pos2 - 5);
+                }
+                if (message == "down") {
+                    await this.matchService.setPosSecondPlayer(match, pos2 + 5);
+                }
+                this.emitGame(client.data, "move", pos1, pos2);
+            }
         }
         catch (_a) { }
     }
@@ -120,10 +134,9 @@ let GameGateway = class GameGateway {
     }
     async handleConnection(client, ...args) {
         try {
-            console.log(client.handshake.auth);
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
-            if (this.isWaitinglist(client, user))
+            if ((await this.isWaitinglist(client, user)) != false)
                 return;
             const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
             client.data.match = match;
