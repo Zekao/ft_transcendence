@@ -36,6 +36,23 @@ export class GameGateway
     this.logger.log("Init");
   }
 
+  @SubscribeMessage("action")
+  async waitingList(client: Socket, message: string): Promise<void> {
+    try {
+      const player = client.data.user;
+      const match: Matchs = client.data.match;
+      if (message[0] == "action") {
+        if (message[1] == "join") {
+          console.log("JOIN");
+        }
+        if (message[1] == "leave") {
+          console.log("LEAVE");
+        }
+      }
+      this.emitChannel(client.data, "waitinglist", "READY");
+    } catch {}
+  }
+
   @SubscribeMessage("move")
   async gamecontrol(client: Socket, message: string): Promise<void> {
     try {
@@ -72,13 +89,24 @@ export class GameGateway
   }
 
   handleDisconnect(client: Socket) {
+    const waiting = client.data.waiting;
     const user = client.data.user;
-    if (client.data.game) {
+    if (user || waiting) {
       user.in_game = UserGameStatus.OUT_GAME;
       this.userService.saveUser(user);
     }
     console.log("OUT GAME");
     this.logger.log(`Client disconnected: ${client.id}`);
+  }
+
+  async isWaitinglist(client: Socket, user: User) {
+    client.data.waitinglist = client.handshake.auth.waitinglist;
+    if (client.data.waitinglist) {
+      console.log("IN_WAITINGLIST");
+      this.logger.log(`Client connected: ${client.id}`);
+      return true;
+    }
+    return false;
   }
 
   async isInGame(client: Socket, user: User) {
@@ -87,8 +115,6 @@ export class GameGateway
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
       console.log("IN_GAME");
-      await this.matchService.setPosFirstPlayer(client.data.match, 0);
-      await this.matchService.setPosSecondPlayer(client.data.match, 0);
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -98,11 +124,11 @@ export class GameGateway
   async handleConnection(client: Socket, ...args: any[]) {
     try {
       const user = await this.authService.getUserFromSocket(client);
+      if (this.isWaitinglist(client, user)) return;
       const match = await this.matchService.getMatchsId(
         client.handshake.auth.game,
         [{ withUsers: true }]
       );
-      if (!match) throw new UnauthorizedException("The match does not exist");
       client.data.user = user;
       client.data.match = match;
       if (this.isInGame(client, user)) return;

@@ -27,6 +27,22 @@ let GameGateway = class GameGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
+    async waitingList(client, message) {
+        try {
+            const player = client.data.user;
+            const match = client.data.match;
+            if (message[0] == "action") {
+                if (message[1] == "join") {
+                    console.log("JOIN");
+                }
+                if (message[1] == "leave") {
+                    console.log("LEAVE");
+                }
+            }
+            this.emitChannel(client.data, "waitinglist", "READY");
+        }
+        catch (_a) { }
+    }
     async gamecontrol(client, message) {
         try {
             const player = client.data.user;
@@ -63,13 +79,23 @@ let GameGateway = class GameGateway {
         catch (_a) { }
     }
     handleDisconnect(client) {
+        const waiting = client.data.waiting;
         const user = client.data.user;
-        if (client.data.game) {
+        if (user || waiting) {
             user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
             this.userService.saveUser(user);
         }
         console.log("OUT GAME");
         this.logger.log(`Client disconnected: ${client.id}`);
+    }
+    async isWaitinglist(client, user) {
+        client.data.waitinglist = client.handshake.auth.waitinglist;
+        if (client.data.waitinglist) {
+            console.log("IN_WAITINGLIST");
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
     }
     async isInGame(client, user) {
         client.data.game = client.handshake.auth.game;
@@ -77,8 +103,6 @@ let GameGateway = class GameGateway {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
             console.log("IN_GAME");
-            await this.matchService.setPosFirstPlayer(client.data.match, 0);
-            await this.matchService.setPosSecondPlayer(client.data.match, 0);
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
@@ -87,9 +111,9 @@ let GameGateway = class GameGateway {
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
+            if (this.isWaitinglist(client, user))
+                return;
             const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
-            if (!match)
-                throw new common_1.UnauthorizedException("The match does not exist");
             client.data.user = user;
             client.data.match = match;
             if (this.isInGame(client, user))
@@ -105,6 +129,12 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
 ], GameGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("action"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", Promise)
+], GameGateway.prototype, "waitingList", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)("move"),
     __metadata("design:type", Function),
