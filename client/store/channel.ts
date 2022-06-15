@@ -65,7 +65,7 @@ export const actions: ActionTree<ChannelState, RootState> = {
   },
   async delete({ commit }, channelID: string) {
     try {
-      const res = await this.$axios.$delete(`/channels/${channelID}`)
+      const res = await this.$axios.$delete(`/channel/${channelID}`)
       commit('DELETE', channelID)
       return res
     } catch (err) {

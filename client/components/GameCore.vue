@@ -2,12 +2,11 @@
   <div>
       <v-card :height="height" color="#B686D6">
       <canvas
-        height="720"
-        width="1080"
         ref="game"
-        color="blue lighten-1">
+        height="720"
+        width="1080">
       </canvas>
-    </v-card>      
+    </v-card>
   </div>
 </template>
 
@@ -16,7 +15,6 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
 import VueKeybindings from 'vue-keybindings'
-
   Vue.use(VueKeybindings, {
       alias: {
           Up: ['w'],
@@ -24,9 +22,7 @@ import VueKeybindings from 'vue-keybindings'
           Escape: ['Escape']
       }
   })
-
 // keybinds that the user will use
-
 export default Vue.extend({
     // <p>
     //   <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
@@ -38,12 +34,17 @@ export default Vue.extend({
           context: {}, // canvas context
           position: {
             x: 10,
-            y: 360
+            y: 50
           },
           position2: {
             x: 840,
-            y: 360
-          }
+            y: 10
+          },
+          ball: {
+            x: 500,
+            y: 500,
+            radius: 10,
+          },
 
         }
       },
@@ -63,55 +64,61 @@ export default Vue.extend({
       },
       mounted() {
           this.context = this.$refs.game.getContext("2d");
-          console.log("both values:", this.position.x, this.position.y);
+          // console.log("both values:", this.position.x, this.position.y);
           // this.context.fillRect(this.position.x, this.position.y, 20, 20);
         this.socket = this.$nuxtSocket({
           channel: "/game",
-          extraHeaders: {
+          auth: {
             Authorization: this.accessToken,
-            game: "efa176ea-68bf-4145-ac46-eb9d42e610a3",
+            game: "a09d83c8-1a17-443e-b968-2018407fd21f",
           },
           path: "/api/socket.io/",
         })
         this.socket.on('move', (data, data2) => {
-          console.log('data :', data);
-          console.log('data2 :', data2);
-          this.position.y = data;
-          // this.position2.y = data2;
-          this.context.clearRect(0, 0, 720, 1080);
+          // console.log('======== DIFFERENT VALUES ========');
+          // console.log('data is:', data);
+          // console.log('data2 is:', data2);
+          // console.log('======== DIFFERENT VALUES ========');
+            if (this.position.y != data) {
+                this.position.y = data;
+            }
+            else if (this.position2.y != data2) {
+                this.position2.y = data2;
+            }
+          this.context.clearRect(0, 0, 1080, 1920);
+          // console.log('======== DIFFERENT VALUES 2 ========');
+          // console.log('both values:', this.position2.x, this.position2.y);
           this.context.fillRect(this.position.x, this.position.y, 20, 120);
           this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
+          // this.context.fillCircle(this.ball.x, this.ball.y, this.ball.radius);
         });
-        console.log("both values:", this.position.x, this.position.y);
+        // console.log("both values:", this.position.x, this.position.y);
       },
       shortcuts: {
-        keydown: function (event) {
+        keydown (event) {
           if (event.key === 'w') {
-            console.log("position : ", this.position.y);
               this.move('up');
           }
           else if (event.key === 's') {
-            console.log("position : ", this.position.y);
-              this.move('down');
-          } 
+            this.move('down');
+          }
           else if (event.key === 'Escape') {
             this.move('stop');
-          } 
-
+          }
           return false // stop alias calling
         },
-        cancel: function () {
+        cancel () {
             console.log('escape key pressed')
             return false // stop propagation
         },
       },
        methods: {
         keyb(val) {
-            this.context.fillRect(this.position.x, this.position.y, 20, 120);
+             this.context.clearRect(0, 0, 720, 1080);
+            // this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
             console.log("both values:", this.position.x, this.position.y);
         this.socket.emit('customBinding', val);
         },
-
         move(direction) {
           if (direction == 'up') {
             console.log('up pressed');

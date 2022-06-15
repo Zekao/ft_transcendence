@@ -16,7 +16,6 @@ const socket_io_1 = require("socket.io");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const channels_service_1 = require("./channels.service");
-const users_enum_1 = require("../users/users.enum");
 let ChannelsGateway = class ChannelsGateway {
     constructor(userService, authService, channelService) {
         this.userService = userService;
@@ -32,7 +31,6 @@ let ChannelsGateway = class ChannelsGateway {
             const channel = client.data.channel;
             const login = client.data.user.display_name;
             if (message[0] === "msg") {
-                console.log('test');
                 if (!channel.history)
                     channel.history = [];
                 const history = { login, message: message[1] };
@@ -40,7 +38,26 @@ let ChannelsGateway = class ChannelsGateway {
                 this.channelService.saveChannel(channel);
                 this.emitChannel(client.data, "channel", login, message[1]);
             }
-            else {
+            else if (message[0] == "action") {
+                if (message[1] == "logout")
+                    client.disconnect();
+                if (message[1] === "mute") {
+                    const login = message[2];
+                    const time = message[3];
+                    this.emitChannel(client.data, "channel", login, " is mute for ", time, "minute");
+                }
+                else if (message[1] === "unmute") {
+                    const login = message[2];
+                    this.emitChannel(client.data, "channel", login, " is unmute");
+                }
+                else if (message[1] === "ban") {
+                    const login = message[2];
+                    this.emitChannel(client.data, "channel", login, " is ban");
+                }
+                else if (message[1] === "unban") {
+                    const login = message[2];
+                    this.emitChannel(client.data, "channel", login, " is unban");
+                }
             }
         }
         catch (_a) { }
@@ -58,17 +75,13 @@ let ChannelsGateway = class ChannelsGateway {
         catch (_a) { }
     }
     handleDisconnect(client) {
-        const user = client.data.user;
-        if (client.data.status) {
-            user.status = users_enum_1.UserStatus.OFFLINE;
-            this.userService.saveUser(user);
-        }
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async isChannel(client) {
-        client.data.ConnectedChannel = client.handshake.headers.channel;
-        if (client.data.ConnectedChannel) {
-            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel);
+        client.data.ConnectedChannel = client.handshake.auth.channel;
+        client.data.password = client.handshake.auth.password;
+        if (client.data.ConnectedChannel && client.data.password) {
+            client.data.channel = await this.channelService.getChannelId(client.data.ConnectedChannel, client.data.password);
             if (client.data.channel == false)
                 return false;
             else {
@@ -80,7 +93,6 @@ let ChannelsGateway = class ChannelsGateway {
     }
     async handleConnection(client, ...args) {
         try {
-            console.log(client.handshake.headers.authorization);
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
             if (await this.isChannel(client))

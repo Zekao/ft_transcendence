@@ -3,10 +3,10 @@ import { RootState } from '@/store'
 
 export interface IMatch {
   id: string
-  FirstPlayer: string,
-  SecondPlayer: string,
-  scoreFirstPlayer: number,
-  scoreSecondPlayer: number,
+  FirstPlayer: string
+  SecondPlayer: string
+  scoreFirstPlayer: number
+  scoreSecondPlayer: number
   winner: string
 }
 
@@ -28,8 +28,8 @@ export const actions: ActionTree<MatchState, RootState> = {
       const res = await this.$axios.$get('/matchs')
       commit('FETCH', res)
       return res
-    } catch(err) {
+    } catch (err) {
       throw err
     }
-  }
+  },
 }

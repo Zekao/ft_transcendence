@@ -69,9 +69,9 @@ let UsersService = class UsersService {
         if (!user.matchs)
             return [];
         console.log(user.matchs);
-        var matchs = [];
+        const matchs = [];
         for (const match of user.matchs) {
-            matchs.push((await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])));
+            matchs.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
         return matchs;
     }
@@ -186,19 +186,19 @@ let UsersService = class UsersService {
     }
     async getWhoFollowMe(id) {
         const users = (await this.getUsers([{ withFriends: true }])).filter((user) => user.id !== id);
-        var whoFollowMe = [];
+        const whoFollowMe = [];
         for (const user of users) {
             if (user.friends.find((f) => f.id === id))
-                whoFollowMe.push((await this.getUserId(user.id)));
+                whoFollowMe.push(await this.getUserId(user.id));
         }
         return whoFollowMe;
     }
     async getWhoBlockMe(id) {
         const users = (await this.getUsers([{ withBlocked: true }])).filter((user) => user.id !== id);
-        var whoBlockMe = [];
+        const whoBlockMe = [];
         for (const user of users) {
             if (user.blockedUsers.find((f) => f.id === id))
-                whoBlockMe.push((await this.getUserId(user.id)));
+                whoBlockMe.push(await this.getUserId(user.id));
         }
         return whoBlockMe;
     }
@@ -210,11 +210,12 @@ let UsersService = class UsersService {
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name: user_name,
-            display_name: null,
+            display_name: user_name,
             email: user_name + "@transcendence.com",
             first_name: first_name,
             last_name: last_name,
             TwoFA: false,
+            matchs: [],
             win: 0,
             loose: 0,
             rank: 0,
@@ -237,7 +238,10 @@ let UsersService = class UsersService {
     async addFriend(id, friend_id) {
         if (friend_id == id)
             throw new common_1.BadRequestException("You can't add yourself");
-        const found = await this.getUserId(id, [{ withFriends: true }, { withBlocked: true }]);
+        const found = await this.getUserId(id, [
+            { withFriends: true },
+            { withBlocked: true },
+        ]);
         const friend = await this.getUserId(friend_id, [{ withBlocked: true }]);
         if (!found.friends)
             found.friends = [];
@@ -254,8 +258,13 @@ let UsersService = class UsersService {
     async addBlocked(id, blockedUsersId) {
         if ((await this.getUserId(blockedUsersId)) === (await this.getUserId(id)))
             throw new common_1.BadRequestException("You can't block yourself");
-        const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
-        const blockedUser = await this.getUserId(blockedUsersId, [{ withFriends: true, }]);
+        const found = await this.getUserId(id, [
+            { withBlocked: true },
+            { withFriends: true },
+        ]);
+        const blockedUser = await this.getUserId(blockedUsersId, [
+            { withFriends: true },
+        ]);
         if (!found.blockedUsers)
             found.blockedUsers = [];
         if (found.blockedUsers.find((f) => f.id == blockedUser.id))
@@ -273,7 +282,7 @@ let UsersService = class UsersService {
             originalname: file.originalname,
             filename: file.filename,
         };
-        const split = id.avatar.split('?');
+        const split = id.avatar.split("?");
         const name = split[split.length - 2];
         const extfile = (0, path_1.extname)(name);
         if (extfile != (0, path_1.extname)(file.filename)) {
@@ -340,6 +349,7 @@ let UsersService = class UsersService {
     }
     async patchUser(id, body) {
         const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
+        console.log("================+DEBUG==================");
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;

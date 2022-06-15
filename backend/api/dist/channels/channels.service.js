@@ -19,6 +19,7 @@ const users_service_1 = require("../users/users.service");
 const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
+const bcrypt = require("bcrypt");
 class ChannelRelationsPicker {
 }
 exports.ChannelRelationsPicker = ChannelRelationsPicker;
@@ -76,25 +77,6 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
-    async getChannelPermissions(id) {
-        const found = await this.getChannelId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        return found.permissions;
-    }
-    async getChannelStatus(id) {
-        const found = await this.getChannelId(id);
-        if (!found)
-            throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-        return found.status;
-    }
-    async getChannelMembers(id, role) {
-        let members;
-        if (!role) {
-            members.push(null);
-        }
-        return members;
-    }
     async getChannelHistory(id) {
         const found = await this.getChannelId(id);
         if (!found)
@@ -105,14 +87,15 @@ let ChannelsService = class ChannelsService {
         this.ChannelsRepository.save(id);
         return true;
     }
-    async createChannel(channelsDto, channelPasswordDto) {
-        const { name, status, permissions } = channelsDto;
-        const { password } = channelPasswordDto;
+    async createChannel(channelsDto) {
+        const { name, status, permissions, password } = channelsDto;
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
         const channel = this.ChannelsRepository.create({
             name,
             status,
             permissions,
-            password,
+            password: hashedPassword,
         });
         try {
             await this.ChannelsRepository.save(channel);
@@ -127,6 +110,13 @@ let ChannelsService = class ChannelsService {
             }
         }
         return channel;
+    }
+    async validateChannelPassword(id, channelPasswordDto) {
+        const found = await this.getChannelId(id);
+        const { password } = channelPasswordDto;
+        if (!(await bcrypt.compare(password, found.password)))
+            throw new common_1.ForbiddenException("Incorrect Password");
+        return found;
     }
     async deleteChannel(id) {
         const found = await this.getChannelId(id);

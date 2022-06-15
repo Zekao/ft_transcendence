@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Inject,
   forwardRef,
+  ForbiddenException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersService } from "src/users/users.service";
@@ -16,6 +17,8 @@ import { ChannelsGateway } from "./channels.gateway";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
+import { ChannelStatus } from "./channels.enum";
+import * as bcrypt from "bcrypt";
 
 export class ChannelRelationsPicker {
   withAllMembers?: boolean;
@@ -87,23 +90,6 @@ export class ChannelsService {
     return found;
   }
 
-  async getChannelPermissions(id: string): Promise<string> {
-    const found = await this.getChannelId(id);
-    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    return found.permissions;
-  }
-  async getChannelStatus(id: string): Promise<string> {
-    const found = await this.getChannelId(id);
-    if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-    return found.status;
-  }
-  async getChannelMembers(id: string, role?: string): Promise<User[]> {
-    let members: User[];
-    if (!role) {
-      members.push(null);
-    }
-    return members;
-  }
   async getChannelHistory(
     id: string
   ): Promise<{ login: string; message: string }[]> {
@@ -120,17 +106,15 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createChannel(
-    channelsDto: ChannelsDto,
-    channelPasswordDto: ChannelPasswordDto
-  ): Promise<Channel> {
-    const { name, status, permissions } = channelsDto;
-    const { password } = channelPasswordDto;
+  async createChannel(channelsDto: ChannelsDto): Promise<Channel> {
+    const { name, status, permissions, password } = channelsDto;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
     const channel = this.ChannelsRepository.create({
       name,
       status,
       permissions,
-      password,
+      password: hashedPassword,
     });
     try {
       await this.ChannelsRepository.save(channel);
@@ -143,6 +127,17 @@ export class ChannelsService {
       }
     }
     return channel;
+  }
+
+  async validateChannelPassword(
+    id: string,
+    channelPasswordDto: ChannelPasswordDto
+  ) {
+    const found = await this.getChannelId(id);
+    const { password } = channelPasswordDto;
+    if (!(await bcrypt.compare(password, found.password)))
+      throw new ForbiddenException("Incorrect Password");
+    return found;
   }
 
   /* ************************************************************************** */

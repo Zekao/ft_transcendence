@@ -66,12 +66,17 @@ let MatchsService = class MatchsService {
         const relations = [];
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
-                relation.withUsers && relations.push("FirstPlayer") && relations.push("SecondPlayer");
+                relation.withUsers &&
+                    relations.push("FirstPlayer") &&
+                    relations.push("SecondPlayer");
             }
         }
         let found = null;
         if (isMatchs(id))
-            found = await this.MatchsRepository.findOne({ where: { id: id }, relations });
+            found = await this.MatchsRepository.findOne({
+                where: { id: id },
+                relations,
+            });
         if (!found)
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
@@ -94,8 +99,9 @@ let MatchsService = class MatchsService {
     }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-        if (user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED))
-            throw new common_1.ConflictException("You already have a match in progress");
+        const matchPending = user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED);
+        if (matchPending)
+            throw new common_1.ConflictException(`You already have a match in progress: \`${matchPending.id}\``);
         const match = this.MatchsRepository.create({
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
@@ -107,13 +113,6 @@ let MatchsService = class MatchsService {
         await this.MatchsRepository.save(match);
         match.FirstPlayer = user;
         await this.MatchsRepository.save(match);
-        return match;
-    }
-    async addMatchToPlayer(player, match) {
-        if (!player.matchs)
-            player.matchs = [];
-        player.matchs.push(match);
-        await this.userService.saveUser(player);
         return match;
     }
     async addPlayerToMatch(player, match) {
@@ -140,7 +139,6 @@ let MatchsService = class MatchsService {
         try {
             match = await this.findMatch();
             await this.addPlayerToMatch(player, match);
-            await this.addMatchToPlayer(player, match);
             match.status = matchs_enum_1.MatchStatus.STARTED;
             this.MatchsRepository.save(match);
         }

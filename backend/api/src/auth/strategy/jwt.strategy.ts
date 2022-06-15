@@ -21,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
   // fetching user form db
   async validate(payload: FortyTwoUser): Promise<User> {
-    console.log(payload.FortyTwoID);
     const { FortyTwoID } = payload;
     const user = this.userService.getUserFortyTwo(FortyTwoID);
     return user;

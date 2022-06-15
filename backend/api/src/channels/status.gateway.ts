@@ -38,22 +38,16 @@ export class StatusGateway
 
   handleDisconnect(client: Socket) {
     const user = client.data.user;
-    if (client.data.status) {
-      user.status = UserStatus.OFFLINE;
-      this.userService.saveUser(user);
-    }
+    user.status = UserStatus.OFFLINE;
+    this.userService.saveUser(user);
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   isStatus(client: Socket, user: User) {
-    client.data.status = client.handshake.headers.status;
-    if (client.data.status) {
-      user.status = UserStatus.ONLINE;
-      this.userService.saveUser(user);
-      this.logger.log(`Client connected: ${client.id}`);
-      return true;
-    }
-    return false;
+    user.status = UserStatus.ONLINE;
+    this.userService.saveUser(user);
+    this.logger.log(`Client connected: ${client.id}`);
+    return true;
   }
 
   async handleConnection(client: Socket, ...args: any[]) {

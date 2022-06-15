@@ -93,7 +93,7 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <ChannelRoom :channel="channel" :key="i"/>
+            <ChannelRoom :key="i" :channel="channel" />
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -115,7 +115,7 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <MessageRoom :user="user" :key="i"/>
+            <MessageRoom :key="i" :user="user" />
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -129,8 +129,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { IChannel } from '@/store/channel'
 import { NuxtSocket } from 'nuxt-socket-io'
+import { IChannel } from '@/store/channel'
 import { IUser } from '~/store/user'
 
 export default Vue.extend({
@@ -142,7 +142,7 @@ export default Vue.extend({
     channelVisible: false,
     channelName: '',
     channelStatus: '',
-    channelStatusList: ['Public', 'Protected' ],
+    channelStatusList: ['Public', 'Protected'],
     channelPassword: '',
     items: [
       {
@@ -168,6 +168,8 @@ export default Vue.extend({
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
       (v: string) => !!v || 'Channel password is required',
+      (v: string) => v.length >= 8 || 'Channel password must be greater than 24 characters',
+      (v: string) => v.length <= 32 || 'Channel password must be less than 32 characters',
     ],
     socket: null as NuxtSocket | null,
   }),
@@ -189,17 +191,19 @@ export default Vue.extend({
   mounted() {
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
     this.socket = this.$nuxtSocket({
-      extraHeaders: {
+      auth: {
         Authorization: this.accessToken,
-        status: "1",
       },
-      path: "/api/socket.io/",
-    })
+      path: '/api/socket.io/',
+    } as any)
   },
 
   async fetch() {
     try {
-      await Promise.all([this.$store.dispatch('channel/fetch'), this.$store.dispatch('user/fetch')])
+      await Promise.all([
+        this.$store.dispatch('channel/fetch'),
+        this.$store.dispatch('user/fetch'),
+      ])
     } catch (err) {
       console.log(err)
     }
@@ -220,7 +224,7 @@ export default Vue.extend({
           name: this.channelName,
           status: this.convertChannelStatus(this.channelStatus),
           permissions: 'OPEN',
-          password: 'Hello World!',
+          password: this.channelStatus === 'Protected' ? this.channelPassword : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
       } catch (err) {

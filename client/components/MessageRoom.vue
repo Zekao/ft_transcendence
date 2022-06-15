@@ -15,7 +15,9 @@
         hide-details
         class="mr-2"
       ></v-text-field>
-      <v-btn icon @click="emitMessageOnChannel"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-btn icon @click="emitMessageOnChannel"
+        ><v-icon>mdi-pencil</v-icon></v-btn
+      >
     </v-toolbar>
   </v-sheet>
 </template>
@@ -27,9 +29,8 @@ import { NuxtSocket } from 'nuxt-socket-io'
 import { IUser } from '@/store/user'
 
 export default Vue.extend({
-
   props: {
-    user: Object as () => IUser
+    user: Object as () => IUser,
   },
 
   data: () => ({
@@ -42,7 +43,7 @@ export default Vue.extend({
     ...mapState({
       authUser: (state: any) => state.user.authUser,
       accessToken: (state: any) => state.token.accessToken,
-    })
+    }),
   },
 
   // async fetch() {
@@ -60,12 +61,12 @@ export default Vue.extend({
   mounted() {
     this.socket = this.$nuxtSocket({
       channel: '/chat',
-      extraHeaders: {
+      auth: {
         Authorization: this.accessToken,
         msg: this.user.display_name,
       },
-      path: "/api/socket.io/",
-    })
+      path: '/api/socket.io/',
+    } as any)
     this.socket.on('msg', (msg, cb) => {
       this.messages.push(msg)
       this.$nextTick(() => {
@@ -79,7 +80,7 @@ export default Vue.extend({
       const messageTextFormated = this.messageText.trim()
       if (this.socket && messageTextFormated) {
         this.socket.emit('msg', messageTextFormated, (resp: any) => {
-            console.log(resp)
+          console.log(resp)
         })
         this.messageText = ''
       }
@@ -87,7 +88,7 @@ export default Vue.extend({
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
-    }
-  }
+    },
+  },
 })
 </script>
