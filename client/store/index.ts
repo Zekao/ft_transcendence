@@ -8,6 +8,7 @@ export interface IToken {
 }
 
 export const state = () => ({
+  selectedMatchId: '',
   isFriendMenu: false,
   isAuthenticated: false,
   token: {} as IToken,

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="value" top :offset-x="offset">
+  <v-menu v-model="value" top>
 
     <v-list>
       <v-list-item> Win : {{ friend.win }} </v-list-item>
@@ -46,7 +46,7 @@
       </v-list-item>
       <v-list-item> </v-list-item>
     </v-list>
-  </v-dialog>
+  </v-menu>
 </template>
 
 <script lang="ts">
@@ -105,12 +105,6 @@ export default Vue.extend({
         undefined
       )
     },
-  },
-
-  created() {
-    if (!this.friend.id) {
-      this.value = false
-    }
   },
 
   methods: {
