@@ -138,17 +138,18 @@ let MatchsService = class MatchsService {
         let match = null;
         try {
             match = await this.findMatch();
-            match.array.forEach((element) => {
-                if (element.id) {
-                    console.log(element.id);
+            for (const el of match) {
+                if (el.status == matchs_enum_1.MatchStatus.PENDING && el.FirstPlayer != player.id) {
+                    console.log(el);
+                    await this.addPlayerToMatch(player, el);
+                    match.status = matchs_enum_1.MatchStatus.STARTED;
+                    this.MatchsRepository.save(match);
+                    return match;
                 }
-            });
-            await this.addPlayerToMatch(player, match);
-            match.status = matchs_enum_1.MatchStatus.STARTED;
-            this.MatchsRepository.save(match);
+            }
         }
         catch (err) {
-            return err;
+            return null;
         }
         return match;
     }
