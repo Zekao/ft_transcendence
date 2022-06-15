@@ -41,10 +41,22 @@
         </v-form>
       </v-list-item>
       <v-list-item>
-        <v-btn block @click="updateTwoFactorAuth">
+        <v-btn :loading="is2FADialog" block @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()">
           {{ isTwoFactorAuth ? 'Disable' : 'Enable' }}
           <v-icon class="ml-2 mb-1">mdi-two-factor-authentication</v-icon>
         </v-btn>
+        <v-dialog v-model="is2FADialog">
+          <v-card>
+            <v-img :src="`https://ft.localhost:4500/api/google/${userName}.png`" />
+            <v-otp-input
+              v-model="code"
+              length="6"
+            ></v-otp-input>
+            <v-btn :loading="loading" dense @click="verify">
+              Verify
+            </v-btn>
+          </v-card>
+        </v-dialog>
       </v-list-item>
     </v-list>
   </v-card>
@@ -54,10 +66,19 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    updateTwoFactorAuth: () => Promise<void>
+  }
+}
+
 export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
   data: () => ({
+    is2FADialog: false,
+    loading: false,
+    code: '',
     file: {} as Blob,
     isLoginValid: false,
     newLogin: '',
@@ -70,6 +91,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      userName: (state: any): string => state.user.authUser.user_name,
       login: (state: any): string => state.user.authUser.display_name || '',
       avatar: (state: any): string => state.user.authUser.avatar,
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
@@ -112,6 +134,28 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+    async fetchQrCode() {
+      console.log('hey')
+      this.is2FADialog = true
+      try {
+        await this.$axios.$get('/qrcode')
+      } catch(err) {
+        console.log(err)
+      }
+    },
+
+    async verify() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('authTwoFactor')
+        await this.updateTwoFactorAuth()
+        this.is2FADialog = false
+      } catch(err) {
+        this.code = ''
+        this.loading = false
+      }
+    }
   },
 
   },
