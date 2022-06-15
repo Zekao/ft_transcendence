@@ -103,21 +103,19 @@ let MatchsService = class MatchsService {
             throw new common_1.ConflictException("You already have a match in progress");
         const match = this.MatchsRepository.create({
             FirstPlayer: user,
+            scoreFirstPlayer: 0,
+            scoreSecondPlayer: 0,
+            posFirstPlayer: 0,
+            posSecondPlayer: 0,
+            status: matchs_enum_1.MatchStatus.PENDING,
+            specs: [],
         });
-        try {
-            match.status = matchs_enum_1.MatchStatus.PENDING;
-            match.specs = [];
-        }
-        catch (error) {
-            console.log(error);
-            throw new common_1.InternalServerErrorException();
-        }
+        await this.MatchsRepository.save(match);
+        match.FirstPlayer = user;
         await this.MatchsRepository.save(match);
         return match;
     }
     async addMatchToPlayer(player, match) {
-        if (!player.matchs)
-            player.matchs = [];
         player.matchs.push(match);
         await this.userService.saveUser(player);
         return match;
