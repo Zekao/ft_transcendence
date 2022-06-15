@@ -163,7 +163,7 @@ export class MatchsService {
     return match;
   }
 
-  async findMatch(): Promise<Matchs> {
+  async findMatch(): Promise<Matchs[]> {
     let Allmatchs = await this.getMatchs();
     if (!Allmatchs.length)
       throw new NotFoundException("No match are available");
@@ -171,13 +171,18 @@ export class MatchsService {
       (Allmatchs) => Allmatchs.status === MatchStatus.PENDING
     );
     if (!Allmatchs) throw new NotFoundException("No match are available");
-    return Allmatchs.at(0);
+    return Allmatchs;
   }
 
   async defineMatch(player: User): Promise<Matchs> {
     let match = null;
     try {
       match = await this.findMatch();
+      match.array.forEach((element) => {
+        if (element.id) {
+          console.log(element.id);
+        }
+      });
       await this.addPlayerToMatch(player, match);
       match.status = MatchStatus.STARTED;
       this.MatchsRepository.save(match);

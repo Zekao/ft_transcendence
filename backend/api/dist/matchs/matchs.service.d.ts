@@ -20,7 +20,7 @@ export declare class MatchsService {
     setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean>;
     createMatch(id: string): Promise<Matchs>;
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
-    findMatch(): Promise<Matchs>;
+    findMatch(): Promise<Matchs[]>;
     defineMatch(player: User): Promise<Matchs>;
     deleteMatch(id: string): Promise<boolean>;
     editMatch(id: string, matchDto: MatchDto): Promise<Matchs>;
