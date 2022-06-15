@@ -31,7 +31,7 @@ let GameGateway = class GameGateway {
         try {
             const player = client.data.user;
             const match = client.data.match;
-            console.log('FIRST PLAYER INFORMATIONS:', match.FirstPlayer);
+            console.log("FIRST PLAYER INFORMATIONS:", match.FirstPlayer);
             if (player == match.FirstPlayer)
                 console.log("FIRST");
             else if (player == match.SecondPlayer)
@@ -87,7 +87,7 @@ let GameGateway = class GameGateway {
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
-            const match = await this.matchService.getMatchsId(client.handshake.auth.game);
+            const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
             if (!match)
                 throw new common_1.UnauthorizedException("The match does not exist");
             client.data.user = user;

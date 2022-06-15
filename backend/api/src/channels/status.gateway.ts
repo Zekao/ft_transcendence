@@ -36,8 +36,8 @@ export class StatusGateway
     this.logger.log("Init");
   }
 
-  handleDisconnect(client: Socket) {
-    const user = client.data.user;
+  async handleDisconnect(client: Socket) {
+    const user = await this.userService.getUserId(client.data.user.id);
     user.status = UserStatus.OFFLINE;
     this.userService.saveUser(user);
     this.logger.log(`Client disconnected: ${client.id}`);

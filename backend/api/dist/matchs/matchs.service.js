@@ -67,8 +67,8 @@ let MatchsService = class MatchsService {
         if (RelationsPicker) {
             for (const relation of RelationsPicker) {
                 relation.withUsers &&
-                    relations.push("firstPlayer") &&
-                    relations.push("secondPlayer");
+                    relations.push("FirstPlayer") &&
+                    relations.push("SecondPlayer");
             }
         }
         let found = null;
@@ -99,10 +99,10 @@ let MatchsService = class MatchsService {
     }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-        if (user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED))
-            throw new common_1.ConflictException("You already have a match in progress");
+        const matchPending = user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED);
+        if (matchPending)
+            throw new common_1.ConflictException(`You already have a match in progress: \`${matchPending.id}\``);
         const match = this.MatchsRepository.create({
-            FirstPlayer: user,
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
             posFirstPlayer: 0,
@@ -113,11 +113,6 @@ let MatchsService = class MatchsService {
         await this.MatchsRepository.save(match);
         match.FirstPlayer = user;
         await this.MatchsRepository.save(match);
-        return match;
-    }
-    async addMatchToPlayer(player, match) {
-        player.matchs.push(match);
-        await this.userService.saveUser(player);
         return match;
     }
     async addPlayerToMatch(player, match) {
@@ -144,7 +139,6 @@ let MatchsService = class MatchsService {
         try {
             match = await this.findMatch();
             await this.addPlayerToMatch(player, match);
-            await this.addMatchToPlayer(player, match);
             match.status = matchs_enum_1.MatchStatus.STARTED;
             this.MatchsRepository.save(match);
         }

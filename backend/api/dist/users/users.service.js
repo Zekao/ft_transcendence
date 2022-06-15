@@ -181,7 +181,7 @@ let UsersService = class UsersService {
         return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
     }
     async saveUser(id) {
-        this.UserRepository.save(id);
+        await this.UserRepository.save(id);
         return true;
     }
     async getWhoFollowMe(id) {
@@ -210,7 +210,7 @@ let UsersService = class UsersService {
             status: stat,
             in_game: users_enum_1.UserGameStatus.OUT_GAME,
             user_name: user_name,
-            display_name: null,
+            display_name: user_name,
             email: user_name + "@transcendence.com",
             first_name: first_name,
             last_name: last_name,
@@ -252,7 +252,7 @@ let UsersService = class UsersService {
         if (found.blockedUsers.find((f) => f.id === friend.id))
             throw new common_1.ConflictException(`You are blocked \`${friend_id}'`);
         found.friends.push(friend);
-        this.UserRepository.save(found);
+        await this.UserRepository.save(found);
         return friend;
     }
     async addBlocked(id, blockedUsersId) {
@@ -270,7 +270,7 @@ let UsersService = class UsersService {
         if (found.blockedUsers.find((f) => f.id == blockedUser.id))
             throw new common_1.ConflictException("Already blocked");
         found.blockedUsers.push(blockedUser);
-        this.UserRepository.save(found);
+        await this.UserRepository.save(found);
         if (found.friends.find((f) => f.id == blockedUser.id))
             this.removeFriend(id, blockedUsersId);
         if (blockedUser.friends.find((f) => f.id == found.id))
@@ -290,7 +290,7 @@ let UsersService = class UsersService {
             this.deleteAvatarID(id);
         }
         id.avatar = file.filename + "?" + new Date().getTime();
-        this.UserRepository.save(id);
+        await this.UserRepository.save(id);
         return response;
     }
     async deleteUser(id) {
@@ -311,7 +311,7 @@ let UsersService = class UsersService {
         }
         catch (err) { }
         found.avatar = "default.png";
-        this.UserRepository.save(found);
+        await this.UserRepository.save(found);
         return true;
     }
     async deleteAvatarID(user) {
@@ -322,7 +322,7 @@ let UsersService = class UsersService {
         }
         catch (err) { }
         user.avatar = "default.png";
-        this.UserRepository.save(user);
+        await this.UserRepository.save(user);
         return true;
     }
     async removeFriend(id, friend_id) {
@@ -333,7 +333,7 @@ let UsersService = class UsersService {
         if (!user.friends.find((f) => f.id == friend.id))
             throw new common_1.NotFoundException(`User \`${id}' has no friend \`${friend_id}'`);
         user.friends = user.friends.filter((f) => f.id != friend.id);
-        this.UserRepository.save(user);
+        await this.UserRepository.save(user);
         return friend;
     }
     async removeBlocked(id, blockedUserId) {
@@ -344,11 +344,12 @@ let UsersService = class UsersService {
         if (!user.blockedUsers.find((f) => f.id == blockedUser.id))
             throw new common_1.NotFoundException(`User \`${user.user_name}' has no blocked user \`${blockedUser.user_name}'`);
         user.blockedUsers = user.blockedUsers.filter((f) => f.id != blockedUser.id);
-        this.UserRepository.save(user);
+        await this.UserRepository.save(user);
         return blockedUser;
     }
     async patchUser(id, body) {
         const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
+        console.log("================+DEBUG==================");
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
@@ -372,14 +373,14 @@ let UsersService = class UsersService {
             found.rank = rank;
         if (ratio)
             found.ratio = ratio;
-        this.UserRepository.save(found);
+        await this.UserRepository.save(found);
         return found;
     }
     async patchUpdateRank() {
         const found = await this.getRankedUsers();
         for (let i = 0; i < found.length; i++) {
             found[i].rank = i + 1;
-            this.UserRepository.save(found[i]);
+            await this.UserRepository.save(found[i]);
         }
         return found;
     }

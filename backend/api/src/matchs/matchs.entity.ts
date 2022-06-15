@@ -5,6 +5,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -18,12 +19,12 @@ export class Matchs {
   id: string;
 
   @ApiProperty({ type: () => User })
-  @ManyToMany(() => User, (user) => user.matchs)
+  @ManyToOne(() => User, (user) => user.matchs)
   @JoinTable({ name: "firstPlayer" })
   FirstPlayer: User;
 
   @ApiProperty({ type: () => User })
-  @ManyToMany(() => User, (user) => user.matchs, { nullable: true })
+  @ManyToOne(() => User, (user) => user.matchs, { nullable: true })
   @JoinTable({ name: "secondPlayer" })
   SecondPlayer: User;
 
