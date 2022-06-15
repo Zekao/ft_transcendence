@@ -62,7 +62,7 @@ export class User {
   ratio: number;
 
   @ApiProperty({ type: () => Matchs })
-  @ManyToMany(
+  @OneToMany(
     () => Matchs,
     (matchs) => matchs.FirstPlayer || matchs.SecondPlayer
   )

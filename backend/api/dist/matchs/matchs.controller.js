@@ -28,8 +28,9 @@ let MatchsController = class MatchsController {
             return this.matchService.getMatchsByFilter(filters);
         return this.matchService.getMatchs();
     }
-    getMatchsId(id) {
-        return this.matchService.getMatchsId(id);
+    getMatchsId(id, req) {
+        console.log(req.relation);
+        return this.matchService.getMatchsId(id, [{ withUsers: true }]);
     }
     createMatch(req) {
         return this.matchService.createMatch(req.user.id);
@@ -57,8 +58,9 @@ __decorate([
     (0, common_1.Get)("/:id"),
     (0, swagger_1.ApiOperation)({ summary: "Return a match by id" }),
     __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "getMatchsId", null);
 __decorate([
