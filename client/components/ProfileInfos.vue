@@ -153,7 +153,7 @@ export default Vue.extend({
     async verify() {
       try {
         this.loading = true
-        await this.$store.dispatch('authTwoFactor')
+        await this.$store.dispatch('authTwoFactor', this.code)
         await this.updateTwoFactorAuth()
         this.is2FADialog = false
       } catch(err) {
