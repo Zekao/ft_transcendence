@@ -45,16 +45,21 @@
           {{ isTwoFactorAuth ? 'Disable' : 'Enable' }}
           <v-icon class="ml-2 mb-1">mdi-two-factor-authentication</v-icon>
         </v-btn>
-        <v-dialog v-model="is2FADialog">
+        <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
-            <v-img :src="`https://ft.localhost:4500/api/google/${userName}.png`" />
-            <v-otp-input
-              v-model="code"
-              length="6"
-            ></v-otp-input>
-            <v-btn :loading="loading" dense @click="verify">
-              Verify
-            </v-btn>
+            <v-img :src="`https://ft.localhost:4500/api/image/google/${userName}.png`" />
+            <v-list-item>
+              <v-otp-input
+                v-model="code"
+                length="6"
+                style="width: 50%"
+              ></v-otp-input>
+            </v-list-item>
+            <v-list-item class="justify-center">
+              <v-btn :loading="loading" dense @click="verify">
+                Verify
+              </v-btn>
+            </v-list-item>
           </v-card>
         </v-dialog>
       </v-list-item>
