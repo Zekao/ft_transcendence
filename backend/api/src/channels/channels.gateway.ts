@@ -47,29 +47,28 @@ export class ChannelsGateway
         this.channelService.saveChannel(channel);
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] == "action") {
-          if (message[1] == "logout")
-            client.disconnect();
-          if (message[1] === "mute")
-          {
-            const login = message[2];
-            const time = message[3];
-            this.emitChannel(client.data, "channel", login, " is mute for ", time, "minute");
-          }
-          else if (message[1] === "unmute")
-          {
-            const login = message[2];
-            this.emitChannel(client.data, "channel", login, " is unmute");
-          }
-          else if (message[1] === "ban")
-          {
-            const login = message[2];
-            this.emitChannel(client.data, "channel", login, " is ban");
-          }
-          else if (message[1] === "unban")
-          {
-            const login = message[2];
-            this.emitChannel(client.data, "channel", login, " is unban");
-          }
+        if (message[1] == "logout") client.disconnect();
+        if (message[1] === "mute") {
+          const login = message[2];
+          const time = message[3];
+          this.emitChannel(
+            client.data,
+            "channel",
+            login,
+            " is mute for ",
+            time,
+            "minute"
+          );
+        } else if (message[1] === "unmute") {
+          const login = message[2];
+          this.emitChannel(client.data, "channel", login, " is unmute");
+        } else if (message[1] === "ban") {
+          const login = message[2];
+          this.emitChannel(client.data, "channel", login, " is ban");
+        } else if (message[1] === "unban") {
+          const login = message[2];
+          this.emitChannel(client.data, "channel", login, " is unban");
+        }
       }
     } catch {}
   }
@@ -93,8 +92,9 @@ export class ChannelsGateway
     client.data.ConnectedChannel = client.handshake.auth.channel;
     client.data.password = client.handshake.auth.password;
     if (client.data.ConnectedChannel && client.data.password) {
-        client.data.channel = await this.channelService.getChannelId(
-        client.data.ConnectedChannel, client.data.password
+      client.data.channel = await this.channelService.getChannelId(
+        client.data.ConnectedChannel,
+        client.data.password
       );
       if (client.data.channel == false) return false;
       else {
