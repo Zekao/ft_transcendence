@@ -112,7 +112,6 @@ export class ChannelsService {
       relations.push({ withAllMembers: true });
     }
     const channel = await this.getChannelId(channelId, relations);
-    console.log(channel);
     var users: User[] = [] ;
     if (channel.members){ 
       for (const member of channel.members)
