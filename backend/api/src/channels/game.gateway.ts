@@ -68,7 +68,6 @@ export class GameGateway
     try {
       const player = client.data.user;
       const match: Matchs = client.data.match;
-
       console.log("============ DEBUG ============");
       console.log(" first player :", match.FirstPlayer.user_name);
       console.log("============ PLAYING ============");
