@@ -63,23 +63,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async verifyQrCode(@Req() req, @Query() query): Promise<boolean> {
     try {
-      this.verifyQrCode(query.gcode, req.user.TwoFAVerify);
+      return this.authService.verifyQR(query.gcode, req.user);
     } catch (err) {}
-    return true;
-  }
-
-  @Delete("/qrcode/delete")
-  @ApiOperation({
-    summary: "Delete qrcode image",
-  })
-  @UseGuards(JwtAuthGuard)
-  async qrcodeDelete(@Req() req): Promise<boolean> {
-    const user: User = req.user.user_name;
-    const file = user + ".png";
-    try {
-      fs.unlinkSync("image/googe/" + file);
-    } catch (err) {}
-    return true;
+    return false;
   }
 
   @Get("/qrcode")

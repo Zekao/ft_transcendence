@@ -10,6 +10,5 @@ export declare class AuthController {
         accessToken: string;
     };
     verifyQrCode(req: any, query: any): Promise<boolean>;
-    qrcodeDelete(req: any): Promise<boolean>;
     qrcode(req: any): Promise<boolean>;
 }

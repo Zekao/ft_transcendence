@@ -21,6 +21,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
+const fs = require("fs");
 let AuthService = class AuthService {
     constructor(jwtService, userRepository, userService) {
         this.jwtService = jwtService;
@@ -90,12 +91,18 @@ let AuthService = class AuthService {
             qrcode: await qrcode.toDataURL(secret.otpauth_url),
             secret: secret.ascii,
         };
-        id.TwoFAVerify = QRObjects;
+        id.TwoFAVerify = secret.ascii;
+        this.userService.saveUser(id);
         return QRObjects;
     }
-    async verifyQR(user_token, qrObjet) {
+    async verifyQR(user_token, user) {
+        const file = user.user_name + ".png";
+        try {
+            fs.unlinkSync("image/googe/" + file);
+        }
+        catch (err) { }
         const verified = speakeasy.totp.verify({
-            secret: qrObjet.secret,
+            secret: user.TwoFAVerify,
             encoding: "ascii",
             token: user_token,
         });

@@ -20,5 +20,5 @@ export declare class AuthService {
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
     getUserFromSocket(client: Socket): Promise<User>;
     generateQR(id: User): Promise<QRObjects>;
-    verifyQR(user_token: string, qrObjet: QRObjects): Promise<any>;
+    verifyQR(user_token: string, user: User): Promise<boolean>;
 }

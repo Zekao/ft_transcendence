@@ -44,8 +44,8 @@ export class User {
   @Column()
   TwoFA: boolean;
   @ApiProperty()
-  @Column("text", { array: true, nullable: true })
-  TwoFAVerify: QRObjects;
+  @Column("text", { nullable: true })
+  TwoFAVerify: string;
   @ApiProperty()
   @Column()
   status: UserStatus;

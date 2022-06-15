@@ -16,6 +16,7 @@ import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
 import { QRObjects } from "./dto/2fa.dto";
 import { Socket } from "socket.io";
+import * as fs from "fs";
 
 @Injectable()
 export class AuthService {
@@ -89,13 +90,18 @@ export class AuthService {
       qrcode: await qrcode.toDataURL(secret.otpauth_url),
       secret: secret.ascii,
     };
-    id.TwoFAVerify = QRObjects;
+    id.TwoFAVerify = secret.ascii;
+    this.userService.saveUser(id);
     return QRObjects;
   }
 
-  async verifyQR(user_token: string, qrObjet: QRObjects): Promise<any> {
+  async verifyQR(user_token: string, user: User): Promise<boolean> {
+    const file = user.user_name + ".png";
+    try {
+      fs.unlinkSync("image/googe/" + file);
+    } catch (err) {}
     const verified = speakeasy.totp.verify({
-      secret: qrObjet.secret,
+      secret: user.TwoFAVerify,
       encoding: "ascii",
       token: user_token,
     });

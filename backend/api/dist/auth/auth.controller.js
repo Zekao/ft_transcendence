@@ -32,19 +32,10 @@ let AuthController = class AuthController {
     }
     async verifyQrCode(req, query) {
         try {
-            this.verifyQrCode(query.gcode, req.user.TwoFAVerify);
+            return this.authService.verifyQR(query.gcode, req.user);
         }
         catch (err) { }
-        return true;
-    }
-    async qrcodeDelete(req) {
-        const user = req.user.user_name;
-        const file = user + ".png";
-        try {
-            fs.unlinkSync("image/googe/" + file);
-        }
-        catch (err) { }
-        return true;
+        return false;
     }
     async qrcode(req) {
         const user = req.user.user_name;
@@ -108,17 +99,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "verifyQrCode", null);
-__decorate([
-    (0, common_1.Delete)("/qrcode/delete"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Delete qrcode image",
-    }),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "qrcodeDelete", null);
 __decorate([
     (0, common_1.Get)("/qrcode"),
     (0, swagger_1.ApiOperation)({
