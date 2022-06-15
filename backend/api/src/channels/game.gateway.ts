@@ -18,6 +18,7 @@ import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 import { MatchsService } from "../matchs/matchs.service";
 import { Matchs } from "../matchs/matchs.entity";
+import { MatchStatus } from "../matchs/matchs.enum";
 
 @WebSocketGateway({ namespace: "game" })
 export class GameGateway
@@ -45,12 +46,14 @@ export class GameGateway
         client.data.match = match;
       }
       if (message == "join") {
+        this.matchService.defineMatch(client.data.user);
         console.log("JOIN");
       }
       if (message == "leave") {
         console.log(client.data.match);
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
+        client.data.match = null;
         console.log("LEAVE");
       }
       // this.emitChannel(client.data, "waitinglist", "READY");
@@ -92,9 +95,11 @@ export class GameGateway
     } catch {}
   }
 
-  handleDisconnect(client: Socket) {
+  async handleDisconnect(client: Socket) {
     const waiting = client.data.waiting;
     const user = client.data.user;
+    if (client.data.match && client.data.match.status === MatchStatus.PENDING)
+      await this.matchService.deleteMatch(client.data.match.id);
     if (user || waiting) {
       user.in_game = UserGameStatus.OUT_GAME;
       this.userService.saveUser(user);

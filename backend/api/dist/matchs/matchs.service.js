@@ -132,12 +132,17 @@ let MatchsService = class MatchsService {
         Allmatchs = Allmatchs.filter((Allmatchs) => Allmatchs.status === matchs_enum_1.MatchStatus.PENDING);
         if (!Allmatchs)
             throw new common_1.NotFoundException("No match are available");
-        return Allmatchs.at(0);
+        return Allmatchs;
     }
     async defineMatch(player) {
         let match = null;
         try {
             match = await this.findMatch();
+            match.array.forEach((element) => {
+                if (element.id) {
+                    console.log(element.id);
+                }
+            });
             await this.addPlayerToMatch(player, match);
             match.status = matchs_enum_1.MatchStatus.STARTED;
             this.MatchsRepository.save(match);

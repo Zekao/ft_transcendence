@@ -17,6 +17,7 @@ const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const users_enum_1 = require("../users/users.enum");
 const matchs_service_1 = require("../matchs/matchs.service");
+const matchs_enum_1 = require("../matchs/matchs.enum");
 let GameGateway = class GameGateway {
     constructor(matchService, userService, authService) {
         this.matchService = matchService;
@@ -35,12 +36,14 @@ let GameGateway = class GameGateway {
                 client.data.match = match;
             }
             if (message == "join") {
+                this.matchService.defineMatch(client.data.user);
                 console.log("JOIN");
             }
             if (message == "leave") {
                 console.log(client.data.match);
                 if (client.data.match)
                     await this.matchService.deleteMatch(client.data.match.id);
+                client.data.match = null;
                 console.log("LEAVE");
             }
         }
@@ -81,9 +84,11 @@ let GameGateway = class GameGateway {
         }
         catch (_a) { }
     }
-    handleDisconnect(client) {
+    async handleDisconnect(client) {
         const waiting = client.data.waiting;
         const user = client.data.user;
+        if (client.data.match && client.data.match.status === matchs_enum_1.MatchStatus.PENDING)
+            await this.matchService.deleteMatch(client.data.match.id);
         if (user || waiting) {
             user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
             this.userService.saveUser(user);
