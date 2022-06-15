@@ -19,7 +19,6 @@ export declare class MatchsService {
     setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;
     setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean>;
     createMatch(id: string): Promise<Matchs>;
-    addMatchToPlayer(player: User, match: Matchs): Promise<Matchs>;
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
     findMatch(): Promise<Matchs>;
     defineMatch(player: User): Promise<Matchs>;

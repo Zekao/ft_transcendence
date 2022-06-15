@@ -79,13 +79,14 @@ export class UsersService {
   }
 
   async getMatchs(id: string): Promise<Matchs[]> {
-
     const user = await this.getUserId(id, [{ withMatchs: true }]);
     if (!user.matchs) return [];
     console.log(user.matchs);
-    var matchs : Matchs[] = [];
+    const matchs: Matchs[] = [];
     for (const match of user.matchs) {
-      matchs.push((await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])));
+      matchs.push(
+        await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])
+      );
     }
     return matchs;
   }
@@ -205,29 +206,33 @@ export class UsersService {
   }
 
   async saveUser(id: User): Promise<boolean> {
-    this.UserRepository.save(id);
+    await this.UserRepository.save(id);
     return true;
   }
 
   async getWhoFollowMe(id: string): Promise<User[]> {
-    const users: User[] = (await this.getUsers([{ withFriends: true }])).filter((user) => user.id !== id);
-    var whoFollowMe: User[] = [];
+    const users: User[] = (await this.getUsers([{ withFriends: true }])).filter(
+      (user) => user.id !== id
+    );
+    const whoFollowMe: User[] = [];
     for (const user of users) {
       if (user.friends.find((f) => f.id === id))
-        whoFollowMe.push((await this.getUserId(user.id)));
+        whoFollowMe.push(await this.getUserId(user.id));
     }
     return whoFollowMe;
-    }
+  }
 
-    async getWhoBlockMe(id: string): Promise<User[]> {
-      const users: User[] = (await this.getUsers([{ withBlocked: true }])).filter((user) => user.id !== id);
-      var whoBlockMe: User[] = [];
-      for (const user of users) {
-        if (user.blockedUsers.find((f) => f.id === id))
-          whoBlockMe.push((await this.getUserId(user.id)));
-      }
-      return whoBlockMe;
-      }
+  async getWhoBlockMe(id: string): Promise<User[]> {
+    const users: User[] = (await this.getUsers([{ withBlocked: true }])).filter(
+      (user) => user.id !== id
+    );
+    const whoBlockMe: User[] = [];
+    for (const user of users) {
+      if (user.blockedUsers.find((f) => f.id === id))
+        whoBlockMe.push(await this.getUserId(user.id));
+    }
+    return whoBlockMe;
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
@@ -241,11 +246,12 @@ export class UsersService {
       status: stat,
       in_game: UserGameStatus.OUT_GAME,
       user_name: user_name,
-      display_name: null,
+      display_name: user_name,
       email: user_name + "@transcendence.com",
       first_name: first_name,
       last_name: last_name,
       TwoFA: false,
+      matchs: [],
       win: 0,
       loose: 0,
       rank: 0,
@@ -268,7 +274,10 @@ export class UsersService {
   async addFriend(id: string, friend_id: string): Promise<User> {
     if (friend_id == id)
       throw new BadRequestException("You can't add yourself");
-    const found = await this.getUserId(id, [{ withFriends: true }, { withBlocked: true }]);
+    const found = await this.getUserId(id, [
+      { withFriends: true },
+      { withBlocked: true },
+    ]);
     const friend = await this.getUserId(friend_id, [{ withBlocked: true }]);
     if (!found.friends) found.friends = [];
     if (friend.blockedUsers.find((f) => f.id === found.id))
@@ -278,20 +287,25 @@ export class UsersService {
     if (found.blockedUsers.find((f) => f.id === friend.id))
       throw new ConflictException(`You are blocked \`${friend_id}'`);
     found.friends.push(friend);
-    this.UserRepository.save(found);
+    await this.UserRepository.save(found);
     return friend;
   }
 
   async addBlocked(id: string, blockedUsersId: string): Promise<User> {
     if ((await this.getUserId(blockedUsersId)) === (await this.getUserId(id)))
       throw new BadRequestException("You can't block yourself");
-    const found = await this.getUserId(id, [{ withBlocked: true }, { withFriends: true }]);
-    const blockedUser = await this.getUserId(blockedUsersId, [{withFriends: true,}]);
+    const found = await this.getUserId(id, [
+      { withBlocked: true },
+      { withFriends: true },
+    ]);
+    const blockedUser = await this.getUserId(blockedUsersId, [
+      { withFriends: true },
+    ]);
     if (!found.blockedUsers) found.blockedUsers = [];
     if (found.blockedUsers.find((f) => f.id == blockedUser.id))
       throw new ConflictException("Already blocked");
     found.blockedUsers.push(blockedUser);
-    this.UserRepository.save(found);
+    await this.UserRepository.save(found);
     if (found.friends.find((f) => f.id == blockedUser.id))
       this.removeFriend(id, blockedUsersId);
     if (blockedUser.friends.find((f) => f.id == found.id))
@@ -304,16 +318,15 @@ export class UsersService {
       originalname: file.originalname,
       filename: file.filename,
     };
-    const split = id.avatar.split('?');
-    const name = split[split.length - 2]
+    const split = id.avatar.split("?");
+    const name = split[split.length - 2];
     const extfile = extname(name);
-    if (extfile != extname(file.filename))
-    {
+    if (extfile != extname(file.filename)) {
       id.avatar = name;
       this.deleteAvatarID(id);
     }
     id.avatar = file.filename + "?" + new Date().getTime();
-    this.UserRepository.save(id);
+    await this.UserRepository.save(id);
     return response;
   }
 
@@ -336,7 +349,7 @@ export class UsersService {
       fs.unlinkSync("image/" + found.avatar);
     } catch (err) {}
     found.avatar = "default.png";
-    this.UserRepository.save(found);
+    await this.UserRepository.save(found);
     return true;
   }
 
@@ -346,7 +359,7 @@ export class UsersService {
       fs.unlinkSync("image/" + user.avatar);
     } catch (err) {}
     user.avatar = "default.png";
-    this.UserRepository.save(user);
+    await this.UserRepository.save(user);
     return true;
   }
 
@@ -360,7 +373,7 @@ export class UsersService {
         `User \`${id}' has no friend \`${friend_id}'`
       );
     user.friends = user.friends.filter((f) => f.id != friend.id);
-    this.UserRepository.save(user);
+    await this.UserRepository.save(user);
     return friend;
   }
 
@@ -370,9 +383,11 @@ export class UsersService {
       throw new NotFoundException(`User \`${id}' has no blocked users`);
     const blockedUser = await this.getUserId(blockedUserId);
     if (!user.blockedUsers.find((f) => f.id == blockedUser.id))
-      throw new NotFoundException(`User \`${user.user_name}' has no blocked user \`${blockedUser.user_name}'`);
+      throw new NotFoundException(
+        `User \`${user.user_name}' has no blocked user \`${blockedUser.user_name}'`
+      );
     user.blockedUsers = user.blockedUsers.filter((f) => f.id != blockedUser.id);
-    this.UserRepository.save(user);
+    await this.UserRepository.save(user);
     return blockedUser;
   }
 
@@ -394,6 +409,7 @@ export class UsersService {
       ratio,
       TwoFA,
     } = body;
+    console.log("================+DEBUG==================");
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
@@ -406,7 +422,7 @@ export class UsersService {
     if (loose) found.loose = loose;
     if (rank) found.rank = rank;
     if (ratio) found.ratio = ratio;
-    this.UserRepository.save(found);
+    await this.UserRepository.save(found);
     return found;
   }
 
@@ -414,7 +430,7 @@ export class UsersService {
     const found = await this.getRankedUsers();
     for (let i = 0; i < found.length; i++) {
       found[i].rank = i + 1;
-      this.UserRepository.save(found[i]);
+      await this.UserRepository.save(found[i]);
     }
     return found;
   }

@@ -91,7 +91,7 @@ export class UsersController {
   })
   @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
   getUserId(@Request() req, @Param("id") id: string): Promise<User> {
-    return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
+    return this.UsersService.getUserId(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -104,7 +104,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getAvatar(@Request() req, @Param("id") id: string, @Res() res) {
-    return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
+    return this.UsersService.getAvatar(id === "me" ? req.user.id : id, res);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -131,7 +131,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getMatch(@Request() req, @Param("id") id: string) {
-    return this.UsersService.getMatchs((id === 'me') ? req.user.id : id);
+    return this.UsersService.getMatchs(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -170,10 +170,7 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a friend to a specified user profile",
   })
-  addFriend(
-    @Request() req,
-    @Query() query
-  ): Promise<User> {
+  addFriend(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
     return this.UsersService.addFriend(user.id, query.friend);
   }
@@ -183,10 +180,7 @@ export class UsersController {
   @ApiOperation({
     summary: "Add a blocked user to a specified user profile",
   })
-  addBlocked(
-    @Request() req,
-    @Query() query
-  ): Promise<User> {
+  addBlocked(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
     return this.UsersService.addBlocked(user.id, query.blocked);
   }
@@ -233,7 +227,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   deleteUser(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
+    return this.UsersService.deleteUser(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -248,7 +242,7 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   @AvatarApiException(() => UnauthorizedException)
   deleteAvatar(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
+    return this.UsersService.deleteAvatar(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -256,10 +250,7 @@ export class UsersController {
   @ApiOperation({
     summary: "delete a friend to a specified user profile",
   })
-  removeFriend(
-    @Request() req,
-    @Query() query
-  ): Promise<User> {
+  removeFriend(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
     return this.UsersService.removeFriend(user.id, query.friend);
   }
@@ -297,7 +288,7 @@ export class UsersController {
     @Param("id") id: string,
     @Body() body
   ): Promise<User> {
-    return this.UsersService.patchUser((id === 'me') ? req.user.id : id, body);
+    return this.UsersService.patchUser(id === "me" ? req.user.id : id, body);
   }
 
   @Patch("/updateRank")

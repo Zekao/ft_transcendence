@@ -35,15 +35,25 @@ export class UserDto {
           return new MatchDto(match);
         });
       if (user.joined_channels)
-          this.joined_channels = user.joined_channels.map((channel) => {return new Channel()});
+        this.joined_channels = user.joined_channels.map((channel) => {
+          return new Channel();
+        });
       if (user.ownered_channels)
-          this.ownered_channels = user.ownered_channels.map((channel) => {return new Channel()});
+        this.ownered_channels = user.ownered_channels.map((channel) => {
+          return new Channel();
+        });
       if (user.admined_channels)
-          this.admined_channels = user.admined_channels.map((channel) => {return new ChannelsDto()});
+        this.admined_channels = user.admined_channels.map((channel) => {
+          return new ChannelsDto();
+        });
       if (user.bannedChannels)
-          this.bannedChannels = user.bannedChannels.map((channel) => {return new ChannelsDto()});
+        this.bannedChannels = user.bannedChannels.map((channel) => {
+          return new ChannelsDto();
+        });
       if (user.mutedChannels)
-          this.mutedChannels = user.mutedChannels.map((channel) => {return new ChannelsDto()});
+        this.mutedChannels = user.mutedChannels.map((channel) => {
+          return new ChannelsDto();
+        });
     }
   }
   id: string;

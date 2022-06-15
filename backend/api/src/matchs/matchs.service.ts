@@ -92,11 +92,11 @@ export class MatchsService {
     if (RelationsPicker) {
       for (const relation of RelationsPicker) {
         relation.withUsers &&
-          relations.push("firstPlayer") &&
-          relations.push("secondPlayer");
+          relations.push("FirstPlayer") &&
+          relations.push("SecondPlayer");
       }
     }
-    let found = null;
+    let found: Matchs = null;
     if (isMatchs(id))
       found = await this.MatchsRepository.findOne({
         where: { id: id },
@@ -132,31 +132,25 @@ export class MatchsService {
 
   async createMatch(id: string): Promise<Matchs> {
     const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-    if (
-      user.matchs.find(
-        (m) =>
-          m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED
-      )
-    )
-      throw new ConflictException("You already have a match in progress");
+    const matchPending = user.matchs.find(
+      (m) =>
+        m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED
+    );
+    if (matchPending)
+      throw new ConflictException(
+        `You already have a match in progress: \`${matchPending.id}\``
+      );
     const match = this.MatchsRepository.create({
-      FirstPlayer: user,
+      scoreFirstPlayer: 0,
+      scoreSecondPlayer: 0,
+      posFirstPlayer: 0,
+      posSecondPlayer: 0,
+      status: MatchStatus.PENDING,
+      specs: [],
     });
-    try {
-      match.status = MatchStatus.PENDING;
-      match.specs = [];
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException();
-    }
     await this.MatchsRepository.save(match);
-    return match;
-  }
-
-  async addMatchToPlayer(player: User, match: Matchs): Promise<Matchs> {
-    if (!player.matchs) player.matchs = [];
-    player.matchs.push(match);
-    await this.userService.saveUser(player);
+    match.FirstPlayer = user;
+    await this.MatchsRepository.save(match);
     return match;
   }
 
@@ -185,7 +179,6 @@ export class MatchsService {
     try {
       match = await this.findMatch();
       await this.addPlayerToMatch(player, match);
-      await this.addMatchToPlayer(player, match);
       match.status = MatchStatus.STARTED;
       this.MatchsRepository.save(match);
     } catch (err) {
