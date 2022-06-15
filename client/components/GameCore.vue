@@ -1,6 +1,6 @@
 <template>
   <div>
-      <v-card :height="height" color="#B686D6">
+      <v-card :height="height" color="#333333">
       <canvas
         ref="game"
         height="720"
@@ -8,6 +8,7 @@
       </canvas>
     </v-card>
   </div>
+  
 </template>
 
 <script lang="ts" >
@@ -32,6 +33,10 @@ export default Vue.extend({
         return {
           socket: null as NuxtSocket | null,
           context: {}, // canvas context
+          score: {
+            player1: 0,
+            player2: 0
+          },
           position: {
             x: 10,
             y: 50
@@ -70,7 +75,7 @@ export default Vue.extend({
           channel: "/game",
           auth: {
             Authorization: this.accessToken,
-            game: "a09d83c8-1a17-443e-b968-2018407fd21f",
+            game: "614d9a89-feff-44ac-be08-883735d1cde7",
           },
           path: "/api/socket.io/",
         })
@@ -85,14 +90,26 @@ export default Vue.extend({
             else if (this.position2.y != data2) {
                 this.position2.y = data2;
             }
-          this.context.clearRect(0, 0, 1080, 1920);
-          // console.log('======== DIFFERENT VALUES 2 ========');
-          // console.log('both values:', this.position2.x, this.position2.y);
-          this.context.fillRect(this.position.x, this.position.y, 20, 120);
-          this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
-          // this.context.fillCircle(this.ball.x, this.ball.y, this.ball.radius);
+            // a voir pour mettre tout ca dans une fonction direct car c'est juste l'affichage // 
+            this.context.clearRect(0, 0, 1080, 1920);
+            this.context.fillStyle = "white";
+            this.context.font = "30px Arial";
+            this.context.fillText(this.score.player1, 370, 50);
+            this.context.fillRect(420, 0, 3, 1000);
+            this.context.fillText(this.score.player2, 460, 50);
+            this.context.fillStyle = "grey";
+            this.context.fillRect(this.position.x, this.position.y, 20, 120);
+            this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
+            // a voir pour mettre tout ca dans une fonction direct car c'est juste l'affichage // 
+            if (this.score.player1 >= 5) {
+                this.context.clearRect(0, 0, 1080, 1920);
+                this.$emit('next')
+            }
+            else if (this.score.player2 >= 5) {
+                this.context.clearRect(0, 0, 1080, 1920);
+                this.$emit('next')
+            }
         });
-        // console.log("both values:", this.position.x, this.position.y);
       },
       shortcuts: {
         keydown (event) {
@@ -117,7 +134,7 @@ export default Vue.extend({
              this.context.clearRect(0, 0, 720, 1080);
             // this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
             console.log("both values:", this.position.x, this.position.y);
-        this.socket.emit('customBinding', val);
+             this.socket.emit('customBinding', val);
         },
         move(direction) {
           if (direction == 'up') {
