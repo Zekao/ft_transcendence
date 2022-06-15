@@ -35,6 +35,7 @@ let GameGateway = class GameGateway {
                 console.log("JOIN");
             }
             if (message[0] == "leave") {
+                this.matchService.deleteMatch(match.id);
                 console.log("LEAVE");
             }
         }
@@ -88,6 +89,7 @@ let GameGateway = class GameGateway {
     async isWaitinglist(client, user) {
         client.data.waitinglist = client.handshake.auth.waitinglist;
         if (client.data.waitinglist) {
+            client.data.match = this.matchService.createMatch(client.data.user.id);
             console.log("IN_WAITINGLIST");
             this.logger.log(`Client connected: ${client.id}`);
             return true;
@@ -108,10 +110,10 @@ let GameGateway = class GameGateway {
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
+            client.data.user = user;
             if (this.isWaitinglist(client, user))
                 return;
             const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
-            client.data.user = user;
             client.data.match = match;
             if (this.isInGame(client, user))
                 return;
