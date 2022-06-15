@@ -132,13 +132,14 @@ export class MatchsService {
 
   async createMatch(id: string): Promise<Matchs> {
     const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-    if (
-      user.matchs.find(
-        (m) =>
-          m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED
-      )
-    )
-      throw new ConflictException("You already have a match in progress");
+    const matchPending = user.matchs.find(
+      (m) =>
+        m.status === MatchStatus.PENDING || m.status === MatchStatus.STARTED
+    );
+    if (matchPending)
+      throw new ConflictException(
+        `You already have a match in progress: \`${matchPending.id}\``
+      );
     const match = this.MatchsRepository.create({
       scoreFirstPlayer: 0,
       scoreSecondPlayer: 0,

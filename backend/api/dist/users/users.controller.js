@@ -39,17 +39,17 @@ let UsersController = class UsersController {
         return this.UsersService.getRankedUsers();
     }
     getUserId(req, id) {
-        return this.UsersService.getUserId((id === 'me') ? req.user.id : id);
+        return this.UsersService.getUserId(id === "me" ? req.user.id : id);
     }
     getAvatar(req, id, res) {
-        return this.UsersService.getAvatar((id === 'me') ? req.user.id : id, res);
+        return this.UsersService.getAvatar(id === "me" ? req.user.id : id, res);
     }
     getFriends(req) {
         const user = req.user;
         return this.UsersService.getFriends(user.id);
     }
     getMatch(req, id) {
-        return this.UsersService.getMatchs((id === 'me') ? req.user.id : id);
+        return this.UsersService.getMatchs(id === "me" ? req.user.id : id);
     }
     getBlocked(req, id) {
         const user = req.user;
@@ -71,10 +71,10 @@ let UsersController = class UsersController {
         return this.UsersService.uploadFile(user, file);
     }
     deleteUser(req, id) {
-        return this.UsersService.deleteUser((id === 'me') ? req.user.id : id);
+        return this.UsersService.deleteUser(id === "me" ? req.user.id : id);
     }
     deleteAvatar(req, id) {
-        return this.UsersService.deleteAvatar((id === 'me') ? req.user.id : id);
+        return this.UsersService.deleteAvatar(id === "me" ? req.user.id : id);
     }
     removeFriend(req, query) {
         const user = req.user;
@@ -85,7 +85,7 @@ let UsersController = class UsersController {
         return this.UsersService.removeBlocked(user.id, query.blocked);
     }
     patchUser(req, id, body) {
-        return this.UsersService.patchUser((id === 'me') ? req.user.id : id, body);
+        return this.UsersService.patchUser(id === "me" ? req.user.id : id, body);
     }
     patchUpdateRank() {
         return this.UsersService.patchUpdateRank();

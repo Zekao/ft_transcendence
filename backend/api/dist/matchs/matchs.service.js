@@ -99,8 +99,9 @@ let MatchsService = class MatchsService {
     }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
-        if (user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED))
-            throw new common_1.ConflictException("You already have a match in progress");
+        const matchPending = user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED);
+        if (matchPending)
+            throw new common_1.ConflictException(`You already have a match in progress: \`${matchPending.id}\``);
         const match = this.MatchsRepository.create({
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
