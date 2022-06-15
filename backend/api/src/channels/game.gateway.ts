@@ -43,20 +43,22 @@ export class GameGateway
       const match: Matchs = client.data.match;
       // console.log(message);
       // console.log(match);
-      console.log('FIRST PLAYER INFORMATIONS:', match.FirstPlayer);
+      // console.log('FIRST PLAYER INFORMATIONS:', match);
       if (player == match.FirstPlayer) console.log("FIRST");
       else if (player == match.SecondPlayer) console.log("SECOND");
       const pos1 = await this.matchService.getPosFirstPlayer(match);
       const pos2 = await this.matchService.getPosSecondPlayer(match);
-      console.log(pos1);
-      console.log(pos2);
+      console.log('position 1:',  pos1);
+      console.log('position 2:', pos2);
       if (message == "up") {
         await this.matchService.setPosFirstPlayer(match, pos1 - 5);
+        await this.matchService.setPosSecondPlayer(match, pos2 - 5);
         this.emitChannel(client.data, match.id, pos1, pos2);
       }
       if (message == "down")
       await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-      this.emitChannel(client.data, "move", pos1);
+        await this.matchService.setPosSecondPlayer(match, pos2 + 5);
+        this.emitChannel(client.data, "move", pos1,);
     } catch {}
   }
 
@@ -87,8 +89,8 @@ export class GameGateway
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
       console.log("IN_GAME");
-      await this.matchService.setPosFirstPlayer(client.data.match, 0);
-      await this.matchService.setPosSecondPlayer(client.data.match, 0);
+      await this.matchService.setPosFirstPlayer(client.data.match, 260);
+      await this.matchService.setPosSecondPlayer(client.data.match, 260);
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -97,10 +99,13 @@ export class GameGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
+      console.log('========debug========')
       const user = await this.authService.getUserFromSocket(client);
+      console.log('========debug========')
       const match = await this.matchService.getMatchsId(
         client.handshake.headers.game
       );
+      console.log(match);
       if (!match) throw new UnauthorizedException("The match does not exist");
       client.data.user = user;
       client.data.match = match;

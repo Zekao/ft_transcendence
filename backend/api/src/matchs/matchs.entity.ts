@@ -18,12 +18,12 @@ export class Matchs {
   id: string;
 
   @ApiProperty({ type: () => User })
-  @OneToMany(() => User, (user) => user.matchs)
+  @ManyToMany(() => User, (user) => user.matchs)
   @JoinTable({ name: "firstPlayer" })
   FirstPlayer: User;
 
   @ApiProperty({ type: () => User })
-  @OneToMany(() => User, (user) => user.matchs, { nullable: true })
+  @ManyToMany(() => User, (user) => user.matchs, { nullable: true })
   @JoinTable({ name: "secondPlayer" })
   SecondPlayer: User;
 

@@ -38,8 +38,13 @@ export default Vue.extend({
           context: {}, // canvas context
           position: {
             x: 10,
-            y: 50
+            y: 360
+          },
+          position2: {
+            x: 840,
+            y: 360
           }
+
         }
       },
       computed: {
@@ -64,32 +69,30 @@ export default Vue.extend({
           channel: "/game",
           extraHeaders: {
             Authorization: this.accessToken,
-            game: "cefe5e90-8d4d-4b2e-87fb-0b4790b12c05",
+            game: "efa176ea-68bf-4145-ac46-eb9d42e610a3",
           },
           path: "/api/socket.io/",
         })
-        this.socket.on('move', data => {
+        this.socket.on('move', (data, data2) => {
           console.log('data :', data);
-          // if (data >= 0)
-            this.position.y = data;
-          // else
-            // data = 0;
-          // if (data <= 600)
-            // this.position.y = data;
-          // else
-            // data = 600;
+          console.log('data2 :', data2);
+          this.position.y = data;
+          // this.position2.y = data2;
           this.context.clearRect(0, 0, 720, 1080);
           this.context.fillRect(this.position.x, this.position.y, 20, 120);
+          this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
         });
         console.log("both values:", this.position.x, this.position.y);
       },
       shortcuts: {
         keydown: function (event) {
           if (event.key === 'w') {
+            console.log("position : ", this.position.y);
               this.move('up');
           }
           else if (event.key === 's') {
-            this.move('down');
+            console.log("position : ", this.position.y);
+              this.move('down');
           } 
           else if (event.key === 'Escape') {
             this.move('stop');
@@ -104,7 +107,7 @@ export default Vue.extend({
       },
        methods: {
         keyb(val) {
-            this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
+            this.context.fillRect(this.position.x, this.position.y, 20, 120);
             console.log("both values:", this.position.x, this.position.y);
         this.socket.emit('customBinding', val);
         },
