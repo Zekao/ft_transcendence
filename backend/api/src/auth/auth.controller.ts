@@ -7,6 +7,8 @@ import {
   UseGuards,
   Res,
   Param,
+  Delete,
+  Query,
 } from "@nestjs/common";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
@@ -19,6 +21,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import * as fs from "fs";
+import { User } from "../users/users.entity";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -53,26 +56,55 @@ export class AuthController {
     return this.authService.GenerateJwtToken(id);
   }
 
+  @Post("/qrcode")
+  @ApiOperation({
+    summary: "Verify if code is valid",
+  })
+  @UseGuards(FortyTwoAuthGuard)
+  async verifyQrCode(@Req() req, @Query() query): Promise<boolean> {
+    try {
+      this.verifyQrCode(query.gcode, req.user.TwoFAVerify);
+    } catch (err) {}
+    return true;
+  }
+
+  @Delete("/qrcode/delete")
+  @ApiOperation({
+    summary: "Delete qrcode image",
+  })
+  @UseGuards(FortyTwoAuthGuard)
+  async qrcodeDelete(@Req() req): Promise<boolean> {
+    const user: User = req.user.user_name;
+    const file = user + ".png";
+    try {
+      fs.unlinkSync("image/googe/" + file);
+    } catch (err) {}
+    return true;
+  }
+
   @Get("/qrcode")
   @ApiOperation({
     summary: "Get image of qrcode",
   })
-  async qrcode(): Promise<string> {
-    const Test = await this.authService.generateQR();
-
+  @UseGuards(FortyTwoAuthGuard)
+  async qrcode(@Req() req): Promise<boolean> {
+    const user: User = req.user.user_name;
+    const Test = await this.authService.generateQR(req.user);
     const file = fs;
     file.writeFile(
-      "qrcode_user.png",
+      "image/google/" + user + ".png",
       Test.qrcode.substring(22),
       { encoding: "base64" },
       function (err) {
         if (err) {
           console.log(err);
+          return false;
         } else {
           console.log("The file was saved!");
+          return true;
         }
       }
     );
-    return Test.qrcode.substring(22);
+    return true;
   }
 }

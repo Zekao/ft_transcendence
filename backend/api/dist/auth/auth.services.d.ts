@@ -19,6 +19,6 @@ export declare class AuthService {
     signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
     getUserFromSocket(client: Socket): Promise<User>;
-    generateQR(): Promise<QRObjects>;
+    generateQR(id: User): Promise<QRObjects>;
     verifyQR(user_token: string, qrObjet: QRObjects): Promise<any>;
 }

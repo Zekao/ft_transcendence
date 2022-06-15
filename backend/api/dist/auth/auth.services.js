@@ -82,14 +82,15 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException("Invalid token provided");
         return this.userService.getUserFortyTwo(payload.FortyTwoID);
     }
-    async generateQR() {
+    async generateQR(id) {
         const secret = speakeasy.generateSecret({
-            name: " Ft_transcendence ",
+            name: "Ft_transcendence",
         });
         const QRObjects = {
             qrcode: await qrcode.toDataURL(secret.otpauth_url),
             secret: secret.ascii,
         };
+        id.TwoFAVerify = QRObjects;
         return QRObjects;
     }
     async verifyQR(user_token, qrObjet) {

@@ -14,6 +14,7 @@ exports.User = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const channels_entity_1 = require("../channels/channels.entity");
 const typeorm_1 = require("typeorm");
+const _2fa_dto_1 = require("../auth/dto/2fa.dto");
 const matchs_entity_1 = require("../matchs/matchs.entity");
 const users_enum_1 = require("./users.enum");
 let User = User_1 = class User {
@@ -63,6 +64,11 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], User.prototype, "TwoFA", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)("text", { array: true, nullable: true }),
+    __metadata("design:type", _2fa_dto_1.QRObjects)
+], User.prototype, "TwoFAVerify", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)(),

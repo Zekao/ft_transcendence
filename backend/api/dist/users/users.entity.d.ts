@@ -1,5 +1,6 @@
 import { Channel } from "src/channels/channels.entity";
 import { ChannelsDto } from "src/channels/dto/channels.dto";
+import { QRObjects } from "../auth/dto/2fa.dto";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 export declare class User {
@@ -12,6 +13,7 @@ export declare class User {
     email: string;
     avatar: string;
     TwoFA: boolean;
+    TwoFAVerify: QRObjects;
     status: UserStatus;
     in_game: UserGameStatus;
     win: number;

@@ -29,18 +29,37 @@ let AuthController = class AuthController {
     tokenGen(req, id) {
         return this.authService.GenerateJwtToken(id);
     }
-    async qrcode() {
-        const Test = await this.authService.generateQR();
+    async verifyQrCode(req, query) {
+        try {
+            this.verifyQrCode(query.gcode, req.user.TwoFAVerify);
+        }
+        catch (err) { }
+        return true;
+    }
+    async qrcodeDelete(req) {
+        const user = req.user.user_name;
+        const file = user + ".png";
+        try {
+            fs.unlinkSync("image/googe/" + file);
+        }
+        catch (err) { }
+        return true;
+    }
+    async qrcode(req) {
+        const user = req.user.user_name;
+        const Test = await this.authService.generateQR(req.user);
         const file = fs;
-        file.writeFile("qrcode_user.png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
+        file.writeFile("image/google/" + user + ".png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
             if (err) {
                 console.log(err);
+                return false;
             }
             else {
                 console.log("The file was saved!");
+                return true;
             }
         });
-        return Test.qrcode.substring(22);
+        return true;
     }
 };
 __decorate([
@@ -77,12 +96,37 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "tokenGen", null);
 __decorate([
+    (0, common_1.Post)("/qrcode"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Verify if code is valid",
+    }),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyQrCode", null);
+__decorate([
+    (0, common_1.Delete)("/qrcode/delete"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete qrcode image",
+    }),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "qrcodeDelete", null);
+__decorate([
     (0, common_1.Get)("/qrcode"),
     (0, swagger_1.ApiOperation)({
         summary: "Get image of qrcode",
     }),
+    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "qrcode", null);
 AuthController = __decorate([

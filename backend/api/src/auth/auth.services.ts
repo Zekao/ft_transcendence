@@ -81,15 +81,15 @@ export class AuthService {
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
   }
 
-  async generateQR(): Promise<QRObjects> {
+  async generateQR(id: User): Promise<QRObjects> {
     const secret = speakeasy.generateSecret({
-      name: " Ft_transcendence ",
+      name: "Ft_transcendence",
     });
-
     const QRObjects = {
       qrcode: await qrcode.toDataURL(secret.otpauth_url),
       secret: secret.ascii,
     };
+    id.TwoFAVerify = QRObjects;
     return QRObjects;
   }
 
