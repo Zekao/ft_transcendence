@@ -41,10 +41,27 @@
         </v-form>
       </v-list-item>
       <v-list-item>
-        <v-btn block @click="updateTwoFactorAuth">
+        <v-btn :loading="is2FADialog" block @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()">
           {{ isTwoFactorAuth ? 'Disable' : 'Enable' }}
           <v-icon class="ml-2 mb-1">mdi-two-factor-authentication</v-icon>
         </v-btn>
+        <v-dialog v-model="is2FADialog" width="40%">
+          <v-card>
+            <v-img :src="`https://ft.localhost:4500/api/image/google/${userName}.png`" />
+            <v-list-item>
+              <v-otp-input
+                v-model="code"
+                length="6"
+                style="width: 50%"
+              ></v-otp-input>
+            </v-list-item>
+            <v-list-item class="justify-center">
+              <v-btn :loading="loading" dense @click="verify">
+                Verify
+              </v-btn>
+            </v-list-item>
+          </v-card>
+        </v-dialog>
       </v-list-item>
     </v-list>
   </v-card>
@@ -54,10 +71,19 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
+declare module 'vue/types/vue' {
+  interface Vue {
+    updateTwoFactorAuth: () => Promise<void>
+  }
+}
+
 export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
   data: () => ({
+    is2FADialog: false,
+    loading: false,
+    code: '',
     file: {} as Blob,
     isLoginValid: false,
     newLogin: '',
@@ -70,6 +96,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      userName: (state: any): string => state.user.authUser.user_name,
       login: (state: any): string => state.user.authUser.display_name || '',
       avatar: (state: any): string => state.user.authUser.avatar,
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
@@ -112,6 +139,28 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+    async fetchQrCode() {
+      console.log('hey')
+      this.is2FADialog = true
+      try {
+        await this.$axios.$get('/auth/qrcode')
+      } catch(err) {
+        console.log(err)
+      }
+    },
+
+    async verify() {
+      try {
+        this.loading = true
+        await this.$store.dispatch('authTwoFactor', this.code)
+        await this.updateTwoFactorAuth()
+        this.is2FADialog = false
+      } catch(err) {
+        this.code = ''
+        this.loading = false
+      }
+    }
   },
 
   },

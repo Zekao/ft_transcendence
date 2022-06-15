@@ -9,5 +9,9 @@ export declare class AuthController {
     tokenGen(req: any, id: number): {
         accessToken: string;
     };
-    qrcode(): Promise<string>;
+    verifyGToken(request: any): Promise<boolean>;
+    verifyQrCode(req: any, query: any): Promise<{
+        gtoken: string;
+    }>;
+    qrcode(req: any): Promise<boolean>;
 }

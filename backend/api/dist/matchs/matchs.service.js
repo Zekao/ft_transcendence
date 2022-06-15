@@ -128,12 +128,9 @@ let MatchsService = class MatchsService {
     async defineMatch(player) {
         let match = null;
         try {
-            console.log("TEST");
             match = await this.getMatchs();
-            console.log(match);
             for (const el of match) {
                 if (el.status == matchs_enum_1.MatchStatus.PENDING && el.FirstPlayer != player.id) {
-                    console.log(el);
                     await this.addPlayerToMatch(player, el);
                     match.status = matchs_enum_1.MatchStatus.STARTED;
                     this.MatchsRepository.save(el);

@@ -2,7 +2,6 @@
   <v-menu
     v-model="value"
     :close-on-content-click="false"
-    bottom
   >
     <v-list>
       <v-list-item class="justify-center">
@@ -29,7 +28,7 @@
           <v-icon>mdi-message-outline</v-icon>
         </v-btn>
       </v-list-item>
-      <v-list-item :disabled="!isBlockedByMe" class="justify-center">
+      <v-list-item v-if="!isMe" class="justify-center">
         <v-btn :disabled="isFriend" class="mr-2" @click="addFriend(friend.id)">
           Add
           <v-icon class="ml-2"> mdi-account-multiple-plus </v-icon>
@@ -39,7 +38,7 @@
           <v-icon class="ml-2"> mdi-account-multiple-remove </v-icon>
         </v-btn>
       </v-list-item>
-      <v-list-item class="justify-center">
+      <v-list-item v-if="!isMe" class="justify-center">
         <v-btn :disabled="isBlockedByMe" class="mr-2" @click="block(friend.id)">
           Block
           <v-icon class="ml-2"> mdi-account-cancel </v-icon>
