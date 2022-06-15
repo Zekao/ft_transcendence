@@ -94,32 +94,8 @@ export default Vue.extend({
       }
     }, 
 
-    async checkLogin() {
-      if(this.newLogin)
-      {
-      try {
-        const response = await axios.get(
-          'https://ft.localhost:4500/api/user/' + this.newLogin
-        )
-        if (response.data.length > 0) {
-          this.isLoginValid = true
-        } else {
-          this.isLoginValid = false
-        }
-      } catch (err) {
-        console.log(err)
-      }
-      }
-    },
-
     async updateLogin() {
-      
-
-      if (this.checkLogin) {
-        this.isLoginValid = false; 
-        console.log('User already exists');
-      }
-      else try {
+        try {
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
