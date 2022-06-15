@@ -53,6 +53,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import {IUser} from '@/store/user'
+import axios from 'axios'
 export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
@@ -63,7 +65,7 @@ export default Vue.extend({
     loginRules: [
       (v: string) => !!v || 'Login is required',
       (v: string) => v.length > 3 || 'Login must be more than 3 characters',
-      (v: string) => v.length <= 24 || 'Login must be less than 24 characters',
+      (v: string) => v.length <= 24 || 'Login must be less than 24 characters', 
     ],
   }),
 
@@ -90,9 +92,34 @@ export default Vue.extend({
           console.log(err)
         }
       }
-    },
-    async updateLogin() {
+    }, 
+
+    async checkLogin() {
+      if(this.newLogin)
+      {
       try {
+        const response = await axios.get(
+          'https://ft.localhost:4500/api/user/' + this.newLogin
+        )
+        if (response.data.length > 0) {
+          this.isLoginValid = true
+        } else {
+          this.isLoginValid = false
+        }
+      } catch (err) {
+        console.log(err)
+      }
+      }
+    },
+
+    async updateLogin() {
+      
+
+      if (this.checkLogin) {
+        this.isLoginValid = false; 
+        console.log('User already exists');
+      }
+      else try {
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
@@ -100,6 +127,8 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+    
     async updateTwoFactorAuth() {
       try {
         await this.$store.dispatch('user/updateAuth', {
@@ -109,6 +138,14 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+  // find a user in the database by its display_name, return the user if found
+  // or return null if not found
+
+  
+  
   },
-})
+
+  },
+)
 </script>

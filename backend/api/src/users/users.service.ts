@@ -87,6 +87,7 @@ export class UsersService {
     for (const match of user.matchs) {
       matchs.push((await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])));
     }
+    console.log(matchs);
     return matchs;
   }
 
@@ -108,6 +109,7 @@ export class UsersService {
         if (user.id.includes(username)) return true;
         if (user.first_name.includes(username)) return true;
         if (user.last_name.includes(username)) return true;
+        if (user.display_name.includes(username)) return true;
         if (user.user_name.includes(username)) return true;
         if (user.email.includes(username)) return true;
       });
