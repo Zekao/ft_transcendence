@@ -2,9 +2,21 @@
   <v-sheet width="100%">
     <v-card :id="user.display_name" height="320px" class="overflow-y-auto">
       <v-list>
-        <v-list-item v-for="(message, i) in messages" :key="i">
-          {{ message }}
-        </v-list-item>
+        <v-list-item
+            v-for="(message, i) in messages"
+            :key="i"
+            three-line
+            class="d-flex d-flex-column"
+          >
+            <v-list-item-content>
+              <v-list-item-title class="d-flex d-flex-column align-center mb-1">
+                <v-btn class="mr-2">{{ message.login }}</v-btn>
+              </v-list-item-title>
+              <v-list-item-subtitle class="text-right">{{
+                message.message
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
       </v-list>
     </v-card>
     <v-toolbar>
@@ -14,10 +26,8 @@
         outlined
         hide-details
         class="mr-2"
+        @keyup.enter="emitMessageOnChannel"
       ></v-text-field>
-      <v-btn icon @click="emitMessageOnChannel"
-        ><v-icon>mdi-pencil</v-icon></v-btn
-      >
     </v-toolbar>
   </v-sheet>
 </template>
@@ -35,7 +45,7 @@ export default Vue.extend({
 
   data: () => ({
     messageText: '',
-    messages: [] as string[],
+    messages: [] as { login: string; message: string }[],
     socket: null as NuxtSocket | null,
   }),
 
@@ -49,10 +59,12 @@ export default Vue.extend({
   // async fetch() {
   //   try {
   //     const res = await this.$axios.$get(`/users/${this.authUser.id}/messages/${this.user.id}`)
-  //     this.messages = [...res]
-  //     this.$nextTick(() => {
-  //       this.scrollToBottom()
-  //     })
+  //     this.messages = res.length
+      //   ? [...res.map((el: string) => JSON.parse(el))]
+      //   : []
+      // this.$nextTick(() => {
+      //   this.scrollToBottom()
+      // })
   //   } catch(err) {
   //     console.log(err)
   //   }
@@ -67,8 +79,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('msg', (msg, cb) => {
-      this.messages.push(msg)
+    this.socket.on('msg', (login, message) => {
+      this.messages.push({ login, message })
       this.$nextTick(() => {
         this.scrollToBottom()
       })

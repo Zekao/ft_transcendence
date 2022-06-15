@@ -138,12 +138,9 @@ export default Vue.extend({
 
   methods: {
     async searchUserMatches() {
-      const user = this.users.filter((el) => el.display_name === this.search)
+      const userID = this.users.find((el) => el.display_name === this.search)?.id || '42'
       try {
-        await this.$store.dispatch(
-          'user/fetchMatchs',
-          user[0] ? user[0].id : '0'
-        )
+        await this.$store.dispatch('user/fetchMatchs', userID)
         this.selectedLogin = this.search
       } catch (err) {
         console.log(err)
@@ -151,9 +148,7 @@ export default Vue.extend({
     },
 
     getUserAvatar(userName: string): string {
-      const users = this.users.filter((el) => el.user_name === userName)
-      console.log(users.length)
-      return users.length ? users[0].avatar : ''
+      return this.users.find((el) => el.user_name === userName)?.avatar || ''
     },
 
     clearSearch() {

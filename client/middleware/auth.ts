@@ -5,7 +5,8 @@ const auth: Middleware = async ({ $cookies, redirect, store }) => {
   if (!accessToken) redirect('/login')
   store.commit('AUTH_SUCCESS', { accessToken })
   try {
-    await store.dispatch('user/fetchAuth')
+    const res = await store.dispatch('user/fetchAuth')
+    console.log(res)
   } catch (err) {
     store.dispatch('logout')
     redirect('/login')

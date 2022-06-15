@@ -1,10 +1,5 @@
 <template>
-  <v-menu top :offset-x="offset">
-    <template #activator="{ on, attrs }">
-      <v-btn dark v-bind="attrs" :disabled="isBlockedByMe" v-on="on">
-        {{ friend.user_name }}
-      </v-btn>
-    </template>
+  <v-menu v-model="value" top>
 
     <v-list>
       <v-list-item> Win : {{ friend.win }} </v-list-item>
@@ -58,14 +53,17 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { IUser } from '@/store/user'
+
 export default Vue.extend({
   name: 'FriendMenu',
+
   props: {
     friend: {
-      type: Object,
+      type: Object as () => IUser,
       required: true,
     },
   },
+
   data() {
     return {
       offset: true,
@@ -79,7 +77,14 @@ export default Vue.extend({
       userID: (state: any): string => state.user.authUser.id,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
-
+    value: {
+      get(): boolean {
+        return this.$store.state.isFriendMenu
+      },
+      set(value: boolean) {
+        this.$store.commit('FRIEND_MENU', value)
+      },
+    },
     // function who return true if friend id is in authUserFriends or false if not
     isFriend() {
       return (

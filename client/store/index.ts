@@ -8,6 +8,8 @@ export interface IToken {
 }
 
 export const state = () => ({
+  selectedMatchId: '',
+  isFriendMenu: false,
   isAuthenticated: false,
   token: {} as IToken,
   authStatus: '',
@@ -16,6 +18,9 @@ export const state = () => ({
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
+  FRIEND_MENU: (state, value: boolean) => {
+    state.isFriendMenu = value
+  },
   AUTH_REQUEST: (state) => {
     state.authStatus = 'loading'
   },
