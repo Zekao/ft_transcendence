@@ -31,15 +31,16 @@ let GameGateway = class GameGateway {
         try {
             const player = client.data.user;
             if (!client.data.match) {
-                const match = this.matchService.createMatch(player.id);
+                const match = await this.matchService.createMatch(player.id);
                 client.data.match = match;
             }
             if (message == "join") {
                 console.log("JOIN");
             }
             if (message == "leave") {
+                console.log(client.data.match);
                 if (client.data.match)
-                    this.matchService.deleteMatch(client.data.match.id);
+                    await this.matchService.deleteMatch(client.data.match.id);
                 console.log("LEAVE");
             }
         }
