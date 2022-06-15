@@ -16,7 +16,7 @@
         <GameCore @next="e1 = 3" />
       </v-stepper-content>
       <v-stepper-content step="3">
-        <GameCore @next="e1 = 1" />
+        <GameResult @next="e1 = 1" />
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
