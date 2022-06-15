@@ -4,7 +4,6 @@
     color="grey lighten-1"
     class="d-flex d-flex-column justify-center align-center"
   >
-    <v-btn color="primary" @click="$emit('next')"> Continue </v-btn>
     <v-btn :loading="waiting" @click="emitJoin"> Join </v-btn>
     <v-btn :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
     <p> {{ !ready ? 'Not ready' : 'READY' }} </p>
@@ -40,8 +39,12 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('waitinglist', (msg) => {
-      if (msg === 'ready') this.ready = true
+    this.socket.on('waitinglist', (msg, matchID) => {
+      if (msg === 'ready') {
+        this.$store.state.commit('SELECTED_MATCH_ID', matchID)
+        this.$emit('next')
+        this.ready = true
+      }
     })
   },
 
