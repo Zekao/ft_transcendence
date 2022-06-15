@@ -32,8 +32,8 @@ let AuthController = class AuthController {
     }
     async verifyGToken(body) {
         try {
-            console.log(body.g_code);
-            if (this.authService.verifyJwtToken(body.g_code))
+            console.log(body.gcode);
+            if (this.authService.verifyJwtToken(body.gcode))
                 return true;
         }
         catch (err) { }

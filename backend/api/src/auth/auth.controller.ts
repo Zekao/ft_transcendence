@@ -64,8 +64,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async verifyGToken(@Body() body): Promise<boolean> {
     try {
-      console.log(body.g_code);
-      if (this.authService.verifyJwtToken(body.g_code)) return true;
+      console.log(body.gcode);
+      if (this.authService.verifyJwtToken(body.gcode)) return true;
     } catch (err) {}
     throw new UnauthorizedException("Acces token provided is not allowed");
   }
