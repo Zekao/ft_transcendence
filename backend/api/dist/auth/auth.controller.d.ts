@@ -9,7 +9,7 @@ export declare class AuthController {
     tokenGen(req: any, id: number): {
         accessToken: string;
     };
-    verifyGToken(res: any): Promise<boolean>;
+    verifyGToken(request: any): Promise<boolean>;
     verifyQrCode(req: any, query: any): Promise<{
         gtoken: string;
     }>;

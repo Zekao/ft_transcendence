@@ -30,9 +30,9 @@ let AuthController = class AuthController {
     tokenGen(req, id) {
         return this.authService.GenerateJwtToken(id);
     }
-    async verifyGToken(res) {
+    async verifyGToken(request) {
         try {
-            console.log(res);
+            console.log(request.cookies);
         }
         catch (err) { }
         throw new common_1.UnauthorizedException("Acces token provided is not allowed");
@@ -101,7 +101,7 @@ __decorate([
         summary: "Verify if code is valid",
     }),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Res)()),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
