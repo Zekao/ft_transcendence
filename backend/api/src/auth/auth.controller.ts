@@ -60,7 +60,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Verify if code is valid",
   })
-  @UseGuards(FortyTwoAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async verifyQrCode(@Req() req, @Query() query): Promise<boolean> {
     try {
       this.verifyQrCode(query.gcode, req.user.TwoFAVerify);
@@ -72,7 +72,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Delete qrcode image",
   })
-  @UseGuards(FortyTwoAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async qrcodeDelete(@Req() req): Promise<boolean> {
     const user: User = req.user.user_name;
     const file = user + ".png";
@@ -86,7 +86,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Get image of qrcode",
   })
-  @UseGuards(FortyTwoAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async qrcode(@Req() req): Promise<boolean> {
     const user: User = req.user.user_name;
     const Test = await this.authService.generateQR(req.user);

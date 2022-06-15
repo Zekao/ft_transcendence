@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_services_1 = require("./auth.services");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
+const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 const fs = require("fs");
 let AuthController = class AuthController {
@@ -100,7 +101,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Verify if code is valid",
     }),
-    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -112,7 +113,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Delete qrcode image",
     }),
-    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -123,7 +124,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({
         summary: "Get image of qrcode",
     }),
-    (0, common_1.UseGuards)(_42_auth_guard_1.FortyTwoAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
