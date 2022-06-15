@@ -31,15 +31,12 @@ let GameGateway = class GameGateway {
         try {
             const player = client.data.user;
             const match = client.data.match;
-            if (message[0] == "action") {
-                if (message[1] == "join") {
-                    console.log("JOIN");
-                }
-                if (message[1] == "leave") {
-                    console.log("LEAVE");
-                }
+            if (message[0] == "join") {
+                console.log("JOIN");
             }
-            this.emitChannel(client.data, "waitinglist", "READY");
+            if (message[0] == "leave") {
+                console.log("LEAVE");
+            }
         }
         catch (_a) { }
     }
