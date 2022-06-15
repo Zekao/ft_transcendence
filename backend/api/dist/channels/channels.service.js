@@ -12,30 +12,36 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChannelsService = exports.ChannelRoleDto = exports.ChannelRelationsPicker = void 0;
+exports.ChannelsService = exports.ChannelRelationsPicker = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_service_1 = require("../users/users.service");
 const utils_1 = require("../utils/utils");
 const typeorm_2 = require("typeorm");
 const channels_entity_1 = require("./channels.entity");
+const channels_enum_1 = require("./channels.enum");
 const bcrypt = require("bcrypt");
 class ChannelRelationsPicker {
 }
 exports.ChannelRelationsPicker = ChannelRelationsPicker;
-class ChannelRoleDto {
-}
-exports.ChannelRoleDto = ChannelRoleDto;
 let ChannelsService = class ChannelsService {
     constructor(ChannelsRepository, UsersService) {
         this.ChannelsRepository = ChannelsRepository;
         this.UsersService = UsersService;
     }
-    async getChannel() {
-        const channel = await this.ChannelsRepository.find();
-        if (!channel)
+    async getChannel(StatusDto) {
+        if (StatusDto)
+            var { status } = StatusDto;
+        var channels = await this.ChannelsRepository.find();
+        if (!channels)
             throw new common_1.NotFoundException(`Channel not found`);
-        return channel;
+        if (status && status === channels_enum_1.ChannelStatus.PRIVATE)
+            channels = channels.filter((channel) => channel.status === channels_enum_1.ChannelStatus.PRIVATE);
+        else if (status && status === channels_enum_1.ChannelStatus.PUBLIC)
+            channels = channels.filter((channel) => channel.status === channels_enum_1.ChannelStatus.PUBLIC);
+        else if (status && status === channels_enum_1.ChannelStatus.PROTECTED)
+            channels = channels.filter((channel) => channel.status === channels_enum_1.ChannelStatus.PROTECTED);
+        return channels;
     }
     async getChannelByFilter(filter) {
         const { name, permissions, status } = filter;

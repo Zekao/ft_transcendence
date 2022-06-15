@@ -4,3 +4,9 @@ export declare class ChannelFilteDto {
     status?: ChannelStatus;
     permissions?: ChannelPermissions;
 }
+export declare class ChannelStatusDto {
+    status: ChannelStatus;
+}
+export declare class ChannelRoleDto {
+    role: string;
+}

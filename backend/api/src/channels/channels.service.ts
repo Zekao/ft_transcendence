@@ -14,7 +14,7 @@ import { isUuid } from "src/utils/utils";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
-import { ChannelFilteDto } from "./dto/channels-filter.dto";
+import { ChannelFilteDto, ChannelRoleDto, ChannelStatusDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
@@ -29,10 +29,6 @@ export class ChannelRelationsPicker {
   withBanned?: boolean;
 }
 
-export class ChannelRoleDto{
-  role: string;
-}
-
 @Injectable()
 export class ChannelsService {
   constructor(
@@ -43,10 +39,18 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
-  async getChannel(): Promise<Channel[]> {
-    const channel = await this.ChannelsRepository.find();
-    if (!channel) throw new NotFoundException(`Channel not found`);
-    return channel;
+  async getChannel(StatusDto ?: ChannelStatusDto): Promise<Channel[]> {
+    if (StatusDto)
+      var { status } = StatusDto;
+    var channels = await this.ChannelsRepository.find();
+    if (!channels) throw new NotFoundException(`Channel not found`);
+    if (status && status === ChannelStatus.PRIVATE)
+      channels = channels.filter((channel) => channel.status === ChannelStatus.PRIVATE);
+    else if (status && status === ChannelStatus.PUBLIC)
+      channels = channels.filter((channel) => channel.status === ChannelStatus.PUBLIC);
+    else if (status && status === ChannelStatus.PROTECTED)
+      channels = channels.filter((channel) => channel.status === ChannelStatus.PROTECTED);
+    return channels;
   }
   async getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]> {
     const { name, permissions, status } = filter;
