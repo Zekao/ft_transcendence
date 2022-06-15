@@ -14,11 +14,15 @@ export declare class AuthService {
     GenerateJwtToken(FortyTwoID: number): {
         accessToken: string;
     };
+    GenerateGToken(Gtoken: number): {
+        gtoken: string;
+    };
     verifyJwtToken(token: string): Promise<FortyTwoUser>;
     handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any>;
     signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
     getUserFromSocket(client: Socket): Promise<User>;
+    verifyGToken(user_token: string, user: User): Promise<boolean>;
     generateQR(id: User): Promise<QRObjects>;
     verifyQR(user_token: string, user: User): Promise<boolean>;
 }

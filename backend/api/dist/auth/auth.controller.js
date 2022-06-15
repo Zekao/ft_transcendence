@@ -30,12 +30,20 @@ let AuthController = class AuthController {
     tokenGen(req, id) {
         return this.authService.GenerateJwtToken(id);
     }
-    async verifyQrCode(req, query) {
+    async verifyGToken(res) {
         try {
-            return this.authService.verifyQR(query.gcode, req.user);
+            console.log(res);
         }
         catch (err) { }
-        return false;
+        throw new common_1.UnauthorizedException("Acces token provided is not allowed");
+    }
+    async verifyQrCode(req, query) {
+        try {
+            if ((await this.authService.verifyQR(query.gcode, req.user)) == true)
+                return this.authService.GenerateGToken(query.gcode);
+        }
+        catch (err) { }
+        throw new common_1.UnauthorizedException("GToken provided is incorrect");
     }
     async qrcode(req) {
         const user = req.user.user_name;
@@ -87,6 +95,17 @@ __decorate([
     __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "tokenGen", null);
+__decorate([
+    (0, common_1.Post)("/qrcode/verify"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Verify if code is valid",
+    }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyGToken", null);
 __decorate([
     (0, common_1.Post)("/qrcode"),
     (0, swagger_1.ApiOperation)({

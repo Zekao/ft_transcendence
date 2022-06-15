@@ -33,6 +33,11 @@ let AuthService = class AuthService {
         const accessToken = this.jwtService.sign(payload);
         return { accessToken };
     }
+    GenerateGToken(Gtoken) {
+        const payload = { Gtoken };
+        const gtoken = this.jwtService.sign(payload);
+        return { gtoken };
+    }
     verifyJwtToken(token) {
         try {
             return this.jwtService.verify(token);
@@ -82,6 +87,19 @@ let AuthService = class AuthService {
         if (!payload)
             throw new common_1.UnauthorizedException("Invalid token provided");
         return this.userService.getUserFortyTwo(payload.FortyTwoID);
+    }
+    async verifyGToken(user_token, user) {
+        const file = user.user_name + ".png";
+        try {
+            fs.unlinkSync("image/googe/" + file);
+        }
+        catch (err) { }
+        const verified = speakeasy.totp.verify({
+            secret: user.TwoFAVerify,
+            encoding: "ascii",
+            token: user_token,
+        });
+        return verified;
     }
     async generateQR(id) {
         const secret = speakeasy.generateSecret({

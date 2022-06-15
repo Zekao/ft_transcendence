@@ -17,6 +17,7 @@ import * as qrcode from "qrcode";
 import { QRObjects } from "./dto/2fa.dto";
 import { Socket } from "socket.io";
 import * as fs from "fs";
+import { GPayload } from "./interface/gtoken.interface";
 
 @Injectable()
 export class AuthService {
@@ -29,6 +30,11 @@ export class AuthService {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.jwtService.sign(payload);
     return { accessToken };
+  }
+  GenerateGToken(Gtoken: number) {
+    const payload: GPayload = { Gtoken };
+    const gtoken: string = this.jwtService.sign(payload);
+    return { gtoken };
   }
   verifyJwtToken(token: string): Promise<FortyTwoUser> {
     try {
@@ -80,6 +86,19 @@ export class AuthService {
     const payload = await this.verifyJwtToken(token);
     if (!payload) throw new UnauthorizedException("Invalid token provided");
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
+  }
+
+  async verifyGToken(user_token: string, user: User): Promise<boolean> {
+    const file = user.user_name + ".png";
+    try {
+      fs.unlinkSync("image/googe/" + file);
+    } catch (err) {}
+    const verified = speakeasy.totp.verify({
+      secret: user.TwoFAVerify,
+      encoding: "ascii",
+      token: user_token,
+    });
+    return verified;
   }
 
   async generateQR(id: User): Promise<QRObjects> {

@@ -9,6 +9,7 @@ import {
   Param,
   Delete,
   Query,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
@@ -56,16 +57,30 @@ export class AuthController {
     return this.authService.GenerateJwtToken(id);
   }
 
+  @Post("/qrcode/verify")
+  @ApiOperation({
+    summary: "Verify if code is valid",
+  })
+  @UseGuards(JwtAuthGuard)
+  async verifyGToken(@Res() res): Promise<boolean> {
+    try {
+      console.log(res);
+      // if (this.authService.verifyJwtToken()) return true;
+    } catch (err) {}
+    throw new UnauthorizedException("Acces token provided is not allowed");
+  }
+
   @Post("/qrcode")
   @ApiOperation({
     summary: "Verify if code is valid",
   })
   @UseGuards(JwtAuthGuard)
-  async verifyQrCode(@Req() req, @Query() query): Promise<boolean> {
+  async verifyQrCode(@Req() req, @Query() query): Promise<{ gtoken: string }> {
     try {
-      return this.authService.verifyQR(query.gcode, req.user);
+      if ((await this.authService.verifyQR(query.gcode, req.user)) == true)
+        return this.authService.GenerateGToken(query.gcode);
     } catch (err) {}
-    return false;
+    throw new UnauthorizedException("GToken provided is incorrect");
   }
 
   @Get("/qrcode")
