@@ -30,12 +30,14 @@ let GameGateway = class GameGateway {
     async waitingList(client, message) {
         try {
             const player = client.data.user;
-            const match = client.data.match;
+            const match = this.matchService.createMatch(player.id);
+            client.data.match = match;
             if (message[0] == "join") {
                 console.log("JOIN");
             }
             if (message[0] == "leave") {
-                this.matchService.deleteMatch(match.id);
+                if (client.data.match)
+                    this.matchService.deleteMatch(client.data.match.id);
                 console.log("LEAVE");
             }
         }
@@ -89,7 +91,6 @@ let GameGateway = class GameGateway {
     async isWaitinglist(client, user) {
         client.data.waitinglist = client.handshake.auth.waitinglist;
         if (client.data.waitinglist) {
-            client.data.match = this.matchService.createMatch(client.data.user.id);
             console.log("IN_WAITINGLIST");
             this.logger.log(`Client connected: ${client.id}`);
             return true;

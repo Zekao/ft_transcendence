@@ -36,7 +36,7 @@ export default Vue.extend({
       channel: '/game',
       auth: {
         Authorization: this.accessToken,
-        Waitinglist: "1",
+        waitinglist: "1",
       },
       path: '/api/socket.io/',
     } as any)
