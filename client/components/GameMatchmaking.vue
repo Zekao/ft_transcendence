@@ -5,8 +5,9 @@
     class="d-flex d-flex-column justify-center align-center"
   >
     <v-btn color="primary" @click="$emit('next')"> Continue </v-btn>
-    <v-btn @click="emitJoin"> Join </v-btn>
-    <v-btn :disabled="waiting" @click="emitLeave"> Leave </v-btn>
+    <v-btn :loading="waiting" @click="emitJoin"> Join </v-btn>
+    <v-btn :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
+    <p> {{ ready ? 'Not ready' : 'READY' }} </p>
   </v-card>
 </template>
 
@@ -35,6 +36,7 @@ export default Vue.extend({
       channel: '/game',
       auth: {
         Authorization: this.accessToken,
+        Waitinglist: "1",
       },
       path: '/api/socket.io/',
     } as any)
