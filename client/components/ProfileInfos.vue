@@ -53,6 +53,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+
 export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
@@ -91,8 +92,9 @@ export default Vue.extend({
         }
       }
     },
+
     async updateLogin() {
-      try {
+        try {
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
@@ -100,6 +102,7 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
     async updateTwoFactorAuth() {
       try {
         await this.$store.dispatch('user/updateAuth', {
@@ -110,5 +113,7 @@ export default Vue.extend({
       }
     },
   },
-})
+
+  },
+)
 </script>
