@@ -1,6 +1,3 @@
-
-
-
 <template>
   <div>
       <v-card :height="height" color="#B686D6">
@@ -62,9 +59,9 @@ export default Vue.extend({
           // this.context.fillRect(this.position.x, this.position.y, 20, 20);
         this.socket = this.$nuxtSocket({
           channel: "/game",
-          extraHeaders: {
+          auth: {
             Authorization: this.accessToken,
-            game: "cefe5e90-8d4d-4b2e-87fb-0b4790b12c05",
+            game: "07efe7b3-207e-48f5-a47d-b64a22a9d37c",
           },
           path: "/api/socket.io/",
         })
