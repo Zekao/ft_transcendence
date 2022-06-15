@@ -411,7 +411,6 @@ export class UsersService {
       ratio,
       TwoFA,
     } = body;
-    console.log("================+DEBUG==================");
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
