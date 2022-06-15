@@ -134,6 +134,7 @@ export class GameGateway
 
   async handleConnection(client: Socket, ...args: any[]) {
     try {
+      console.log(client.handshake.auth);
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
       if (this.isWaitinglist(client, user)) return;

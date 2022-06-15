@@ -120,6 +120,7 @@ let GameGateway = class GameGateway {
     }
     async handleConnection(client, ...args) {
         try {
+            console.log(client.handshake.auth);
             const user = await this.authService.getUserFromSocket(client);
             client.data.user = user;
             if (this.isWaitinglist(client, user))
