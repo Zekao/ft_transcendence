@@ -67,7 +67,6 @@ export default Vue.extend({
   data() {
     return {
       socket: null as NuxtSocket | null,
-      offset: true,
       isfriend: true,
     }
   },

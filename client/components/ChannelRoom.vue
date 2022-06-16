@@ -70,6 +70,7 @@
         </v-btn>
       </v-toolbar>
       <v-card :id="channel.name" height="320px" class="overflow-y-auto">
+        <FriendMenu :key="selectedUser.id" :friend="selectedUser"/>
         <v-list>
           <v-list-item
             v-for="(message, i) in messages"
@@ -79,8 +80,7 @@
           >
             <v-list-item-content>
               <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <FriendMenu :key="message.login" :friend="getUser(message.login)"/>
-                <v-btn small class="mr-2" @click="value = true">{{ message.login }}</v-btn>
+                <v-btn small class="mr-2" @click="changeUser(message.login)">{{ message.login }}</v-btn>
                 <v-btn
                   v-if="isAuthUserOwner"
                   x-small
@@ -157,6 +157,7 @@ export default Vue.extend({
     admin: true,
     unlocked: false,
     password: '',
+    selectedUser: {} as IUser,
     messageText: '',
     messages: [] as { login: string; message: string }[],
     admins: [] as IUser[],
@@ -282,8 +283,12 @@ export default Vue.extend({
     fetchMuted() {
       console.log(this.muted)
     },
-    getUser(displayName: string): IUser | null {
+    getUser(displayName: string): IUser {
       return this.users.find(el => el.display_name === displayName) || {} as IUser
+    },
+    changeUser(displayName: string) {
+      this.value = false
+      this.selectedUser = this.getUser(displayName)
     }
   },
 })
