@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { QRObjects } from "../auth/dto/2fa.dto";
+import { Chat } from "../chat/chat.entity";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 
@@ -75,6 +76,11 @@ export class User {
   )
   @JoinTable({ name: "MatchHistory" })
   matchs: Matchs[];
+
+  @ApiProperty()
+  @ManyToMany(() => Chat, (privateMessage) => privateMessage.participants)
+  @JoinTable({ name: "Private Message" })
+  privateMessage: Chat[];
 
   @ApiProperty()
   @ManyToMany(() => User, (user) => user.friends)
