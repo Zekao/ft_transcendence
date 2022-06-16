@@ -112,7 +112,8 @@ export class ChannelsService {
       relations.push({ withAllMembers: true });
     }
     const channel = await this.getChannelId(channelId, relations);
-    var users: User[] = [] ;
+    console.log(channel);
+    var users: User[] = [];
     if (channel.members){ 
       for (const member of channel.members)
         users.push(member);
@@ -162,18 +163,10 @@ export class ChannelsService {
       permissions,
       password: hashedPassword,
     });
-    try {
-      await this.ChannelsRepository.save(channel);
-      channel.owner = owner;
-      await this.ChannelsRepository.save(channel);
-    } catch (error) {
-      if (error.code == "23505") {
-        throw new ConflictException("Channel already exist");
-      } else {
-        console.log(error);
-        throw new InternalServerErrorException();
-      }
-    }
+    // await this.ChannelsRepository.save(channel);
+    channel.owner = owner;
+    await this.ChannelsRepository.save(channel);
+    console.log((await this.getChannelId(channel.id, [{withAllMembers: true}])));
     return channel;
   }
 

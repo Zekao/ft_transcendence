@@ -107,6 +107,7 @@ let ChannelsService = class ChannelsService {
             relations.push({ withAllMembers: true });
         }
         const channel = await this.getChannelId(channelId, relations);
+        console.log(channel);
         var users = [];
         if (channel.members) {
             for (const member of channel.members)
@@ -150,20 +151,9 @@ let ChannelsService = class ChannelsService {
             permissions,
             password: hashedPassword,
         });
-        try {
-            await this.ChannelsRepository.save(channel);
-            channel.owner = owner;
-            await this.ChannelsRepository.save(channel);
-        }
-        catch (error) {
-            if (error.code == "23505") {
-                throw new common_1.ConflictException("Channel already exist");
-            }
-            else {
-                console.log(error);
-                throw new common_1.InternalServerErrorException();
-            }
-        }
+        channel.owner = owner;
+        await this.ChannelsRepository.save(channel);
+        console.log((await this.getChannelId(channel.id, [{ withAllMembers: true }])));
         return channel;
     }
     async validateChannelPassword(id, channelPasswordDto) {

@@ -11,17 +11,20 @@ import { ChatGateway } from "./chat.gateway";
 import { StatusGateway } from "./status.gateway";
 import { GameGateway } from "./game.gateway";
 import { MatchsModule } from "../matchs/matchs.module";
+import { User } from "src/users/users.entity";
+import { UsersService } from "src/users/users.service";
 
 @Module({
   imports: [
     MatchsModule,
     UsersModule,
     AuthModule,
-    TypeOrmModule.forFeature([Channel]),
+    TypeOrmModule.forFeature([Channel, User]),
   ],
   controllers: [ChannelsController],
   providers: [
     ChannelsService,
+    UsersService,
     ChannelsGateway,
     ChatGateway,
     StatusGateway,
