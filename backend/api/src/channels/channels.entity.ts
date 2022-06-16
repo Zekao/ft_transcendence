@@ -44,12 +44,12 @@ export class Channel {
   @JoinTable({ name: "owner" })
   owner: User;
 
-  @OneToMany(() => User, (user) => user.mutedChannels, { nullable: true })
+  @ManyToMany(() => User, (user) => user.mutedChannels, { nullable: true })
   @ApiProperty({ type: () => User })
   @JoinTable({ name: "muted" })
   mutedUsers: User[];
 
-  @OneToMany(() => User, (user) => user.bannedChannels, { nullable: true })
+  @ManyToMany(() => User, (user) => user.bannedChannels, { nullable: true })
   @ApiProperty({ type: () => User })
   @JoinTable({ name: "banned" })
   bannedUsers: User[];

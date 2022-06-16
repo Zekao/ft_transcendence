@@ -88,8 +88,8 @@ export class ChannelsService {
         relation.withMembersOnly && relations.push("members");
         relation.withAdminOnly && relations.push("admins");
         relation.withOwnerOnly && relations.push("owner");
-        relation.withMuted && relations.push("muted");
-        relation.withBanned && relations.push("banned");
+        relation.withMuted && relations.push("mutedUsers");
+        relation.withBanned && relations.push("bannedUsers");
       }
     }
     let found = null;
@@ -112,6 +112,8 @@ export class ChannelsService {
     Role?: ChannelMembersDto
   ): Promise<User[]> {
     const { role, id } = Role;
+    console.log("ROLE: ", role);
+    console.log("MUTE: ", id);
     const relations: ChannelRelationsPicker[] = [];
     if (role) {
       if (role === "all") relations.push({ withAllMembers: true });

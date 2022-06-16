@@ -44,6 +44,7 @@ export class ChannelsController {
   @Get("/:id/members")
   @ApiOperation({ summary: "Return list of all members of channel" })
   getChannelMembers(@Param("id") id: string, @Query() query?): Promise<User[]> {
+    console.log(query);
     return this.channelService.getChannelMembers(id, query);
   }
 

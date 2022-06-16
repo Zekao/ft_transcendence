@@ -29,6 +29,7 @@ let ChannelsController = class ChannelsController {
         return this.channelService.getChannel();
     }
     getChannelMembers(id, query) {
+        console.log(query);
         return this.channelService.getChannelMembers(id, query);
     }
     getChannel(id) {
