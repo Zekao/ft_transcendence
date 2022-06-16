@@ -13,12 +13,14 @@ exports.ChatGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
+const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const chat_service_1 = require("./chat.service");
 let ChatGateway = class ChatGateway {
-    constructor(authService, chatService) {
+    constructor(authService, chatService, userService) {
         this.authService = authService;
         this.chatService = chatService;
+        this.userService = userService;
         this.logger = new common_1.Logger("ChatGateway");
     }
     afterInit(server) {
@@ -46,9 +48,15 @@ let ChatGateway = class ChatGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
-    isMsg(client) {
+    async isMsg(client) {
         client.data.msg = client.handshake.auth.msg;
         if (client.data.msg) {
+            try {
+                const receiver = await this.userService.getUserId(client.data.msg);
+                client.data.history = this.chatService.FindTwoChat(client.data.user.id, receiver.id);
+            }
+            catch (err) {
+            }
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
@@ -80,7 +88,8 @@ __decorate([
 ChatGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ namespace: "chat" }),
     __metadata("design:paramtypes", [auth_services_1.AuthService,
-        chat_service_1.ChatService])
+        chat_service_1.ChatService,
+        users_service_1.UsersService])
 ], ChatGateway);
 exports.ChatGateway = ChatGateway;
 //# sourceMappingURL=chat.gateway.js.map

@@ -21,21 +21,49 @@ let ChatController = class ChatController {
     constructor(chatService) {
         this.chatService = chatService;
     }
+    GetMessage() {
+        return this.chatService.GetMessage();
+    }
     GetHistoryMessage(id) {
         return this.chatService.GetMessageID(id);
+    }
+    CreateNewChat(req) {
+        const user = req.user;
+        return this.chatService.createChat(user);
     }
 };
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return list of all message",
+    }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "GetMessage", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/:id"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return list of history about specified id",
+        summary: "Return list of all message about specified id",
     }),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "GetHistoryMessage", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/create"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Create a new chat",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "CreateNewChat", null);
 ChatController = __decorate([
     (0, swagger_1.ApiTags)("chat"),
     (0, common_1.Controller)("chat"),

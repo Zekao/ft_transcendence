@@ -1,7 +1,7 @@
-import { User } from "../users/users.entity";
 export declare class Chat {
     id: string;
-    participants: User[];
+    first: string;
+    second: string;
     history: {
         login: string;
         message: string;

@@ -34,21 +34,29 @@ __decorate([
     __metadata("design:type", users_entity_1.User)
 ], Matchs.prototype, "SecondPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Matchs.prototype, "scoreFirstPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Matchs.prototype, "scoreSecondPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Matchs.prototype, "posFirstPlayer", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Matchs.prototype, "posSecondPlayer", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Matchs.prototype, "posBallx", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Matchs.prototype, "posBally", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => users_entity_1.User, (user) => user.matchs, { nullable: true }),
     __metadata("design:type", users_entity_1.User)

@@ -12,9 +12,11 @@ export class Chat {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToMany(() => User, (user) => user.privateMessage, { nullable: true })
-  @JoinTable()
-  participants: User[];
+  @Column()
+  first: string;
+
+  @Column({ nullable: true })
+  second: string;
 
   @Column("text", { array: true, nullable: true })
   history: { login: string; message: string }[];

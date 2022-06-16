@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { Repository } from "typeorm";
+import { User } from "../users/users.entity";
 import { isUuid } from "../utils/utils";
 
 import { Chat } from "./chat.entity";
-
-export class ChatRelationPicker {
-  withParticipants?: boolean;
-}
 
 @Injectable()
 export class ChatService {
@@ -26,29 +28,62 @@ export class ChatService {
     return message;
   }
 
-  async GetMessageID(
-    id: string,
-    RelationsPicker?: ChatRelationPicker[]
-  ): Promise<Chat> {
-    const relations: string[] = [];
-    if (RelationsPicker) {
-      for (const relation of RelationsPicker) {
-        relation.withParticipants && relations.push("participants");
-      }
-      let found = null;
-      if (isUuid(id))
-        found = await this.chatRepository.findOne({
-          where: { id: id },
-          relations,
-        });
-      if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
-      return found;
-    }
+  async GetMessageID(id: string): Promise<Chat> {
+    let found = null;
+    if (isUuid(id))
+      found = await this.chatRepository.findOne({
+        where: { id: id },
+      });
+    if (!found) throw new NotFoundException(`Chat \`${id}' not found`);
+    return found;
+  }
+
+  async FindTwoChat(id: string, id2: string): Promise<Chat> {
+    let found = null;
+    if (isUuid(id) && isUuid(id2))
+      found = await this.chatRepository.findOne({
+        where: { first: id, second: id2 },
+      });
+    if (!found) throw new NotFoundException(`Chat \`${id}' not found`);
+    return found;
+  }
+
+  async getHistory(chat: Chat): Promise<{ login: string; message: string }[]> {
+    return chat.history;
   }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
+
+  async createChat(user: User): Promise<Chat> {
+    const chat = this.chatRepository.create({
+      first: user.id,
+      history: [],
+    });
+    try {
+      await this.chatRepository.save(chat);
+    } catch (error) {
+      if (error.code == "23505") {
+        throw new ConflictException("Chat already exist");
+      } else {
+        console.log(error);
+        throw new InternalServerErrorException();
+      }
+    }
+    return chat;
+  }
+
+  async addParticipant(chat: Chat, user: User): Promise<Chat> {
+    try {
+      chat.second = user.id;
+      await this.chatRepository.save(chat);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+    return chat;
+  }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */

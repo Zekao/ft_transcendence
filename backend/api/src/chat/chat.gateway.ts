@@ -26,6 +26,7 @@ export class ChatGateway
   constructor(
     private readonly authService: AuthService,
     private readonly chatService: ChatService,
+    private readonly userService: UsersService,
   ) {}
 
   @WebSocketServer() server: any;
@@ -59,9 +60,15 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  isMsg(client: Socket) {
+  async isMsg(client: Socket) {
     client.data.msg = client.handshake.auth.msg;
     if (client.data.msg) {
+      try {
+        const receiver = await this.userService.getUserId(client.data.msg);
+        client.data.history = this.chatService.FindTwoChat(client.data.user.id, receiver.id)
+      } catch(err) {
+
+      }
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }

@@ -114,6 +114,10 @@ export class MatchsService {
     return id.posSecondPlayer;
   }
 
+  async getPosBall(id: Matchs): Promise<{ posx: number; posy: number }> {
+    return { posx: id.posBallx, posy: id.posBally };
+  }
+
   async setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posFirstPlayer = pos;
     this.MatchsRepository.save(id);
@@ -122,6 +126,13 @@ export class MatchsService {
 
   async setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posSecondPlayer = pos;
+    this.MatchsRepository.save(id);
+    return true;
+  }
+
+  async setPosBall(id: Matchs, posx: number, posy: number): Promise<boolean> {
+    id.posBallx = posx;
+    id.posBally = posy;
     this.MatchsRepository.save(id);
     return true;
   }
@@ -143,6 +154,8 @@ export class MatchsService {
     const match = this.MatchsRepository.create({
       scoreFirstPlayer: 0,
       scoreSecondPlayer: 0,
+      posBallx: 0,
+      posBally: 0,
       posFirstPlayer: 250,
       posSecondPlayer: 250,
       status: MatchStatus.PENDING,

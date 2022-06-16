@@ -78,11 +78,6 @@ export class User {
   matchs: Matchs[];
 
   @ApiProperty()
-  @ManyToMany(() => Chat, (privateMessage) => privateMessage.participants)
-  @JoinTable({ name: "Private Message" })
-  privateMessage: Chat[];
-
-  @ApiProperty()
   @ManyToMany(() => User, (user) => user.friends)
   @JoinTable({ name: "friends" })
   friends: User[];
