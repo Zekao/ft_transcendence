@@ -32,7 +32,7 @@ let ChannelsService = class ChannelsService {
     async getChannel(StatusDto) {
         if (StatusDto)
             var { status } = StatusDto;
-        var channels = await this.ChannelsRepository.find();
+        let channels = await this.ChannelsRepository.find();
         if (!channels)
             throw new common_1.NotFoundException(`Channel not found`);
         if (status && status === channels_enum_1.ChannelStatus.PRIVATE)
@@ -88,7 +88,7 @@ let ChannelsService = class ChannelsService {
     }
     async getChannelMembers(channelId, Role) {
         const { role, id } = Role;
-        var relations = [];
+        const relations = [];
         if (role) {
             if (role === "all")
                 relations.push({ withAllMembers: true });
@@ -108,7 +108,7 @@ let ChannelsService = class ChannelsService {
         }
         const channel = await this.getChannelId(channelId, relations);
         console.log(channel);
-        var users = [];
+        const users = [];
         if (channel.members) {
             for (const member of channel.members)
                 users.push(member);
@@ -141,7 +141,9 @@ let ChannelsService = class ChannelsService {
         return true;
     }
     async createChannel(id, channelsDto) {
-        const owner = await this.UsersService.getUserId(id, [{ withChannels: true }]);
+        const owner = await this.UsersService.getUserId(id, [
+            { withChannels: true },
+        ]);
         const { name, status, permissions, password } = channelsDto;
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);

@@ -21,6 +21,7 @@ const game_gateway_1 = require("./game.gateway");
 const matchs_module_1 = require("../matchs/matchs.module");
 const users_entity_1 = require("../users/users.entity");
 const users_service_1 = require("../users/users.service");
+const chat_module_1 = require("../chat/chat.module");
 let ChannelsModule = class ChannelsModule {
 };
 ChannelsModule = __decorate([

@@ -14,7 +14,11 @@ import { isUuid } from "src/utils/utils";
 import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelsGateway } from "./channels.gateway";
-import { ChannelFilteDto, ChannelMembersDto, ChannelStatusDto } from "./dto/channels-filter.dto";
+import {
+  ChannelFilteDto,
+  ChannelMembersDto,
+  ChannelStatusDto,
+} from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
@@ -39,17 +43,22 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
-  async getChannel(StatusDto ?: ChannelStatusDto): Promise<Channel[]> {
-    if (StatusDto)
-      var { status } = StatusDto;
-    var channels = await this.ChannelsRepository.find();
+  async getChannel(StatusDto?: ChannelStatusDto): Promise<Channel[]> {
+    if (StatusDto) var { status } = StatusDto;
+    let channels = await this.ChannelsRepository.find();
     if (!channels) throw new NotFoundException(`Channel not found`);
     if (status && status === ChannelStatus.PRIVATE)
-      channels = channels.filter((channel) => channel.status === ChannelStatus.PRIVATE);
+      channels = channels.filter(
+        (channel) => channel.status === ChannelStatus.PRIVATE
+      );
     else if (status && status === ChannelStatus.PUBLIC)
-      channels = channels.filter((channel) => channel.status === ChannelStatus.PUBLIC);
+      channels = channels.filter(
+        (channel) => channel.status === ChannelStatus.PUBLIC
+      );
     else if (status && status === ChannelStatus.PROTECTED)
-      channels = channels.filter((channel) => channel.status === ChannelStatus.PROTECTED);
+      channels = channels.filter(
+        (channel) => channel.status === ChannelStatus.PROTECTED
+      );
     return channels;
   }
   async getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]> {
@@ -97,10 +106,13 @@ export class ChannelsService {
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
-  
-  async getChannelMembers(channelId: string, Role?: ChannelMembersDto): Promise<User[]> {
+
+  async getChannelMembers(
+    channelId: string,
+    Role?: ChannelMembersDto
+  ): Promise<User[]> {
     const { role, id } = Role;
-    var relations : ChannelRelationsPicker[] = [];
+    const relations: ChannelRelationsPicker[] = [];
     if (role) {
       if (role === "all") relations.push({ withAllMembers: true });
       if (role === "members") relations.push({ withMembersOnly: true });
@@ -113,25 +125,21 @@ export class ChannelsService {
     }
     const channel = await this.getChannelId(channelId, relations);
     console.log(channel);
-    var users: User[] = [];
-    if (channel.members){ 
-      for (const member of channel.members)
-        users.push(member);
+    const users: User[] = [];
+    if (channel.members) {
+      for (const member of channel.members) users.push(member);
     }
     if (channel.admins) {
-      for (const admin of channel.admins)
-        users.push(admin);
+      for (const admin of channel.admins) users.push(admin);
     }
     if (channel.owner) {
       users.push(channel.owner);
     }
     if (channel.mutedUsers) {
-      for (const muted of channel.mutedUsers)
-        users.push(muted);
+      for (const muted of channel.mutedUsers) users.push(muted);
     }
     if (channel.bannedUsers) {
-      for (const banned of channel.bannedUsers)
-        users.push(banned);
+      for (const banned of channel.bannedUsers) users.push(banned);
     }
     return users;
   }
@@ -151,8 +159,10 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
-  async createChannel(id:string, channelsDto: ChannelsDto): Promise<Channel> {
-    const owner = await this.UsersService.getUserId(id, [{withChannels: true}]);
+  async createChannel(id: string, channelsDto: ChannelsDto): Promise<Channel> {
+    const owner = await this.UsersService.getUserId(id, [
+      { withChannels: true },
+    ]);
     const { name, status, permissions, password } = channelsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);

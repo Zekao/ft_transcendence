@@ -129,8 +129,6 @@ let GameGateway = class GameGateway {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
             console.log("IN_GAME");
-            await this.matchService.setPosFirstPlayer(client.data.match, 250);
-            await this.matchService.setPosSecondPlayer(client.data.match, 250);
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }

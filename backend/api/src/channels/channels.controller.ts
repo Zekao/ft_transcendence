@@ -85,7 +85,10 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(@Request() req, @Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+  createChannel(
+    @Request() req,
+    @Body() ChannelsDtos: ChannelsDto
+  ): Promise<Channel> {
     return this.channelService.createChannel(req.user.id, ChannelsDtos);
   }
 
