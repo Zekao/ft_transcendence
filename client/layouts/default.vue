@@ -126,7 +126,7 @@
     <v-card v-if="invite" style="position: fixed; bottom: 40px; right: 50px">
         <v-list-item>
           <v-list-item-content class="text-center">
-            <p>New invitation from Test</p>
+            <p>New invitation from {{ inviteUserName }}</p>
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
@@ -161,6 +161,7 @@ export default Vue.extend({
     title: 'ft_transcendance',
     invite: true,
     inviteMatchId: '',
+    inviteUserName: '',
     valid: false,
     channelVisible: false,
     channelName: '',
@@ -271,10 +272,18 @@ export default Vue.extend({
       }
     },
     acceptInvitation() {
-
+      this.socket.emit('notification', 'join')
+      this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
+      this.$router.replace('/')
+      this.invite = false
+      this.inviteMatchid = ''
+      this.inviteMatchUser = ''
     },
     refuseInvitation() {
-
+      this.socket.emit('notification', 'deny')
+      this.invite = false
+      this.inviteMatchid = ''
+      this.inviteMatchUser = ''
     }
   },
 })

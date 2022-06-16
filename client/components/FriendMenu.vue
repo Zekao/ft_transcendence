@@ -19,13 +19,9 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-btn class="mr-2">
+        <v-btn class="mr-2" @click="emitInvitation">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
-        </v-btn>
-        <v-btn>
-          Chat with
-          <v-icon>mdi-message-outline</v-icon>
         </v-btn>
       </v-list-item>
       <v-list-item v-if="!isMe" class="justify-center">
@@ -55,6 +51,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
+import { NuxtSocket } from 'nuxt-socket-io'
 import { IUser } from '@/store/user'
 
 export default Vue.extend({
@@ -69,6 +66,7 @@ export default Vue.extend({
 
   data() {
     return {
+      socket: null as NuxtSocket | null,
       offset: true,
       isfriend: true,
     }
@@ -76,6 +74,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      accessToken: (state: any): string => state.token.accessToken,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       userID: (state: any): string => state.user.authUser.id,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
@@ -110,6 +109,15 @@ export default Vue.extend({
     },
   },
 
+  mounted() {
+    this.socket = this.$nuxtSocket({
+      auth: {
+        Authorization: this.accessToken,
+      },
+      path: '/api/socket.io/',
+    } as any)
+  },
+
   methods: {
     async block(userID: string) {
       try {
@@ -142,6 +150,12 @@ export default Vue.extend({
         console.log(err)
       }
     },
+
+    emitInvitation() {
+      if (this.socket) {
+        this.socket.emit('notification', 'invite', this.friend.user_name)
+      }
+    }
   },
 })
 </script>
