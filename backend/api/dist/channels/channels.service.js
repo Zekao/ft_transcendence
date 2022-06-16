@@ -176,14 +176,18 @@ let ChannelsService = class ChannelsService {
         return true;
     }
     async editChannel(id, ChannelDto) {
-        const { name, status, permissions } = ChannelDto;
+        const { name, status, permissions, password } = ChannelDto;
         const found = await this.getChannelId(id);
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
         if (name)
             found.name = name;
         if (status)
             found.status = status;
         if (permissions)
             found.permissions = permissions;
+        if (password)
+            found.password = hashedPassword;
         await this.ChannelsRepository.save(found);
         return found;
     }

@@ -39,12 +39,12 @@ export class StatusGateway
   @SubscribeMessage("notification")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
-      const user: string = client.data.user;
+      const user: User = client.data.user;
       if (message[0] === "invite") {
-        console.log(message);
         if (message[1]) {
-          const invited = this.userService.getUserId(message[1]);
-          this.emitChannel(invited, "notification", "GAME", "GAME-ID", "USER");
+          const invited = await this.userService.getUserId(message[1]);
+          console.log(invited);
+          this.emitChannel("notification", "game", "GAME-ID", user.user_name);
         }
       }
     } catch {}
@@ -61,8 +61,8 @@ export class StatusGateway
     } catch {}
   }
 
-  handleDisconnect(client: Socket) {
-    const user = client.data.user;
+  async handleDisconnect(client: Socket) {
+    const user = await this.userService.getUserId(client.data.user.id);
     user.status = UserStatus.OFFLINE;
     this.userService.saveUser(user);
     this.logger.log(`Client disconnected: ${client.id}`);
