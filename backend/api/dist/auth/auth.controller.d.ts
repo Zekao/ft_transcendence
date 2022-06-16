@@ -5,9 +5,7 @@ export declare class AuthController {
     logfortytwo(req: any): void;
     callbackfortytwo(req: any): {
         accessToken: string;
-    };
-    tokenGen(req: any, id: number): {
-        accessToken: string;
+        firstime: boolean;
     };
     verifyGToken(body: any): Promise<boolean>;
     verifyQrCode(req: any, query: any): Promise<{

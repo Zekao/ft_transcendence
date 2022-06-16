@@ -44,6 +44,9 @@ export class User {
   @Column()
   TwoFA: boolean;
   @ApiProperty()
+  @Column()
+  First_time: boolean;
+  @ApiProperty()
   @Column({ nullable: true })
   TwoFAVerify: string;
   @ApiProperty()

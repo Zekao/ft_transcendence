@@ -28,10 +28,10 @@ let AuthService = class AuthService {
         this.userRepository = userRepository;
         this.userService = userService;
     }
-    GenerateJwtToken(FortyTwoID) {
+    GenerateJwtToken(FortyTwoID, firstime) {
         const payload = { FortyTwoID };
         const accessToken = this.jwtService.sign(payload);
-        return { accessToken };
+        return { accessToken, firstime };
     }
     GenerateGToken(Gtoken) {
         const payload = { Gtoken };
@@ -70,7 +70,11 @@ let AuthService = class AuthService {
             where: { FortyTwoID: FortyTwoID },
         });
         if (user) {
-            this.GenerateJwtToken(FortyTwoID);
+            if (user.First_time === false) {
+                user.First_time = false;
+                await this.userService.saveUser(user);
+            }
+            this.GenerateJwtToken(FortyTwoID, user.First_time);
         }
         else {
             throw new common_1.UnauthorizedException("Incorrect user id");

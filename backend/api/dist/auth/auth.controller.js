@@ -25,10 +25,7 @@ let AuthController = class AuthController {
     }
     logfortytwo(req) { }
     callbackfortytwo(req) {
-        return this.authService.GenerateJwtToken(req.user._json.id);
-    }
-    tokenGen(req, id) {
-        return this.authService.GenerateJwtToken(id);
+        return this.authService.GenerateJwtToken(req.user._json.id, req.user.First_time);
     }
     async verifyGToken(body) {
         try {
@@ -85,17 +82,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "callbackfortytwo", null);
-__decorate([
-    (0, common_1.Get)("/:id/token"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Debugging purpose / Generate token for specified user",
-    }),
-    __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "tokenGen", null);
 __decorate([
     (0, common_1.Post)("/qrcode/verify"),
     (0, swagger_1.ApiOperation)({

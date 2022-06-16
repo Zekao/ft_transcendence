@@ -223,6 +223,7 @@ let UsersService = class UsersService {
             loose: 0,
             rank: 0,
             ratio: 1,
+            First_time: true,
             avatar: "default.png" + "?" + new Date().getTime(),
         });
         try {

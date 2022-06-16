@@ -46,15 +46,10 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
-    return this.authService.GenerateJwtToken(req.user._json.id);
-  }
-
-  @Get("/:id/token")
-  @ApiOperation({
-    summary: "Debugging purpose / Generate token for specified user",
-  })
-  tokenGen(@Req() req, @Param("id") id: number) {
-    return this.authService.GenerateJwtToken(id);
+    return this.authService.GenerateJwtToken(
+      req.user._json.id,
+      req.user.First_time
+    );
   }
 
   @Post("/qrcode/verify")
