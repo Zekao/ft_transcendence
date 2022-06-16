@@ -41,9 +41,10 @@ export class StatusGateway
     try {
       const user: string = client.data.user;
       if (message[0] === "invite") {
+        console.log(message);
         if (message[1]) {
           const invited = this.userService.getUserId(message[1]);
-          this.emitChannel(invited, "notification", "GAME", "GAME-ID");
+          this.emitChannel(invited, "notification", "GAME", "GAME-ID", "USER");
         }
       }
     } catch {}
