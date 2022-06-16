@@ -159,7 +159,7 @@ export default Vue.extend({
 
   data: () => ({
     title: 'ft_transcendance',
-    invite: true,
+    invite: false,
     inviteMatchId: '',
     inviteUserName: '',
     valid: false,
