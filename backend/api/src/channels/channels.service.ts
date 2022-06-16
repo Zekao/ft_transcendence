@@ -97,7 +97,7 @@ export class ChannelsService {
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
   }
-
+  
   async getChannelMembers(channelId: string, Role?: ChannelMembersDto): Promise<User[]> {
     const { role, id } = Role;
     var relations : ChannelRelationsPicker[] = [];
@@ -151,7 +151,6 @@ export class ChannelsService {
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
-
   async createChannel(id:string, channelsDto: ChannelsDto): Promise<Channel> {
     const owner = await this.UsersService.getUserId(id);
     const { name, status, permissions, password } = channelsDto;

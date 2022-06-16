@@ -47,13 +47,12 @@ export class ChannelsController {
     return this.channelService.getChannelMembers(id, query);
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Get("/:id")
   @ApiOperation({
     summary: "Get channel info",
   })
-  getChannel(@Param("id") id: string, ): Promise<Channel> {
+  getChannel(@Param("id") id: string): Promise<Channel> {
     return this.channelService.getChannelId(id);
   }
 

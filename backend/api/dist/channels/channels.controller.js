@@ -112,6 +112,9 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, channels_dto_1.ChannelsDto]),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [channels_dto_1.ChannelsDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
 __decorate([
