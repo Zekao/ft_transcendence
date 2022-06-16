@@ -79,7 +79,7 @@
           >
             <v-list-item-content>
               <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <FriendMenu :friend="getUser(message.login)"/>
+                <FriendMenu :key="message.login" :friend="getUser(message.login)"/>
                 <v-btn small class="mr-2" @click="value = true">{{ message.login }}</v-btn>
                 <v-btn
                   v-if="isAuthUserOwner"
