@@ -116,6 +116,11 @@ let UsersService = class UsersService {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
                 relation.withMatchs && relations.push("matchs");
+                relation.withChannels && relations.push("joinedChannels")
+                    && relations.push("adminedChannels")
+                    && relations.push("ownedChannels")
+                    && relations.push("mutedChannels")
+                    && relations.push("bannedChannels");
             }
         }
         let found = null;
@@ -183,8 +188,8 @@ let UsersService = class UsersService {
     async getAvatar(id, res) {
         return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
     }
-    async saveUser(id) {
-        await this.UserRepository.save(id);
+    async saveUser(user) {
+        await this.UserRepository.save(user);
         return true;
     }
     async getWhoFollowMe(id) {

@@ -1,3 +1,4 @@
+import { User } from "src/users/users.entity";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
 import { ChannelFilteDto } from "./dto/channels-filter.dto";
@@ -6,13 +7,14 @@ export declare class ChannelsController {
     private channelService;
     constructor(channelService: ChannelsService);
     GetAllChannel(filters: ChannelFilteDto): Promise<Channel[]>;
+    getChannelMembers(id: string, query?: any): Promise<User[]>;
     getChannel(id: string): Promise<Channel>;
     getHistory(id: string): Promise<{
         login: string;
         message: string;
     }[]>;
     getChannelPassword(id: string, body: any): Promise<Channel>;
-    createChannel(ChannelsDtos: ChannelsDto): Promise<Channel>;
+    createChannel(req: any, ChannelsDtos: ChannelsDto): Promise<Channel>;
     deleteUser(id: string): Promise<boolean>;
     editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
 }

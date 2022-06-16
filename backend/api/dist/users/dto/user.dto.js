@@ -34,16 +34,16 @@ class UserDto {
                 this.matchs = user.matchs.map((match) => {
                     return new matchs_dto_1.MatchDto(match);
                 });
-            if (user.joined_channels)
-                this.joined_channels = user.joined_channels.map((channel) => {
+            if (user.joinedChannels)
+                this.joinedChannels = user.joinedChannels.map((channel) => {
                     return new channels_entity_1.Channel();
                 });
-            if (user.ownered_channels)
-                this.ownered_channels = user.ownered_channels.map((channel) => {
-                    return new channels_entity_1.Channel();
+            if (user.ownedChannels)
+                this.ownedChannels = user.ownedChannels.map((channel) => {
+                    return new channels_dto_1.ChannelsDto();
                 });
-            if (user.admined_channels)
-                this.admined_channels = user.admined_channels.map((channel) => {
+            if (user.adminedChannels)
+                this.adminedChannels = user.adminedChannels.map((channel) => {
                     return new channels_dto_1.ChannelsDto();
                 });
             if (user.bannedChannels)

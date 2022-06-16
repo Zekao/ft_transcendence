@@ -14,6 +14,7 @@ const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const user_dto_1 = require("../../users/dto/user.dto");
 const channels_enum_1 = require("../channels.enum");
+const users_entity_1 = require("../../users/users.entity");
 class ChannelsDto {
     constructor(channel) {
         if (channel) {
@@ -22,9 +23,15 @@ class ChannelsDto {
             this.status = channel.status;
             this.permissions = channel.permissions;
             this.password = channel.password;
-            this.members = channel.members;
-            this.admins = channel.admins;
             this.owner = channel.owner;
+            if (channel.members)
+                this.members = channel.members.map((member) => {
+                    return new user_dto_1.UserDto(member);
+                });
+            if (channel.admins)
+                this.admins = channel.admins.map((admin) => {
+                    return new user_dto_1.UserDto(admin);
+                });
             if (channel.mutedUsers)
                 this.mutedUsers = channel.mutedUsers.map((user) => {
                     return new user_dto_1.UserDto();
@@ -33,15 +40,6 @@ class ChannelsDto {
                 this.bannedUsers = channel.bannedUsers.map((user) => {
                     return new user_dto_1.UserDto();
                 });
-            if (channel.members)
-                this.members = channel.members.map((user) => {
-                    return new user_dto_1.UserDto();
-                });
-            if (channel.admins)
-                this.admins = channel.admins.map((user) => {
-                    return new user_dto_1.UserDto();
-                });
-            this.owner = channel.owner;
         }
     }
 }
@@ -59,7 +57,7 @@ __decorate([
 ], ChannelsDto.prototype, "permissions", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(channels_enum_1.ChannelStatus, {
-        message: "status must be: PRIVATE, PUBLIC",
+        message: "status must be: PRIVATE, PUBLIC, PROTECTED",
     }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, swagger_1.ApiProperty)(),
@@ -92,7 +90,7 @@ __decorate([
 ], ChannelsDto.prototype, "admins", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: () => user_dto_1.UserDto }),
-    __metadata("design:type", user_dto_1.UserDto)
+    __metadata("design:type", users_entity_1.User)
 ], ChannelsDto.prototype, "owner", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),

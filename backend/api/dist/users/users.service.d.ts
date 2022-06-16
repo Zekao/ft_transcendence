@@ -12,6 +12,7 @@ export declare class UserRelationsPicker {
     withFriends?: boolean;
     withBlocked?: boolean;
     withMatchs?: boolean;
+    withChannels?: boolean;
 }
 export declare class UsersService {
     private UserRepository;
@@ -38,7 +39,7 @@ export declare class UsersService {
     getRank(id: string): Promise<number>;
     getRatio(id: string): Promise<string>;
     getAvatar(id: string, res: any): Promise<any>;
-    saveUser(id: User): Promise<boolean>;
+    saveUser(user: User): Promise<boolean>;
     getWhoFollowMe(id: string): Promise<User[]>;
     getWhoBlockMe(id: string): Promise<User[]>;
     createUsers(authCredentialsDto: AuthCredentialsDto): Promise<void>;

@@ -5,6 +5,7 @@
       </canvas>
     </v-card>
   </div>
+  
 </template>
 
 <script lang="ts">
@@ -13,6 +14,7 @@ import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
 
 // keybinds that the user will use
+
 export default V.extend({
   // <p>
   //   <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
@@ -166,6 +168,7 @@ export default V.extend({
         this.ball.x = 420;
         this.ball.y = 400;
         this.direction = { x: 0 }
+
         // this.velocity = 0.00005;
         while ( Math.abs(this.direction.x) <= 0.2 || Math.abs(this.direction.x) >= 0.9 ) {
           const heading = this.randomNumberBetween(0, 2 * Math.PI)
@@ -264,7 +267,7 @@ export default V.extend({
             // on verifie si la balle touche le joueur 1
             if (this.ball.x >= this.position.x && this.ball.x <= this.position.x + 20 && this.ball.y >= this.position.y && this.ball.y <= this.position.y + 120) {
               this.direction.x = -this.direction.x;
-            }
+            } 
             // on verifie si la balle touche le joueur 2
             if (this.ball.x >= this.position2.x && this.ball.x <= this.position2.x + 20 && this.ball.y >= this.position2.y && this.ball.y <= this.position2.y + 120) {
               this.direction.x = -this.direction.x;

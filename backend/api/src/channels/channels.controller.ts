@@ -8,7 +8,7 @@ import {
   Delete,
   Patch,
   UseGuards,
-  Req,
+  Request,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -16,6 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { User } from "src/users/users.entity";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
 import { ChannelsService } from "./channels.service";
@@ -37,6 +38,13 @@ export class ChannelsController {
     if (Object.keys(filters).length)
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/:id/members")
+  @ApiOperation({ summary: "Return list of all members of channel" })
+  getChannelMembers(@Param("id") id: string, @Query() query?): Promise<User[]> {
+    return this.channelService.getChannelMembers(id, query);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,12 +80,13 @@ export class ChannelsController {
   /*                   POST                                                     */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Post("/create")
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(@Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
-    return this.channelService.createChannel(ChannelsDtos);
+  createChannel(@Request() req, @Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+    return this.channelService.createChannel(req.user.id, ChannelsDtos);
   }
 
   /* ************************************************************************** */

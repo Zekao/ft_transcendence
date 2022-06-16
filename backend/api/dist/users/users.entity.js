@@ -126,19 +126,19 @@ __decorate([
     (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.members, { nullable: true }),
     (0, typeorm_1.JoinTable)({ name: "joinedChannels" }),
     __metadata("design:type", Array)
-], User.prototype, "joined_channels", void 0);
+], User.prototype, "joinedChannels", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.admins, { nullable: true }),
     (0, typeorm_1.JoinTable)({ name: "adminedChannels" }),
     __metadata("design:type", Array)
-], User.prototype, "admined_channels", void 0);
+], User.prototype, "adminedChannels", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => channels_entity_1.Channel, (channel) => channel.owner, { nullable: true }),
     (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
-    (0, typeorm_1.JoinTable)({ name: "owneredChannels" }),
+    (0, typeorm_1.JoinTable)({ name: "ownedChannels" }),
     __metadata("design:type", Array)
-], User.prototype, "ownered_channels", void 0);
+], User.prototype, "ownedChannels", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.mutedUsers, {
         nullable: true,

@@ -33,6 +33,7 @@ export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
   withMatchs?: boolean;
+  withChannels?: boolean;
 }
 
 @Injectable()
@@ -128,6 +129,11 @@ export class UsersService {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
         relation.withMatchs && relations.push("matchs");
+        relation.withChannels && relations.push("joinedChannels")
+                              && relations.push("adminedChannels")
+                              && relations.push("ownedChannels")
+                              && relations.push("mutedChannels")
+                              && relations.push("bannedChannels");
       }
     }
     let found = null;
@@ -207,8 +213,8 @@ export class UsersService {
     return res.sendFile((await this.getUserId(id)).avatar, { root: "./image" });
   }
 
-  async saveUser(id: User): Promise<boolean> {
-    await this.UserRepository.save(id);
+  async saveUser(user: User): Promise<boolean> {
+    await this.UserRepository.save(user);
     return true;
   }
 

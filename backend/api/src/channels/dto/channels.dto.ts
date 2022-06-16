@@ -20,9 +20,15 @@ export class ChannelsDto {
       this.status = channel.status;
       this.permissions = channel.permissions;
       this.password = channel.password;
-      this.members = channel.members;
-      this.admins = channel.admins;
       this.owner = channel.owner;
+      if (channel.members)
+        this.members = channel.members.map((member) => {
+          return new UserDto(member);
+        });
+      if (channel.admins)
+        this.admins = channel.admins.map((admin) => {
+          return new UserDto(admin);
+        });
       if (channel.mutedUsers)
         this.mutedUsers = channel.mutedUsers.map((user) => {
           return new UserDto();
@@ -31,15 +37,6 @@ export class ChannelsDto {
         this.bannedUsers = channel.bannedUsers.map((user) => {
           return new UserDto();
         });
-      if (channel.members)
-        this.members = channel.members.map((user) => {
-          return new UserDto();
-        });
-      if (channel.admins)
-        this.admins = channel.admins.map((user) => {
-          return new UserDto();
-        });
-      this.owner = channel.owner;
     }
   }
 
@@ -53,7 +50,7 @@ export class ChannelsDto {
   @ApiProperty()
   permissions: ChannelPermissions;
   @IsEnum(ChannelStatus, {
-    message: "status must be: PRIVATE, PUBLIC",
+    message: "status must be: PRIVATE, PUBLIC, PROTECTED",
   })
   @IsNotEmpty()
   @ApiProperty()
@@ -80,7 +77,7 @@ export class ChannelsDto {
   admins: UserDto[];
 
   @ApiProperty({ type: () => UserDto })
-  owner: UserDto;
+  owner: User;
 
   @ApiProperty()
   mutedUsers: UserDto[];

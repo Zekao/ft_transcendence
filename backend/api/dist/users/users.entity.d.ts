@@ -23,9 +23,9 @@ export declare class User {
     matchs: Matchs[];
     friends: User[];
     blockedUsers: User[];
-    joined_channels: Channel[];
-    admined_channels: Channel[];
-    ownered_channels: ChannelsDto[];
+    joinedChannels: Channel[];
+    adminedChannels: Channel[];
+    ownedChannels: ChannelsDto[];
     mutedChannels: Channel[];
     bannedChannels: Channel[];
 }
