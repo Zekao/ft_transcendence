@@ -237,10 +237,12 @@ export default V.extend({
               if (this.score.player2 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
+                this.socket.emit("move", "ADD2");
                 this.score.player2++;
               // this.velocity = 0.0005; // va savoir pourquoi si je reset la velocity, la balle ne bouge plus
                 this.resetBall();
@@ -251,11 +253,13 @@ export default V.extend({
               if (this.score.player1 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
                 this.score.player1++;
+                this.socket.emit("move", "ADD1");
                 this.resetBall();
               }
             }

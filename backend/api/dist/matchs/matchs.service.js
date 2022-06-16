@@ -155,6 +155,9 @@ let MatchsService = class MatchsService {
         }
         return match;
     }
+    async saveMatch(match) {
+        return await this.MatchsRepository.save(match);
+    }
     async deleteMatch(id) {
         const found = await this.getMatchsId(id);
         if (!found)

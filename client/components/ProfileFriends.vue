@@ -42,8 +42,8 @@ export default Vue.extend({
 
   // data: () => ({
   //   authUserFriends: [
-  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
+  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://trans.nabentay.fr:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
+  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://trans.nabentay.fr:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
   //   ],
   // }),
 

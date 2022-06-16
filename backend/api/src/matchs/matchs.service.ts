@@ -195,6 +195,10 @@ export class MatchsService {
     return match;
   }
 
+  async saveMatch(match: Matchs): Promise<Matchs> {
+    return await this.MatchsRepository.save(match);
+  }
+
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
