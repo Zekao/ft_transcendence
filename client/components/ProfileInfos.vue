@@ -41,7 +41,7 @@
         </v-form>
       </v-list-item>
       <v-list-item>
-        <v-btn :loading="is2FADialog" block @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()">
+        <v-btn :loading="isImageLoading" block @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()">
           {{ isTwoFactorAuth ? 'Disable' : 'Enable' }}
           <v-icon class="ml-2 mb-1">mdi-two-factor-authentication</v-icon>
         </v-btn>
@@ -81,6 +81,7 @@ export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
   data: () => ({
+    isImageLoading: false,
     is2FADialog: false,
     loading: false,
     code: '',
@@ -141,10 +142,13 @@ export default Vue.extend({
     },
 
     async fetchQrCode() {
-      console.log('hey')
-      this.is2FADialog = true
+      this.isImageLoading = true
       try {
         await this.$axios.$get('/auth/qrcode')
+        setTimeout(() => {
+          this.isImageLoading = false
+          this.is2FADialog = true
+          }, 2000)
       } catch(err) {
         console.log(err)
       }
