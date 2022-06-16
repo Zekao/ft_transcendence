@@ -58,7 +58,7 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/users/${this.authUser.id}/messages/${this.user.id}`)
+      const res = await this.$axios.$get(`/chat/me/${this.user.user_name}`)
       this.messages = res.length
         ? [...res.map((el: string) => JSON.parse(el))]
         : []
