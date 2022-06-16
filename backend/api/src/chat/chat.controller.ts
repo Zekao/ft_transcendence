@@ -25,15 +25,6 @@ export class ChatController {
   /* ************************************************************************** */
 
   @UseGuards(JwtAuthGuard)
-  @Get()
-  @ApiOperation({
-    summary: "Return list of all message",
-  })
-  GetMessage(): Promise<Chat[]> {
-    return this.chatService.GetMessage();
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get("/me/:id")
   @ApiOperation({
     summary: "Return list of all message about specified id",

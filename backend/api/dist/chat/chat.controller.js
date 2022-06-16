@@ -23,25 +23,12 @@ let ChatController = class ChatController {
         this.chatService = chatService;
         this.usersService = usersService;
     }
-    GetMessage() {
-        return this.chatService.GetMessage();
-    }
     async GetHistoryMessage(id, req) {
         const user = await this.usersService.getUserId(id);
         const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
         return this.chatService.getHistory(chat);
     }
 };
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({
-        summary: "Return list of all message",
-    }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ChatController.prototype, "GetMessage", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/:id"),
