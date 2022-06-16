@@ -14,6 +14,28 @@
     </v-toolbar>
     <v-sheet v-else width="100%">
       <v-toolbar v-if="isAuthUserAdmin" class="d-flex justify-center">
+        <v-menu v-if="isAuthUserOwner" :close-on-content-click="false">
+          <template #activator="{ on }">
+            <v-btn small icon class="mr-2" v-on="on">
+              <v-icon>mdi-lock</v-icon>
+            </v-btn>
+          </template>
+          <v-card class="d-flex flex-column justify-center">
+            <v-text-field
+                v-model="newPassword"
+                dense
+                outlined
+                hide-details
+                class="ma-2"
+              ></v-text-field>
+              <v-btn class="ma-2" @click="changePassword">
+                Change password
+              </v-btn>
+              <v-btn class="ma-2" @click="updatePassword">
+                {{ channel.status === 'PROTECTED' ? 'Disable' : 'Enable' }}
+              </v-btn>
+          </v-card>
+        </v-menu>
         <v-menu v-if="isAuthUserOwner">
           <template #activator="{ on }">
             <v-btn small class="mr-2" v-on="on" @click="fetchAdmin">
@@ -157,6 +179,7 @@ export default Vue.extend({
     admin: true,
     unlocked: false,
     password: '',
+    newPassword: '',
     selectedUser: {} as IUser,
     messageText: '',
     messages: [] as { login: string; message: string }[],
@@ -238,6 +261,24 @@ export default Vue.extend({
         })
       } catch (err) {
         this.password = ''
+      }
+    },
+    async changePassword() {
+      try {
+        await this.$axios.$patch(`/channel/${this.channel.id}`, {
+          password: this.newPassword,
+        })
+      } catch (err) {
+        this.newPassword = ''
+      }
+    },
+    async updatePassword() {
+      try {
+        await this.$axios.$patch(`/channel/${this.channel.id}`, {
+          status: this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED',
+        })
+      } catch(err) {
+        console.log(err)
       }
     },
     async deleteChannel() {
