@@ -48,7 +48,7 @@ export class AuthController {
   callbackfortytwo(@Req() req) {
     return this.authService.GenerateJwtToken(
       req.user._json.id,
-      req.user.First_time
+      req.user._json.First_time
     );
   }
 
