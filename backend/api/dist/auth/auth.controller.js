@@ -25,7 +25,7 @@ let AuthController = class AuthController {
     }
     logfortytwo(req) { }
     callbackfortytwo(req) {
-        return this.authService.GenerateJwtToken(req.user._json.id, req.user.First_time);
+        return this.authService.GenerateJwtToken(req.user._json.id, req.user._json.First_time);
     }
     async verifyGToken(body) {
         try {
