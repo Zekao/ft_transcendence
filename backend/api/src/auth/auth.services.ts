@@ -29,7 +29,6 @@ export class AuthService {
   GenerateJwtToken(FortyTwoID: number, firstime: boolean) {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.jwtService.sign(payload);
-    console.log({ accessToken, firstime });
     return { accessToken, firstime };
   }
   GenerateGToken(Gtoken: number) {
