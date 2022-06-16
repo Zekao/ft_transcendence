@@ -141,7 +141,7 @@ let ChannelsService = class ChannelsService {
         return true;
     }
     async createChannel(id, channelsDto) {
-        const owner = await this.UsersService.getUserId(id);
+        const owner = await this.UsersService.getUserId(id, [{ withChannels: true }]);
         const { name, status, permissions, password } = channelsDto;
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -150,10 +150,9 @@ let ChannelsService = class ChannelsService {
             status,
             permissions,
             password: hashedPassword,
+            owner: owner,
         });
-        channel.owner = owner;
         await this.ChannelsRepository.save(channel);
-        console.log((await this.getChannelId(channel.id, [{ withAllMembers: true }])));
         return channel;
     }
     async validateChannelPassword(id, channelPasswordDto) {

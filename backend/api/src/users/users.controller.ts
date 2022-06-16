@@ -137,7 +137,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get("/me/blocked")
   @ApiOperation({
-    summary: "Return the list of friends of a specified user profile",
+    summary: "Return the list of blocked users of a specified user profile",
   })
   @ApiOkResponse({
     description: "Ok.",

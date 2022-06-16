@@ -31,8 +31,6 @@ let GameGateway = class GameGateway {
         try {
             const player = client.data.user;
             const match = client.data.match;
-            console.log("FIRST PLAYER INFORMATIONS:", match.FirstPlayer);
-            if (player == match.FirstPlayer)
             console.log('============ DEBUG ============');
             console.log(' first player :', match.FirstPlayer.user_name);
             console.log('============ PLAYING ============');
@@ -48,13 +46,6 @@ let GameGateway = class GameGateway {
                 pos2 = 25;
             console.log(pos1);
             console.log(pos2);
-            if (message == "up") {
-                await this.matchService.setPosFirstPlayer(match, pos1 - 5);
-                this.emitChannel(client.data, match.id, pos1, pos2);
-            }
-            if (message == "down")
-                await this.matchService.setPosFirstPlayer(match, pos1 + 5);
-            this.emitChannel(client.data, "move", pos1);
             if (player.user_name == match.FirstPlayer.user_name) {
                 if (message == "up") {
                     await this.matchService.setPosFirstPlayer(match, pos1 - 13);

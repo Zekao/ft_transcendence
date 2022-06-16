@@ -189,7 +189,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return the list of friends of a specified user profile",
+        summary: "Return the list of blocked users of a specified user profile",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",

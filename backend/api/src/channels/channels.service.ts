@@ -152,7 +152,7 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
   async createChannel(id:string, channelsDto: ChannelsDto): Promise<Channel> {
-    const owner = await this.UsersService.getUserId(id);
+    const owner = await this.UsersService.getUserId(id, [{withChannels: true}]);
     const { name, status, permissions, password } = channelsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -161,11 +161,9 @@ export class ChannelsService {
       status,
       permissions,
       password: hashedPassword,
+      owner: owner,
     });
-    // await this.ChannelsRepository.save(channel);
-    channel.owner = owner;
     await this.ChannelsRepository.save(channel);
-    console.log((await this.getChannelId(channel.id, [{withAllMembers: true}])));
     return channel;
   }
 

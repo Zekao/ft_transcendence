@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { Channel } from "./channels.entity";
 import { ChannelFilteDto, ChannelMembersDto, ChannelStatusDto } from "./dto/channels-filter.dto";
 import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
+import { User } from "src/users/users.entity";
 export declare class ChannelRelationsPicker {
     withAllMembers?: boolean;
     withMembersOnly?: boolean;

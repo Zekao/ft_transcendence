@@ -1,6 +1,7 @@
 import { Channel } from "../channels.entity";
 import { UserDto } from "src/users/dto/user.dto";
 import { ChannelPermissions, ChannelStatus } from "../channels.enum";
+import { User } from "../../users/users.entity";
 export declare class ChannelsDto {
     constructor(channel?: Channel);
     id: string;
@@ -10,7 +11,7 @@ export declare class ChannelsDto {
     password: string;
     members: UserDto[];
     admins: UserDto[];
-    owner: UserDto;
+    owner: User;
     mutedUsers: UserDto[];
     bannedUsers: UserDto[];
 }
