@@ -118,6 +118,7 @@ let MatchsService = class MatchsService {
             posBally: 0,
             posFirstPlayer: 250,
             posSecondPlayer: 250,
+            direction: 0,
             status: matchs_enum_1.MatchStatus.PENDING,
             specs: [],
         });
