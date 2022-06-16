@@ -46,6 +46,9 @@ export class Matchs {
   @Column()
   posBally: number;
 
+  @Column({ type: "real" })
+  direction: number;
+
   @OneToMany(() => User, (user) => user.matchs, { nullable: true })
   winner: User;
 

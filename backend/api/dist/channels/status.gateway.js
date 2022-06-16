@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatusGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
+const socket_io_1 = require("socket.io");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
@@ -27,6 +28,30 @@ let StatusGateway = class StatusGateway {
     }
     afterInit(server) {
         this.logger.log("Init");
+    }
+    async SendMessageToChannel(client, message) {
+        try {
+            const user = client.data.user;
+            if (message[0] === "INVITE") {
+                if (message[1]) {
+                    const invited = this.userService.getUserId(message[1]);
+                    this.emitChannel(invited, "notification", "GAME", "GAME-ID");
+                }
+            }
+        }
+        catch (_a) { }
+    }
+    emitChannel(channel, event, ...args) {
+        try {
+            if (!channel.user)
+                return;
+            const sockets = Array.from(this.server.sockets.values());
+            sockets.forEach((socket) => {
+                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                    socket.emit(event, ...args);
+            });
+        }
+        catch (_a) { }
     }
     handleDisconnect(client) {
         const user = client.data.user;
@@ -46,7 +71,6 @@ let StatusGateway = class StatusGateway {
             client.data.user = user;
             if (this.isStatus(client, user))
                 return;
-            throw new common_1.UnauthorizedException("You must specify a channel, or msg");
         }
         catch (err) {
             return client.disconnect();
@@ -57,6 +81,12 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
 ], StatusGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("notification"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", Promise)
+], StatusGateway.prototype, "SendMessageToChannel", null);
 StatusGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
