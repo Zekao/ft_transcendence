@@ -56,19 +56,19 @@ export default Vue.extend({
     }),
   },
 
-  // async fetch() {
-  //   try {
-  //     const res = await this.$axios.$get(`/users/${this.authUser.id}/messages/${this.user.id}`)
-  //     this.messages = res.length
-      //   ? [...res.map((el: string) => JSON.parse(el))]
-      //   : []
-      // this.$nextTick(() => {
-      //   this.scrollToBottom()
-      // })
-  //   } catch(err) {
-  //     console.log(err)
-  //   }
-  // },
+  async fetch() {
+    try {
+      const res = await this.$axios.$get(`/users/${this.authUser.id}/messages/${this.user.id}`)
+      this.messages = res.length
+        ? [...res.map((el: string) => JSON.parse(el))]
+        : []
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  },
 
   mounted() {
     this.socket = this.$nuxtSocket({
