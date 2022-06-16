@@ -105,8 +105,8 @@ let MatchsService = class MatchsService {
         const match = this.MatchsRepository.create({
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
-            posFirstPlayer: 0,
-            posSecondPlayer: 0,
+            posFirstPlayer: 250,
+            posSecondPlayer: 250,
             status: matchs_enum_1.MatchStatus.PENDING,
             specs: [],
         });

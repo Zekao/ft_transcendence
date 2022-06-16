@@ -1,5 +1,6 @@
 import { Channel } from "src/channels/channels.entity";
 import { ChannelsDto } from "src/channels/dto/channels.dto";
+import { Chat } from "../chat/chat.entity";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 export declare class User {
@@ -21,6 +22,7 @@ export declare class User {
     rank: number;
     ratio: number;
     matchs: Matchs[];
+    privateMessage: Chat[];
     friends: User[];
     blockedUsers: User[];
     joined_channels: Channel[];

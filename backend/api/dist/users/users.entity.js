@@ -14,6 +14,7 @@ exports.User = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const channels_entity_1 = require("../channels/channels.entity");
 const typeorm_1 = require("typeorm");
+const chat_entity_1 = require("../chat/chat.entity");
 const matchs_entity_1 = require("../matchs/matchs.entity");
 const users_enum_1 = require("./users.enum");
 let User = User_1 = class User {
@@ -109,6 +110,12 @@ __decorate([
     (0, typeorm_1.JoinTable)({ name: "MatchHistory" }),
     __metadata("design:type", Array)
 ], User.prototype, "matchs", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.ManyToMany)(() => chat_entity_1.Chat, (privateMessage) => privateMessage.participants),
+    (0, typeorm_1.JoinTable)({ name: "Private Message" }),
+    __metadata("design:type", Array)
+], User.prototype, "privateMessage", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.ManyToMany)(() => User_1, (user) => user.friends),

@@ -6,6 +6,7 @@ import { ChannelsModule } from "./channels/channels.module";
 import { MatchsModule } from "./matchs/matchs.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
+import { ChatModule } from "./chat/chat.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { join } from "path";
     AuthModule,
     ChannelsModule,
     MatchsModule,
+    ChatModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "image"),
       serveRoot: "/image",

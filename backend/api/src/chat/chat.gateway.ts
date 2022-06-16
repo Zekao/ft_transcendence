@@ -13,20 +13,19 @@ import { Socket, Server } from "socket.io";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
-import { ChannelsService } from "./channels.service";
+import { ChannelsService } from "../channels/channels.service";
 import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
-import { Channel } from "./channels.entity";
+import { Channel } from "../channels/channels.entity";
+import { ChatService } from "./chat.service";
 
 @WebSocketGateway({ namespace: "chat" })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly userService: UsersService,
     private readonly authService: AuthService,
-    private readonly channelService: ChannelsService
+    private readonly chatService: ChatService,
   ) {}
 
   @WebSocketServer() server: any;

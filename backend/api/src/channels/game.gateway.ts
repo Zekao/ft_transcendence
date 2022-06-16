@@ -68,30 +68,32 @@ export class GameGateway
     try {
       const player = client.data.user;
       const match: Matchs = client.data.match;
+
       console.log("============ DEBUG ============");
       console.log(" first player :", match.FirstPlayer.user_name);
       console.log("============ PLAYING ============");
       console.log(player.user_name);
       console.log("============ WHO ============");
       if (player.user_name == match.FirstPlayer.user_name) console.log("FIRST");
-      else console.log("SECOND");
-      const pos1 = await this.matchService.getPosFirstPlayer(match);
-      const pos2 = await this.matchService.getPosSecondPlayer(match);
+      let pos1 = await this.matchService.getPosFirstPlayer(match);
+      let pos2 = await this.matchService.getPosSecondPlayer(match);
+      if (pos1 == 0) pos1 = 25;
+      if (pos2 == 0) pos2 = 25;
       console.log(pos1);
       console.log(pos2);
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message == "up") {
-          await this.matchService.setPosFirstPlayer(match, pos1 - 5);
+          await this.matchService.setPosFirstPlayer(match, pos1 - 13);
         }
         if (message == "down")
-          await this.matchService.setPosFirstPlayer(match, pos1 + 5);
+          await this.matchService.setPosFirstPlayer(match, pos1 + 13);
         this.emitGame(client.data, "move", pos1, pos2);
       } else {
         if (message == "up") {
-          await this.matchService.setPosSecondPlayer(match, pos2 - 5);
+          await this.matchService.setPosSecondPlayer(match, pos2 - 13);
         }
         if (message == "down") {
-          await this.matchService.setPosSecondPlayer(match, pos2 + 5);
+          await this.matchService.setPosSecondPlayer(match, pos2 + 13);
         }
         this.emitGame(client.data, "move", pos1, pos2);
       }
