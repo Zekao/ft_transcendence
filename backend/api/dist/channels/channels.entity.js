@@ -41,31 +41,31 @@ __decorate([
     __metadata("design:type", Array)
 ], Channel.prototype, "history", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.joinedChannels, { nullable: true }),
-    (0, typeorm_1.JoinTable)({ name: "members" }),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, { nullable: true }),
+    (0, typeorm_1.JoinTable)({ name: 'members' }),
     __metadata("design:type", Array)
 ], Channel.prototype, "members", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.adminedChannels, { nullable: true }),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, { nullable: true }),
     (0, typeorm_1.JoinTable)({ name: "admins" }),
     __metadata("design:type", Array)
 ], Channel.prototype, "admins", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, (user) => user.ownedChannels, { nullable: false }),
+    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, { nullable: false }),
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
     (0, typeorm_1.JoinTable)({ name: "owner" }),
     __metadata("design:type", users_entity_1.User)
 ], Channel.prototype, "owner", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.mutedChannels, { nullable: true }),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, { nullable: true }),
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
-    (0, typeorm_1.JoinTable)({ name: "muted" }),
+    (0, typeorm_1.JoinTable)({ name: "mutedUsers" }),
     __metadata("design:type", Array)
 ], Channel.prototype, "mutedUsers", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, (user) => user.bannedChannels, { nullable: true }),
+    (0, typeorm_1.ManyToMany)(() => users_entity_1.User, { nullable: true }),
     (0, swagger_1.ApiProperty)({ type: () => users_entity_1.User }),
-    (0, typeorm_1.JoinTable)({ name: "banned" }),
+    (0, typeorm_1.JoinTable)({ name: "bannedUsers" }),
     __metadata("design:type", Array)
 ], Channel.prototype, "bannedUsers", void 0);
 Channel = __decorate([

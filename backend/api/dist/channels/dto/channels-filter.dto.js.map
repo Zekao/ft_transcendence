@@ -1,1 +1,1 @@
-{"version":3,"file":"channels-filter.dto.js","sourceRoot":"","sources":["../../../src/channels/dto/channels-filter.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,eAAe;CAI3B;AAJD,0CAIC;AAED,MAAa,gBAAgB;CAE5B;AAFD,4CAEC;AAED,MAAa,iBAAiB;CAG7B;AAHD,8CAGC"}
+{"version":3,"file":"channels-filter.dto.js","sourceRoot":"","sources":["../../../src/channels/dto/channels-filter.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,eAAe;CAI3B;AAJD,0CAIC;AAED,MAAa,gBAAgB;CAE5B;AAFD,4CAEC;AAED,MAAa,iBAAiB;CAI7B;AAJD,8CAIC"}

@@ -20,6 +20,7 @@ export declare class ChannelsService {
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
     getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
     getChannelMembers(channelId: string, Role?: ChannelMembersDto): Promise<User[]>;
+    getChannelBanMembers(channelId: string): Promise<User[]>;
     getChannelHistory(id: string): Promise<{
         login: string;
         message: string;
@@ -27,6 +28,10 @@ export declare class ChannelsService {
     saveChannel(id: Channel): Promise<boolean>;
     createChannel(id: string, channelsDto: ChannelsDto): Promise<Channel>;
     validateChannelPassword(id: string, channelPasswordDto: ChannelPasswordDto): Promise<Channel>;
+    addUserToMember(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    addUserToAdmin(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    addUserToMuted(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    addUserToBanned(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
     deleteChannel(id: string): Promise<boolean>;
     editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel>;
 }

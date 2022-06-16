@@ -29,7 +29,6 @@ let ChannelsController = class ChannelsController {
         return this.channelService.getChannel();
     }
     getChannelMembers(id, query) {
-        console.log(query);
         return this.channelService.getChannelMembers(id, query);
     }
     getChannel(id) {
@@ -43,6 +42,18 @@ let ChannelsController = class ChannelsController {
     }
     createChannel(req, ChannelsDtos) {
         return this.channelService.createChannel(req.user.id, ChannelsDtos);
+    }
+    addUserToMember(req, id, query) {
+        return this.channelService.addUserToMember(req.user.id, id, query);
+    }
+    addUserToAdmin(req, id, query) {
+        return this.channelService.addUserToAdmin(req.user.id, id, query);
+    }
+    addUserToMuted(req, id, query) {
+        return this.channelService.addUserToMuted(req.user.id, id, query);
+    }
+    addUserToBanned(req, id, query) {
+        return this.channelService.addUserToBanned(req.user.id, id, query);
     }
     deleteUser(id) {
         return this.channelService.deleteChannel(id);
@@ -115,6 +126,58 @@ __decorate([
     __metadata("design:paramtypes", [Object, channels_dto_1.ChannelsDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "createChannel", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/:id/members"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a member to a channel",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "addUserToMember", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/:id/admin"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a member to a Admin channel",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "addUserToAdmin", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/:id/mute"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a member to a Muted Users",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "addUserToMuted", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Post)("/:id/ban"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Add a member to a Banned Users",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "addUserToBanned", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({

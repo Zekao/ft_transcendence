@@ -116,12 +116,6 @@ let UsersService = class UsersService {
                 relation.withFriends && relations.push("friends");
                 relation.withBlocked && relations.push("blockedUsers");
                 relation.withMatchs && relations.push("matchs");
-                relation.withChannels &&
-                    relations.push("joinedChannels") &&
-                    relations.push("adminedChannels") &&
-                    relations.push("ownedChannels") &&
-                    relations.push("mutedChannels") &&
-                    relations.push("bannedChannels");
             }
         }
         let found = null;
@@ -292,6 +286,7 @@ let UsersService = class UsersService {
             filename: file.filename,
         };
         const split = id.avatar.split("?");
+        console.log("aa");
         const name = split[split.length - 2];
         const extfile = (0, path_1.extname)(name);
         if (extfile != (0, path_1.extname)(file.filename)) {

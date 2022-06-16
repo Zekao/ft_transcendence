@@ -1,3 +1,4 @@
+
 import {
   Injectable,
   NotFoundException,
@@ -33,7 +34,6 @@ export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
   withMatchs?: boolean;
-  withChannels?: boolean;
 }
 
 @Injectable()
@@ -129,12 +129,6 @@ export class UsersService {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
         relation.withMatchs && relations.push("matchs");
-        relation.withChannels &&
-          relations.push("joinedChannels") &&
-          relations.push("adminedChannels") &&
-          relations.push("ownedChannels") &&
-          relations.push("mutedChannels") &&
-          relations.push("bannedChannels");
       }
     }
     let found = null;
@@ -328,6 +322,7 @@ export class UsersService {
       filename: file.filename,
     };
     const split = id.avatar.split("?");
+    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {

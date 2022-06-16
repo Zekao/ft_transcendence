@@ -10,4 +10,5 @@ export declare class ChannelStatusDto {
 export declare class ChannelMembersDto {
     role: string;
     id: string;
+    user: string;
 }
