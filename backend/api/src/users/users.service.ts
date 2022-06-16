@@ -328,7 +328,6 @@ export class UsersService {
       filename: file.filename,
     };
     const split = id.avatar.split("?");
-    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {
