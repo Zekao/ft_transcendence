@@ -28,12 +28,6 @@ let GameGateway = class GameGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
-    async resetball(client, message) {
-        try {
-            this.emitOnlyToOther(client.data, "reset");
-        }
-        catch (_a) { }
-    }
     async waitingList(client, message) {
         try {
             const player = client.data.user;
@@ -93,18 +87,6 @@ let GameGateway = class GameGateway {
                 }
                 this.emitGame(client.data, "move", pos1, pos2);
             }
-        }
-        catch (_a) { }
-    }
-    emitOnlyToOther(player, event, ...args) {
-        try {
-            if (!player.user)
-                return;
-            const sockets = Array.from(this.server.sockets.values());
-            sockets.forEach((socket) => {
-                if (player.game == socket.data.game && player.user != socket.data.user)
-                    socket.emit(event, ...args);
-            });
         }
         catch (_a) { }
     }
@@ -173,12 +155,6 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
 ], GameGateway.prototype, "server", void 0);
-__decorate([
-    (0, websockets_1.SubscribeMessage)("reset"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
-    __metadata("design:returntype", Promise)
-], GameGateway.prototype, "resetball", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)("action"),
     __metadata("design:type", Function),
