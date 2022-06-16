@@ -37,7 +37,8 @@ export default Vue.extend({
     const { code: authCode } = query
     if (authCode) {
       try {
-        await store.dispatch('login', authCode)
+        const res = await store.dispatch('login', authCode)
+        if (res.firstime) redirect('/profile')
         redirect('/')
       } catch (err) {
         return {

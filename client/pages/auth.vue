@@ -35,9 +35,9 @@ export default Vue.extend({
   async middleware({ $cookies, redirect, store }) {
     const accessToken = $cookies.get('access_token')
     if (!accessToken) redirect('/login')
-    store.commit('AUTH_SUCCESS', { accessToken })
     try {
       const res = await store.dispatch('user/fetchAuth')
+      store.commit('AUTH_SUCCESS', { accessToken })
       console.log(res)
     } catch (err) {
       store.dispatch('logout')
