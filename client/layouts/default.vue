@@ -160,6 +160,7 @@ export default Vue.extend({
   data: () => ({
     title: 'ft_transcendance',
     invite: true,
+    inviteMatchId: '',
     valid: false,
     channelVisible: false,
     channelName: '',
@@ -235,6 +236,13 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
+    this.socket.on('notification', (game: string, matchId: string, userName: string) => {
+      if (game === 'game') {
+        this.invite = true
+        this.inviteMatchid = matchId
+        this.inviteUserName = userName
+      }
+    })
   },
 
   methods: {
