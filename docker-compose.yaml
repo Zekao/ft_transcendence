@@ -46,13 +46,15 @@ services:
 
   client:
     image: node:16-alpine
-    working_dir: /app
+    working_dir: /usr/src/app
     entrypoint: |
       /bin/sh -c "
-        yarn dev --dotenv ../.env
+        yarn install;
+        yarn dev --dotenv /.env
       "
     volumes:
-      - ./client:/app
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
       - ./.env:/.env
     env_file:
       - .env
