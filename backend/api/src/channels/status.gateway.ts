@@ -40,7 +40,7 @@ export class StatusGateway
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
       const user: string = client.data.user;
-      if (message[0] === "INVITE") {
+      if (message[0] === "invite") {
         if (message[1]) {
           const invited = this.userService.getUserId(message[1]);
           this.emitChannel(invited, "notification", "GAME", "GAME-ID");
