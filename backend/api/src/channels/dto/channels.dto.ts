@@ -57,7 +57,7 @@ export class ChannelsDto {
   status: ChannelStatus;
   @IsString()
   @MinLength(2)
-  @MaxLength(8)
+  @MaxLength(24)
   @ApiProperty()
   name: string;
 

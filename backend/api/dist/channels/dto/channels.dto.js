@@ -66,7 +66,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(2),
-    (0, class_validator_1.MaxLength)(8),
+    (0, class_validator_1.MaxLength)(24),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], ChannelsDto.prototype, "name", void 0);

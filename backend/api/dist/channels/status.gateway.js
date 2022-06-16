@@ -32,10 +32,11 @@ let StatusGateway = class StatusGateway {
     async SendMessageToChannel(client, message) {
         try {
             const user = client.data.user;
-            if (message[0] === "INVITE") {
+            if (message[0] === "invite") {
+                console.log(message);
                 if (message[1]) {
                     const invited = this.userService.getUserId(message[1]);
-                    this.emitChannel(invited, "notification", "GAME", "GAME-ID");
+                    this.emitChannel(invited, "notification", "GAME", "GAME-ID", "USER");
                 }
             }
         }
