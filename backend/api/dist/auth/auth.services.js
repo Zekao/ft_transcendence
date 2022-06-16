@@ -31,6 +31,7 @@ let AuthService = class AuthService {
     GenerateJwtToken(FortyTwoID, firstime) {
         const payload = { FortyTwoID };
         const accessToken = this.jwtService.sign(payload);
+        console.log({ accessToken, firstime });
         return { accessToken, firstime };
     }
     GenerateGToken(Gtoken) {
@@ -70,7 +71,7 @@ let AuthService = class AuthService {
             where: { FortyTwoID: FortyTwoID },
         });
         if (user) {
-            if (user.First_time === false) {
+            if (user.First_time === true) {
                 user.First_time = false;
                 await this.userService.saveUser(user);
             }

@@ -29,6 +29,7 @@ export class AuthService {
   GenerateJwtToken(FortyTwoID: number, firstime: boolean) {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.jwtService.sign(payload);
+    console.log({ accessToken, firstime });
     return { accessToken, firstime };
   }
   GenerateGToken(Gtoken: number) {
@@ -69,7 +70,7 @@ export class AuthService {
       where: { FortyTwoID: FortyTwoID },
     });
     if (user) {
-      if (user.First_time === false) {
+      if (user.First_time === true) {
         user.First_time = false;
         await this.userService.saveUser(user);
       }
