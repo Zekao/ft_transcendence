@@ -52,9 +52,17 @@ export class AuthController {
     );
   }
 
+  @Get("/generate")
+  @ApiOperation({
+    summary: "Generate amd create a random user",
+  })
+  generateRandom() {
+    this.authService.generateRandomUser();
+  }
+
   @Post("/qrcode/verify")
   @ApiOperation({
-    summary: "Verify if code is valid",
+    summary: "Verify the valid of the acess token",
   })
   @UseGuards(JwtAuthGuard)
   async verifyGToken(@Body() body): Promise<boolean> {
@@ -66,7 +74,7 @@ export class AuthController {
 
   @Post("/qrcode")
   @ApiOperation({
-    summary: "Verify if code is valid",
+    summary: "Return an acess token if code is valid",
   })
   @UseGuards(JwtAuthGuard)
   async verifyQrCode(@Req() req, @Query() query): Promise<{ gtoken: string }> {

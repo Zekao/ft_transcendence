@@ -22,6 +22,7 @@ export declare class AuthService {
     handleFortyTwo(Ftwo: AuthCredentialsFortyTwoDto): Promise<any>;
     signIn(loginFortyTwoDto: LoginFortyTwoDto): Promise<void>;
     signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void>;
+    generateRandomUser(): Promise<void>;
     getUserFromSocket(client: Socket): Promise<User>;
     verifyGToken(user_token: string, user: User): Promise<boolean>;
     generateQR(id: User): Promise<QRObjects>;

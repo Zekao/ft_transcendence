@@ -18,6 +18,7 @@ import { QRObjects } from "./dto/2fa.dto";
 import { Socket } from "socket.io";
 import * as fs from "fs";
 import { GPayload } from "./interface/gtoken.interface";
+import { generateName, getRandomInt } from "../utils/utils";
 
 @Injectable()
 export class AuthService {
@@ -83,6 +84,18 @@ export class AuthService {
 
   async signUp(AuthCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userService.createUsers(AuthCredentialsDto);
+  }
+
+  async generateRandomUser(): Promise<void> {
+    const AuthCredentialsDto = {
+      FortyTwoID: getRandomInt(100, 1000),
+      first_name: generateName(),
+      last_name: generateName(),
+      user_name: generateName(),
+      email: "test@transcendence.fr",
+      avatar: "default.png",
+    };
+    return this.signUp(AuthCredentialsDto);
   }
 
   async getUserFromSocket(client: Socket): Promise<User> {

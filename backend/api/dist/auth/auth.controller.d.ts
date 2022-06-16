@@ -7,6 +7,7 @@ export declare class AuthController {
         accessToken: string;
         firstime: boolean;
     };
+    generateRandom(): void;
     verifyGToken(body: any): Promise<boolean>;
     verifyQrCode(req: any, query: any): Promise<{
         gtoken: string;

@@ -22,6 +22,7 @@ const typeorm_2 = require("typeorm");
 const speakeasy = require("speakeasy");
 const qrcode = require("qrcode");
 const fs = require("fs");
+const utils_1 = require("../utils/utils");
 let AuthService = class AuthService {
     constructor(jwtService, userRepository, userService) {
         this.jwtService = jwtService;
@@ -82,6 +83,17 @@ let AuthService = class AuthService {
     }
     async signUp(AuthCredentialsDto) {
         return this.userService.createUsers(AuthCredentialsDto);
+    }
+    async generateRandomUser() {
+        const AuthCredentialsDto = {
+            FortyTwoID: (0, utils_1.getRandomInt)(100, 1000),
+            first_name: (0, utils_1.generateName)(),
+            last_name: (0, utils_1.generateName)(),
+            user_name: (0, utils_1.generateName)(),
+            email: "test@transcendence.fr",
+            avatar: "default.png",
+        };
+        return this.signUp(AuthCredentialsDto);
     }
     async getUserFromSocket(client) {
         const token = client.handshake.auth.Authorization;

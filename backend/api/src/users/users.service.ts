@@ -129,11 +129,12 @@ export class UsersService {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
         relation.withMatchs && relations.push("matchs");
-        relation.withChannels && relations.push("joinedChannels")
-                              && relations.push("adminedChannels")
-                              && relations.push("ownedChannels")
-                              && relations.push("mutedChannels")
-                              && relations.push("bannedChannels");
+        relation.withChannels &&
+          relations.push("joinedChannels") &&
+          relations.push("adminedChannels") &&
+          relations.push("ownedChannels") &&
+          relations.push("mutedChannels") &&
+          relations.push("bannedChannels");
       }
     }
     let found = null;
