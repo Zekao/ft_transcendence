@@ -12,6 +12,7 @@ export declare class User {
     email: string;
     avatar: string;
     TwoFA: boolean;
+    First_time: boolean;
     TwoFAVerify: string;
     status: UserStatus;
     in_game: UserGameStatus;

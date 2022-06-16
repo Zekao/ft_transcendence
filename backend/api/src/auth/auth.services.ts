@@ -26,10 +26,10 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private userService: UsersService
   ) {}
-  GenerateJwtToken(FortyTwoID: number) {
+  GenerateJwtToken(FortyTwoID: number, firstime: boolean) {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.jwtService.sign(payload);
-    return { accessToken };
+    return { accessToken, firstime };
   }
   GenerateGToken(Gtoken: number) {
     const payload: GPayload = { Gtoken };
@@ -69,8 +69,13 @@ export class AuthService {
       where: { FortyTwoID: FortyTwoID },
     });
     if (user) {
+      if (user.First_time === false) {
+        user.First_time = false;
+        await this.userService.saveUser(user);
+      }
+
       // return an access token for the client
-      this.GenerateJwtToken(FortyTwoID);
+      this.GenerateJwtToken(FortyTwoID, user.First_time);
     } else {
       throw new UnauthorizedException("Incorrect user id");
     }
