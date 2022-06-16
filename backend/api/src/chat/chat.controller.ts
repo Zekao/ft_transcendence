@@ -1,13 +1,24 @@
-import { Controller, Get, Param, Post, Request, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
+import { UsersService } from "../users/users.service";
 import { Chat } from "./chat.entity";
 import { ChatService } from "./chat.service";
 
 @ApiTags("chat")
 @Controller("chat")
 export class ChatController {
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private usersService: UsersService
+  ) {}
 
   /* ************************************************************************** */
   /*                   GET                                                      */
@@ -23,27 +34,22 @@ export class ChatController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get("/:id")
+  @Get("/me/:id")
   @ApiOperation({
     summary: "Return list of all message about specified id",
   })
-  GetHistoryMessage(@Param("id") id: string): Promise<Chat> {
-    return this.chatService.GetMessageID(id);
+  async GetHistoryMessage(
+    @Param("id") id: string,
+    @Request() req
+  ): Promise<{ login: string; message: string }[]> {
+    const user = await this.usersService.getUserId(id);
+    const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
+    return this.chatService.getHistory(chat);
   }
 
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
-
-  @UseGuards(JwtAuthGuard)
-  @Post("/create")
-  @ApiOperation({
-    summary: "Create a new chat",
-  })
-  CreateNewChat(@Request() req): Promise<Chat> {
-    const user = req.user;
-    return this.chatService.createChat(user);
-  }
 
   /* ************************************************************************** */
   /*                   DELETE                                                   */

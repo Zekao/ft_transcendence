@@ -18,6 +18,7 @@ import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "../channels/channels.entity";
 import { ChatService } from "./chat.service";
+import { Chat } from "./chat.entity";
 
 @WebSocketGateway({ namespace: "chat" })
 export class ChatGateway
@@ -39,8 +40,12 @@ export class ChatGateway
   @SubscribeMessage("msg")
   async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
     try {
-      // const receiver = client.data.msg;
-      const login = client.data.user.display_name
+      client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id)
+      const chat: Chat = client.data.chat;
+      const login: string = client.data.user.display_name;
+      const history = { login, message: msg };
+      chat.history.push(history);
+      this.chatService.saveChat(chat);
       this.emitChannel(client.data, "msg", login, msg)
     } catch {}
   }
@@ -61,13 +66,13 @@ export class ChatGateway
   }
 
   async isMsg(client: Socket) {
-    client.data.msg = client.handshake.auth.msg;
-    if (client.data.msg) {
+    client.data.receiver = client.handshake.auth.msg;
+    if (client.data.receiver) {
+      client.data.receiver = await this.userService.getUserId(client.data.receiver);
       try {
-        const receiver = await this.userService.getUserId(client.data.msg);
-        client.data.history = this.chatService.FindTwoChat(client.data.user.id, receiver.id)
+        client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id)
       } catch(err) {
-
+        client.data.chat = await this.chatService.createChat(client.data.user, client.data.receiver);
       }
       this.logger.log(`Client connected: ${client.id}`);
       return true;

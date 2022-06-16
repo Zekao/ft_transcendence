@@ -44,6 +44,11 @@ let ChatService = class ChatService {
             found = await this.chatRepository.findOne({
                 where: { first: id, second: id2 },
             });
+        if (!found) {
+            found = await this.chatRepository.findOne({
+                where: { first: id2, second: id },
+            });
+        }
         if (!found)
             throw new common_1.NotFoundException(`Chat \`${id}' not found`);
         return found;
@@ -51,9 +56,14 @@ let ChatService = class ChatService {
     async getHistory(chat) {
         return chat.history;
     }
-    async createChat(user) {
+    async saveChat(chat) {
+        this.chatRepository.save(chat);
+        return true;
+    }
+    async createChat(sender, receiver) {
         const chat = this.chatRepository.create({
-            first: user.id,
+            first: sender.id,
+            second: receiver.id,
             history: [],
         });
         try {

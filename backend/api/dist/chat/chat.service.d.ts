@@ -11,6 +11,7 @@ export declare class ChatService {
         login: string;
         message: string;
     }[]>;
-    createChat(user: User): Promise<Chat>;
+    saveChat(chat: Chat): Promise<boolean>;
+    createChat(sender: User, receiver: User): Promise<Chat>;
     addParticipant(chat: Chat, user: User): Promise<Chat>;
 }

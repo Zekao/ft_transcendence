@@ -44,6 +44,11 @@ export class ChatService {
       found = await this.chatRepository.findOne({
         where: { first: id, second: id2 },
       });
+    if (!found) {
+      found = await this.chatRepository.findOne({
+        where: { first: id2, second: id },
+      });
+    }
     if (!found) throw new NotFoundException(`Chat \`${id}' not found`);
     return found;
   }
@@ -52,13 +57,19 @@ export class ChatService {
     return chat.history;
   }
 
+  async saveChat(chat: Chat): Promise<boolean> {
+    this.chatRepository.save(chat);
+    return true;
+  }
+
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
 
-  async createChat(user: User): Promise<Chat> {
+  async createChat(sender: User, receiver: User): Promise<Chat> {
     const chat = this.chatRepository.create({
-      first: user.id,
+      first: sender.id,
+      second: receiver.id,
       history: [],
     });
     try {

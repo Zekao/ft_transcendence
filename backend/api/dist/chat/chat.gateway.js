@@ -28,7 +28,12 @@ let ChatGateway = class ChatGateway {
     }
     async SendPrivateMessage(client, msg) {
         try {
+            client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id);
+            const chat = client.data.chat;
             const login = client.data.user.display_name;
+            const history = { login, message: msg };
+            chat.history.push(history);
+            this.chatService.saveChat(chat);
             this.emitChannel(client.data, "msg", login, msg);
         }
         catch (_a) { }
@@ -49,13 +54,14 @@ let ChatGateway = class ChatGateway {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
     async isMsg(client) {
-        client.data.msg = client.handshake.auth.msg;
-        if (client.data.msg) {
+        client.data.receiver = client.handshake.auth.msg;
+        if (client.data.receiver) {
+            client.data.receiver = await this.userService.getUserId(client.data.receiver);
             try {
-                const receiver = await this.userService.getUserId(client.data.msg);
-                client.data.history = this.chatService.FindTwoChat(client.data.user.id, receiver.id);
+                client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id);
             }
             catch (err) {
+                client.data.chat = await this.chatService.createChat(client.data.user, client.data.receiver);
             }
             this.logger.log(`Client connected: ${client.id}`);
             return true;
