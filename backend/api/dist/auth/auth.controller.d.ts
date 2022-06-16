@@ -5,9 +5,11 @@ export declare class AuthController {
     logfortytwo(req: any): void;
     callbackfortytwo(req: any): {
         accessToken: string;
+        firstime: boolean;
     };
-    tokenGen(req: any, id: number): {
-        accessToken: string;
-    };
-    qrcode(): Promise<string>;
+    verifyGToken(body: any): Promise<boolean>;
+    verifyQrCode(req: any, query: any): Promise<{
+        gtoken: string;
+    }>;
+    qrcode(req: any): Promise<boolean>;
 }

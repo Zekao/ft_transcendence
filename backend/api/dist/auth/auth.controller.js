@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_services_1 = require("./auth.services");
 const _42_auth_guard_1 = require("./guard/42.auth.guard");
+const jwt_auth_guard_1 = require("./guard/jwt.auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 const fs = require("fs");
 let AuthController = class AuthController {
@@ -24,23 +25,39 @@ let AuthController = class AuthController {
     }
     logfortytwo(req) { }
     callbackfortytwo(req) {
-        return this.authService.GenerateJwtToken(req.user._json.id);
+        return this.authService.GenerateJwtToken(req.user._json.id, req.user._json.First_time);
     }
-    tokenGen(req, id) {
-        return this.authService.GenerateJwtToken(id);
+    async verifyGToken(body) {
+        try {
+            if (this.authService.verifyJwtToken(body.gtoken))
+                return true;
+        }
+        catch (err) { }
+        throw new common_1.UnauthorizedException("Acces token provided is not allowed");
     }
-    async qrcode() {
-        const Test = await this.authService.generateQR();
+    async verifyQrCode(req, query) {
+        try {
+            if ((await this.authService.verifyQR(query.gcode, req.user)) == true)
+                return this.authService.GenerateGToken(query.gcode);
+        }
+        catch (err) { }
+        throw new common_1.UnauthorizedException("GToken provided is incorrect");
+    }
+    async qrcode(req) {
+        const user = req.user.user_name;
+        const Test = await this.authService.generateQR(req.user);
         const file = fs;
-        file.writeFile("qrcode_user.png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
+        file.writeFile("image/google/" + user + ".png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
             if (err) {
                 console.log(err);
+                return false;
             }
             else {
                 console.log("The file was saved!");
+                return true;
             }
         });
-        return Test.qrcode.substring(22);
+        return true;
     }
 };
 __decorate([
@@ -66,23 +83,37 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "callbackfortytwo", null);
 __decorate([
-    (0, common_1.Get)("/:id/token"),
+    (0, common_1.Post)("/qrcode/verify"),
     (0, swagger_1.ApiOperation)({
-        summary: "Debugging purpose / Generate token for specified user",
+        summary: "Verify if code is valid",
     }),
-    __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Param)("id")),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Number]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "tokenGen", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyGToken", null);
+__decorate([
+    (0, common_1.Post)("/qrcode"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Verify if code is valid",
+    }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyQrCode", null);
 __decorate([
     (0, common_1.Get)("/qrcode"),
     (0, swagger_1.ApiOperation)({
         summary: "Get image of qrcode",
     }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "qrcode", null);
 AuthController = __decorate([

@@ -13,20 +13,21 @@ import { Socket, Server } from "socket.io";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
-import { ChannelsService } from "./channels.service";
+import { ChannelsService } from "../channels/channels.service";
 import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
-import { Channel } from "./channels.entity";
+import { Channel } from "../channels/channels.entity";
+import { ChatService } from "./chat.service";
+import { Chat } from "./chat.entity";
 
 @WebSocketGateway({ namespace: "chat" })
 export class ChatGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly userService: UsersService,
     private readonly authService: AuthService,
-    private readonly channelService: ChannelsService
+    private readonly chatService: ChatService,
+    private readonly userService: UsersService,
   ) {}
 
   @WebSocketServer() server: any;
@@ -39,9 +40,13 @@ export class ChatGateway
   @SubscribeMessage("msg")
   async SendPrivateMessage(client: Socket, msg: string): Promise<void> {
     try {
-      // const receiver = client.data.msg;
-      const message = client.data.user.display_name + ": " + msg;
-      this.emitChannel(client.data, "msg", message);
+      client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id)
+      const chat: Chat = client.data.chat;
+      const login: string = client.data.user.display_name;
+      const history = { login, message: msg };
+      chat.history.push(history);
+      this.chatService.saveChat(chat);
+      this.emitChannel(client.data, "msg", login, msg)
     } catch {}
   }
 
@@ -60,9 +65,15 @@ export class ChatGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  isMsg(client: Socket) {
-    client.data.msg = client.handshake.auth.msg;
-    if (client.data.msg) {
+  async isMsg(client: Socket) {
+    client.data.receiver = client.handshake.auth.msg;
+    if (client.data.receiver) {
+      client.data.receiver = await this.userService.getUserId(client.data.receiver);
+      try {
+        client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id)
+      } catch(err) {
+        client.data.chat = await this.chatService.createChat(client.data.user, client.data.receiver);
+      }
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -80,4 +91,3 @@ export class ChatGateway
     }
   }
 }
-

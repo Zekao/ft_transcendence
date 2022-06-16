@@ -123,6 +123,9 @@
     <v-main>
       <Nuxt />
     </v-main>
+    <v-card v-if="true" style="position: fixed; bottom: 40px; right: 50px">
+        Hello World!
+    </v-card>
   </v-app>
 </template>
 
@@ -168,8 +171,10 @@ export default Vue.extend({
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
       (v: string) => !!v || 'Channel password is required',
-      (v: string) => v.length >= 8 || 'Channel password must be greater than 24 characters',
-      (v: string) => v.length <= 32 || 'Channel password must be less than 32 characters',
+      (v: string) =>
+        v.length >= 8 || 'Channel password must be greater than 8 characters',
+      (v: string) =>
+        v.length <= 32 || 'Channel password must be less than 32 characters',
     ],
     socket: null as NuxtSocket | null,
   }),
@@ -224,7 +229,10 @@ export default Vue.extend({
           name: this.channelName,
           status: this.convertChannelStatus(this.channelStatus),
           permissions: 'OPEN',
-          password: this.channelStatus === 'Protected' ? this.channelPassword : 'Hello World!',
+          password:
+            this.channelStatus === 'Protected'
+              ? this.channelPassword
+              : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
       } catch (err) {

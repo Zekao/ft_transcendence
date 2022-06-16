@@ -10,6 +10,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { QRObjects } from "../auth/dto/2fa.dto";
+import { Chat } from "../chat/chat.entity";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 
@@ -42,6 +44,12 @@ export class User {
   @ApiProperty()
   @Column()
   TwoFA: boolean;
+  @ApiProperty()
+  @Column()
+  First_time: boolean;
+  @ApiProperty()
+  @Column({ nullable: true })
+  TwoFAVerify: string;
   @ApiProperty()
   @Column()
   status: UserStatus;

@@ -18,7 +18,6 @@ const swagger_1 = require("@nestjs/swagger");
 const matchs_filter_dto_1 = require("./dto/matchs-filter.dto");
 const matchs_service_1 = require("./matchs.service");
 const matchs_dto_1 = require("./dto/matchs.dto");
-const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 let MatchsController = class MatchsController {
     constructor(matchService) {
         this.matchService = matchService;
@@ -31,13 +30,6 @@ let MatchsController = class MatchsController {
     getMatchsId(id, req) {
         console.log(req.relation);
         return this.matchService.getMatchsId(id, [{ withUsers: true }]);
-    }
-    createMatch(req) {
-        return this.matchService.createMatch(req.user.id);
-    }
-    addUserToMatchMatch(req) {
-        const user = req.user;
-        return this.matchService.defineMatch(user);
     }
     deleteUser(id) {
         return this.matchService.deleteMatch(id);
@@ -63,28 +55,6 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], MatchsController.prototype, "getMatchsId", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)("/create"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Create a new match",
-    }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], MatchsController.prototype, "createMatch", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.Post)("/join"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Join a match",
-    }),
-    __param(0, (0, common_1.Request)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], MatchsController.prototype, "addUserToMatchMatch", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({

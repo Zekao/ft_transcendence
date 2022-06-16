@@ -38,8 +38,8 @@ let ChannelsGateway = class ChannelsGateway {
                 this.channelService.saveChannel(channel);
                 this.emitChannel(client.data, "channel", login, message[1]);
             }
-            else if (message[0] == "action") {
-                if (message[1] == "logout")
+            else if (message[0] === "action") {
+                if (message[1] === "logout")
                     client.disconnect();
                 if (message[1] === "mute") {
                     const login = message[2];

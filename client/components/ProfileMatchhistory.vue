@@ -33,9 +33,8 @@
       <v-list v-else width="40%">
         <v-list-item v-for="(match, i) in userMatches" :key="i">
           <v-list-item-action class="justify-center align-center">
-            <!-- {{ match.FirstPlayer }}  -->
             <v-badge
-              v-if="match.FirstPlayer === match.winner"
+              v-if="match.scoreFirstPlayer > match.scoreSecondPlayer"
               color="orange"
               icon="mdi-crown"
               overlap
@@ -43,8 +42,8 @@
               <v-avatar>
                 <v-img
                   :src="
-                    'https://ft.localhost:4500/api/image/' +
-                    getUserAvatar(match.FirstPlayer)
+                   
+                   getAvatarPath(match.FirstPlayer)
                   "
                 />
               </v-avatar>
@@ -52,42 +51,39 @@
             <v-avatar v-else>
               <v-img
                 :src="
-                  'https://ft.localhost:4500/api/image/' +
-                  getUserAvatar(match.FirstPlayer)
+                  getAvatarPath(match.FirstPlayer)
                 "
               />
             </v-avatar>
-            <v-btn> {{ match.FirstPlayer }} </v-btn>
+            <v-btn> {{ match.FirstPlayer.display_name }} {{match.scoreFirstPlayer}} </v-btn>
           </v-list-item-action>
           <v-list-item-content class="justify-center">
-            {{ match.scoreFirstPlayer + ' - ' + match.scoreSecondPlayer }}
+            
           </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
-            <!-- {{ match.SecondPlayer }} -->
             <v-badge
-              v-if="match.SecondPlayer === match.winner"
+              v-if="match.scoreSecondPlayer > match.scoreFirstPlayer"
               color="orange"
               icon="mdi-crown"
               overlap
             >
               <v-avatar>
                 <v-img
-                  :src="
-                    'https://ft.localhost:4500/api/image/' +
-                    getUserAvatar(match.SecondPlayer)
-                  "
+                   :src="
+                  getAvatarPath(match.SecondPlayer)
+                "
+               
                 />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
               <v-img
                 :src="
-                  'https://ft.localhost:4500/api/image/' +
-                  getUserAvatar(match.SecondPlayer)
+                 getAvatarPath(match.SecondPlayer)
                 "
               />
             </v-avatar>
-            <v-btn> {{ match.FirstPlayer }} </v-btn>
+            <v-btn>  {{match.scoreSecondPlayer}} {{ match.SecondPlayer.display_name  }} </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -107,15 +103,7 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
-    // authUserMatches: [
-    //   {
-    //     FirstPlayer: 'gamarcha',
-    //     SecondPlayer: 'gamarcha',
-    //     scoreFirstPlayer: 4,
-    //     scoreSecondPlayer: 0,
-    //     winner: '',
-    //   },
-    // ],
+
   }),
 
   computed: {
@@ -125,7 +113,9 @@ export default Vue.extend({
       selectedUserMatches: (state: any): IMatch[] =>
         state.user.selectedUserMatches,
     }),
-    userMatches() {
+    userMatches() { 
+      console.log(this.authUserMatches)
+
       return this.selectedLogin
         ? this.selectedUserMatches
         : this.authUserMatches
@@ -150,10 +140,9 @@ export default Vue.extend({
       }
     },
 
-    getUserAvatar(userName: string): string {
-      const users = this.users.filter((el) => el.user_name === userName)
-      console.log(users.length)
-      return users.length ? users[0].avatar : ''
+    getAvatarPath(userName: IUser): string {
+
+      return 'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
     },
 
     clearSearch() {

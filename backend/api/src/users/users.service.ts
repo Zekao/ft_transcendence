@@ -89,6 +89,7 @@ export class UsersService {
         await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }])
       );
     }
+    console.log(matchs);
     return matchs;
   }
 
@@ -110,6 +111,7 @@ export class UsersService {
         if (user.id.includes(username)) return true;
         if (user.first_name.includes(username)) return true;
         if (user.last_name.includes(username)) return true;
+        if (user.display_name.includes(username)) return true;
         if (user.user_name.includes(username)) return true;
         if (user.email.includes(username)) return true;
       });
@@ -262,7 +264,8 @@ export class UsersService {
       loose: 0,
       rank: 0,
       ratio: 1,
-      avatar: "default.png",
+      First_time: true,
+      avatar: "default.png" + "?" + new Date().getTime(),
     });
     try {
       await this.UserRepository.save(user);
@@ -321,10 +324,10 @@ export class UsersService {
 
   async uploadFile(id: User, file: Express.Multer.File) {
     const response = {
-      originalname: file.originalname,
       filename: file.filename,
     };
     const split = id.avatar.split("?");
+    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {
@@ -415,7 +418,6 @@ export class UsersService {
       ratio,
       TwoFA,
     } = body;
-    console.log("================+DEBUG==================");
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;

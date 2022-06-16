@@ -73,6 +73,7 @@ let UsersService = class UsersService {
         for (const match of user.matchs) {
             matchs.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
+        console.log(matchs);
         return matchs;
     }
     async getBlocked(id) {
@@ -96,6 +97,8 @@ let UsersService = class UsersService {
                 if (user.first_name.includes(username))
                     return true;
                 if (user.last_name.includes(username))
+                    return true;
+                if (user.display_name.includes(username))
                     return true;
                 if (user.user_name.includes(username))
                     return true;
@@ -225,7 +228,8 @@ let UsersService = class UsersService {
             loose: 0,
             rank: 0,
             ratio: 1,
-            avatar: "default.png",
+            First_time: true,
+            avatar: "default.png" + "?" + new Date().getTime(),
         });
         try {
             await this.UserRepository.save(user);
@@ -284,10 +288,10 @@ let UsersService = class UsersService {
     }
     async uploadFile(id, file) {
         const response = {
-            originalname: file.originalname,
             filename: file.filename,
         };
         const split = id.avatar.split("?");
+        console.log("aa");
         const name = split[split.length - 2];
         const extfile = (0, path_1.extname)(name);
         if (extfile != (0, path_1.extname)(file.filename)) {
@@ -354,7 +358,6 @@ let UsersService = class UsersService {
     }
     async patchUser(id, body) {
         const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
-        console.log("================+DEBUG==================");
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;

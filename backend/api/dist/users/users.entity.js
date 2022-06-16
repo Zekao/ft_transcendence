@@ -66,6 +66,16 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)(),
+    __metadata("design:type", Boolean)
+], User.prototype, "First_time", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "TwoFAVerify", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "status", void 0);
 __decorate([

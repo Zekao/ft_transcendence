@@ -15,6 +15,7 @@ const channels_module_1 = require("./channels/channels.module");
 const matchs_module_1 = require("./matchs/matchs.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const chat_module_1 = require("./chat/chat.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -24,6 +25,7 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             channels_module_1.ChannelsModule,
             matchs_module_1.MatchsModule,
+            chat_module_1.ChatModule,
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: (0, path_1.join)(__dirname, "..", "image"),
                 serveRoot: "/image",

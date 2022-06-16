@@ -16,7 +16,6 @@ const channels_gateway_1 = require("./channels.gateway");
 const jwt_1 = require("@nestjs/jwt");
 const users_module_1 = require("../users/users.module");
 const auth_module_1 = require("../auth/auth.module");
-const chat_gateway_1 = require("./chat.gateway");
 const status_gateway_1 = require("./status.gateway");
 const game_gateway_1 = require("./game.gateway");
 const matchs_module_1 = require("../matchs/matchs.module");
@@ -28,6 +27,7 @@ ChannelsModule = __decorate([
     (0, common_1.Module)({
         imports: [
             matchs_module_1.MatchsModule,
+            chat_module_1.ChatModule,
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             typeorm_1.TypeOrmModule.forFeature([channels_entity_1.Channel, users_entity_1.User]),
@@ -37,7 +37,6 @@ ChannelsModule = __decorate([
             channels_service_1.ChannelsService,
             users_service_1.UsersService,
             channels_gateway_1.ChannelsGateway,
-            chat_gateway_1.ChatGateway,
             status_gateway_1.StatusGateway,
             jwt_1.JwtService,
             game_gateway_1.GameGateway,

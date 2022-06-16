@@ -17,6 +17,7 @@ const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
 const users_enum_1 = require("../users/users.enum");
 const matchs_service_1 = require("../matchs/matchs.service");
+const matchs_enum_1 = require("../matchs/matchs.enum");
 let GameGateway = class GameGateway {
     constructor(matchService, userService, authService) {
         this.matchService = matchService;
@@ -27,15 +28,38 @@ let GameGateway = class GameGateway {
     afterInit(server) {
         this.logger.log("Init");
     }
+    async waitingList(client, message) {
+        try {
+            const player = client.data.user;
+            if (message == "join") {
+                const findedMatch = await this.matchService.defineMatch(client.data.user);
+                if (findedMatch.id) {
+                    this.server.emit("wait", "ready", findedMatch.id);
+                }
+                else {
+                    const match = await this.matchService.createMatch(player.id);
+                    client.data.match = match;
+                }
+                console.log("JOIN");
+            }
+            if (message == "leave") {
+                if (client.data.match)
+                    await this.matchService.deleteMatch(client.data.match.id);
+                client.data.match = null;
+                console.log("LEAVE");
+            }
+        }
+        catch (_a) { }
+    }
     async gamecontrol(client, message) {
         try {
             const player = client.data.user;
             const match = client.data.match;
-            console.log('============ DEBUG ============');
-            console.log(' first player :', match.FirstPlayer.user_name);
-            console.log('============ PLAYING ============');
+            console.log("============ DEBUG ============");
+            console.log(" first player :", match.FirstPlayer.user_name);
+            console.log("============ PLAYING ============");
             console.log(player.user_name);
-            console.log('============ WHO ============');
+            console.log("============ WHO ============");
             if (player.user_name == match.FirstPlayer.user_name)
                 console.log("FIRST");
             let pos1 = await this.matchService.getPosFirstPlayer(match);
@@ -78,14 +102,26 @@ let GameGateway = class GameGateway {
         }
         catch (_a) { }
     }
-    handleDisconnect(client) {
+    async handleDisconnect(client) {
+        const waiting = client.data.waiting;
         const user = client.data.user;
-        if (client.data.game) {
+        if (client.data.match && client.data.match.status === matchs_enum_1.MatchStatus.PENDING)
+            await this.matchService.deleteMatch(client.data.match.id);
+        if (user || waiting) {
             user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
             this.userService.saveUser(user);
         }
         console.log("OUT GAME");
         this.logger.log(`Client disconnected: ${client.id}`);
+    }
+    async isWaitinglist(client, user) {
+        client.data.waitinglist = client.handshake.auth.waitinglist;
+        if (client.data.waitinglist) {
+            console.log("IN_WAITINGLIST");
+            this.logger.log(`Client connected: ${client.id}`);
+            return true;
+        }
+        return false;
     }
     async isInGame(client, user) {
         client.data.game = client.handshake.auth.game;
@@ -103,10 +139,10 @@ let GameGateway = class GameGateway {
     async handleConnection(client, ...args) {
         try {
             const user = await this.authService.getUserFromSocket(client);
-            const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
-            if (!match)
-                throw new common_1.UnauthorizedException("The match does not exist");
             client.data.user = user;
+            if ((await this.isWaitinglist(client, user)) != false)
+                return;
+            const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
             client.data.match = match;
             if (this.isInGame(client, user))
                 return;
@@ -121,6 +157,12 @@ __decorate([
     (0, websockets_1.WebSocketServer)(),
     __metadata("design:type", Object)
 ], GameGateway.prototype, "server", void 0);
+__decorate([
+    (0, websockets_1.SubscribeMessage)("action"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
+    __metadata("design:returntype", Promise)
+], GameGateway.prototype, "waitingList", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)("move"),
     __metadata("design:type", Function),

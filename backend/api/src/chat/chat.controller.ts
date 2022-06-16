@@ -1,30 +1,42 @@
 import {
-  Body,
   Controller,
-  Post,
   Get,
-  Query,
   Param,
-  Delete,
-  Patch,
+  Post,
+  Request,
   UseGuards,
-  Req,
 } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
+import { UsersService } from "../users/users.service";
+import { Chat } from "./chat.entity";
+import { ChatService } from "./chat.service";
 
 @ApiTags("chat")
 @Controller("chat")
 export class ChatController {
-  constructor() {}
+  constructor(
+    private chatService: ChatService,
+    private usersService: UsersService
+  ) {}
 
   /* ************************************************************************** */
   /*                   GET                                                      */
   /* ************************************************************************** */
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/me/:id")
+  @ApiOperation({
+    summary: "Return list of all message about specified id",
+  })
+  async GetHistoryMessage(
+    @Param("id") id: string,
+    @Request() req
+  ): Promise<{ login: string; message: string }[]> {
+    const user = await this.usersService.getUserId(id);
+    const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
+    return this.chatService.getHistory(chat);
+  }
 
   /* ************************************************************************** */
   /*                   POST                                                     */

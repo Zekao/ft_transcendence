@@ -7,6 +7,9 @@ import {
   UseGuards,
   Res,
   Param,
+  Delete,
+  Query,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.services";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
@@ -19,6 +22,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import * as fs from "fs";
+import { User } from "../users/users.entity";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -42,37 +46,60 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
-    return this.authService.GenerateJwtToken(req.user._json.id);
+    return this.authService.GenerateJwtToken(
+      req.user._json.id,
+      req.user._json.First_time
+    );
   }
 
-  @Get("/:id/token")
+  @Post("/qrcode/verify")
   @ApiOperation({
-    summary: "Debugging purpose / Generate token for specified user",
+    summary: "Verify if code is valid",
   })
-  tokenGen(@Req() req, @Param("id") id: number) {
-    return this.authService.GenerateJwtToken(id);
+  @UseGuards(JwtAuthGuard)
+  async verifyGToken(@Body() body): Promise<boolean> {
+    try {
+      if (this.authService.verifyJwtToken(body.gtoken)) return true;
+    } catch (err) {}
+    throw new UnauthorizedException("Acces token provided is not allowed");
+  }
+
+  @Post("/qrcode")
+  @ApiOperation({
+    summary: "Verify if code is valid",
+  })
+  @UseGuards(JwtAuthGuard)
+  async verifyQrCode(@Req() req, @Query() query): Promise<{ gtoken: string }> {
+    try {
+      if ((await this.authService.verifyQR(query.gcode, req.user)) == true)
+        return this.authService.GenerateGToken(query.gcode);
+    } catch (err) {}
+    throw new UnauthorizedException("GToken provided is incorrect");
   }
 
   @Get("/qrcode")
   @ApiOperation({
     summary: "Get image of qrcode",
   })
-  async qrcode(): Promise<string> {
-    const Test = await this.authService.generateQR();
-
+  @UseGuards(JwtAuthGuard)
+  async qrcode(@Req() req): Promise<boolean> {
+    const user: User = req.user.user_name;
+    const Test = await this.authService.generateQR(req.user);
     const file = fs;
     file.writeFile(
-      "qrcode_user.png",
+      "image/google/" + user + ".png",
       Test.qrcode.substring(22),
       { encoding: "base64" },
       function (err) {
         if (err) {
           console.log(err);
+          return false;
         } else {
           console.log("The file was saved!");
+          return true;
         }
       }
     );
-    return Test.qrcode.substring(22);
+    return true;
   }
 }

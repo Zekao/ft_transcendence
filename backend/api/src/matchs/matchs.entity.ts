@@ -28,17 +28,23 @@ export class Matchs {
   @JoinTable({ name: "secondPlayer" })
   SecondPlayer: User;
 
-  @Column({ nullable: true })
+  @Column()
   scoreFirstPlayer: number;
 
-  @Column({ nullable: true })
+  @Column()
   scoreSecondPlayer: number;
 
-  @Column({ nullable: true })
+  @Column()
   posFirstPlayer: number;
 
-  @Column({ nullable: true })
+  @Column()
   posSecondPlayer: number;
+
+  @Column()
+  posBallx: number;
+
+  @Column()
+  posBally: number;
 
   @OneToMany(() => User, (user) => user.matchs, { nullable: true })
   winner: User;

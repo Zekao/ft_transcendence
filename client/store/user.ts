@@ -91,7 +91,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async fetchAuthFriends({ state, commit }) {
+  async fetchAuthFriends({ commit }) {
     try {
       const res = await this.$axios.$get(`/users/me/friends`)
       commit('FETCH_AUTH_FRIENDS', res)
@@ -100,7 +100,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async createAuthFriend({ state, commit }, userID: string) {
+  async createAuthFriend({ commit }, userID: string) {
     try {
       const res = await this.$axios.$post(`/users/me/friends?friend=${userID}`)
       commit('CREATE_AUTH_FRIEND', res)
@@ -109,7 +109,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async deleteAuthFriend({ state, commit }, userID: string) {
+  async deleteAuthFriend({ commit }, userID: string) {
     try {
       const res = await this.$axios.$delete(
         `/users/me/friends?friend=${userID}`
@@ -120,7 +120,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async fetchAuthBlocked({ state, commit }) {
+  async fetchAuthBlocked({ commit }) {
     try {
       const res = await this.$axios.$get(`/users/me/blocked`)
       commit('FETCH_AUTH_BLOCKED', res)
@@ -129,7 +129,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async createAuthBlocked({ state, commit }, userID: string) {
+  async createAuthBlocked({ commit }, userID: string) {
     try {
       const res = await this.$axios.$post(`/users/me/blocked?blocked=${userID}`)
       commit('CREATE_AUTH_BLOCKED', res)
@@ -138,7 +138,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async deleteAuthBlocked({ state, commit }, userID: string) {
+  async deleteAuthBlocked({ commit }, userID: string) {
     try {
       const res = await this.$axios.$delete(
         `/users/me/blocked?blocked=${userID}`
@@ -149,7 +149,7 @@ export const actions: ActionTree<UserState, RootState> = {
       throw err
     }
   },
-  async fetchAuthMatchs({ state, commit }) {
+  async fetchAuthMatchs({ commit }) {
     try {
       const res = await this.$axios.$get(`/users/me/matchs`)
       commit('FETCH_AUTH_MATCHES', res)

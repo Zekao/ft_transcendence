@@ -16,6 +16,8 @@ import * as speakeasy from "speakeasy";
 import * as qrcode from "qrcode";
 import { QRObjects } from "./dto/2fa.dto";
 import { Socket } from "socket.io";
+import * as fs from "fs";
+import { GPayload } from "./interface/gtoken.interface";
 
 @Injectable()
 export class AuthService {
@@ -24,10 +26,15 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private userService: UsersService
   ) {}
-  GenerateJwtToken(FortyTwoID: number) {
+  GenerateJwtToken(FortyTwoID: number, firstime: boolean) {
     const payload: FortyTwoUser = { FortyTwoID };
     const accessToken: string = this.jwtService.sign(payload);
-    return { accessToken };
+    return { accessToken, firstime };
+  }
+  GenerateGToken(Gtoken: number) {
+    const payload: GPayload = { Gtoken };
+    const gtoken: string = this.jwtService.sign(payload);
+    return { gtoken };
   }
   verifyJwtToken(token: string): Promise<FortyTwoUser> {
     try {
@@ -62,8 +69,13 @@ export class AuthService {
       where: { FortyTwoID: FortyTwoID },
     });
     if (user) {
+      if (user.First_time === true) {
+        user.First_time = false;
+        await this.userService.saveUser(user);
+      }
+
       // return an access token for the client
-      this.GenerateJwtToken(FortyTwoID);
+      this.GenerateJwtToken(FortyTwoID, user.First_time);
     } else {
       throw new UnauthorizedException("Incorrect user id");
     }
@@ -81,21 +93,35 @@ export class AuthService {
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
   }
 
-  async generateQR(): Promise<QRObjects> {
-    const secret = speakeasy.generateSecret({
-      name: " Ft_transcendence ",
+  async verifyGToken(user_token: string, user: User): Promise<boolean> {
+    const verified = speakeasy.totp.verify({
+      secret: user.TwoFAVerify,
+      encoding: "ascii",
+      token: user_token,
     });
+    return verified;
+  }
 
+  async generateQR(id: User): Promise<QRObjects> {
+    const secret = speakeasy.generateSecret({
+      name: "Ft_transcendence",
+    });
     const QRObjects = {
       qrcode: await qrcode.toDataURL(secret.otpauth_url),
       secret: secret.ascii,
     };
+    id.TwoFAVerify = secret.ascii;
+    this.userService.saveUser(id);
     return QRObjects;
   }
 
-  async verifyQR(user_token: string, qrObjet: QRObjects): Promise<any> {
+  async verifyQR(user_token: string, user: User): Promise<boolean> {
+    const file = user.user_name + ".png";
+    try {
+      fs.unlinkSync("image/google/" + file);
+    } catch (err) {}
     const verified = speakeasy.totp.verify({
-      secret: qrObjet.secret,
+      secret: user.TwoFAVerify,
       encoding: "ascii",
       token: user_token,
     });

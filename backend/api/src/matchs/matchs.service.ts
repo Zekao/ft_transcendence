@@ -114,6 +114,10 @@ export class MatchsService {
     return id.posSecondPlayer;
   }
 
+  async getPosBall(id: Matchs): Promise<{ posx: number; posy: number }> {
+    return { posx: id.posBallx, posy: id.posBally };
+  }
+
   async setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posFirstPlayer = pos;
     this.MatchsRepository.save(id);
@@ -122,6 +126,13 @@ export class MatchsService {
 
   async setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean> {
     id.posSecondPlayer = pos;
+    this.MatchsRepository.save(id);
+    return true;
+  }
+
+  async setPosBall(id: Matchs, posx: number, posy: number): Promise<boolean> {
+    id.posBallx = posx;
+    id.posBally = posy;
     this.MatchsRepository.save(id);
     return true;
   }
@@ -143,8 +154,10 @@ export class MatchsService {
     const match = this.MatchsRepository.create({
       scoreFirstPlayer: 0,
       scoreSecondPlayer: 0,
-      posFirstPlayer: 0,
-      posSecondPlayer: 0,
+      posBallx: 0,
+      posBally: 0,
+      posFirstPlayer: 250,
+      posSecondPlayer: 250,
       status: MatchStatus.PENDING,
       specs: [],
     });
@@ -163,26 +176,20 @@ export class MatchsService {
     return match;
   }
 
-  async findMatch(): Promise<Matchs> {
-    let Allmatchs = await this.getMatchs();
-    if (!Allmatchs.length)
-      throw new NotFoundException("No match are available");
-    Allmatchs = Allmatchs.filter(
-      (Allmatchs) => Allmatchs.status === MatchStatus.PENDING
-    );
-    if (!Allmatchs) throw new NotFoundException("No match are available");
-    return Allmatchs.at(0);
-  }
-
   async defineMatch(player: User): Promise<Matchs> {
     let match = null;
     try {
-      match = await this.findMatch();
-      await this.addPlayerToMatch(player, match);
-      match.status = MatchStatus.STARTED;
-      this.MatchsRepository.save(match);
+      match = await this.getMatchs();
+      for (const el of match) {
+        if (el.status == MatchStatus.PENDING && el.FirstPlayer != player.id) {
+          await this.addPlayerToMatch(player, el);
+          match.status = MatchStatus.STARTED;
+          this.MatchsRepository.save(el);
+          return el;
+        }
+      }
     } catch (err) {
-      return err;
+      return null;
     }
     return match;
   }
