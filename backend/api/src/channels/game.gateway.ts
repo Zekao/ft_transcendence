@@ -37,6 +37,13 @@ export class GameGateway
     this.logger.log("Init");
   }
 
+  @SubscribeMessage("reset")
+  async resetball(client: Socket, message: string): Promise<void> {
+    try {
+      this.emitOnlyToOther(client.data, "reset");
+    } catch {}
+  }
+
   @SubscribeMessage("action")
   async waitingList(client: Socket, message: string): Promise<void> {
     try {
@@ -96,6 +103,17 @@ export class GameGateway
         }
         this.emitGame(client.data, "move", pos1, pos2);
       }
+    } catch {}
+  }
+
+  emitOnlyToOther(player: any, event: string, ...args: any): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.game == socket.data.game && player.user != socket.data.user)
+          socket.emit(event, ...args);
+      });
     } catch {}
   }
 
