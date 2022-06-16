@@ -114,7 +114,7 @@ export class ChannelsController {
   })
   editChannel(
     @Param("id") id: string,
-    @Query() edit: ChannelsDto
+    @Body() edit: ChannelsDto
   ): Promise<Channel> {
     return this.channelService.editChannel(id, edit);
   }
