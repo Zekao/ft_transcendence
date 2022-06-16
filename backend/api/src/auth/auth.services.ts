@@ -89,10 +89,6 @@ export class AuthService {
   }
 
   async verifyGToken(user_token: string, user: User): Promise<boolean> {
-    const file = user.user_name + ".png";
-    try {
-      fs.unlinkSync("image/googe/" + file);
-    } catch (err) {}
     const verified = speakeasy.totp.verify({
       secret: user.TwoFAVerify,
       encoding: "ascii",
@@ -117,7 +113,7 @@ export class AuthService {
   async verifyQR(user_token: string, user: User): Promise<boolean> {
     const file = user.user_name + ".png";
     try {
-      fs.unlinkSync("image/googe/" + file);
+      fs.unlinkSync("image/google/" + file);
     } catch (err) {}
     const verified = speakeasy.totp.verify({
       secret: user.TwoFAVerify,
