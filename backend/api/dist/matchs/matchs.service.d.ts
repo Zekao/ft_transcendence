@@ -16,8 +16,13 @@ export declare class MatchsService {
     getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs>;
     getPosFirstPlayer(id: Matchs): Promise<number>;
     getPosSecondPlayer(id: Matchs): Promise<number>;
+    getPosBall(id: Matchs): Promise<{
+        posx: number;
+        posy: number;
+    }>;
     setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;
     setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean>;
+    setPosBall(id: Matchs, posx: number, posy: number): Promise<boolean>;
     createMatch(id: string): Promise<Matchs>;
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
     defineMatch(player: User): Promise<Matchs>;

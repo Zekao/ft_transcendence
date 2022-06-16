@@ -9,28 +9,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Chat = void 0;
-const typeorm_1 = require("typeorm");
-let Chat = class Chat {
-};
+exports.chatDTO = void 0;
+const swagger_1 = require("@nestjs/swagger");
+const user_dto_1 = require("../../users/dto/user.dto");
+class chatDTO {
+    constructor(chat) {
+        if (chat) {
+            if (chat.participants)
+                this.participants = chat.participants.map((user) => {
+                    return new user_dto_1.UserDto();
+                });
+        }
+    }
+}
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
-    __metadata("design:type", String)
-], Chat.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Chat.prototype, "first", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], Chat.prototype, "second", void 0);
-__decorate([
-    (0, typeorm_1.Column)("text", { array: true, nullable: true }),
+    (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Array)
-], Chat.prototype, "history", void 0);
-Chat = __decorate([
-    (0, typeorm_1.Entity)()
-], Chat);
-exports.Chat = Chat;
-//# sourceMappingURL=chat.entity.js.map
+], chatDTO.prototype, "participants", void 0);
+exports.chatDTO = chatDTO;
+//# sourceMappingURL=chat.dto.js.map

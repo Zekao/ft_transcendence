@@ -87,6 +87,9 @@ let MatchsService = class MatchsService {
     async getPosSecondPlayer(id) {
         return id.posSecondPlayer;
     }
+    async getPosBall(id) {
+        return { posx: id.posBallx, posy: id.posBally };
+    }
     async setPosFirstPlayer(id, pos) {
         id.posFirstPlayer = pos;
         this.MatchsRepository.save(id);
@@ -94,6 +97,12 @@ let MatchsService = class MatchsService {
     }
     async setPosSecondPlayer(id, pos) {
         id.posSecondPlayer = pos;
+        this.MatchsRepository.save(id);
+        return true;
+    }
+    async setPosBall(id, posx, posy) {
+        id.posBallx = posx;
+        id.posBally = posy;
         this.MatchsRepository.save(id);
         return true;
     }
@@ -105,6 +114,8 @@ let MatchsService = class MatchsService {
         const match = this.MatchsRepository.create({
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
+            posBallx: 0,
+            posBally: 0,
             posFirstPlayer: 250,
             posSecondPlayer: 250,
             status: matchs_enum_1.MatchStatus.PENDING,

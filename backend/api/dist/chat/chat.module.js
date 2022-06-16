@@ -15,11 +15,12 @@ const chat_entity_1 = require("./chat.entity");
 const chat_service_1 = require("./chat.service");
 const chat_controller_1 = require("./chat.controller");
 const auth_module_1 = require("../auth/auth.module");
+const users_module_1 = require("../users/users.module");
 let ChatModule = class ChatModule {
 };
 ChatModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forFeature([chat_entity_1.Chat])],
+        imports: [users_module_1.UsersModule, auth_module_1.AuthModule, typeorm_1.TypeOrmModule.forFeature([chat_entity_1.Chat])],
         controllers: [chat_controller_1.ChatController],
         providers: [chat_service_1.ChatService, jwt_1.JwtService, chat_gateway_1.ChatGateway],
     })

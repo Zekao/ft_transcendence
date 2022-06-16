@@ -12,15 +12,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatService = exports.ChatRelationPicker = void 0;
+exports.ChatService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const utils_1 = require("../utils/utils");
 const chat_entity_1 = require("./chat.entity");
-class ChatRelationPicker {
-}
-exports.ChatRelationPicker = ChatRelationPicker;
 let ChatService = class ChatService {
     constructor(chatRepository) {
         this.chatRepository = chatRepository;
@@ -31,22 +28,58 @@ let ChatService = class ChatService {
             throw new common_1.NotFoundException(`Message not found`);
         return message;
     }
-    async GetMessageID(id, RelationsPicker) {
-        const relations = [];
-        if (RelationsPicker) {
-            for (const relation of RelationsPicker) {
-                relation.withParticipants && relations.push("participants");
-            }
-            let found = null;
-            if ((0, utils_1.isUuid)(id))
-                found = await this.chatRepository.findOne({
-                    where: { id: id },
-                    relations,
-                });
-            if (!found)
-                throw new common_1.NotFoundException(`Channel \`${id}' not found`);
-            return found;
+    async GetMessageID(id) {
+        let found = null;
+        if ((0, utils_1.isUuid)(id))
+            found = await this.chatRepository.findOne({
+                where: { id: id },
+            });
+        if (!found)
+            throw new common_1.NotFoundException(`Chat \`${id}' not found`);
+        return found;
+    }
+    async FindTwoChat(id, id2) {
+        let found = null;
+        if ((0, utils_1.isUuid)(id) && (0, utils_1.isUuid)(id2))
+            found = await this.chatRepository.findOne({
+                where: { first: id, second: id2 },
+            });
+        if (!found)
+            throw new common_1.NotFoundException(`Chat \`${id}' not found`);
+        return found;
+    }
+    async getHistory(chat) {
+        return chat.history;
+    }
+    async createChat(user) {
+        const chat = this.chatRepository.create({
+            first: user.id,
+            history: [],
+        });
+        try {
+            await this.chatRepository.save(chat);
         }
+        catch (error) {
+            if (error.code == "23505") {
+                throw new common_1.ConflictException("Chat already exist");
+            }
+            else {
+                console.log(error);
+                throw new common_1.InternalServerErrorException();
+            }
+        }
+        return chat;
+    }
+    async addParticipant(chat, user) {
+        try {
+            chat.second = user.id;
+            await this.chatRepository.save(chat);
+        }
+        catch (error) {
+            console.log(error);
+            throw new common_1.InternalServerErrorException();
+        }
+        return chat;
     }
 };
 ChatService = __decorate([
