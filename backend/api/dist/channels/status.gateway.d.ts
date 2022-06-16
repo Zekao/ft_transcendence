@@ -14,6 +14,8 @@ export declare class StatusGateway implements OnGatewayInit, OnGatewayConnection
     server: any;
     private logger;
     afterInit(server: Server): void;
+    SendMessageToChannel(client: Socket, message: any): Promise<void>;
+    emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     isStatus(client: Socket, user: User): boolean;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;

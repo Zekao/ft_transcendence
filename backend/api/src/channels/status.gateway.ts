@@ -35,6 +35,31 @@ export class StatusGateway
   afterInit(server: Server) {
     this.logger.log("Init");
   }
+
+  @SubscribeMessage("notification")
+  async SendMessageToChannel(client: Socket, message: any): Promise<void> {
+    try {
+      const user: string = client.data.user;
+      if (message[0] === "INVITE") {
+        if (message[1]) {
+          const invited = this.userService.getUserId(message[1]);
+          this.emitChannel(invited, "notification", "GAME", "GAME-ID");
+        }
+      }
+    } catch {}
+  }
+
+  emitChannel(channel: any, event: string, ...args: any): void {
+    try {
+      if (!channel.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+          socket.emit(event, ...args);
+      });
+    } catch {}
+  }
+
   handleDisconnect(client: Socket) {
     const user = client.data.user;
     user.status = UserStatus.OFFLINE;
@@ -54,7 +79,6 @@ export class StatusGateway
       const user = await this.authService.getUserFromSocket(client);
       client.data.user = user;
       if (this.isStatus(client, user)) return;
-      throw new UnauthorizedException("You must specify a channel, or msg");
     } catch (err) {
       return client.disconnect();
     }

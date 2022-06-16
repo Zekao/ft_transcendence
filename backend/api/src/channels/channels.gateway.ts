@@ -68,6 +68,9 @@ export class ChannelsGateway
         } else if (message[1] === "unban") {
           const login = message[2];
           this.emitChannel(client.data, "channel", login, " is unban");
+        } else if (message[1] === "admin") {
+          const login = message[2];
+          this.emitChannel(client.data, "channel", login, " is admin");
         }
       }
     } catch {}
