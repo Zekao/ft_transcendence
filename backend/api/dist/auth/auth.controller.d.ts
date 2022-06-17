@@ -3,10 +3,10 @@ export declare class AuthController {
     private authService;
     constructor(authService: AuthService);
     logfortytwo(req: any): void;
-    callbackfortytwo(req: any): {
+    callbackfortytwo(req: any): Promise<{
         accessToken: string;
         firstime: boolean;
-    };
+    }>;
     generateRandom(): Promise<{
         accessToken: any;
         firstime: any;

@@ -11,10 +11,10 @@ export declare class AuthService {
     private userRepository;
     private userService;
     constructor(jwtService: JwtService, userRepository: Repository<User>, userService: UsersService);
-    GenerateJwtToken(FortyTwoID: number, firstime: boolean): {
+    GenerateJwtToken(FortyTwoID: number): Promise<{
         accessToken: string;
         firstime: boolean;
-    };
+    }>;
     GenerateGToken(Gtoken: number): {
         gtoken: string;
     };
@@ -27,7 +27,6 @@ export declare class AuthService {
         firstime: any;
     }>;
     getUserFromSocket(client: Socket): Promise<User>;
-    verifyGToken(user_token: string, user: User): Promise<boolean>;
     generateQR(id: User): Promise<QRObjects>;
     verifyQR(user_token: string, user: User): Promise<boolean>;
 }

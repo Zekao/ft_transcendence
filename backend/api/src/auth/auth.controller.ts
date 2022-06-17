@@ -46,17 +46,14 @@ export class AuthController {
   })
   @UseGuards(FortyTwoAuthGuard)
   callbackfortytwo(@Req() req) {
-    return this.authService.GenerateJwtToken(
-      req.user._json.id,
-      req.user._json.First_time
-    );
+    return this.authService.GenerateJwtToken(req.user._json.id);
   }
 
   @Get("/generate")
   @ApiOperation({
     summary: "Generate amd create a random user",
   })
-  generateRandom(): Promise<{ accessToken, firstime }> {
+  generateRandom(): Promise<{ accessToken; firstime }> {
     return this.authService.generateRandomUser();
   }
 

@@ -27,9 +27,14 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     private userService: UsersService
   ) {}
-  GenerateJwtToken(FortyTwoID: number, firstime: boolean) {
+  async GenerateJwtToken(FortyTwoID: number) {
+    let player = null;
     const payload: FortyTwoUser = { FortyTwoID };
+    try {
+      player = await this.userService.getUserFortyTwo(FortyTwoID);
+    } catch (err) {}
     const accessToken: string = this.jwtService.sign(payload);
+    const firstime: boolean = player.First_time;
     return { accessToken, firstime };
   }
   GenerateGToken(Gtoken: number) {
@@ -76,7 +81,7 @@ export class AuthService {
       }
 
       // return an access token for the client
-      this.GenerateJwtToken(FortyTwoID, user.First_time);
+      this.GenerateJwtToken(FortyTwoID);
     } else {
       throw new UnauthorizedException("Incorrect user id");
     }
@@ -86,7 +91,7 @@ export class AuthService {
     return this.userService.createUsers(AuthCredentialsDto);
   }
 
-  async generateRandomUser(): Promise<{ accessToken, firstime }> {
+  async generateRandomUser(): Promise<{ accessToken; firstime }> {
     const FTwoID = getRandomInt(100, 1000);
     const AuthCredentialsDto = {
       FortyTwoID: FTwoID,
@@ -97,7 +102,7 @@ export class AuthService {
       avatar: "default.png",
     };
     this.signUp(AuthCredentialsDto);
-    return this.GenerateJwtToken(FTwoID, true);
+    return this.GenerateJwtToken(FTwoID);
   }
 
   async getUserFromSocket(client: Socket): Promise<User> {
@@ -106,15 +111,6 @@ export class AuthService {
     const payload = await this.verifyJwtToken(token);
     if (!payload) throw new UnauthorizedException("Invalid token provided");
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
-  }
-
-  async verifyGToken(user_token: string, user: User): Promise<boolean> {
-    const verified = speakeasy.totp.verify({
-      secret: user.TwoFAVerify,
-      encoding: "ascii",
-      token: user_token,
-    });
-    return verified;
   }
 
   async generateQR(id: User): Promise<QRObjects> {
