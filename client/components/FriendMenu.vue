@@ -132,7 +132,7 @@ export default Vue.extend({
 
     async addFriend(userID: string) {
       try {
-        await this.$store.dispatch('user/createAuthFriends', userID)
+        await this.$store.dispatch('user/createAuthFriend', userID)
       } catch (err) {
         console.log(err)
       }
@@ -148,7 +148,7 @@ export default Vue.extend({
     // function remove friend from authUserFriends
     async removeFriend(userID: string) {
       try {
-        await this.$store.dispatch('user/deleteAuthFriends', userID)
+        await this.$store.dispatch('user/deleteAuthFriend', userID)
       } catch (err) {
         console.log(err)
       }
