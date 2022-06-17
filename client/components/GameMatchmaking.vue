@@ -7,7 +7,15 @@
     <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin">
       Join queue
     </v-btn>
-    <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
+    <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn> 
+
+  <!-- IMPLEMENT LIST OF MATCHS PENDING -->
+  <!-- SAME HAS FRIENDLIST BUT FROM MATCH TABLE WITH STARTED STATUS  -->
+  <!-- DONT FORGET TO SHOW ONLY GAMES WITH NON_BLOCKED USER --> 
+
+  
+
+
   </v-card>
 </template>
 

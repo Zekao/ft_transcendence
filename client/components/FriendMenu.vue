@@ -20,14 +20,6 @@
 
       <v-list-item v-if="!isMe" class="justify-center">
         <v-list-item-content>
-          <v-btn
-            :disabled="!canWatch"
-            class="mr-2"
-            @click="watchGame(friend.id)"
-          >
-            Watch
-            <v-icon>mdi-binoculars</v-icon>
-          </v-btn>
         </v-list-item-content>
         <v-btn
           :disabled="friend.status !== 'ONLINE'"
@@ -153,11 +145,6 @@ export default Vue.extend({
       } catch (err) {
         console.log(err)
       }
-    },
-
-    // function who launch the spectator game of the friend id
-    watchGame(userID: string) {
-      console.log(userID)
     },
 
     // function remove friend from authUserFriends
