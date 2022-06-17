@@ -13,6 +13,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
+import { IUser } from '~/store/user'
 
 export default Vue.extend({
   name: 'GameMatchmaking',
@@ -25,7 +26,8 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      accessToken: (state: any) => state.token.accessToken
+      accessToken: (state: any): string => state.token.accessToken,
+      authUser: (state: any): IUser => state.user.authUser,
     })
   },
 
@@ -38,8 +40,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('wait', (msg, matchID) => {
-      if (msg === 'ready') {
+    this.socket.on('wait', (userName, msg, matchID) => {
+      if (userName === this.authUser.user_name && msg === 'ready') {
         this.$store.commit('SELECTED_MATCH_ID', matchID)
         this.ready = true
         this.$emit('next')

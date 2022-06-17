@@ -236,8 +236,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('notification', (game: string, matchId: string, userName: string) => {
-      if (game === 'game') {
+    this.socket.on('notification', (authUserName: string, game: string, matchId: string, userName: string) => {
+      if (authUserName === this.username && game === 'game') {
         this.invite = true
         this.inviteMatchId = matchId
         this.inviteUserName = userName
