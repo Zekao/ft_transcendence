@@ -3,10 +3,7 @@
     <v-row justify="center">
       <v-card flat align="center">
         <h1 class="ma-4 text-center">{{ title }}</h1>
-        <v-otp-input
-          v-model="code"
-          length="6"
-        ></v-otp-input>
+        <v-otp-input v-model="code" length="6"></v-otp-input>
         <v-btn
           dark
           x-large
@@ -62,9 +59,8 @@ export default Vue.extend({
         this.code = ''
         this.loading = false
       }
-    }
-  }
-
+    },
+  },
 })
 </script>
 

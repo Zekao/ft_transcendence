@@ -1,14 +1,14 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
 declare module '*.vue' {
-  export default Vue;
+  export default Vue
 }
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
     shortcuts?: {
-      keydown: (ev: any) => boolean,
-      cancel: () => boolean,
+      keydown: (ev: any) => boolean
+      cancel: () => boolean
     }
   }
 }

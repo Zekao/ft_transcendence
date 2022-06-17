@@ -123,25 +123,21 @@
     <v-main>
       <Nuxt></Nuxt>
     </v-main>
-    <FriendMenu/>
+    <FriendMenu />
     <v-card v-if="invite" style="position: fixed; bottom: 40px; right: 50px">
-        <v-list-item>
-          <v-list-item-content class="text-center">
-            <p>New invitation from {{ inviteUserName }}</p>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-action>
-            <v-btn x-large @click="acceptInvitation">
-              Accept
-            </v-btn>
-          </v-list-item-action>
-          <v-list-item-action>
-            <v-btn x-large @click="refuseInvitation">
-              Refuse
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
+      <v-list-item>
+        <v-list-item-content class="text-center">
+          <p>New invitation from {{ inviteUserName }}</p>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action>
+          <v-btn x-large @click="acceptInvitation"> Accept </v-btn>
+        </v-list-item-action>
+        <v-list-item-action>
+          <v-btn x-large @click="refuseInvitation"> Refuse </v-btn>
+        </v-list-item-action>
+      </v-list-item>
     </v-card>
   </v-app>
 </template>
@@ -221,7 +217,7 @@ export default Vue.extend({
       users: (state: any): IUser[] => state.user.users,
     }),
     usersFiltered(): IUser[] {
-      return this.users.filter(el => el.id !== this.id)
+      return this.users.filter((el) => el.id !== this.id)
     },
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
@@ -236,19 +232,27 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('notification', (authUserName: string, game: string, matchId: string, userName: string) => {
-      if (authUserName === this.username && game === 'game') {
-        this.invite = true
-        this.inviteMatchId = matchId
-        this.inviteUserName = userName
-      } else if (authUserName === this.username && game === 'join') {
-        this.$store.commit('SELECTED_MATCH_ID', matchId)
-        if (this.$route.path !== '/') this.$router.replace('/')
-        this.invite = false
-        this.inviteMatchId = ''
-        this.inviteUserName = ''
+    this.socket.on(
+      'notification',
+      (
+        authUserName: string,
+        game: string,
+        matchId: string,
+        userName: string
+      ) => {
+        if (authUserName === this.username && game === 'game') {
+          this.invite = true
+          this.inviteMatchId = matchId
+          this.inviteUserName = userName
+        } else if (authUserName === this.username && game === 'join') {
+          this.$store.commit('SELECTED_MATCH_ID', matchId)
+          if (this.$route.path !== '/') this.$router.replace('/')
+          this.invite = false
+          this.inviteMatchId = ''
+          this.inviteUserName = ''
+        }
       }
-    })
+    )
   },
 
   methods: {
@@ -293,7 +297,7 @@ export default Vue.extend({
         this.inviteMatchId = ''
         this.inviteUserName = ''
       }
-    }
+    },
   },
 })
 </script>

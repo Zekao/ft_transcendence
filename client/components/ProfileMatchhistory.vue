@@ -49,7 +49,7 @@
             <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
           </v-list-item-action>
           <v-list-item-content class="justify-center">
-            {{match.scoreFirstPlayer}} - {{match.scoreSecondPlayer}}
+            {{ match.scoreFirstPlayer }} - {{ match.scoreSecondPlayer }}
           </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
             <v-badge
@@ -59,11 +59,11 @@
               overlap
             >
               <v-avatar>
-                <v-img :src="getAvatarPath(match.SecondPlayer)"/>
+                <v-img :src="getAvatarPath(match.SecondPlayer)" />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-              <v-img :src="getAvatarPath(match.SecondPlayer)"/>
+              <v-img :src="getAvatarPath(match.SecondPlayer)" />
             </v-avatar>
             <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
           </v-list-item-action>
@@ -85,7 +85,6 @@ export default Vue.extend({
   data: () => ({
     search: '',
     selectedLogin: '',
-
   }),
 
   computed: {
@@ -112,10 +111,7 @@ export default Vue.extend({
     async searchUserMatches() {
       const user = this.users.find((el) => el.display_name === this.search)
       try {
-        await this.$store.dispatch(
-          'user/fetchMatchs',
-          user
-        )
+        await this.$store.dispatch('user/fetchMatchs', user)
         this.selectedLogin = this.search
       } catch (err) {
         console.log(err)
@@ -123,7 +119,9 @@ export default Vue.extend({
     },
 
     getAvatarPath(userName: IUser): string {
-      return 'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
+      return (
+        'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
+      )
     },
 
     clearSearch() {

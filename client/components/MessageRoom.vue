@@ -3,20 +3,22 @@
     <v-card :id="user.display_name" height="320px" class="overflow-y-auto">
       <v-list>
         <v-list-item
-            v-for="(message, i) in messages"
-            :key="i"
-            three-line
-            class="d-flex d-flex-column"
-          >
-            <v-list-item-content>
-              <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <v-btn class="mr-2" @click="changeUser(message.login)">{{ message.login }}</v-btn>
-              </v-list-item-title>
-              <v-list-item-subtitle class="text-right">{{
-                message.message
-              }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+          v-for="(message, i) in messages"
+          :key="i"
+          three-line
+          class="d-flex d-flex-column"
+        >
+          <v-list-item-content>
+            <v-list-item-title class="d-flex d-flex-column align-center mb-1">
+              <v-btn class="mr-2" @click="changeUser(message.login)">{{
+                message.login
+              }}</v-btn>
+            </v-list-item-title>
+            <v-list-item-subtitle class="text-right">{{
+              message.message
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-card>
     <v-toolbar>
@@ -74,7 +76,7 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.scrollToBottom()
       })
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
   },
@@ -109,18 +111,20 @@ export default Vue.extend({
       }
     },
 
-
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
     getUser(displayName: string): IUser {
-      return this.users.find(el => el.display_name === displayName) || {} as IUser
+      return (
+        this.users.find((el) => el.display_name === displayName) ||
+        ({} as IUser)
+      )
     },
     changeUser(displayName: string) {
       this.$store.commit('SELECTED_USER', this.getUser(displayName))
       this.value = true
-    }
+    },
   },
 })
 </script>

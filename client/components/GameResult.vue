@@ -5,12 +5,10 @@
     class="d-flex justify-center align-center"
   >
     <v-list>
-    <v-list-item>
-      MatchID: {{ selectedMatchId }}
-    </v-list-item>
-    <v-list-item>
-      <v-btn color="primary" @click="resetMatch"> Continue </v-btn>
-    </v-list-item>
+      <v-list-item> MatchID: {{ selectedMatchId }} </v-list-item>
+      <v-list-item>
+        <v-btn color="primary" @click="resetMatch"> Continue </v-btn>
+      </v-list-item>
     </v-list>
   </v-card>
 </template>
@@ -31,7 +29,7 @@ export default Vue.extend({
     ...mapState({
       selectedMatchId: (state: any) => state.selectedMatchId,
       matchDone: (state: any) => state.matchDone,
-    })
+    }),
   },
 
   watch: {
@@ -40,11 +38,11 @@ export default Vue.extend({
         try {
           const res = await this.$axios.$get(`/match/${this.selectedMatchId}`)
           this.match = res
-        } catch(err) {
+        } catch (err) {
           console.log(err)
         }
       }
-    }
+    },
   },
 
   methods: {
@@ -52,7 +50,7 @@ export default Vue.extend({
       this.$store.commit('SELECTED_MATCH_ID', '')
       this.$store.commit('MATCH_DONE', false)
       this.$emit('next')
-    }
-  }
+    },
+  },
 })
 </script>

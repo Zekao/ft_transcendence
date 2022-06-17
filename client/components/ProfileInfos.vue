@@ -41,13 +41,19 @@
         </v-form>
       </v-list-item>
       <v-list-item>
-        <v-btn :loading="isImageLoading" block @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()">
+        <v-btn
+          :loading="isImageLoading"
+          block
+          @click="isTwoFactorAuth ? updateTwoFactorAuth() : fetchQrCode()"
+        >
           {{ isTwoFactorAuth ? 'Disable' : 'Enable' }}
           <v-icon class="ml-2 mb-1">mdi-two-factor-authentication</v-icon>
         </v-btn>
         <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
-            <v-img :src="`https://ft.localhost:4500/api/image/google/${userName}.png`" />
+            <v-img
+              :src="`https://ft.localhost:4500/api/image/google/${userName}.png`"
+            />
             <v-list-item>
               <v-otp-input
                 v-model="code"
@@ -56,9 +62,7 @@
               ></v-otp-input>
             </v-list-item>
             <v-list-item class="justify-center">
-              <v-btn :loading="loading" dense @click="verify">
-                Verify
-              </v-btn>
+              <v-btn :loading="loading" dense @click="verify"> Verify </v-btn>
             </v-list-item>
           </v-card>
         </v-dialog>
@@ -122,7 +126,7 @@ export default Vue.extend({
     },
 
     async updateLogin() {
-        try {
+      try {
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
@@ -148,8 +152,8 @@ export default Vue.extend({
         setTimeout(() => {
           this.isImageLoading = false
           this.is2FADialog = true
-          }, 2000)
-      } catch(err) {
+        }, 2000)
+      } catch (err) {
         console.log(err)
       }
     },
@@ -160,13 +164,11 @@ export default Vue.extend({
         await this.$store.dispatch('authTwoFactor', this.code)
         await this.updateTwoFactorAuth()
         this.is2FADialog = false
-      } catch(err) {
+      } catch (err) {
         this.code = ''
         this.loading = false
       }
     },
   },
-
-  },
-)
+})
 </script>

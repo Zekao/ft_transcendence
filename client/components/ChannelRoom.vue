@@ -87,9 +87,7 @@
             </v-btn>
           </template>
           <v-list v-if="!muted.length">
-            <v-list-item-subtitle class="mx-2">
-              No muted
-            </v-list-item-subtitle>
+            <v-list-item-subtitle class="mx-2"> No muted </v-list-item-subtitle>
           </v-list>
           <v-list v-else>
             <v-list-item v-for="(user, i) in muted" :key="i">
@@ -120,7 +118,9 @@
           >
             <v-list-item-content>
               <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <v-btn small class="mr-2" @click="changeUser(message.login)">{{ message.login }}</v-btn>
+                <v-btn small class="mr-2" @click="changeUser(message.login)">{{
+                  message.login
+                }}</v-btn>
                 <v-btn
                   v-if="isAuthUserOwner"
                   x-small
@@ -181,16 +181,12 @@ import { NuxtSocket } from 'nuxt-socket-io'
 import { IChannel } from '@/store/channel'
 import { IUser } from '@/store/user'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    scrollToBottom: () => void
-    getUser: (displayName: string) => IUser
-  }
-}
-
 export default Vue.extend({
   props: {
-    channel: Object as () => IChannel,
+    channel: {
+      type: Object as () => IChannel,
+      default: {} as IChannel,
+    },
   },
 
   data: () => ({
@@ -216,11 +212,17 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const owners = await this.$axios.$get(`/channel/${this.channel.id}/members?role=owner`)
+      const owners = await this.$axios.$get(
+        `/channel/${this.channel.id}/members?role=owner`
+      )
       this.owner = owners[0]
-      const admins = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+      const admins = await this.$axios.$get(
+        `/channel/${this.channel.id}/members?role=admin`
+      )
       this.admins = admins
-      const history = await this.$axios.$get(`/channel/${this.channel.id}/history`)
+      const history = await this.$axios.$get(
+        `/channel/${this.channel.id}/history`
+      )
       this.messages = history.length
         ? [...history.map((el: string) => JSON.parse(el))]
         : []
@@ -251,7 +253,10 @@ export default Vue.extend({
       return this.owner.id === this.authUser.id
     },
     isAuthUserAdmin(): boolean {
-      return this.isAuthUserOwner || this.admins.find(el => el.id === this.authUser.id) !== undefined
+      return (
+        this.isAuthUserOwner ||
+        this.admins.find((el) => el.id === this.authUser.id) !== undefined
+      )
     },
     isLocked(): boolean {
       return this.channel.status === 'PROTECTED' ? !this.unlocked : false
@@ -306,10 +311,11 @@ export default Vue.extend({
     async updatePassword() {
       const channel = { ...this.channel }
       channel.password = this.newPassword
-      channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
+      channel.status =
+        this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
-      } catch(err) {
+      } catch (err) {
         this.newPassword = ''
       }
     },
@@ -350,24 +356,26 @@ export default Vue.extend({
     unsetAdmin(user: string) {
       if (this.socket && user) {
         this.socket.emit('channel', 'action', 'unadmin', user)
-        this.admins = this.admins.filter(el => el.user_name !== user)
+        this.admins = this.admins.filter((el) => el.user_name !== user)
       }
     },
     unsetBan(user: string) {
       if (this.socket && user) {
         this.socket.emit('channel', 'action', 'unban', user)
-        this.banned = this.banned.filter(el => el.user_name !== user)
+        this.banned = this.banned.filter((el) => el.user_name !== user)
       }
     },
     unsetMute(user: string) {
       if (this.socket && user) {
         this.socket.emit('channel', 'action', 'unmute', user)
-        this.muted = this.muted.filter(el => el.user_name !== user)
+        this.muted = this.muted.filter((el) => el.user_name !== user)
       }
     },
     async fetchAdmin() {
       try {
-        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+        const res = await this.$axios.$get(
+          `/channel/${this.channel.id}/members?role=admin`
+        )
         this.admins = res
       } catch (err) {
         this.admins = []
@@ -375,7 +383,9 @@ export default Vue.extend({
     },
     async fetchBanned() {
       try {
-        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=ban`)
+        const res = await this.$axios.$get(
+          `/channel/${this.channel.id}/members?role=ban`
+        )
         this.banned = res
       } catch (err) {
         this.banned = []
@@ -383,19 +393,24 @@ export default Vue.extend({
     },
     async fetchMuted() {
       try {
-        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=mute`)
+        const res = await this.$axios.$get(
+          `/channel/${this.channel.id}/members?role=mute`
+        )
         this.muted = res
       } catch (err) {
         this.muted = []
       }
     },
     getUser(displayName: string): IUser {
-      return this.users.find(el => el.display_name === displayName) || {} as IUser
+      return (
+        this.users.find((el) => el.display_name === displayName) ||
+        ({} as IUser)
+      )
     },
     changeUser(displayName: string) {
       this.$store.commit('SELECTED_USER', this.getUser(displayName))
       this.value = true
-    }
+    },
   },
 })
 </script>

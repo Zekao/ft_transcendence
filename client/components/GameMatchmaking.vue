@@ -4,7 +4,9 @@
     color="grey lighten-1"
     class="d-flex d-flex-column justify-center align-center"
   >
-    <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin"> Join queue </v-btn>
+    <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin">
+      Join queue
+    </v-btn>
     <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
   </v-card>
 </template>
@@ -28,7 +30,7 @@ export default Vue.extend({
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
       authUser: (state: any): IUser => state.user.authUser,
-    })
+    }),
   },
 
   mounted() {
@@ -36,7 +38,7 @@ export default Vue.extend({
       channel: '/game',
       auth: {
         Authorization: this.accessToken,
-        waitinglist: "1",
+        waitinglist: '1',
       },
       path: '/api/socket.io/',
     } as any)
@@ -61,7 +63,7 @@ export default Vue.extend({
         this.waiting = false
         this.socket.emit('action', 'leave')
       }
-    }
-  }
+    },
+  },
 })
 </script>

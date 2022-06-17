@@ -69,7 +69,7 @@ export default Vue.extend({
     changeUser(user: IUser) {
       this.$store.commit('SELECTED_USER', user)
       this.value = true
-    }
-  }
+    },
+  },
 })
 </script>

@@ -41,7 +41,7 @@ export default Vue.extend({
   watch: {
     windowHeight(value: number) {
       this.yes = (value - 128).toString()
-    }
-  }
+    },
+  },
 })
 </script>
