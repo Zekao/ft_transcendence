@@ -93,7 +93,6 @@ export const actions: ActionTree<RootState, RootState> = {
       commit('TWO_FACTOR_SUCCESS', gtoken)
       return res
     } catch(err) {
-      this.$cookies.removeAll()
       commit('TWO_FACTOR_ERROR')
       throw err
     }
