@@ -83,7 +83,7 @@ let GameGateway = class GameGateway {
             this.emitGame(client.data, "action", "RESET");
         }
     }
-    async updateBall(client, message) {
+    async updateBall(client) {
         let direction = client.data.direction;
         let ball = client.data.posBall;
         let velocity = client.data.velocity;

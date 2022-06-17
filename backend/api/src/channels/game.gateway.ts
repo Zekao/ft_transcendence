@@ -94,7 +94,7 @@ export class GameGateway
     }
   }
 
-  async updateBall(client: Socket, message: string): Promise<void> {
+  async updateBall(client: Socket): Promise<void> {
     let direction = client.data.direction;
     let ball = client.data.posBall;
     let velocity = client.data.velocity;
