@@ -81,31 +81,6 @@ let MatchsService = class MatchsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
-    async getPosFirstPlayer(id) {
-        return id.posFirstPlayer;
-    }
-    async getPosSecondPlayer(id) {
-        return id.posSecondPlayer;
-    }
-    async getPosBall(id) {
-        return { posx: id.posBallx, posy: id.posBally };
-    }
-    async setPosFirstPlayer(id, pos) {
-        id.posFirstPlayer = pos;
-        this.MatchsRepository.save(id);
-        return true;
-    }
-    async setPosSecondPlayer(id, pos) {
-        id.posSecondPlayer = pos;
-        this.MatchsRepository.save(id);
-        return true;
-    }
-    async setPosBall(id, posx, posy) {
-        id.posBallx = posx;
-        id.posBally = posy;
-        this.MatchsRepository.save(id);
-        return true;
-    }
     async createMatch(id) {
         const user = await this.userService.getUserId(id, [{ withMatchs: true }]);
         const matchPending = user.matchs.find((m) => m.status === matchs_enum_1.MatchStatus.PENDING || m.status === matchs_enum_1.MatchStatus.STARTED);
@@ -114,11 +89,6 @@ let MatchsService = class MatchsService {
         const match = this.MatchsRepository.create({
             scoreFirstPlayer: 0,
             scoreSecondPlayer: 0,
-            posBallx: 0,
-            posBally: 0,
-            posFirstPlayer: 250,
-            posSecondPlayer: 250,
-            direction: 0,
             status: matchs_enum_1.MatchStatus.PENDING,
             specs: [],
         });
@@ -157,6 +127,16 @@ let MatchsService = class MatchsService {
     }
     async saveMatch(match) {
         return await this.MatchsRepository.save(match);
+    }
+    async addOnePointToPlayer(id, player) {
+        if (player == "ONE") {
+            ++id.scoreFirstPlayer;
+            this.MatchsRepository.save(id);
+        }
+        else if (player == "TWO") {
+            ++id.scoreSecondPlayer;
+            this.MatchsRepository.save(id);
+        }
     }
     async deleteMatch(id) {
         const found = await this.getMatchsId(id);

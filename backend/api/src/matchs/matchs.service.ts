@@ -99,37 +99,6 @@ export class MatchsService {
     return found;
   }
 
-  async getPosFirstPlayer(id: Matchs): Promise<number> {
-    return id.posFirstPlayer;
-  }
-
-  async getPosSecondPlayer(id: Matchs): Promise<number> {
-    return id.posSecondPlayer;
-  }
-
-  async getPosBall(id: Matchs): Promise<{ posx: number; posy: number }> {
-    return { posx: id.posBallx, posy: id.posBally };
-  }
-
-  async setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean> {
-    id.posFirstPlayer = pos;
-    this.MatchsRepository.save(id);
-    return true;
-  }
-
-  async setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean> {
-    id.posSecondPlayer = pos;
-    this.MatchsRepository.save(id);
-    return true;
-  }
-
-  async setPosBall(id: Matchs, posx: number, posy: number): Promise<boolean> {
-    id.posBallx = posx;
-    id.posBally = posy;
-    this.MatchsRepository.save(id);
-    return true;
-  }
-
   /* ************************************************************************** */
   /*                   POST                                                     */
   /* ************************************************************************** */
@@ -147,11 +116,6 @@ export class MatchsService {
     const match = this.MatchsRepository.create({
       scoreFirstPlayer: 0,
       scoreSecondPlayer: 0,
-      posBallx: 0,
-      posBally: 0,
-      posFirstPlayer: 250,
-      posSecondPlayer: 250,
-      direction: 0,
       status: MatchStatus.PENDING,
       specs: [],
     });
@@ -190,6 +154,16 @@ export class MatchsService {
 
   async saveMatch(match: Matchs): Promise<Matchs> {
     return await this.MatchsRepository.save(match);
+  }
+
+  async addOnePointToPlayer(id: Matchs, player: string) {
+    if (player == "ONE") {
+      ++id.scoreFirstPlayer;
+      this.MatchsRepository.save(id);
+    } else if (player == "TWO") {
+      ++id.scoreSecondPlayer;
+      this.MatchsRepository.save(id);
+    }
   }
 
   /* ************************************************************************** */

@@ -34,6 +34,7 @@ let GameGateway = class GameGateway {
             if (message === "join") {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
+                    client.data.match = findedMatch;
                     console.log("FIND A MATCH");
                     this.emitReady(client.data, "wait", "ready", findedMatch.id);
                 }
@@ -66,31 +67,10 @@ let GameGateway = class GameGateway {
     }
     async gamecontrol(client, message) {
         try {
+            let pOne = client.data.posPlayer.pOne;
+            let pTwo = client.data.posPlayer.pTwo;
             const player = client.data.user;
             const match = client.data.match;
-            console.log("============ DEBUG ============");
-            console.log(" first player :", match.FirstPlayer.user_name);
-            console.log("============ PLAYING ============");
-            console.log(player.user_name);
-            console.log("============ WHO ============");
-            if (player.user_name == match.FirstPlayer.user_name)
-                console.log("FIRST");
-            let pos1 = await this.matchService.getPosFirstPlayer(match);
-            let pos2 = await this.matchService.getPosSecondPlayer(match);
-            if (pos1 == 0)
-                pos1 = 25;
-            if (pos2 == 0)
-                pos2 = 25;
-            console.log(pos1);
-            console.log(pos2);
-            if (message == "ADD1") {
-                ++match.scoreFirstPlayer;
-                this.matchService.saveMatch(match);
-            }
-            if (message == "ADD2") {
-                ++match.scoreSecondPlayer;
-                this.matchService.saveMatch(match);
-            }
             if (message == "FINISH") {
                 console.log("TEST");
                 match.status = matchs_enum_1.MatchStatus.ENDED;
@@ -98,36 +78,25 @@ let GameGateway = class GameGateway {
                 client.data.match = null;
                 client.disconnect();
             }
+            console.log(message);
             if (player.user_name == match.FirstPlayer.user_name) {
-                if (message == "up") {
-                    if (pos1 >= 0)
-                        await this.matchService.setPosFirstPlayer(match, pos1 - 13);
-                    else
-                        await this.matchService.setPosFirstPlayer(match, pos1);
-                }
-                if (message == "down") {
-                    if (pos1 <= 580)
-                        await this.matchService.setPosFirstPlayer(match, pos1 + 13);
-                    else
-                        await this.matchService.setPosFirstPlayer(match, pos1);
-                }
-                this.emitGame(client.data, "move", pos1, 1);
+                if (message === "up" && pOne >= 0)
+                    pOne -= 13;
+                else if (message === "down" && pOne <= 580)
+                    pOne += 13;
+                console.log("PosOne: ", pOne);
+                this.emitGame(client.data, "move", pOne, 1);
             }
             else {
-                if (message == "up") {
-                    if (pos2 >= 0)
-                        await this.matchService.setPosSecondPlayer(match, pos2 - 13);
-                    else
-                        await this.matchService.setPosSecondPlayer(match, pos2);
-                }
-                if (message == "down") {
-                    if (pos2 <= 580)
-                        await this.matchService.setPosSecondPlayer(match, pos2 + 13);
-                    else
-                        await this.matchService.setPosSecondPlayer(match, pos2);
-                }
-                this.emitGame(client.data, "move", pos2, 2);
+                if (message === "up" && pTwo >= 0)
+                    pTwo -= 13;
+                else if (message === "down" && pTwo <= 580)
+                    pTwo += 13;
+                console.log("PosTwo: ", pTwo);
+                this.emitGame(client.data, "move", pTwo, 2);
             }
+            client.data.posPlayer.pOne = pOne;
+            client.data.posPlayer.pTwo = pTwo;
         }
         catch (_a) { }
     }
@@ -168,7 +137,11 @@ let GameGateway = class GameGateway {
         return false;
     }
     async isInGame(client, user) {
+        const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
+        client.data.match = match;
         client.data.game = client.handshake.auth.game;
+        client.data.posPlayer = { pOne: 250, pTwo: 250 };
+        client.data.posBall = { pX: 0, pY: 0 };
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
@@ -184,8 +157,6 @@ let GameGateway = class GameGateway {
             client.data.user = user;
             if ((await this.isWaitinglist(client, user)) != false)
                 return;
-            const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
-            client.data.match = match;
             if (this.isInGame(client, user))
                 return;
             throw new common_1.UnauthorizedException("You must be in a game");

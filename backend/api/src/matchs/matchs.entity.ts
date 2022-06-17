@@ -33,21 +33,6 @@ export class Matchs {
   @Column()
   scoreSecondPlayer: number;
 
-  @Column()
-  posFirstPlayer: number;
-
-  @Column()
-  posSecondPlayer: number;
-
-  @Column()
-  posBallx: number;
-
-  @Column()
-  posBally: number;
-
-  @Column({ type: "real" })
-  direction: number;
-
   @OneToMany(() => User, (user) => user.matchs, { nullable: true })
   winner: User;
 
