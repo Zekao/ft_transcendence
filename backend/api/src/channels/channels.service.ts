@@ -45,7 +45,7 @@ export class ChannelsService {
   /*                   GET                                                      */
   /* ************************************************************************** */
   async getChannel(StatusDto?: ChannelStatusDto): Promise<Channel[]> {
-    const { status } = StatusDto;
+    if (StatusDto) var { status } = StatusDto;
     let channels = await this.ChannelsRepository.find();
     if (!channels) throw new NotFoundException(`Channel not found`);
     if (status && status === ChannelStatus.PRIVATE)

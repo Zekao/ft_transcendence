@@ -30,7 +30,8 @@ let ChannelsService = class ChannelsService {
         this.UsersService = UsersService;
     }
     async getChannel(StatusDto) {
-        const { status } = StatusDto;
+        if (StatusDto)
+            var { status } = StatusDto;
         let channels = await this.ChannelsRepository.find();
         if (!channels)
             throw new common_1.NotFoundException(`Channel not found`);
