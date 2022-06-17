@@ -116,6 +116,7 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "TWO");
+                this.resetBall(client);
             }
         }
         else if (ball.x >= 850) {
@@ -125,6 +126,7 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "ONE");
+                this.resetBall(client);
             }
         }
         if (ball.x < 0 || ball.x > 850) {
@@ -157,7 +159,7 @@ let GameGateway = class GameGateway {
         if (ball)
             client.data.ball = ball;
     }
-    async collisionDetect(client) {
+    collisionDetect(client) {
         const direction = client.data.direction;
         const ball = client.data.posBall;
         const pOne = client.data.posPlayer.pOne;
@@ -177,6 +179,20 @@ let GameGateway = class GameGateway {
             direction.x = -direction.x;
         }
         this.saveAllData(client, direction, null, ball);
+    }
+    resetBall(client) {
+        let direction = client.data.direction;
+        const ball = client.data.posBall;
+        const match = client.data.match;
+        ball.x = 420;
+        ball.y = 400;
+        direction = { x: 0 };
+        while (Math.abs(direction.x) <= 0.2 || Math.abs(direction.x) >= 0.9) {
+            if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
+                direction = { x: 0.45312, y: 0.6291837 };
+            else
+                direction = { x: -0.45312, y: -0.6291837 };
+        }
     }
     async gamecontrol(client, message) {
         try {

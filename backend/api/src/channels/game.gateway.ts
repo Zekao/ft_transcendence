@@ -127,7 +127,7 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO"); // EMIT TO ADD POINT IN FRONT
-        // FAIRE RESET BALL
+        this.resetBall(client);
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
@@ -135,7 +135,7 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE"); // EMIT TO ADD POINT IN FRONT
-        // FAIRE RESET BALL
+        this.resetBall(client);
       }
     }
     if (ball.x < 0 || ball.x > 850) {
@@ -175,7 +175,7 @@ export class GameGateway
     if (ball) client.data.ball = ball;
   }
 
-  async collisionDetect(client: Socket) {
+  collisionDetect(client: Socket) {
     const direction = client.data.direction;
     const ball = client.data.posBall;
     const pOne = client.data.posPlayer.pOne;
@@ -199,6 +199,21 @@ export class GameGateway
       direction.x = -direction.x;
     }
     this.saveAllData(client, direction, null, ball);
+  }
+
+  resetBall(client: Socket) {
+    let direction = client.data.direction;
+    const ball = client.data.posBall;
+    const match: Matchs = client.data.match;
+
+    ball.x = 420;
+    ball.y = 400;
+    direction = { x: 0 } as { x: number; y: number };
+    while (Math.abs(direction.x) <= 0.2 || Math.abs(direction.x) >= 0.9) {
+      if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
+        direction = { x: 0.45312, y: 0.6291837 };
+      else direction = { x: -0.45312, y: -0.6291837 };
+    }
   }
 
   @SubscribeMessage("move")
