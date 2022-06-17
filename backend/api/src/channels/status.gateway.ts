@@ -60,7 +60,8 @@ export class StatusGateway
 
       }
       if (message[0] === "deny") {
-        
+        // const match = this.matchSevice.getMatchsByFilter()
+        // this.matchSevice.deleteMatch();
       }
     } catch {}
   }
