@@ -74,10 +74,14 @@ let GameGateway = class GameGateway {
             client.data.match = null;
             client.disconnect();
         }
-        else if (message == "ADD P1")
+        else if (message == "ADD P1") {
             await this.matchService.addOnePointToPlayer(match, "ONE");
-        else if (message == "ADD P2")
+            this.emitGame(client.data, "action", "RESET");
+        }
+        else if (message == "ADD P2") {
             await this.matchService.addOnePointToPlayer(match, "TWO");
+            this.emitGame(client.data, "action", "RESET");
+        }
     }
     async gamecontrol(client, message) {
         try {
@@ -90,7 +94,6 @@ let GameGateway = class GameGateway {
                     pOne -= 13;
                 else if (message === "down" && pOne <= 580)
                     pOne += 13;
-                console.log("PosOne: ", pOne);
                 this.emitGame(client.data, "move", pOne, 1);
             }
             else {
@@ -98,7 +101,6 @@ let GameGateway = class GameGateway {
                     pTwo -= 13;
                 else if (message === "down" && pTwo <= 580)
                     pTwo += 13;
-                console.log("PosTwo: ", pTwo);
                 this.emitGame(client.data, "move", pTwo, 2);
             }
             client.data.posPlayer.pOne = pOne;

@@ -82,7 +82,7 @@ export default V.extend({
          path: '/api/socket.io/',
        } as any)
         this.socket.on('move', (data, boolplayer) => {
-          if (boolplayer == 1) {
+          if (boolplayer === 1) {
             if (this.position.y !== data) {
                 this.position.y = data;
             }
@@ -91,7 +91,7 @@ export default V.extend({
                  this.$emit('next')
             }
           }
-          else if (boolplayer == 2)
+          else if (boolplayer === 2)
           {
             if (this.position2.y !== data) {
                 this.position2.y = data;
@@ -101,6 +101,10 @@ export default V.extend({
                 this.$emit('next')
             }
           }
+          })
+        this.socket.on('action', (data) => {
+            if (data === "RESET")
+              this.resetBall();
         })
           setInterval(this.updateContent, 17);
       }
@@ -116,8 +120,6 @@ export default V.extend({
             this.move('up');
           else if (event.key === 's' && (this.position.y <= 585 || this.position2.y <= 585))
               this.move('down');
-          else if (event.key === 'Escape')
-            this.move('stop');
           return false // stop alias calling
         },
         cancel () {
@@ -127,7 +129,6 @@ export default V.extend({
       },
        methods: {
         updateContent( ) {
-            const call = 0;
             this.context.clearRect(0, 0, 1080, 1920);
             this.context.fillStyle = "white";
             this.context.font = "30px Arial";
@@ -153,16 +154,11 @@ export default V.extend({
         this.direction = { x: 0 } as { x: number, y: number }
         // this.velocity = 0.00005;
         while ( Math.abs(this.direction.x) <= 0.2 || Math.abs(this.direction.x) >= 0.9 ) {
-          const heading = this.randomNumberBetween(0, 2 * Math.PI)
           if (this.score.player1 >= this.score.player2)
             this.direction = { x: 0.45312, y: 0.6291837 }
           else
             this.direction = { x: -0.45312, y: -0.6291837 }
-
-          // this.direction = { x: 0.45312, y: 0.6291837 }
-          // this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
-        }
-        // on reset la vitesse a celle initiale
+          }
         },
         // fonction de mouvement de la balle
         clearCircle( x: number , y: number , r: number ) {
@@ -201,10 +197,8 @@ export default V.extend({
             this.context.fillText("THE GAME IS FINISHED", 180, 150);
             return ;
           }
-            if (this.direction.x == 1 || this.direction.x == -1) {
+            if (this.direction.x === 1 || this.direction.x === -1) {
               while (this.direction.x <= 0.2 || this.direction.x >= 0.9) {
-              const heading = this.randomNumberBetween(0, 2 * Math.PI)
-              console.log('supposed to be real value',  Math.cos(heading), Math.sin(heading));
               if (this.score.player1 >= this.score.player2)
                 this.direction = { x: 0.45312, y: 0.6291837 }
               else
@@ -273,8 +267,6 @@ export default V.extend({
               this.velocity.speed += 0.00005;
         },
         move(direction: string) {
-          if (this.score.player1 >= 5 || this.score.player2 >= 5)
-            return ;
           if (this.socket) this.socket.emit("move", direction);
         }
       }
