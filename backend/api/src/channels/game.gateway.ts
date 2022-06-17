@@ -89,7 +89,6 @@ export class GameGateway
         client.data.match = null;
         client.disconnect();
       }
-      console.log(message);
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message === "up" && pOne >= 0) pOne -= 13;
         else if (message === "down" && pOne <= 580) pOne += 13;
@@ -149,7 +148,9 @@ export class GameGateway
     client.data.match = match;
     client.data.game = client.handshake.auth.game;
     client.data.posPlayer = { pOne: 250, pTwo: 250 };
-    client.data.posBall = { pX: 0, pY: 0 };
+    client.data.posBall = { pX: 420, pY: 400, rad: 10 };
+    client.data.direction = { x: 1, y: 1 };
+    client.data.velocity = 0.00005;
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);

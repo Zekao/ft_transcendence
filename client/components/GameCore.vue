@@ -33,8 +33,8 @@ export default V.extend({
       y: 250
     },
     ball: {
-      x: 500,
-      y: 500,
+      x: 420,
+      y: 400,
       radius: 10,
     },
     direction: {
@@ -112,25 +112,12 @@ export default V.extend({
   },
       shortcuts: {
         keydown (event) {
-          if (event.key === 'w') {
-            // console.log('both positions of player: ', this.position.y, this.position2.y)
-            if (this.position.y >= 13 || this.position2.y >= 13)
-              this.move('up');
-            else
-              return false;
-          }
-          else if (event.key === 's') {
-            // console.log('both positions of player: ', this.position.y, this.position2.y)
-            // faudrait que je puisse savoir si c'est le joueur 1 ou le joueur 2 mais je vois pas trop comment pcq j'suis fatigue
-            if (this.position.y <= 585 || this.position2.y <= 585)
+          if (event.key === 'w' && (this.position.y >= 13 || this.position2.y >= 13))
+            this.move('up');
+          else if (event.key === 's' && (this.position.y <= 585 || this.position2.y <= 585))
               this.move('down');
-            else
-              return false;
-          }
-          else if (event.key === 'Escape') {
+          else if (event.key === 'Escape')
             this.move('stop');
-            console.log('pressed escape key!!!!!')
-          }
           return false // stop alias calling
         },
         cancel () {
