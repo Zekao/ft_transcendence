@@ -62,7 +62,7 @@ export class StatusGateway
         const match = await this.matchSevice.getMatchsId(gameID);
         this.emitNotif(
           client.data,
-          match.SecondPlayer.user_name,
+          match.FirstPlayer.user_name,
           "join",
           gameID
         );
