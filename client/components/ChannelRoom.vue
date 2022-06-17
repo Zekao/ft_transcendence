@@ -264,19 +264,19 @@ export default Vue.extend({
       }
     },
     async changePassword() {
+      const channel = this.channel
+      channel.password = this.newPassword
       try {
-        await this.$axios.$patch(`/channel/${this.channel.id}`, {
-          password: this.newPassword,
-        })
+        await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
       } catch (err) {
         this.newPassword = ''
       }
     },
     async updatePassword() {
+      const channel = this.channel
+      channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
-        await this.$axios.$patch(`/channel/${this.channel.id}`, {
-          status: this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED',
-        })
+        await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
       } catch(err) {
         console.log(err)
       }
