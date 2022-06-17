@@ -22,7 +22,8 @@
       "@types/node",
       "cookie-universal-nuxt",
       "nuxt-socket-io"
-    ]
+    ],
+    "jsx": "preserve",
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }
