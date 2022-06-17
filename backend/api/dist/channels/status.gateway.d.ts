@@ -1,21 +1,19 @@
 import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from "@nestjs/websockets";
 import { Socket, Server } from "socket.io";
-import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
-import { ChannelsService } from "./channels.service";
 import { User } from "../users/users.entity";
+import { MatchsService } from "../matchs/matchs.service";
 export declare class StatusGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    private readonly jwtService;
     private readonly userService;
     private readonly authService;
-    private readonly channelService;
-    constructor(jwtService: JwtService, userService: UsersService, authService: AuthService, channelService: ChannelsService);
+    private readonly matchSevice;
+    constructor(userService: UsersService, authService: AuthService, matchSevice: MatchsService);
     server: any;
     private logger;
     afterInit(server: Server): void;
     SendMessageToChannel(client: Socket, message: any): Promise<void>;
-    emitChannel(channel: any, event: string, ...args: any): void;
+    emitNotif(client: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): Promise<void>;
     isStatus(client: Socket, user: User): boolean;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;

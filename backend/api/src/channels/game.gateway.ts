@@ -101,9 +101,10 @@ export class GameGateway
       }
       if (message == "FINISH") {
         console.log("TEST");
-        client.disconnect();
         match.status = MatchStatus.ENDED;
         this.matchService.saveMatch(match);
+        client.data.match = null;
+        client.disconnect();
       }
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message == "up") {

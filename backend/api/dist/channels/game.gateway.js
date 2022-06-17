@@ -93,9 +93,10 @@ let GameGateway = class GameGateway {
             }
             if (message == "FINISH") {
                 console.log("TEST");
-                client.disconnect();
                 match.status = matchs_enum_1.MatchStatus.ENDED;
                 this.matchService.saveMatch(match);
+                client.data.match = null;
+                client.disconnect();
             }
             if (player.user_name == match.FirstPlayer.user_name) {
                 if (message == "up") {

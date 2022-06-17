@@ -17,16 +17,16 @@ import { ChannelsService } from "./channels.service";
 import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
+import { MatchsService } from "../matchs/matchs.service";
 
 @WebSocketGateway()
 export class StatusGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly userService: UsersService,
     private readonly authService: AuthService,
-    private readonly channelService: ChannelsService
+    private readonly matchSevice: MatchsService
   ) {}
 
   @WebSocketServer() server: any;
@@ -43,26 +43,33 @@ export class StatusGateway
       if (message[0] === "invite") {
         if (message[1]) {
           const invited = await this.userService.getUserId(message[1]);
+          const match = await this.matchSevice.createMatch(invited.id);
+          this.matchSevice.addPlayerToMatch(client.data.user, match);
           console.log(message);
-          client.emit(
+          this.emitNotif(
+            client.data,
             "notification",
-            user.user_name,
+            invited.user_name,
             "game",
-            "GAME-ID",
+            match.id,
             invited.user_name
           );
         }
       }
+      if (message[0] === "join") {
+      }
+      if (message[0] === "deny") {
+        // const match = this.matchSevice.getMatchsByFilter()
+        // this.matchSevice.deleteMatch();
+      }
     } catch {}
   }
 
-  emitChannel(channel: any, event: string, ...args: any): void {
+  emitNotif(client: any, event: string, ...args: any): void {
     try {
-      if (!channel.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.values());
+      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
+        socket.emit(event, ...args);
       });
     } catch {}
   }
