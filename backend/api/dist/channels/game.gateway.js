@@ -35,7 +35,7 @@ let GameGateway = class GameGateway {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
                     console.log("FIND A MATCH");
-                    this.server.emit("wait", "ready", findedMatch.id);
+                    this.emitReady(client.data, "wait", "ready", findedMatch.id);
                 }
                 else {
                     console.log("CREATION OF THE MATCH");
@@ -49,6 +49,18 @@ let GameGateway = class GameGateway {
                 client.data.match = null;
                 console.log("LEAVE THE WAITING LIST MATCH");
             }
+        }
+        catch (_a) { }
+    }
+    emitReady(player, event, ...args) {
+        try {
+            if (!player.user)
+                return;
+            const sockets = Array.from(this.server.sockets.values());
+            sockets.forEach((socket) => {
+                if (player.game == socket.data.game)
+                    socket.emit(event, socket.data.user.user_name, ...args);
+            });
         }
         catch (_a) { }
     }
@@ -133,12 +145,15 @@ let GameGateway = class GameGateway {
     async handleDisconnect(client) {
         const waiting = client.data.waiting;
         const user = client.data.user;
-        if (client.data.match && client.data.match.status === matchs_enum_1.MatchStatus.PENDING)
-            await this.matchService.deleteMatch(client.data.match.id);
-        if (user || waiting) {
-            user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
-            this.userService.saveUser(user);
+        try {
+            if (client.data.match && client.data.match.status === matchs_enum_1.MatchStatus.PENDING)
+                await this.matchService.deleteMatch(client.data.match.id);
+            if (user || waiting) {
+                user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
+                this.userService.saveUser(user);
+            }
         }
+        catch (err) { }
         console.log("OUT GAME");
         this.logger.log(`Client disconnected: ${client.id}`);
     }
