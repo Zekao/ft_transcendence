@@ -13,17 +13,15 @@ exports.StatusGateway = void 0;
 const websockets_1 = require("@nestjs/websockets");
 const common_1 = require("@nestjs/common");
 const socket_io_1 = require("socket.io");
-const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const auth_services_1 = require("../auth/auth.services");
-const channels_service_1 = require("./channels.service");
 const users_enum_1 = require("../users/users.enum");
+const matchs_service_1 = require("../matchs/matchs.service");
 let StatusGateway = class StatusGateway {
-    constructor(jwtService, userService, authService, channelService) {
-        this.jwtService = jwtService;
+    constructor(userService, authService, matchSevice) {
         this.userService = userService;
         this.authService = authService;
-        this.channelService = channelService;
+        this.matchSevice = matchSevice;
         this.logger = new common_1.Logger("StatusGateway");
     }
     afterInit(server) {
@@ -35,9 +33,15 @@ let StatusGateway = class StatusGateway {
             if (message[0] === "invite") {
                 if (message[1]) {
                     const invited = await this.userService.getUserId(message[1]);
+                    const match = await this.matchSevice.createMatch(invited.id);
+                    this.matchSevice.addPlayerToMatch(client.data.user, match);
                     console.log(message);
-                    this.emitNotif(client.data, "notification", invited.user_name, "game", "GAME-ID", invited.user_name);
+                    this.emitNotif(client.data, "notification", invited.user_name, "game", match.id, invited.user_name);
                 }
+            }
+            if (message[0] === "join") {
+            }
+            if (message[0] === "deny") {
             }
         }
         catch (_a) { }
@@ -89,10 +93,9 @@ __decorate([
 ], StatusGateway.prototype, "SendMessageToChannel", null);
 StatusGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService,
-        users_service_1.UsersService,
+    __metadata("design:paramtypes", [users_service_1.UsersService,
         auth_services_1.AuthService,
-        channels_service_1.ChannelsService])
+        matchs_service_1.MatchsService])
 ], StatusGateway);
 exports.StatusGateway = StatusGateway;
 //# sourceMappingURL=status.gateway.js.map
