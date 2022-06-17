@@ -234,7 +234,7 @@ export default V.extend({
               }
               else {
                 this.velocity.speed = 0.000050;
-                if (this.socket) this.socket.emit("move", "ADD2");
+                if (this.socket) this.socket.emit("action", "ADD P2");
                 this.score.player2++;
               // this.velocity = 0.0005; // va savoir pourquoi si je reset la velocity, la balle ne bouge plus
                 this.resetBall();
@@ -251,7 +251,7 @@ export default V.extend({
               else {
                 this.velocity.speed = 0.000050;
                 this.score.player1++;
-                if (this.socket) this.socket.emit("move", "ADD1");
+                if (this.socket) this.socket.emit("action", "ADD P1");
                 this.resetBall();
               }
             }

@@ -75,6 +75,22 @@ export class GameGateway
     } catch {}
   }
 
+  @SubscribeMessage("action")
+  async GameAction(client: Socket, message: string): Promise<void> {
+    const match: Matchs = client.data.match;
+
+    if (message == "FINISH") {
+      console.log("GAME IS FINISH");
+      match.status = MatchStatus.ENDED;
+      this.matchService.saveMatch(match);
+      client.data.match = null;
+      client.disconnect();
+    } else if (message == "ADD P1")
+      await this.matchService.addOnePointToPlayer(match, "ONE");
+    else if (message == "ADD P2")
+      await this.matchService.addOnePointToPlayer(match, "TWO");
+  }
+
   @SubscribeMessage("move")
   async gamecontrol(client: Socket, message: string): Promise<void> {
     try {
@@ -82,13 +98,6 @@ export class GameGateway
       let pTwo = client.data.posPlayer.pTwo;
       const player = client.data.user;
       const match: Matchs = client.data.match;
-      if (message == "FINISH") {
-        console.log("TEST");
-        match.status = MatchStatus.ENDED;
-        this.matchService.saveMatch(match);
-        client.data.match = null;
-        client.disconnect();
-      }
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message === "up" && pOne >= 0) pOne -= 13;
         else if (message === "down" && pOne <= 580) pOne += 13;
@@ -148,9 +157,9 @@ export class GameGateway
     client.data.match = match;
     client.data.game = client.handshake.auth.game;
     client.data.posPlayer = { pOne: 250, pTwo: 250 };
-    client.data.posBall = { pX: 420, pY: 400, rad: 10 };
-    client.data.direction = { x: 1, y: 1 };
-    client.data.velocity = 0.00005;
+    // client.data.posBall = { pX: 420, pY: 400, rad: 10 };
+    // client.data.direction = { x: 1, y: 1 };
+    // client.data.velocity = 0.00005;
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
