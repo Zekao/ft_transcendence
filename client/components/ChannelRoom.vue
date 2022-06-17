@@ -274,6 +274,7 @@ export default Vue.extend({
     },
     async updatePassword() {
       const channel = { ...this.channel }
+      channel.password = this.newPassword
       channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
