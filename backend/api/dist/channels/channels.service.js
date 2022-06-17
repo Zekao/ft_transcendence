@@ -30,9 +30,8 @@ let ChannelsService = class ChannelsService {
         this.UsersService = UsersService;
     }
     async getChannel(StatusDto) {
-        if (StatusDto)
-            var { status } = StatusDto;
-        var channels = await this.ChannelsRepository.find();
+        const { status } = StatusDto;
+        let channels = await this.ChannelsRepository.find();
         if (!channels)
             throw new common_1.NotFoundException(`Channel not found`);
         if (status && status === channels_enum_1.ChannelStatus.PRIVATE)
@@ -87,9 +86,8 @@ let ChannelsService = class ChannelsService {
         return found;
     }
     async getChannelMembers(channelId, Role) {
-        if (Role)
-            var { role, id } = Role;
-        var relations = [];
+        const { role, id } = Role;
+        const relations = [];
         if (role) {
             if (role === "all")
                 relations.push({ withAllMembers: true });
@@ -108,7 +106,7 @@ let ChannelsService = class ChannelsService {
             relations.push({ withAllMembers: true });
         }
         const channel = await this.getChannelId(channelId, relations);
-        var users = [];
+        const users = [];
         if (channel.members) {
             for (const member of channel.members)
                 users.push(member);
@@ -173,7 +171,10 @@ let ChannelsService = class ChannelsService {
         if (user)
             me = user;
         const found = await this.UsersService.getUserId(me);
-        const channel = await this.getChannelId(channelId, [{ withAllMembers: true }, { withBanned: true }]);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withBanned: true },
+        ]);
         if ((await this.getChannelMembers(channelId)).find((user) => user.id === found.id))
             throw new common_1.ConflictException(`User ${me} is already in channel`);
         if ((await this.getChannelBanMembers(channelId)).find((user) => user.id === found.id))
@@ -187,7 +188,11 @@ let ChannelsService = class ChannelsService {
         if (user)
             me = user;
         const found = await this.UsersService.getUserId(me);
-        const channel = await this.getChannelId(channelId, [{ withAllMembers: true }, { withBanned: true }, { withMuted: true }]);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withBanned: true },
+            { withMuted: true },
+        ]);
         if (!(await this.getChannelMembers(channelId)).find((user) => user.id === found.id))
             throw new common_1.ForbiddenException(`User ${me} has not in channel`);
         if (channel.owner.id === found.id)
@@ -206,7 +211,11 @@ let ChannelsService = class ChannelsService {
         if (user)
             me = user;
         const found = await this.UsersService.getUserId(me);
-        const channel = await this.getChannelId(channelId, [{ withAllMembers: true }, { withBanned: true }, { withMuted: true }]);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withBanned: true },
+            { withMuted: true },
+        ]);
         if (!(await this.getChannelMembers(channelId)).find((user) => user.id === found.id))
             throw new common_1.ForbiddenException(`User ${me} has not in channel`);
         if (channel.owner.id === found.id)
@@ -224,7 +233,11 @@ let ChannelsService = class ChannelsService {
         if (user)
             me = user;
         const found = await this.UsersService.getUserId(me);
-        const channel = await this.getChannelId(channelId, [{ withAllMembers: true }, { withBanned: true }, { withMuted: true }]);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withBanned: true },
+            { withMuted: true },
+        ]);
         if ((await this.getChannelBanMembers(channelId)).find((user) => user.id === found.id))
             throw new common_1.ConflictException(`User ${me} already banned`);
         if (channel.owner.id === found.id)

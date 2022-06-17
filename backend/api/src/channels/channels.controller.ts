@@ -10,13 +10,7 @@ import {
   UseGuards,
   Request,
 } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
-import { UserDto } from "src/users/dto/user.dto";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/users/users.entity";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
@@ -86,7 +80,10 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Create a new channel",
   })
-  createChannel(@Request() req, @Body() ChannelsDtos: ChannelsDto): Promise<Channel> {
+  createChannel(
+    @Request() req,
+    @Body() ChannelsDtos: ChannelsDto
+  ): Promise<Channel> {
     return this.channelService.createChannel(req.user.id, ChannelsDtos);
   }
 
@@ -95,7 +92,11 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Add a member to a channel",
   })
-  addUserToMember(@Request() req, @Param("id") id: string, @Query() query): Promise<User> {
+  addUserToMember(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.channelService.addUserToMember(req.user.id, id, query);
   }
 
@@ -104,7 +105,11 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Add a member to a Admin channel",
   })
-  addUserToAdmin(@Request() req, @Param('id') id: string, @Query() query): Promise<User> {
+  addUserToAdmin(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.channelService.addUserToAdmin(req.user.id, id, query);
   }
 
@@ -113,7 +118,11 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Add a member to a Muted Users",
   })
-  addUserToMuted(@Request() req, @Param('id') id: string, @Query() query): Promise<User> {
+  addUserToMuted(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.channelService.addUserToMuted(req.user.id, id, query);
   }
 
@@ -122,7 +131,11 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Add a member to a Banned Users",
   })
-  addUserToBanned(@Request() req, @Param('id') id: string, @Query() query): Promise<User> {
+  addUserToBanned(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
     return this.channelService.addUserToBanned(req.user.id, id, query);
   }
 

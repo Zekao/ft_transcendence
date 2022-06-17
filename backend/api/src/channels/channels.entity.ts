@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserDto } from "src/users/dto/user.dto";
 import { User } from "src/users/users.entity";
 import {
   Column,
@@ -7,7 +6,6 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   TableInheritance,
 } from "typeorm";
@@ -32,14 +30,14 @@ export class Channel {
   history: { login: string; message: string }[];
 
   @ManyToMany(() => User, { nullable: true })
-  @JoinTable({ name: 'members' })
+  @JoinTable({ name: "members" })
   members: User[];
 
   @ManyToMany(() => User, { nullable: true })
   @JoinTable({ name: "admins" })
   admins: User[];
 
-  @ManyToOne(() => User, { nullable: false})
+  @ManyToOne(() => User, { nullable: false })
   @ApiProperty({ type: () => User })
   @JoinTable({ name: "owner" })
   owner: User;

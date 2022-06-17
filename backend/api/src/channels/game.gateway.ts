@@ -83,10 +83,12 @@ export class GameGateway
       if (message == "ADD1") {
         ++match.scoreFirstPlayer;
         this.matchService.saveMatch(match);
-      } if (message == "ADD2") {
+      }
+      if (message == "ADD2") {
         ++match.scoreSecondPlayer;
         this.matchService.saveMatch(match);
-      } if (message == "FINISH") {
+      }
+      if (message == "FINISH") {
         console.log("TEST");
         client.disconnect();
         match.status = MatchStatus.ENDED;

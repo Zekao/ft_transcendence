@@ -5,17 +5,12 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  MessageBody,
-  ConnectedSocket,
 } from "@nestjs/websockets";
 import { Logger, UnauthorizedException } from "@nestjs/common";
 import { Socket, Server } from "socket.io";
-import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
-import { UserStatus } from "../users/users.enum";
-import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 
 @WebSocketGateway({ namespace: "channel" })
