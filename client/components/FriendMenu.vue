@@ -19,7 +19,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-btn class="mr-2" @click="emitInvitation">
+        <v-btn :loading="waitingGame" class="mr-2" @click="emitInvitation">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
         </v-btn>
@@ -60,6 +60,7 @@ export default Vue.extend({
   data: () => ({
     socket: null as NuxtSocket | null,
     isfriend: true,
+    waitingGame: false,
   }),
 
   computed: {
@@ -142,6 +143,7 @@ export default Vue.extend({
 
     emitInvitation() {
       if (this.socket) {
+        this.waitingGame = true
         this.socket.emit('notification', 'invite', this.friend.user_name)
       }
     }
