@@ -56,7 +56,7 @@
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setAdmin(user.user_name)">Remove</v-btn>
+              <v-btn @click="unsetAdmin(user.user_name)">Remove</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -76,7 +76,7 @@
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setBan(user.user_name)">Unban</v-btn>
+              <v-btn @click="unsetBan(user.user_name)">Unban</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -96,7 +96,7 @@
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setMute(user.user_name)">Unmute</v-btn>
+              <v-btn @click="unsetMute(user.user_name)">Unmute</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -345,6 +345,24 @@ export default Vue.extend({
     setMute(user: string) {
       if (this.socket && user) {
         this.socket.emit('channel', 'action', 'mute', user)
+      }
+    },
+    unsetAdmin(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unadmin', user)
+        this.admins = this.admins.filter(el => el.user_name !== user)
+      }
+    },
+    unsetBan(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unban', user)
+        this.banned = this.banned.filter(el => el.user_name !== user)
+      }
+    },
+    unsetMute(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unmute', user)
+        this.muted = this.muted.filter(el => el.user_name !== user)
       }
     },
     async fetchAdmin() {
