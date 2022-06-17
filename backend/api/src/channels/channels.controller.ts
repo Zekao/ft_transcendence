@@ -159,7 +159,6 @@ export class ChannelsController {
     summary: "Modify attribute of a specified channel",
   })
   editChannel(@Param("id") id: string, @Body() edit): Promise<Channel> {
-    console.log(edit);
     return this.channelService.editChannel(id, edit);
   }
 }
