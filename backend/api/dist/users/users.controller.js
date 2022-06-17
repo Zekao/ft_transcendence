@@ -27,68 +27,68 @@ const nestjs_swagger_api_exception_decorator_1 = require("@nanogiants/nestjs-swa
 const templated_api_exception_1 = require("./template/templated-api-exception");
 const yargs_1 = require("yargs");
 let UsersController = class UsersController {
-    constructor(UsersService) {
-        this.UsersService = UsersService;
+    constructor(usersService) {
+        this.usersService = usersService;
     }
     getUsers(filters) {
         if (Object.keys(filters).length)
-            return this.UsersService.getUserByFilter(filters);
-        return this.UsersService.getUsers();
+            return this.usersService.getUserByFilter(filters);
+        return this.usersService.getUsers();
     }
     getRankedUsers() {
-        return this.UsersService.getRankedUsers();
+        return this.usersService.getRankedUsers();
     }
     getUserId(req, id) {
-        return this.UsersService.getUserId(id === "me" ? req.user.id : id);
+        return this.usersService.getUserId(id === "me" ? req.user.id : id);
     }
     getAvatar(req, id, res) {
-        return this.UsersService.getAvatar(id === "me" ? req.user.id : id, res);
+        return this.usersService.getAvatar(id === "me" ? req.user.id : id, res);
     }
     getFriends(req) {
         const user = req.user;
-        return this.UsersService.getFriends(user.id);
+        return this.usersService.getFriends(user.id);
     }
     getMatch(req, id) {
-        return this.UsersService.getMatchs(id === "me" ? req.user.id : id);
+        return this.usersService.getMatchs(id === "me" ? req.user.id : id);
     }
-    getBlocked(req, id) {
+    getBlocked(req) {
         const user = req.user;
-        return this.UsersService.getBlocked(user.id);
+        return this.usersService.getBlocked(user.id);
     }
     getWhoFollowMe(req) {
-        return this.UsersService.getWhoFollowMe(req.user.id);
+        return this.usersService.getWhoFollowMe(req.user.id);
     }
     addFriend(req, query) {
         const user = req.user;
-        return this.UsersService.addFriend(user.id, query.friend);
+        return this.usersService.addFriend(user.id, query.friend);
     }
     addBlocked(req, query) {
         const user = req.user;
-        return this.UsersService.addBlocked(user.id, query.blocked);
+        return this.usersService.addBlocked(user.id, query.blocked);
     }
     async uploadedFile(req, file) {
         const user = req.user;
-        return this.UsersService.uploadFile(user, file);
+        return this.usersService.uploadFile(user, file);
     }
     deleteUser(req, id) {
-        return this.UsersService.deleteUser(id === "me" ? req.user.id : id);
+        return this.usersService.deleteUser(id === "me" ? req.user.id : id);
     }
     deleteAvatar(req, id) {
-        return this.UsersService.deleteAvatar(id === "me" ? req.user.id : id);
+        return this.usersService.deleteAvatar(id === "me" ? req.user.id : id);
     }
     removeFriend(req, query) {
         const user = req.user;
-        return this.UsersService.removeFriend(user.id, query.friend);
+        return this.usersService.removeFriend(user.id, query.friend);
     }
     removeBlocked(req, id, query) {
         const user = req.user;
-        return this.UsersService.removeBlocked(user.id, query.blocked);
+        return this.usersService.removeBlocked(user.id, query.blocked);
     }
     patchUser(req, id, body) {
-        return this.UsersService.patchUser(id === "me" ? req.user.id : id, body);
+        return this.usersService.patchUser(id === "me" ? req.user.id : id, body);
     }
     patchUpdateRank() {
-        return this.UsersService.patchUpdateRank();
+        return this.usersService.patchUpdateRank();
     }
 };
 __decorate([
@@ -158,7 +158,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/friends"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return the list of friends of a specified user profile",
+        summary: "Return the list of friends w/crediential",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
@@ -189,23 +189,22 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return the list of blocked users of a specified user profile",
+        summary: "Return the list of blocked users w/credential",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
     }),
     (0, templated_api_exception_1.UserApiException)(() => common_1.NotFoundException),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getBlocked", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/me/whofollowme"),
     (0, swagger_1.ApiOperation)({
-        summary: "Return all users who have you in friends list",
+        summary: "Return all users that are in your friends list w/credential",
     }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
@@ -220,7 +219,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/me/friends"),
     (0, swagger_1.ApiOperation)({
-        summary: "Add a friend to a specified user profile",
+        summary: "Add a friend w/crediential",
     }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
@@ -232,7 +231,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
-        summary: "Add a blocked user to a specified user profile",
+        summary: "Add a blocked user w/credential",
     }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
@@ -304,7 +303,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)("/me/friends"),
     (0, swagger_1.ApiOperation)({
-        summary: "delete a friend to a specified user profile",
+        summary: "delete a friend w/crediential",
     }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
@@ -316,7 +315,7 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)("/me/blocked"),
     (0, swagger_1.ApiOperation)({
-        summary: "delete a friend to a specified user profile",
+        summary: "delete a friend w/credential",
     }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)("id")),

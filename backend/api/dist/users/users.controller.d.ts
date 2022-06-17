@@ -4,15 +4,15 @@ import { User } from "./users.entity";
 import { UsersService } from "./users.service";
 import { UserDto } from "./dto/user.dto";
 export declare class UsersController {
-    private UsersService;
-    constructor(UsersService: UsersService);
+    private usersService;
+    constructor(usersService: UsersService);
     getUsers(filters: UsersFiltesDTO): Promise<User[]>;
     getRankedUsers(): Promise<User[]>;
     getUserId(req: any, id: string): Promise<User>;
     getAvatar(req: any, id: string, res: any): Promise<any>;
     getFriends(req: any): Promise<UserDto[]>;
     getMatch(req: any, id: string): Promise<import("../matchs/matchs.entity").Matchs[]>;
-    getBlocked(req: any, id: string): Promise<UserDto[]>;
+    getBlocked(req: any): Promise<UserDto[]>;
     getWhoFollowMe(req: any): Promise<User[]>;
     addFriend(req: any, query: any): Promise<User>;
     addBlocked(req: any, query: any): Promise<User>;
