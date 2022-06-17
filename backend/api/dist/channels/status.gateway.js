@@ -36,20 +36,17 @@ let StatusGateway = class StatusGateway {
                 if (message[1]) {
                     const invited = await this.userService.getUserId(message[1]);
                     console.log(message);
-                    client.emit("notification", user.user_name, "game", "GAME-ID", invited.user_name);
+                    this.emitNotif(client.data, "notification", invited.user_name, "game", "GAME-ID", invited.user_name);
                 }
             }
         }
         catch (_a) { }
     }
-    emitChannel(channel, event, ...args) {
+    emitNotif(client, event, ...args) {
         try {
-            if (!channel.user)
-                return;
-            const sockets = Array.from(this.server.sockets.values());
+            const sockets = Array.from(this.server.sockets.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-                    socket.emit(event, ...args);
+                socket.emit(event, ...args);
             });
         }
         catch (_a) { }

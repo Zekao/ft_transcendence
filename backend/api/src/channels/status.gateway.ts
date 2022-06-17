@@ -44,9 +44,10 @@ export class StatusGateway
         if (message[1]) {
           const invited = await this.userService.getUserId(message[1]);
           console.log(message);
-          client.emit(
+          this.emitNotif(
+            client.data,
             "notification",
-            user.user_name,
+            invited.user_name,
             "game",
             "GAME-ID",
             invited.user_name
@@ -56,13 +57,11 @@ export class StatusGateway
     } catch {}
   }
 
-  emitChannel(channel: any, event: string, ...args: any): void {
+  emitNotif(client: any, event: string, ...args: any): void {
     try {
-      if (!channel.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.values());
+      const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
+        socket.emit(event, ...args);
       });
     } catch {}
   }
