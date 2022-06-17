@@ -245,7 +245,7 @@ export default V.extend({
               if (this.score.player1 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
-                if (this.socket) this.socket.emit("move", "FINISH");
+                if (this.socket) this.socket.emit("action", "FINISH");
                 this.$emit('next')
               }
               else {
