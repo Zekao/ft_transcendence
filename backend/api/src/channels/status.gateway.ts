@@ -18,6 +18,7 @@ import { UserStatus } from "../users/users.enum";
 import { User } from "../users/users.entity";
 import { Channel } from "./channels.entity";
 import { MatchsService } from "../matchs/matchs.service";
+import { Matchs } from "../matchs/matchs.entity";
 
 @WebSocketGateway()
 export class StatusGateway
@@ -57,10 +58,18 @@ export class StatusGateway
         }
       }
       if (message[0] === "join") {
+        const gameID = message[1];
+        const match = await this.matchSevice.getMatchsId(gameID);
+        this.emitNotif(
+          client.data,
+          match.SecondPlayer.user_name,
+          "join",
+          gameID
+        );
       }
       if (message[0] === "deny") {
-        // const match = this.matchSevice.getMatchsByFilter()
-        // this.matchSevice.deleteMatch();
+        const gameID = message[1];
+        this.matchSevice.deleteMatch(gameID);
       }
     } catch {}
   }
