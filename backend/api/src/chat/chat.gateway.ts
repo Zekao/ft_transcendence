@@ -42,7 +42,6 @@ export class ChatGateway
       const history = { login, message: msg };
       chat.history.push(history);
       this.chatService.saveChat(chat);
-      client.emit("msg", "test", "ok");
       this.emitChat(client.data, "msg", login, msg);
     } catch {}
   }
