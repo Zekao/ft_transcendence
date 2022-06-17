@@ -46,8 +46,13 @@
               Admin
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!admins.length">
+            <v-list-item-subtitle class="mx-2">
+              No admins
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in admins" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
@@ -61,8 +66,13 @@
               Banned
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!banned.length">
+            <v-list-item-subtitle class="mx-2">
+              No banned
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in banned" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
@@ -76,8 +86,13 @@
               Muted
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!muted.length">
+            <v-list-item-subtitle class="mx-2">
+              No muted
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in muted" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
@@ -179,14 +194,13 @@ export default Vue.extend({
   },
 
   data: () => ({
-    owner: true,
-    admin: true,
     valid: false,
     unlocked: false,
     password: '',
     newPassword: '',
     messageText: '',
     messages: [] as { login: string; message: string }[],
+    owner: {} as IUser,
     admins: [] as IUser[],
     banned: [] as IUser[],
     muted: [] as IUser[],
@@ -202,9 +216,13 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
-      this.messages = res.length
-        ? [...res.map((el: string) => JSON.parse(el))]
+      const owners = await this.$axios.$get(`/channel/${this.channel.id}/members?role=owner`)
+      this.owner = owners[0]
+      const admins = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+      this.admins = admins
+      const history = await this.$axios.$get(`/channel/${this.channel.id}/history`)
+      this.messages = history.length
+        ? [...history.map((el: string) => JSON.parse(el))]
         : []
       this.$nextTick(() => {
         this.scrollToBottom()
@@ -218,6 +236,7 @@ export default Vue.extend({
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
       selectedUser: (state: any): IUser => state.selectedUser,
+      authUser: (state: any): IUser => state.user.authUser,
       users: (state: any): IUser[] => state.user.users,
     }),
     value: {
@@ -228,13 +247,13 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-    isAuthUserOwner() {
-      return this.owner
+    isAuthUserOwner(): boolean {
+      return this.owner.id === this.authUser.id
     },
-    isAuthUserAdmin() {
-      return this.admin
+    isAuthUserAdmin(): boolean {
+      return this.isAuthUserOwner || this.admins.find(el => el.id === this.authUser.id) !== undefined
     },
-    isLocked() {
+    isLocked(): boolean {
       return this.channel.status === 'PROTECTED' ? !this.unlocked : false
     },
   },
@@ -328,14 +347,29 @@ export default Vue.extend({
         this.socket.emit('channel', 'action', 'mute', user)
       }
     },
-    fetchAdmin() {
-      console.log(this.admins)
+    async fetchAdmin() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+        this.admins = res
+      } catch (err) {
+        this.admins = []
+      }
     },
-    fetchBanned() {
-      console.log(this.banned)
+    async fetchBanned() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=ban`)
+        this.banned = res
+      } catch (err) {
+        this.banned = []
+      }
     },
-    fetchMuted() {
-      console.log(this.muted)
+    async fetchMuted() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=mute`)
+        this.muted = res
+      } catch (err) {
+        this.muted = []
+      }
     },
     getUser(displayName: string): IUser {
       return this.users.find(el => el.display_name === displayName) || {} as IUser
