@@ -46,19 +46,20 @@ export class GameGateway
           client.data.user
         );
         if (findedMatch.id) {
+          console.log("FIND A MATCH");
           this.server.emit("wait", "ready", findedMatch.id);
           // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
         } else {
+          console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
           client.data.match = match;
         }
-        console.log("JOIN");
       }
       if (message === "leave") {
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
         client.data.match = null;
-        console.log("LEAVE");
+        console.log("LEAVE THE WAITING LIST MATCH");
       }
     } catch {}
   }
@@ -139,7 +140,7 @@ export class GameGateway
   async isWaitinglist(client: Socket, user: User) {
     client.data.waitinglist = client.handshake.auth.waitinglist;
     if (client.data.waitinglist) {
-      console.log("IN_WAITINGLIST");
+      console.log("CONNECTED TO SOCKET GAME");
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -151,7 +152,7 @@ export class GameGateway
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
-      console.log("IN_GAME");
+      console.log("CONNECTED TO THE PONG GAME");
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }

@@ -22,6 +22,7 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     SendMessageToChannel(client: Socket, message: any): Promise<void>;
     emitChannel(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
+    createOrAddUserToChannel(client: Socket): Promise<void>;
     isChannel(client: Socket): Promise<boolean>;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;
 }

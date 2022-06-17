@@ -116,6 +116,21 @@ let ChannelsGateway = class ChannelsGateway {
     handleDisconnect(client) {
         this.logger.log(`Client disconnected: ${client.id}`);
     }
+    async createOrAddUserToChannel(client) {
+        try {
+            const channel = await this.channelService.getChannelMembers(client.data.channel.id);
+            for (const el of channel) {
+                if (el.id === client.data.user.id)
+                    return;
+            }
+            await this.channelService.addUserToMember(client.data.user.id, client.data.channel.id, {
+                user: client.data.user.id,
+                role: "",
+                id: "",
+            });
+        }
+        catch (err) { }
+    }
     async isChannel(client) {
         client.data.ConnectedChannel = client.handshake.auth.channel;
         client.data.password = client.handshake.auth.password;
@@ -124,14 +139,7 @@ let ChannelsGateway = class ChannelsGateway {
             if (client.data.channel == false)
                 return false;
             else {
-                try {
-                    await this.channelService.addUserToMember(client.data.user.id, client.data.channel.id, {
-                        user: client.data.user.id,
-                        role: "",
-                        id: "",
-                    });
-                }
-                catch (err) { }
+                await this.createOrAddUserToChannel(client);
                 this.logger.log(`Client connected: ${client.id}`);
                 return true;
             }
