@@ -241,6 +241,12 @@ export default Vue.extend({
         this.invite = true
         this.inviteMatchId = matchId
         this.inviteUserName = userName
+      } else if (authUserName === this.username && game === 'join') {
+        this.$store.commit('SELECTED_MATCH_ID', matchId)
+        if (this.$route.path !== '/') this.$router.replace('/')
+        this.invite = false
+        this.inviteMatchId = ''
+        this.inviteUserName = ''
       }
     })
   },
@@ -272,9 +278,9 @@ export default Vue.extend({
     },
     acceptInvitation() {
       if (this.socket) {
-        this.socket.emit('notification', 'join')
+        this.socket.emit('notification', 'join', this.inviteMatchId)
         this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
-        this.$router.replace('/')
+        if (this.$route.path !== '/') this.$router.replace('/')
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''
@@ -282,7 +288,7 @@ export default Vue.extend({
     },
     refuseInvitation() {
       if (this.socket) {
-        this.socket.emit('notification', 'deny')
+        this.socket.emit('notification', 'deny', this.inviteMatchId)
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''
