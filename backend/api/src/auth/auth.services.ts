@@ -113,15 +113,6 @@ export class AuthService {
     return this.userService.getUserFortyTwo(payload.FortyTwoID);
   }
 
-  async verifyGToken(user_token: string, user: User): Promise<boolean> {
-    const verified = speakeasy.totp.verify({
-      secret: user.TwoFAVerify,
-      encoding: "ascii",
-      token: user_token,
-    });
-    return verified;
-  }
-
   async generateQR(id: User): Promise<QRObjects> {
     const secret = speakeasy.generateSecret({
       name: "Ft_transcendence",

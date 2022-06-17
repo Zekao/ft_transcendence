@@ -27,7 +27,6 @@ export declare class AuthService {
         firstime: any;
     }>;
     getUserFromSocket(client: Socket): Promise<User>;
-    verifyGToken(user_token: string, user: User): Promise<boolean>;
     generateQR(id: User): Promise<QRObjects>;
     verifyQR(user_token: string, user: User): Promise<boolean>;
 }
