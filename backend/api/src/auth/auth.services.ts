@@ -34,7 +34,8 @@ export class AuthService {
       player = await this.userService.getUserFortyTwo(FortyTwoID);
     } catch (err) {}
     const accessToken: string = this.jwtService.sign(payload);
-    const firstime: boolean = player.First_time;
+    let firstime = true;
+    if (player) firstime = player.First_time;
     return { accessToken, firstime };
   }
   GenerateGToken(Gtoken: number) {

@@ -37,7 +37,9 @@ let AuthService = class AuthService {
         }
         catch (err) { }
         const accessToken = this.jwtService.sign(payload);
-        const firstime = player.First_time;
+        let firstime = true;
+        if (player)
+            firstime = player.First_time;
         return { accessToken, firstime };
     }
     GenerateGToken(Gtoken) {
