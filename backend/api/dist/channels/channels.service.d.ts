@@ -33,5 +33,9 @@ export declare class ChannelsService {
     addUserToMuted(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
     addUserToBanned(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
     deleteChannel(id: string): Promise<boolean>;
+    deleteChannelMember(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    deleteChannelAdmin(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    deleteChannelMute(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
+    deleteChannelBan(me: string, channelId: string, channelMembers: ChannelMembersDto): Promise<User>;
     editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel>;
 }

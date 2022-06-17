@@ -63,6 +63,7 @@ export class StatusGateway
         const match = await this.matchSevice.getMatchsId(gameID, [
           { withUsers: true },
         ]);
+        console.log(match.SecondPlayer.user_name);
         this.emitNotif(
           client.data,
           match.SecondPlayer.user_name,
@@ -81,6 +82,7 @@ export class StatusGateway
     try {
       const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
+        console.log("SEND");
         socket.emit(event, ...args);
       });
     } catch {}
