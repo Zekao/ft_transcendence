@@ -57,7 +57,6 @@ export class StatusGateway
         }
       }
       if (message[0] === "join") {
-
       }
       if (message[0] === "deny") {
         // const match = this.matchSevice.getMatchsByFilter()
