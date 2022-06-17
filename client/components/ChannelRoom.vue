@@ -21,19 +21,23 @@
             </v-btn>
           </template>
           <v-card class="d-flex flex-column justify-center">
-            <v-text-field
+            <v-form v-model="valid">
+              <v-text-field
                 v-model="newPassword"
+                :rules="passwordRules"
+                :counter="24"
+                label="Password"
                 dense
                 outlined
-                hide-details
                 class="ma-2"
               ></v-text-field>
-              <v-btn class="ma-2" @click="changePassword">
+              <v-btn :disabled="!valid" class="ma-2" @click="changePassword">
                 Change password
               </v-btn>
-              <v-btn class="ma-2" @click="updatePassword">
+              <v-btn :disabled="!valid" class="ma-2" @click="updatePassword">
                 {{ channel.status === 'PROTECTED' ? 'Disable' : 'Enable' }}
               </v-btn>
+            </v-form>
           </v-card>
         </v-menu>
         <v-menu v-if="isAuthUserOwner">
@@ -177,6 +181,7 @@ export default Vue.extend({
   data: () => ({
     owner: true,
     admin: true,
+    valid: false,
     unlocked: false,
     password: '',
     newPassword: '',
@@ -186,6 +191,13 @@ export default Vue.extend({
     banned: [] as IUser[],
     muted: [] as IUser[],
     socket: null as NuxtSocket | null,
+    passwordRules: [
+      (v: string) => !!v || 'Password is required',
+      (v: string) =>
+        v.length >= 8 || 'Password must be greater than 8 characters',
+      (v: string) =>
+        v.length <= 32 || 'Password must be less than 32 characters',
+    ],
   }),
 
   async fetch() {
