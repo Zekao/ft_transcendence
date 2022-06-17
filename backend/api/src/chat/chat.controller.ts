@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Get, Param, Request, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { UsersService } from "../users/users.service";
-import { Chat } from "./chat.entity";
 import { ChatService } from "./chat.service";
 
 @ApiTags("chat")

@@ -56,8 +56,8 @@ export class AuthController {
   @ApiOperation({
     summary: "Generate amd create a random user",
   })
-  generateRandom() {
-    this.authService.generateRandomUser();
+  generateRandom(): Promise<{ accessToken, firstime }> {
+    return this.authService.generateRandomUser();
   }
 
   @Post("/qrcode/verify")

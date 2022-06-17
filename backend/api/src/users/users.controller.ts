@@ -42,7 +42,6 @@ import {
 } from "./template/templated-api-exception";
 import { boolean } from "yargs";
 import { UserDto } from "./dto/user.dto";
-import { MatchDto } from "../matchs/dto/matchs.dto";
 
 @ApiTags("users")
 @Controller("users")

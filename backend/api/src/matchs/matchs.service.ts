@@ -2,24 +2,17 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
-  BadRequestException,
-  InternalServerErrorException,
   UnauthorizedException,
-  Res,
-  Req,
   Inject,
   forwardRef,
 } from "@nestjs/common";
-import * as fs from "fs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Matchs } from "./matchs.entity";
-import { ChannelFilteDto } from "../channels/dto/channels-filter.dto";
 import { MatchsFilteDto } from "./dto/matchs-filter.dto";
 import { MatchDto } from "./dto/matchs.dto";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/users.entity";
-import { UserDto } from "../users/dto/user.dto";
 import { MatchStatus } from "./matchs.enum";
 
 function isMatchs(id: string): boolean {

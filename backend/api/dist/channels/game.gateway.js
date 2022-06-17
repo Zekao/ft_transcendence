@@ -31,22 +31,23 @@ let GameGateway = class GameGateway {
     async waitingList(client, message) {
         try {
             const player = client.data.user;
-            if (message == "join") {
+            if (message === "join") {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
+                    console.log("FIND A MATCH");
                     this.server.emit("wait", "ready", findedMatch.id);
                 }
                 else {
+                    console.log("CREATION OF THE MATCH");
                     const match = await this.matchService.createMatch(player.id);
                     client.data.match = match;
                 }
-                console.log("JOIN");
             }
-            if (message == "leave") {
+            if (message === "leave") {
                 if (client.data.match)
                     await this.matchService.deleteMatch(client.data.match.id);
                 client.data.match = null;
-                console.log("LEAVE");
+                console.log("LEAVE THE WAITING LIST MATCH");
             }
         }
         catch (_a) { }
@@ -90,7 +91,7 @@ let GameGateway = class GameGateway {
                 }
                 if (message == "down")
                     await this.matchService.setPosFirstPlayer(match, pos1 + 13);
-                this.emitGame(client.data, "move", pos1, pos2);
+                this.emitGame(client.data, "move", pos1, 1);
             }
             else {
                 if (message == "up") {
@@ -99,7 +100,7 @@ let GameGateway = class GameGateway {
                 if (message == "down") {
                     await this.matchService.setPosSecondPlayer(match, pos2 + 13);
                 }
-                this.emitGame(client.data, "move", pos1, pos2);
+                this.emitGame(client.data, "move", pos2, 2);
             }
         }
         catch (_a) { }
@@ -131,7 +132,7 @@ let GameGateway = class GameGateway {
     async isWaitinglist(client, user) {
         client.data.waitinglist = client.handshake.auth.waitinglist;
         if (client.data.waitinglist) {
-            console.log("IN_WAITINGLIST");
+            console.log("CONNECTED TO SOCKET GAME");
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
@@ -142,7 +143,7 @@ let GameGateway = class GameGateway {
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
-            console.log("IN_GAME");
+            console.log("CONNECTED TO THE PONG GAME");
             this.logger.log(`Client connected: ${client.id}`);
             return true;
         }
