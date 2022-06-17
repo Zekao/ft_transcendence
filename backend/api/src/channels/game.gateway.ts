@@ -37,36 +37,40 @@ export class GameGateway
     this.logger.log("Init");
   }
 
-  @SubscribeMessage("reset")
-  async resetball(client: Socket, message: string): Promise<void> {
-    try {
-      this.emitOnlyToOther(client.data, "reset");
-    } catch {}
-  }
-
   @SubscribeMessage("action")
   async waitingList(client: Socket, message: string): Promise<void> {
     try {
       const player: User = client.data.user;
-      if (message == "join") {
+      if (message === "join") {
         const findedMatch = await this.matchService.defineMatch(
           client.data.user
         );
         if (findedMatch.id) {
-          this.server.emit("wait", "ready", findedMatch.id);
-          // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
+          console.log("FIND A MATCH");
+          this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
+          console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
           client.data.match = match;
         }
-        console.log("JOIN");
       }
-      if (message == "leave") {
+      if (message === "leave") {
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
         client.data.match = null;
-        console.log("LEAVE");
+        console.log("LEAVE THE WAITING LIST MATCH");
       }
+    } catch {}
+  }
+
+  emitReady(player: any, event: string, ...args: any): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.game == socket.data.game)
+          socket.emit(event, socket.data.user.user_name, ...args);
+      });
     } catch {}
   }
 
@@ -87,33 +91,47 @@ export class GameGateway
       if (pos2 == 0) pos2 = 25;
       console.log(pos1);
       console.log(pos2);
+      if (message == "ADD1") {
+        ++match.scoreFirstPlayer;
+        this.matchService.saveMatch(match);
+      }
+      if (message == "ADD2") {
+        ++match.scoreSecondPlayer;
+        this.matchService.saveMatch(match);
+      }
+      if (message == "FINISH") {
+        console.log("TEST");
+        client.disconnect();
+        match.status = MatchStatus.ENDED;
+        this.matchService.saveMatch(match);
+      }
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message == "up") {
-          await this.matchService.setPosFirstPlayer(match, pos1 - 13);
-        }
-        if (message == "down")
-          await this.matchService.setPosFirstPlayer(match, pos1 + 13);
-        this.emitGame(client.data, "move", pos1, pos2);
-      } else {
-        if (message == "up") {
-          await this.matchService.setPosSecondPlayer(match, pos2 - 13);
+          if (pos1 >= 0)
+            await this.matchService.setPosFirstPlayer(match, pos1 - 13);
+          else await this.matchService.setPosFirstPlayer(match, pos1);
         }
         if (message == "down") {
-          await this.matchService.setPosSecondPlayer(match, pos2 + 13);
+          if (pos1 <= 580)
+            await this.matchService.setPosFirstPlayer(match, pos1 + 13);
+          else await this.matchService.setPosFirstPlayer(match, pos1);
         }
-        this.emitGame(client.data, "move", pos1, pos2);
-      }
-    } catch {}
-  }
+        this.emitGame(client.data, "move", pos1, 1);
+      } else {
+        if (message == "up") {
+          if (pos2 >= 0)
+            await this.matchService.setPosSecondPlayer(match, pos2 - 13);
+          else await this.matchService.setPosSecondPlayer(match, pos2);
+        }
+        if (message == "down") {
+          if (pos2 <= 580)
+            await this.matchService.setPosSecondPlayer(match, pos2 + 13);
+          else await this.matchService.setPosSecondPlayer(match, pos2);
 
-  emitOnlyToOther(player: any, event: string, ...args: any): void {
-    try {
-      if (!player.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.values());
-      sockets.forEach((socket) => {
-        if (player.game == socket.data.game && player.user != socket.data.user)
-          socket.emit(event, ...args);
-      });
+          // await this.matchService.setPosSecondPlayer(match, pos2 + 13);
+        }
+        this.emitGame(client.data, "move", pos2, 2);
+      }
     } catch {}
   }
 
@@ -130,12 +148,14 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const waiting = client.data.waiting;
     const user = client.data.user;
-    if (client.data.match && client.data.match.status === MatchStatus.PENDING)
-      await this.matchService.deleteMatch(client.data.match.id);
-    if (user || waiting) {
-      user.in_game = UserGameStatus.OUT_GAME;
-      this.userService.saveUser(user);
-    }
+    try {
+      if (client.data.match && client.data.match.status === MatchStatus.PENDING)
+        await this.matchService.deleteMatch(client.data.match.id);
+      if (user || waiting) {
+        user.in_game = UserGameStatus.OUT_GAME;
+        this.userService.saveUser(user);
+      }
+    } catch (err) {}
     console.log("OUT GAME");
     this.logger.log(`Client disconnected: ${client.id}`);
   }
@@ -143,7 +163,7 @@ export class GameGateway
   async isWaitinglist(client: Socket, user: User) {
     client.data.waitinglist = client.handshake.auth.waitinglist;
     if (client.data.waitinglist) {
-      console.log("IN_WAITINGLIST");
+      console.log("CONNECTED TO SOCKET GAME");
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }
@@ -155,7 +175,7 @@ export class GameGateway
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
-      console.log("IN_GAME");
+      console.log("CONNECTED TO THE PONG GAME");
       this.logger.log(`Client connected: ${client.id}`);
       return true;
     }

@@ -10,12 +10,7 @@ import {
   UseGuards,
   Request,
 } from "@nestjs/common";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/users/users.entity";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { Channel } from "./channels.entity";
@@ -44,7 +39,6 @@ export class ChannelsController {
   @Get("/:id/members")
   @ApiOperation({ summary: "Return list of all members of channel" })
   getChannelMembers(@Param("id") id: string, @Query() query?): Promise<User[]> {
-    console.log(query);
     return this.channelService.getChannelMembers(id, query);
   }
 
@@ -68,6 +62,10 @@ export class ChannelsController {
     return this.channelService.getChannelHistory(id);
   }
 
+  /* ************************************************************************** */
+  /*                   POST                                                     */
+  /* ************************************************************************** */
+
   @UseGuards(JwtAuthGuard)
   @Post("/:id/password")
   @ApiOperation({
@@ -76,10 +74,6 @@ export class ChannelsController {
   getChannelPassword(@Param("id") id: string, @Body() body): Promise<Channel> {
     return this.channelService.validateChannelPassword(id, body);
   }
-
-  /* ************************************************************************** */
-  /*                   POST                                                     */
-  /* ************************************************************************** */
 
   @UseGuards(JwtAuthGuard)
   @Post("/create")
@@ -91,6 +85,58 @@ export class ChannelsController {
     @Body() ChannelsDtos: ChannelsDto
   ): Promise<Channel> {
     return this.channelService.createChannel(req.user.id, ChannelsDtos);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("/:id/members")
+  @ApiOperation({
+    summary: "Add a member to a channel",
+  })
+  addUserToMember(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.addUserToMember(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("/:id/admin")
+  @ApiOperation({
+    summary: "Add a member to a Admin channel",
+  })
+  addUserToAdmin(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.addUserToAdmin(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("/:id/mute")
+  @ApiOperation({
+    summary: "Add a member to a Muted Users",
+  })
+  addUserToMuted(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.addUserToMuted(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post("/:id/ban")
+  @ApiOperation({
+    summary: "Add a member to a Banned Users",
+  })
+  addUserToBanned(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.addUserToBanned(req.user.id, id, query);
   }
 
   /* ************************************************************************** */
@@ -112,10 +158,7 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Modify attribute of a specified channel",
   })
-  editChannel(
-    @Param("id") id: string,
-    @Body() edit: ChannelsDto
-  ): Promise<Channel> {
+  editChannel(@Param("id") id: string, @Body() edit): Promise<Channel> {
     return this.channelService.editChannel(id, edit);
   }
 }

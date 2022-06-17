@@ -1,8 +1,6 @@
 import { UserGameStatus, UserStatus } from "../users.enum";
 import { User } from "../users.entity";
 import { MatchDto } from "../../matchs/dto/matchs.dto";
-import { ChannelsDto } from "src/channels/dto/channels.dto";
-import { Channel } from "src/channels/channels.entity";
 export declare class UserDto {
     constructor(user?: User);
     id: string;
@@ -23,9 +21,4 @@ export declare class UserDto {
     matchs: MatchDto[];
     friends: UserDto[];
     blockedUsers: UserDto[];
-    joinedChannels: Channel[];
-    ownedChannels: ChannelsDto[];
-    adminedChannels: ChannelsDto[];
-    mutedChannels: ChannelsDto[];
-    bannedChannels: ChannelsDto[];
 }

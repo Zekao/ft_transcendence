@@ -1,12 +1,11 @@
+
 import {
   Injectable,
   NotFoundException,
   ConflictException,
   BadRequestException,
   InternalServerErrorException,
-  UnauthorizedException,
   Res,
-  Req,
   Inject,
   forwardRef,
 } from "@nestjs/common";
@@ -17,23 +16,17 @@ import { AuthCredentialsDto } from "../auth/dto/auth-credentials.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
-import { JwtPayload } from "../auth/interface/jwt-payload.interface";
 import { JwtService } from "@nestjs/jwt";
-import { UserGameStatusDto, UserStatusDto } from "./dto/user-status.dto";
 import { isUuid } from "../utils/utils";
 import { UserDto } from "./dto/user.dto";
-import * as bcrypt from "bcrypt";
 import { MatchsService } from "../matchs/matchs.service";
 import { Matchs } from "../matchs/matchs.entity";
-import { MatchDto } from "../matchs/dto/matchs.dto";
 import { extname } from "path";
-import { MatchsRelationPicker } from "../matchs/matchs.service";
 
 export class UserRelationsPicker {
   withFriends?: boolean;
   withBlocked?: boolean;
   withMatchs?: boolean;
-  withChannels?: boolean;
 }
 
 @Injectable()
@@ -129,12 +122,6 @@ export class UsersService {
         relation.withFriends && relations.push("friends");
         relation.withBlocked && relations.push("blockedUsers");
         relation.withMatchs && relations.push("matchs");
-        relation.withChannels &&
-          relations.push("joinedChannels") &&
-          relations.push("adminedChannels") &&
-          relations.push("ownedChannels") &&
-          relations.push("mutedChannels") &&
-          relations.push("bannedChannels");
       }
     }
     let found = null;
@@ -328,6 +315,7 @@ export class UsersService {
       filename: file.filename,
     };
     const split = id.avatar.split("?");
+    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {

@@ -85,15 +85,17 @@ let AuthService = class AuthService {
         return this.userService.createUsers(AuthCredentialsDto);
     }
     async generateRandomUser() {
+        const FTwoID = (0, utils_1.getRandomInt)(100, 1000);
         const AuthCredentialsDto = {
-            FortyTwoID: (0, utils_1.getRandomInt)(100, 1000),
+            FortyTwoID: FTwoID,
             first_name: (0, utils_1.generateName)(),
             last_name: (0, utils_1.generateName)(),
             user_name: (0, utils_1.generateName)(),
             email: "test@transcendence.fr",
             avatar: "default.png",
         };
-        return this.signUp(AuthCredentialsDto);
+        this.signUp(AuthCredentialsDto);
+        return this.GenerateJwtToken(FTwoID, true);
     }
     async getUserFromSocket(client) {
         const token = client.handshake.auth.Authorization;

@@ -11,6 +11,7 @@ export class ChannelStatusDto {
 }
 
 export class ChannelMembersDto {
+  user: string;
   role: string;
   id: string;
 }

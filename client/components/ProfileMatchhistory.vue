@@ -17,7 +17,7 @@
       :key="selectedLogin"
       height="calc(100% - 64px)"
       color="#00000000"
-      class="d-flex justify-center align-center"
+      class="d-flex justify-center align-center pa-4"
     >
       <v-progress-circular
         v-if="$fetchState.pending"
@@ -40,25 +40,16 @@
               overlap
             >
               <v-avatar>
-                <v-img
-                  :src="
-                   
-                   getAvatarPath(match.FirstPlayer)
-                  "
-                />
+                <v-img :src="getAvatarPath(match.FirstPlayer)" />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-              <v-img
-                :src="
-                  getAvatarPath(match.FirstPlayer)
-                "
-              />
+              <v-img :src="getAvatarPath(match.FirstPlayer)" />
             </v-avatar>
-            <v-btn> {{ match.FirstPlayer.display_name }} {{match.scoreFirstPlayer}} </v-btn>
+            <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
           </v-list-item-action>
           <v-list-item-content class="justify-center">
-            
+            {{match.scoreFirstPlayer}} - {{match.scoreSecondPlayer}}
           </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
             <v-badge
@@ -68,22 +59,13 @@
               overlap
             >
               <v-avatar>
-                <v-img
-                   :src="
-                  getAvatarPath(match.SecondPlayer)
-                "
-               
-                />
+                <v-img :src="getAvatarPath(match.SecondPlayer)"/>
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-              <v-img
-                :src="
-                 getAvatarPath(match.SecondPlayer)
-                "
-              />
+              <v-img :src="getAvatarPath(match.SecondPlayer)"/>
             </v-avatar>
-            <v-btn>  {{match.scoreSecondPlayer}} {{ match.SecondPlayer.display_name  }} </v-btn>
+            <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -113,7 +95,7 @@ export default Vue.extend({
       selectedUserMatches: (state: any): IMatch[] =>
         state.user.selectedUserMatches,
     }),
-    userMatches() { 
+    userMatches() {
       console.log(this.authUserMatches)
 
       return this.selectedLogin
@@ -128,11 +110,11 @@ export default Vue.extend({
 
   methods: {
     async searchUserMatches() {
-      const user = this.users.filter((el) => el.display_name === this.search)
+      const user = this.users.find((el) => el.display_name === this.search)
       try {
         await this.$store.dispatch(
           'user/fetchMatchs',
-          user[0] ? user[0].id : '0'
+          user
         )
         this.selectedLogin = this.search
       } catch (err) {
@@ -141,7 +123,6 @@ export default Vue.extend({
     },
 
     getAvatarPath(userName: IUser): string {
-
       return 'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
     },
 

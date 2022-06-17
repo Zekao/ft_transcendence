@@ -9,7 +9,7 @@
       MatchID: {{ selectedMatchId }}
     </v-list-item>
     <v-list-item>
-      <v-btn color="primary" @click="$emit('next')"> Continue </v-btn>
+      <v-btn color="primary" @click="resetMatch"> Continue </v-btn>
     </v-list-item>
     </v-list>
   </v-card>
@@ -18,7 +18,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { IMatch } from '~/store/match'
+import { IMatch } from '@/store/match'
 
 export default Vue.extend({
   name: 'GameResult',
@@ -29,16 +29,29 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      selectedMatchId: (state: any) => state.selectedMatchId
+      selectedMatchId: (state: any) => state.selectedMatchId,
+      matchDone: (state: any) => state.matchDone,
     })
   },
 
-  async fetch() {
-    try {
-      const res = await this.$axios.$get(`/match/${this.selectedMatchId}`)
-      this.match = res
-    } catch(err) {
-      console.log(err)
+  watch: {
+    async matchDone(value) {
+      if (value) {
+        try {
+          const res = await this.$axios.$get(`/match/${this.selectedMatchId}`)
+          this.match = res
+        } catch(err) {
+          console.log(err)
+        }
+      }
+    }
+  },
+
+  methods: {
+    resetMatch() {
+      this.$store.commit('SELECTED_MATCH_ID', '')
+      this.$store.commit('MATCH_DONE', false)
+      this.$emit('next')
     }
   }
 })

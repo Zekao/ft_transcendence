@@ -12,7 +12,6 @@ var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const channels_entity_1 = require("../channels/channels.entity");
 const typeorm_1 = require("typeorm");
 const matchs_entity_1 = require("../matchs/matchs.entity");
 const users_enum_1 = require("./users.enum");
@@ -121,40 +120,6 @@ __decorate([
     (0, typeorm_1.JoinTable)({ name: "blockedUsers" }),
     __metadata("design:type", Array)
 ], User.prototype, "blockedUsers", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.members, { nullable: true }),
-    (0, typeorm_1.JoinTable)({ name: "joinedChannels" }),
-    __metadata("design:type", Array)
-], User.prototype, "joinedChannels", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.admins, { nullable: true }),
-    (0, typeorm_1.JoinTable)({ name: "adminedChannels" }),
-    __metadata("design:type", Array)
-], User.prototype, "adminedChannels", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => channels_entity_1.Channel, (channel) => channel.owner, { nullable: true }),
-    (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
-    (0, typeorm_1.JoinTable)({ name: "ownedChannels" }),
-    __metadata("design:type", Array)
-], User.prototype, "ownedChannels", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.mutedUsers, {
-        nullable: true,
-    }),
-    (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
-    (0, typeorm_1.JoinTable)({ name: "mutedChannels" }),
-    __metadata("design:type", Array)
-], User.prototype, "mutedChannels", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => channels_entity_1.Channel, (channel) => channel.bannedUsers, {
-        nullable: true,
-    }),
-    (0, swagger_1.ApiProperty)({ type: () => channels_entity_1.Channel }),
-    (0, typeorm_1.JoinTable)({ name: "bannedChannels" }),
-    __metadata("design:type", Array)
-], User.prototype, "bannedChannels", void 0);
 User = User_1 = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

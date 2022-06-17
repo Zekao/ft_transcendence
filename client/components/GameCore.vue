@@ -11,7 +11,7 @@
 import V from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-// keybinds that the user will use
+
 export default V.extend({
   // <p>
   //   <v-btn color="primary" @click="$emit('next')"> Quit Match </v-btn>
@@ -81,21 +81,26 @@ export default V.extend({
          },
          path: '/api/socket.io/',
        } as any)
-        this.socket.on('move', (data, data2) => {
+        this.socket.on('move', (data, boolplayer) => {
+          if (boolplayer == 1) {
             if (this.position.y !== data) {
                 this.position.y = data;
             }
-            else if (this.position2.y !== data2) {
-                this.position2.y = data2;
-            }
             if (this.score.player1 >= 5) {
-                this.context.clearRect(0, 0, 1080, 1920);
-                this.$emit('next')
+                 this.context.clearRect(0, 0, 1080, 1920);
+                 this.$emit('next')
+            }
+          }
+          else if (boolplayer == 2)
+          {
+            if (this.position2.y !== data) {
+                this.position2.y = data;
             }
             else if (this.score.player2 >= 5) {
                 this.context.clearRect(0, 0, 1080, 1920);
                 this.$emit('next')
             }
+          }
         })
           setInterval(this.updateContent, 17);
       }
@@ -104,13 +109,12 @@ export default V.extend({
   mounted() {
     this.context = (this.$refs.game as any).getContext('2d')
     this.context.clearRect(0, 0, 1080, 1920);
-    console.log('both values:', this.position.x, this.position.y)
   },
       shortcuts: {
         keydown (event) {
           if (event.key === 'w') {
             // console.log('both positions of player: ', this.position.y, this.position2.y)
-            if (this.position.y >= 13 && this.position2.y >= 13)
+            if (this.position.y >= 13 || this.position2.y >= 13)
               this.move('up');
             else
               return false;
@@ -118,13 +122,14 @@ export default V.extend({
           else if (event.key === 's') {
             // console.log('both positions of player: ', this.position.y, this.position2.y)
             // faudrait que je puisse savoir si c'est le joueur 1 ou le joueur 2 mais je vois pas trop comment pcq j'suis fatigue
-            if (this.position.y <= 585 && this.position2.y <= 585)
+            if (this.position.y <= 585 || this.position2.y <= 585)
               this.move('down');
             else
               return false;
           }
           else if (event.key === 'Escape') {
             this.move('stop');
+            console.log('pressed escape key!!!!!')
           }
           return false // stop alias calling
         },
@@ -147,27 +152,33 @@ export default V.extend({
             this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
             this.updateBall();
         },
-        keyb(val) {
+        keyb(val: any) {
              this.context.clearRect(0, 0, 720, 1080);
             // this.context.fillRect(this.position.x, this.position.y, 20, 120); // fonctionne pas va savoir pourquoi
-             this.socket.emit('customBinding', val);
+             if (this.socket) this.socket.emit('customBinding', val);
         },
-        randomNumberBetween(min, max) {
+        randomNumberBetween(min: number, max: number): number {
             return Math.random() * (max - min) + min;
         },
         resetBall() {
         this.ball.x = 420;
         this.ball.y = 400;
-        this.direction = { x: 0 }
+        this.direction = { x: 0 } as { x: number, y: number }
         // this.velocity = 0.00005;
         while ( Math.abs(this.direction.x) <= 0.2 || Math.abs(this.direction.x) >= 0.9 ) {
           const heading = this.randomNumberBetween(0, 2 * Math.PI)
-          this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
+          if (this.score.player1 >= this.score.player2)
+            this.direction = { x: 0.45312, y: 0.6291837 }
+          else
+            this.direction = { x: -0.45312, y: -0.6291837 }
+
+          // this.direction = { x: 0.45312, y: 0.6291837 }
+          // this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
         }
         // on reset la vitesse a celle initiale
         },
         // fonction de mouvement de la balle
-        clearCircle( x , y , r ) {
+        clearCircle( x: number , y: number , r: number ) {
           for( let i = 0 ; i < Math.round( Math.PI * r ) ; i++ ){
               const angle = ( i / Math.round( Math.PI * r )) * 360;
               this.context.clearRect( x , y , Math.sin( angle * ( Math.PI / 180 )) * r , Math.cos( angle * ( Math.PI / 180 )) * r );
@@ -206,7 +217,12 @@ export default V.extend({
             if (this.direction.x == 1 || this.direction.x == -1) {
               while (this.direction.x <= 0.2 || this.direction.x >= 0.9) {
               const heading = this.randomNumberBetween(0, 2 * Math.PI)
-              this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
+              console.log('supposed to be real value',  Math.cos(heading), Math.sin(heading));
+              if (this.score.player1 >= this.score.player2)
+                this.direction = { x: 0.45312, y: 0.6291837 }
+              else
+                this.direction = { x: -0.45312, y: -0.6291837 }
+              // this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
               }
             }
             const deltaTime=300;
@@ -226,10 +242,12 @@ export default V.extend({
               if (this.score.player2 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                if (this.socket) this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
+                if (this.socket) this.socket.emit("move", "ADD2");
                 this.score.player2++;
               // this.velocity = 0.0005; // va savoir pourquoi si je reset la velocity, la balle ne bouge plus
                 this.resetBall();
@@ -240,11 +258,13 @@ export default V.extend({
               if (this.score.player1 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                if (this.socket) this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
                 this.score.player1++;
+                if (this.socket) this.socket.emit("move", "ADD1");
                 this.resetBall();
               }
             }
@@ -265,10 +285,10 @@ export default V.extend({
             if (this.velocity.speed < 0.05)
               this.velocity.speed += 0.00005;
         },
-        move(direction) {
+        move(direction: string) {
           if (this.score.player1 >= 5 || this.score.player2 >= 5)
             return ;
-          this.socket.emit("move", direction);
+          if (this.socket) this.socket.emit("move", direction);
         }
       }
   })

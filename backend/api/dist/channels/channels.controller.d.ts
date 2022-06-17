@@ -15,6 +15,10 @@ export declare class ChannelsController {
     }[]>;
     getChannelPassword(id: string, body: any): Promise<Channel>;
     createChannel(req: any, ChannelsDtos: ChannelsDto): Promise<Channel>;
+    addUserToMember(req: any, id: string, query: any): Promise<User>;
+    addUserToAdmin(req: any, id: string, query: any): Promise<User>;
+    addUserToMuted(req: any, id: string, query: any): Promise<User>;
+    addUserToBanned(req: any, id: string, query: any): Promise<User>;
     deleteUser(id: string): Promise<boolean>;
-    editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
+    editChannel(id: string, edit: any): Promise<Channel>;
 }

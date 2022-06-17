@@ -21,19 +21,23 @@
             </v-btn>
           </template>
           <v-card class="d-flex flex-column justify-center">
-            <v-text-field
+            <v-form v-model="valid">
+              <v-text-field
                 v-model="newPassword"
+                :rules="passwordRules"
+                :counter="24"
+                label="Password"
                 dense
                 outlined
-                hide-details
                 class="ma-2"
               ></v-text-field>
-              <v-btn class="ma-2" @click="changePassword">
+              <v-btn :disabled="!valid" class="ma-2" @click="changePassword">
                 Change password
               </v-btn>
-              <v-btn class="ma-2" @click="updatePassword">
+              <v-btn :disabled="!valid" class="ma-2" @click="updatePassword">
                 {{ channel.status === 'PROTECTED' ? 'Disable' : 'Enable' }}
               </v-btn>
+            </v-form>
           </v-card>
         </v-menu>
         <v-menu v-if="isAuthUserOwner">
@@ -42,12 +46,17 @@
               Admin
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!admins.length">
+            <v-list-item-subtitle class="mx-2">
+              No admins
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in admins" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setAdmin(user.user_name)">Remove</v-btn>
+              <v-btn @click="unsetAdmin(user.user_name)">Remove</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -57,12 +66,17 @@
               Banned
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!banned.length">
+            <v-list-item-subtitle class="mx-2">
+              No banned
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in banned" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setBan(user.user_name)">Unban</v-btn>
+              <v-btn @click="unsetBan(user.user_name)">Unban</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -72,12 +86,17 @@
               Muted
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(user, i) in users" :key="i">
+          <v-list v-if="!muted.length">
+            <v-list-item-subtitle class="mx-2">
+              No muted
+            </v-list-item-subtitle>
+          </v-list>
+          <v-list v-else>
+            <v-list-item v-for="(user, i) in muted" :key="i">
               <v-list-item-content class="mr-2">
                 {{ user.display_name }}
               </v-list-item-content>
-              <v-btn @click="setMute(user.user_name)">Unmute</v-btn>
+              <v-btn @click="unsetMute(user.user_name)">Unmute</v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -92,7 +111,6 @@
         </v-btn>
       </v-toolbar>
       <v-card :id="channel.name" height="320px" class="overflow-y-auto">
-        <FriendMenu :key="selectedUser.id" :friend="selectedUser"/>
         <v-list>
           <v-list-item
             v-for="(message, i) in messages"
@@ -166,6 +184,7 @@ import { IUser } from '@/store/user'
 declare module 'vue/types/vue' {
   interface Vue {
     scrollToBottom: () => void
+    getUser: (displayName: string) => IUser
   }
 }
 
@@ -175,25 +194,35 @@ export default Vue.extend({
   },
 
   data: () => ({
-    owner: true,
-    admin: true,
+    valid: false,
     unlocked: false,
     password: '',
     newPassword: '',
-    selectedUser: {} as IUser,
     messageText: '',
     messages: [] as { login: string; message: string }[],
+    owner: {} as IUser,
     admins: [] as IUser[],
     banned: [] as IUser[],
     muted: [] as IUser[],
     socket: null as NuxtSocket | null,
+    passwordRules: [
+      (v: string) => !!v || 'Password is required',
+      (v: string) =>
+        v.length >= 8 || 'Password must be greater than 8 characters',
+      (v: string) =>
+        v.length <= 32 || 'Password must be less than 32 characters',
+    ],
   }),
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/channel/${this.channel.id}/history`)
-      this.messages = res.length
-        ? [...res.map((el: string) => JSON.parse(el))]
+      const owners = await this.$axios.$get(`/channel/${this.channel.id}/members?role=owner`)
+      this.owner = owners[0]
+      const admins = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+      this.admins = admins
+      const history = await this.$axios.$get(`/channel/${this.channel.id}/history`)
+      this.messages = history.length
+        ? [...history.map((el: string) => JSON.parse(el))]
         : []
       this.$nextTick(() => {
         this.scrollToBottom()
@@ -205,7 +234,9 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      accessToken: (state: any) => state.token.accessToken,
+      accessToken: (state: any): string => state.token.accessToken,
+      selectedUser: (state: any): IUser => state.selectedUser,
+      authUser: (state: any): IUser => state.user.authUser,
       users: (state: any): IUser[] => state.user.users,
     }),
     value: {
@@ -216,13 +247,13 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-    isAuthUserOwner() {
-      return this.owner
+    isAuthUserOwner(): boolean {
+      return this.owner.id === this.authUser.id
     },
-    isAuthUserAdmin() {
-      return this.admin
+    isAuthUserAdmin(): boolean {
+      return this.isAuthUserOwner || this.admins.find(el => el.id === this.authUser.id) !== undefined
     },
-    isLocked() {
+    isLocked(): boolean {
       return this.channel.status === 'PROTECTED' ? !this.unlocked : false
     },
   },
@@ -264,7 +295,7 @@ export default Vue.extend({
       }
     },
     async changePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
       channel.password = this.newPassword
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
@@ -273,12 +304,13 @@ export default Vue.extend({
       }
     },
     async updatePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
+      channel.password = this.newPassword
       channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
       } catch(err) {
-        console.log(err)
+        this.newPassword = ''
       }
     },
     async deleteChannel() {
@@ -315,21 +347,54 @@ export default Vue.extend({
         this.socket.emit('channel', 'action', 'mute', user)
       }
     },
-    fetchAdmin() {
-      console.log(this.admins)
+    unsetAdmin(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unadmin', user)
+        this.admins = this.admins.filter(el => el.user_name !== user)
+      }
     },
-    fetchBanned() {
-      console.log(this.banned)
+    unsetBan(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unban', user)
+        this.banned = this.banned.filter(el => el.user_name !== user)
+      }
     },
-    fetchMuted() {
-      console.log(this.muted)
+    unsetMute(user: string) {
+      if (this.socket && user) {
+        this.socket.emit('channel', 'action', 'unmute', user)
+        this.muted = this.muted.filter(el => el.user_name !== user)
+      }
+    },
+    async fetchAdmin() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`)
+        this.admins = res
+      } catch (err) {
+        this.admins = []
+      }
+    },
+    async fetchBanned() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=ban`)
+        this.banned = res
+      } catch (err) {
+        this.banned = []
+      }
+    },
+    async fetchMuted() {
+      try {
+        const res = await this.$axios.$get(`/channel/${this.channel.id}/members?role=mute`)
+        this.muted = res
+      } catch (err) {
+        this.muted = []
+      }
     },
     getUser(displayName: string): IUser {
       return this.users.find(el => el.display_name === displayName) || {} as IUser
     },
     changeUser(displayName: string) {
-      this.value = false
-      this.selectedUser = this.getUser(displayName)
+      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+      this.value = true
     }
   },
 })

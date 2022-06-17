@@ -23,6 +23,7 @@ import { ChannelPasswordDto, ChannelsDto } from "./dto/channels.dto";
 import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
 import * as bcrypt from "bcrypt";
+import { UserDto } from "src/users/dto/user.dto";
 
 export class ChannelRelationsPicker {
   withAllMembers?: boolean;
@@ -61,6 +62,7 @@ export class ChannelsService {
       );
     return channels;
   }
+
   async getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]> {
     const { name, permissions, status } = filter;
     let channels = await this.getChannel();
@@ -74,6 +76,7 @@ export class ChannelsService {
     if (!channels) throw new NotFoundException(`Channel not found`);
     return channels;
   }
+
   async getChannelId(
     id: string,
     RelationsPicker?: ChannelRelationsPicker[]
@@ -111,22 +114,19 @@ export class ChannelsService {
     channelId: string,
     Role?: ChannelMembersDto
   ): Promise<User[]> {
-    const { role, id } = Role;
-    console.log("ROLE: ", role);
-    console.log("MUTE: ", id);
+    if (Role) var { role, id } = Role;
     const relations: ChannelRelationsPicker[] = [];
     if (role) {
       if (role === "all") relations.push({ withAllMembers: true });
-      if (role === "members") relations.push({ withMembersOnly: true });
-      if (role === "admins") relations.push({ withAdminOnly: true });
+      if (role === "member") relations.push({ withMembersOnly: true });
+      if (role === "admin") relations.push({ withAdminOnly: true });
       if (role === "owner") relations.push({ withOwnerOnly: true });
       if (role === "muted") relations.push({ withMuted: true });
-      if (role === "banned") relations.push({ withBanned: true });
+      if (role === "ban") relations.push({ withBanned: true });
     } else {
       relations.push({ withAllMembers: true });
     }
     const channel = await this.getChannelId(channelId, relations);
-    console.log(channel);
     const users: User[] = [];
     if (channel.members) {
       for (const member of channel.members) users.push(member);
@@ -146,6 +146,12 @@ export class ChannelsService {
     return users;
   }
 
+  async getChannelBanMembers(channelId: string): Promise<User[]> {
+    const found = await this.getChannelId(channelId, [{ withBanned: true }]);
+    if (found.bannedUsers == null) return [];
+    return found.bannedUsers;
+  }
+
   async getChannelHistory(
     id: string
   ): Promise<{ login: string; message: string }[]> {
@@ -153,6 +159,7 @@ export class ChannelsService {
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found.history;
   }
+
   async saveChannel(id: Channel): Promise<boolean> {
     this.ChannelsRepository.save(id);
     return true;
@@ -162,9 +169,7 @@ export class ChannelsService {
   /*                   POST                                                     */
   /* ************************************************************************** */
   async createChannel(id: string, channelsDto: ChannelsDto): Promise<Channel> {
-    const owner = await this.UsersService.getUserId(id, [
-      { withChannels: true },
-    ]);
+    const owner = await this.UsersService.getUserId(id);
     const { name, status, permissions, password } = channelsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -190,6 +195,135 @@ export class ChannelsService {
     return found;
   }
 
+  async addUserToMember(
+    me: string,
+    channelId: string,
+    channelMembers: ChannelMembersDto
+  ): Promise<User> {
+    const { user } = channelMembers;
+    if (user) me = user;
+    const found: User = await this.UsersService.getUserId(me);
+    const channel = await this.getChannelId(channelId, [
+      { withAllMembers: true },
+      { withBanned: true },
+    ]);
+    if (
+      (await this.getChannelMembers(channelId)).find(
+        (user) => user.id === found.id
+      )
+    )
+      throw new ConflictException(`User ${me} is already in channel`);
+    if (
+      (await this.getChannelBanMembers(channelId)).find(
+        (user) => user.id === found.id
+      )
+    )
+      throw new ConflictException(`User ${me} is banned from this channel`);
+    channel.members.push(found);
+    await this.ChannelsRepository.save(channel);
+    return found;
+  }
+
+  async addUserToAdmin(
+    me: string,
+    channelId: string,
+    channelMembers: ChannelMembersDto
+  ): Promise<User> {
+    const { user } = channelMembers;
+    if (user) me = user;
+    const found = await this.UsersService.getUserId(me);
+    const channel = await this.getChannelId(channelId, [
+      { withAllMembers: true },
+      { withBanned: true },
+      { withMuted: true },
+    ]);
+    if (
+      !(await this.getChannelMembers(channelId)).find(
+        (user) => user.id === found.id
+      )
+    )
+      throw new ForbiddenException(`User ${me} is not in channel`);
+    if (channel.owner.id === found.id)
+      throw new ConflictException(`User ${me} is owner of this channel`);
+    if (channel.admins.find((admin) => admin.id === found.id))
+      throw new ConflictException(`User ${me} is admin of this channel`);
+    channel.members = channel.members.filter(
+      (member) => member.id !== found.id
+    );
+    channel.admins.push(found);
+    if (channel.mutedUsers.find((muted) => muted.id === found.id))
+      channel.mutedUsers = channel.mutedUsers.filter(
+        (muted) => muted.id !== found.id
+      );
+    await this.ChannelsRepository.save(channel);
+    return found;
+  }
+
+  async addUserToMuted(
+    me: string,
+    channelId: string,
+    channelMembers: ChannelMembersDto
+  ): Promise<User> {
+    const { user } = channelMembers;
+    if (user) me = user;
+    const found = await this.UsersService.getUserId(me);
+    const channel = await this.getChannelId(channelId, [
+      { withAllMembers: true },
+      { withBanned: true },
+      { withMuted: true },
+    ]);
+    if (
+      !(await this.getChannelMembers(channelId)).find(
+        (user) => user.id === found.id
+      )
+    )
+      throw new ForbiddenException(`User ${me} is not in channel`);
+    if (channel.owner.id === found.id)
+      throw new ConflictException(`User ${me} is owner of this channel`);
+    if (channel.admins.find((admin) => admin.id === found.id))
+      throw new ConflictException(`User ${me} is admin of this channel`);
+    if (channel.mutedUsers.find((muted) => muted.id === found.id))
+      throw new ConflictException(`User ${me} already muted`);
+    channel.mutedUsers.push(found);
+    await this.ChannelsRepository.save(channel);
+    return found;
+  }
+
+  async addUserToBanned(
+    me: string,
+    channelId: string,
+    channelMembers: ChannelMembersDto
+  ): Promise<User> {
+    const { user } = channelMembers;
+    if (user) me = user;
+    const found = await this.UsersService.getUserId(me);
+    const channel = await this.getChannelId(channelId, [
+      { withAllMembers: true },
+      { withBanned: true },
+      { withMuted: true },
+    ]);
+    if (
+      (await this.getChannelBanMembers(channelId)).find(
+        (user) => user.id === found.id
+      )
+    )
+      throw new ConflictException(`User ${me} already banned`);
+    if (channel.owner.id === found.id)
+      throw new ConflictException(`User ${me} is owner of this channel`);
+    if (channel.admins.find((admin) => admin.id === found.id))
+      throw new ConflictException(`User ${me} is admin of this channel`);
+    channel.bannedUsers.push(found);
+    if (channel.mutedUsers.find((muted) => muted.id === found.id))
+      channel.mutedUsers = channel.mutedUsers.filter(
+        (muted) => muted.id !== found.id
+      );
+    channel.members = channel.members.filter(
+      (member) => member.id !== found.id
+    );
+    await this.ChannelsRepository.save(channel);
+    return found;
+  }
+
   /* ************************************************************************** */
   /*                   DELETE                                                   */
   /* ************************************************************************** */
@@ -202,8 +336,7 @@ export class ChannelsService {
     return true;
   }
 
-  /* **************************************************************************
-  /*
+  /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */
   async editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel> {

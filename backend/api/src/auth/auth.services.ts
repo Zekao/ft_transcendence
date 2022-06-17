@@ -86,16 +86,18 @@ export class AuthService {
     return this.userService.createUsers(AuthCredentialsDto);
   }
 
-  async generateRandomUser(): Promise<void> {
+  async generateRandomUser(): Promise<{ accessToken, firstime }> {
+    const FTwoID = getRandomInt(100, 1000);
     const AuthCredentialsDto = {
-      FortyTwoID: getRandomInt(100, 1000),
+      FortyTwoID: FTwoID,
       first_name: generateName(),
       last_name: generateName(),
       user_name: generateName(),
       email: "test@transcendence.fr",
       avatar: "default.png",
     };
-    return this.signUp(AuthCredentialsDto);
+    this.signUp(AuthCredentialsDto);
+    return this.GenerateJwtToken(FTwoID, true);
   }
 
   async getUserFromSocket(client: Socket): Promise<User> {

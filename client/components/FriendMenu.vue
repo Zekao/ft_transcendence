@@ -18,8 +18,15 @@
           <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+   
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-btn class="mr-2" @click="emitInvitation">
+            <v-list-item-content>
+          <v-btn :disabled="!canWatch" class="mr-2" @click="watchGame(friend.id)">
+          Watch
+          <v-icon>mdi-binoculars</v-icon>
+          </v-btn>
+        </v-list-item-content>
+        <v-btn :disabled="friend.status !== 'ONLINE'" :loading="waitingGame" class="mr-2" @click="emitInvitation">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
         </v-btn>
@@ -57,25 +64,18 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'FriendMenu',
 
-  props: {
-    friend: {
-      type: Object as () => IUser,
-      required: true,
-    },
-  },
-
-  data() {
-    return {
-      socket: null as NuxtSocket | null,
-      isfriend: true,
-    }
-  },
+  data: () => ({
+    socket: null as NuxtSocket | null,
+    isfriend: true,
+    waitingGame: false,
+  }),
 
   computed: {
     ...mapState({
+      friend: (state: any): IUser => state.selectedUser,
       accessToken: (state: any): string => state.token.accessToken,
-      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       userID: (state: any): string => state.user.authUser.id,
+      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
     value: {
@@ -86,6 +86,10 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
+    // function who return true if friend id is the same as userID or false if not
+    isMe() {
+      return this.friend.id === this.userID
+    },
     // function who return true if friend id is in authUserFriends or false if not
     isFriend() {
       return (
@@ -93,18 +97,16 @@ export default Vue.extend({
         undefined
       )
     },
-
-    // function who return true if friend id is the same as userID or false if not
-    isMe() {
-      return this.friend.id === this.userID
-    },
-
     // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe() {
       return (
         this.authUserBlocked.find((friend) => friend.id === this.friend.id) !==
         undefined
       )
+    },
+   canWatch() {   
+      return this.friend.status === 'ONLINE' && this.friend.in_game === 'IN_GAME' && !this.isMe
+      //&& this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
   },
 
@@ -135,16 +137,23 @@ export default Vue.extend({
 
     async addFriend(userID: string) {
       try {
-        await this.$store.dispatch('user/createAuthFriends', userID)
+        await this.$store.dispatch('user/createAuthFriend', userID)
       } catch (err) {
         console.log(err)
       }
     },
 
+
+    // function who launch the spectator game of the friend id
+    async watchGame(userID: string) {
+      // console.log(userID)
+
+    },
+
     // function remove friend from authUserFriends
     async removeFriend(userID: string) {
       try {
-        await this.$store.dispatch('user/deleteAuthFriends', userID)
+        await this.$store.dispatch('user/deleteAuthFriend', userID)
       } catch (err) {
         console.log(err)
       }
@@ -152,6 +161,7 @@ export default Vue.extend({
 
     emitInvitation() {
       if (this.socket) {
+        this.waitingGame = true
         this.socket.emit('notification', 'invite', this.friend.user_name)
       }
     }

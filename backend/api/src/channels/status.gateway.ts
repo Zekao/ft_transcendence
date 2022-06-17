@@ -43,8 +43,14 @@ export class StatusGateway
       if (message[0] === "invite") {
         if (message[1]) {
           const invited = await this.userService.getUserId(message[1]);
-          console.log(invited);
-          this.emitChannel("notification", "game", "GAME-ID", user.user_name);
+          console.log(message);
+          client.emit(
+            "notification",
+            user.user_name,
+            "game",
+            "GAME-ID",
+            invited.user_name
+          );
         }
       }
     } catch {}
@@ -62,9 +68,11 @@ export class StatusGateway
   }
 
   async handleDisconnect(client: Socket) {
-    const user = await this.userService.getUserId(client.data.user.id);
-    user.status = UserStatus.OFFLINE;
-    this.userService.saveUser(user);
+    if (client.data.user) {
+      const user = await this.userService.getUserId(client.data.user.id);
+      user.status = UserStatus.OFFLINE;
+      this.userService.saveUser(user);
+    }
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 

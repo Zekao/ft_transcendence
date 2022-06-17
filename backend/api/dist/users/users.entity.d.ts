@@ -1,5 +1,3 @@
-import { Channel } from "src/channels/channels.entity";
-import { ChannelsDto } from "src/channels/dto/channels.dto";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 export declare class User {
@@ -23,9 +21,4 @@ export declare class User {
     matchs: Matchs[];
     friends: User[];
     blockedUsers: User[];
-    joinedChannels: Channel[];
-    adminedChannels: Channel[];
-    ownedChannels: ChannelsDto[];
-    mutedChannels: Channel[];
-    bannedChannels: Channel[];
 }

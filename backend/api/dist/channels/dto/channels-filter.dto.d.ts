@@ -8,6 +8,7 @@ export declare class ChannelStatusDto {
     status: ChannelStatus;
 }
 export declare class ChannelMembersDto {
+    user: string;
     role: string;
     id: string;
 }

@@ -16,7 +16,7 @@
       <v-list-item dense>No friends yet.</v-list-item>
     </v-list>
     <v-list v-else>
-      <v-list-item v-for="(user, i) in authUserFriends" :key="i">
+      <v-list-item v-for="(user, i) in authUserFriends" :key="i" class="my-2">
         <v-badge
           :color="user.status === 'ONLINE' ? 'green' : 'red'"
           overlap
@@ -24,9 +24,9 @@
         >
           <v-avatar><v-img :src="user.avatar" /></v-avatar>
         </v-badge>
-        <v-list-item-content>
-          <FriendMenu :friend="user" />
-        </v-list-item-content>
+        <v-btn @click="changeUser(user)">
+          {{ user.display_name }}
+        </v-btn>
       </v-list-item>
     </v-list>
   </v-card>
@@ -42,8 +42,8 @@ export default Vue.extend({
 
   // data: () => ({
   //   authUserFriends: [
-  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
+  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
+  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: '' },
   //   ],
   // }),
 
@@ -51,10 +51,25 @@ export default Vue.extend({
     ...mapState({
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
     }),
+    value: {
+      get(): boolean {
+        return this.$store.state.isFriendMenu
+      },
+      set(value: boolean) {
+        this.$store.commit('FRIEND_MENU', value)
+      },
+    },
   },
 
   async fetch() {
     await this.$store.dispatch('user/fetchAuthFriends')
   },
+
+  methods: {
+    changeUser(user: IUser) {
+      this.$store.commit('SELECTED_USER', user)
+      this.value = true
+    }
+  }
 })
 </script>

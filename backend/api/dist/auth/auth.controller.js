@@ -28,7 +28,7 @@ let AuthController = class AuthController {
         return this.authService.GenerateJwtToken(req.user._json.id, req.user._json.First_time);
     }
     generateRandom() {
-        this.authService.generateRandomUser();
+        return this.authService.generateRandomUser();
     }
     async verifyGToken(body) {
         try {
@@ -92,7 +92,7 @@ __decorate([
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "generateRandom", null);
 __decorate([
     (0, common_1.Post)("/qrcode/verify"),

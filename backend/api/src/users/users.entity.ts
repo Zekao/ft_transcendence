@@ -10,8 +10,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { QRObjects } from "../auth/dto/2fa.dto";
-import { Chat } from "../chat/chat.entity";
 import { Matchs } from "../matchs/matchs.entity";
 import { UserStatus, UserGameStatus } from "./users.enum";
 
@@ -86,33 +84,4 @@ export class User {
   @ManyToMany(() => User, (user) => user.blockedUsers)
   @JoinTable({ name: "blockedUsers" })
   blockedUsers: User[];
-
-  @ApiProperty()
-  @ManyToMany(() => Channel, (channel) => channel.members, { nullable: true })
-  @JoinTable({ name: "joinedChannels" })
-  joinedChannels: Channel[];
-
-  @ApiProperty()
-  @ManyToMany(() => Channel, (channel) => channel.admins, { nullable: true })
-  @JoinTable({ name: "adminedChannels" })
-  adminedChannels: Channel[];
-
-  @ManyToOne(() => Channel, (channel) => channel.owner, { nullable: true })
-  @ApiProperty({ type: () => Channel })
-  @JoinTable({ name: "ownedChannels" })
-  ownedChannels: ChannelsDto[];
-
-  @ManyToMany(() => Channel, (channel) => channel.mutedUsers, {
-    nullable: true,
-  })
-  @ApiProperty({ type: () => Channel })
-  @JoinTable({ name: "mutedChannels" })
-  mutedChannels: Channel[];
-
-  @ManyToMany(() => Channel, (channel) => channel.bannedUsers, {
-    nullable: true,
-  })
-  @ApiProperty({ type: () => Channel })
-  @JoinTable({ name: "bannedChannels" })
-  bannedChannels: Channel[];
 }
