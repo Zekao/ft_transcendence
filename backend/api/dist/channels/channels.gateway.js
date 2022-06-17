@@ -68,7 +68,6 @@ let ChannelsGateway = class ChannelsGateway {
             this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
         }
         catch (err) {
-            console.log(err.response);
             this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
         }
     }
@@ -89,7 +88,6 @@ let ChannelsGateway = class ChannelsGateway {
             this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
         }
         catch (err) {
-            console.log(err.response);
             this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
         }
     }

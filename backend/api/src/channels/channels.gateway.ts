@@ -96,7 +96,6 @@ export class ChannelsGateway
         completeMessage
       );
     } catch (err) {
-      console.log(err.response);
       this.emitSingle(
         client.data,
         "channel",
@@ -133,7 +132,6 @@ export class ChannelsGateway
         completeMessage
       );
     } catch (err) {
-      console.log(err.response);
       this.emitSingle(
         client.data,
         "channel",
