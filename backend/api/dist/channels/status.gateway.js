@@ -35,8 +35,8 @@ let StatusGateway = class StatusGateway {
             if (message[0] === "invite") {
                 if (message[1]) {
                     const invited = await this.userService.getUserId(message[1]);
-                    console.log(invited);
-                    this.emitChannel("notification", "game", "GAME-ID", user.user_name);
+                    console.log(message);
+                    client.emit("notification", invited.user_name, "game", "GAME-ID");
                 }
             }
         }
