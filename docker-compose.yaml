@@ -62,7 +62,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.client.loadbalancer.server.port=4500"
-      - "traefik.http.routers.client.rule=Host(`trans.nabentay.fr`)"
+      - "traefik.http.routers.client.rule=Host(`ft.localhost`)"
       - "traefik.http.routers.client.entrypoints=websecure"
       - "traefik.http.routers.client.tls=true"
       - "traefik.http.routers.client.tls.certresolver=leresolver"
@@ -84,7 +84,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
-      - "traefik.http.routers.api.rule=Host(`trans.nabentay.fr`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.api.rule=Host(`ft.localhost`) && PathPrefix(`/api/`)"
       - "traefik.http.middlewares.pathstrip.stripprefix.prefixes=/api"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.api.middlewares=pathstrip@docker"

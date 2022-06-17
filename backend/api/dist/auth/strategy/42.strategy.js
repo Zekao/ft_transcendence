@@ -27,7 +27,7 @@ let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStr
         super({
             clientID: "219b4f87732a059d270fe71c699bad22dcd750d27d82c5086a0f12044c1f263d",
             clientSecret: "44d49e2767bda2d40994b9a453b92c0356eb540c2f94a6ce5499289839e0c330",
-            callbackURL: "https://trans.nabentay.fr:4500/login",
+            callbackURL: "https://ft.localhost:4500/login",
         });
         this.usersRepository = usersRepository;
         this.authService = authService;

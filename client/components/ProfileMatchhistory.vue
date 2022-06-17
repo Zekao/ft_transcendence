@@ -142,7 +142,7 @@ export default Vue.extend({
 
     getAvatarPath(userName: IUser): string {
 
-      return 'https://trans.nabentay.fr:4500/api/image/' + userName.user_name + '.png'
+      return 'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
     },
 
     clearSearch() {

@@ -225,7 +225,7 @@ export default Vue.extend({
       return this.users.filter(el => el.id !== this.id)
     },
     imagePath(): string {
-      return 'https://trans.nabentay.fr:4500/api/image/' + this.avatar
+      return 'https://ft.localhost:4500/api/image/' + this.avatar
     },
   },
 
