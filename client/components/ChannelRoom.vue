@@ -92,7 +92,6 @@
         </v-btn>
       </v-toolbar>
       <v-card :id="channel.name" height="320px" class="overflow-y-auto">
-        <FriendMenu :key="selectedUser.id" :friend="selectedUser"/>
         <v-list>
           <v-list-item
             v-for="(message, i) in messages"
@@ -181,7 +180,6 @@ export default Vue.extend({
     unlocked: false,
     password: '',
     newPassword: '',
-    selectedUser: {} as IUser,
     messageText: '',
     messages: [] as { login: string; message: string }[],
     admins: [] as IUser[],
@@ -207,6 +205,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
+      selectedUser: (state: any) => state.selectedUser,
       users: (state: any): IUser[] => state.user.users,
     }),
     value: {
@@ -329,8 +328,8 @@ export default Vue.extend({
       return this.users.find(el => el.display_name === displayName) || {} as IUser
     },
     changeUser(displayName: string) {
-      this.value = false
-      this.selectedUser = this.getUser(displayName)
+      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+      this.value = true
     }
   },
 })

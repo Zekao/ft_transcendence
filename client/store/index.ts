@@ -1,4 +1,5 @@
 import { ActionTree, MutationTree } from 'vuex'
+import { IUser } from '@/store/user'
 
 export interface IToken {
   accessToken: string
@@ -8,6 +9,7 @@ export interface IToken {
 }
 
 export const state = () => ({
+  selectedUser: {} as IUser,
   selectedMatchId: '',
   isFriendMenu: false,
   isAuthenticated: false,
@@ -21,6 +23,9 @@ export const state = () => ({
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
+  SELECTED_USER: (state, user: IUser) => {
+    state.selectedUser = user
+  },
   SELECTED_MATCH_ID: (state, matchID: string) => {
     state.selectedMatchId = matchID
   },

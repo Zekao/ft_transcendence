@@ -123,6 +123,7 @@
     <v-main>
       <Nuxt></Nuxt>
     </v-main>
+    <FriendMenu/>
     <v-card v-if="invite" style="position: fixed; bottom: 40px; right: 50px">
         <v-list-item>
           <v-list-item-content class="text-center">
@@ -141,8 +142,6 @@
             </v-btn>
           </v-list-item-action>
         </v-list-item>
-
-
     </v-card>
   </v-app>
 </template>

@@ -57,13 +57,6 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'FriendMenu',
 
-  props: {
-    friend: {
-      type: Object as () => IUser,
-      required: true,
-    },
-  },
-
   data: () => ({
     socket: null as NuxtSocket | null,
     isfriend: true,
@@ -71,6 +64,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      friend: (state: any): IUser => state.selectedUser,
       accessToken: (state: any): string => state.token.accessToken,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       userID: (state: any): string => state.user.authUser.id,
