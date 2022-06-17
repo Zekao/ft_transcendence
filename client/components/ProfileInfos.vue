@@ -30,7 +30,7 @@
             label="Login"
             prepend-icon="mdi-account"
             required
-            @input="(val) => (newLogin = val)"
+            @input="setLoginInput"
           >
             <template #append-outer>
               <v-btn icon :disabled="!isLoginValid" @click="updateLogin">
@@ -75,12 +75,6 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    updateTwoFactorAuth: () => Promise<void>
-  }
-}
-
 export default Vue.extend({
   name: 'ProfileInfos',
   middleware: 'auth',
@@ -106,7 +100,7 @@ export default Vue.extend({
       avatar: (state: any): string => state.user.authUser.avatar,
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
     }),
-    imagePath() {
+    imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
     },
   },
@@ -169,6 +163,10 @@ export default Vue.extend({
         this.loading = false
       }
     },
+
+    setLoginInput(val: string) {
+      this.newLogin = val
+    }
   },
 })
 </script>

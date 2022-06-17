@@ -1,10 +1,11 @@
 import { ActionTree, MutationTree } from 'vuex'
+import { IUser } from '@/store/user'
 import { RootState } from '@/store'
 
 export interface IMatch {
   id: string
-  FirstPlayer: string
-  SecondPlayer: string
+  FirstPlayer: IUser
+  SecondPlayer: IUser
   scoreFirstPlayer: number
   scoreSecondPlayer: number
   winner: string

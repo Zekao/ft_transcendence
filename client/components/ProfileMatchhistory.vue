@@ -98,9 +98,7 @@ export default Vue.extend({
       selectedUserMatches: (state: any): IMatch[] =>
         state.user.selectedUserMatches,
     }),
-    userMatches() {
-      console.log(this.authUserMatches)
-
+    userMatches(): IMatch[] {
       return this.selectedLogin
         ? this.selectedUserMatches
         : this.authUserMatches
