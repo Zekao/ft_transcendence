@@ -58,7 +58,7 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get(`/chat/me/${this.user.user_name}`)
+      const res = await this.$axios.$get(`/chat/me/${this.user.display_name}`)
       this.messages = res.length
         ? [...res.map((el: string) => JSON.parse(el))]
         : []
@@ -97,10 +97,18 @@ export default Vue.extend({
         this.messageText = ''
       }
     },
+
+    
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
+
+    // function who get display_name of user by id
+  //  getUserDisplayName(id: string) : string {
+      //const user = this.state.find((el: IUser) => el.id === id)
+      //return user.display_name
+   // },
   },
 })
 </script>
