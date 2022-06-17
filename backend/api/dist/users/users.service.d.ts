@@ -12,7 +12,6 @@ export declare class UserRelationsPicker {
     withFriends?: boolean;
     withBlocked?: boolean;
     withMatchs?: boolean;
-    withChannels?: boolean;
 }
 export declare class UsersService {
     private UserRepository;

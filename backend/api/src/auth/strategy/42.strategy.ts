@@ -54,12 +54,12 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     super({
       // a remplacer avec les variables d'env
       clientID:
-        "360cc9c295cc9eb63bf65794b2a2a50650d8e03353db6fc515d8ac4ad651436a",
+        "219b4f87732a059d270fe71c699bad22dcd750d27d82c5086a0f12044c1f263d",
       clientSecret:
-        "d89e41624c9c1c6dcfa0aa00a39c7f06793f8ecc79c441f519d3f96efb76ca24",
+        "44d49e2767bda2d40994b9a453b92c0356eb540c2f94a6ce5499289839e0c330",
       // clientID: process.env['FORTYTWO_ID'],
       // clientSecret: process.env['FORTYTWO_SECRET'],
-      callbackURL: "https://ft.localhost:4500/login",
+      callbackURL: "https://trans.nabentay.fr:4500/login",
     });
   }
   async validate(accessToken, refreshToken, profile) {

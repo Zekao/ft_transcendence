@@ -162,7 +162,13 @@ export default V.extend({
         // this.velocity = 0.00005;
         while ( Math.abs(this.direction.x) <= 0.2 || Math.abs(this.direction.x) >= 0.9 ) {
           const heading = this.randomNumberBetween(0, 2 * Math.PI)
-          this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
+          if (this.score.player1 >= this.score.player2)
+            this.direction = { x: 0.45312, y: 0.6291837 }
+          else
+            this.direction = { x: -0.45312, y: -0.6291837 }
+
+          // this.direction = { x: 0.45312, y: 0.6291837 }
+          // this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
         }
         // on reset la vitesse a celle initiale
         },
@@ -206,7 +212,12 @@ export default V.extend({
             if (this.direction.x == 1 || this.direction.x == -1) {
               while (this.direction.x <= 0.2 || this.direction.x >= 0.9) {
               const heading = this.randomNumberBetween(0, 2 * Math.PI)
-              this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
+              console.log('supposed to be real value',  Math.cos(heading), Math.sin(heading));
+              if (this.score.player1 >= this.score.player2)
+                this.direction = { x: 0.45312, y: 0.6291837 }
+              else
+                this.direction = { x: -0.45312, y: -0.6291837 }
+              // this.direction = { x: Math.cos(heading), y: Math.sin(heading) }
               }
             }
             const deltaTime=300;
@@ -226,10 +237,12 @@ export default V.extend({
               if (this.score.player2 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
+                this.socket.emit("move", "ADD2");
                 this.score.player2++;
               // this.velocity = 0.0005; // va savoir pourquoi si je reset la velocity, la balle ne bouge plus
                 this.resetBall();
@@ -240,11 +253,13 @@ export default V.extend({
               if (this.score.player1 >= 5) {
                 this.endGame();
                 this.context.clearRect(0, 0, 1080, 1920);
+                this.socket.emit("move", "FINISH");
                 this.$emit('next')
               }
               else {
                 this.velocity.speed = 0.000050;
                 this.score.player1++;
+                this.socket.emit("move", "ADD1");
                 this.resetBall();
               }
             }

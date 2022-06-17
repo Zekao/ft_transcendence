@@ -141,8 +141,8 @@
             </v-btn>
           </v-list-item-action>
         </v-list-item>
-        
-        
+
+
     </v-card>
   </v-app>
 </template>
@@ -225,7 +225,7 @@ export default Vue.extend({
       return this.users.filter(el => el.id !== this.id)
     },
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return 'https://trans.nabentay.fr:4500/api/image/' + this.avatar
     },
   },
 

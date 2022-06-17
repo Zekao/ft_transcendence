@@ -31,26 +31,26 @@ export class Channel {
   @Column("text", { array: true, nullable: true })
   history: { login: string; message: string }[];
 
-  @ManyToMany(() => User, (user) => user.joinedChannels, { nullable: true })
-  @JoinTable({ name: "members" })
+  @ManyToMany(() => User, { nullable: true })
+  @JoinTable({ name: 'members' })
   members: User[];
 
-  @ManyToMany(() => User, (user) => user.adminedChannels, { nullable: true })
+  @ManyToMany(() => User, { nullable: true })
   @JoinTable({ name: "admins" })
   admins: User[];
 
-  @ManyToOne(() => User, (user) => user.ownedChannels, { nullable: false })
+  @ManyToOne(() => User, { nullable: false})
   @ApiProperty({ type: () => User })
   @JoinTable({ name: "owner" })
   owner: User;
 
-  @ManyToMany(() => User, (user) => user.mutedChannels, { nullable: true })
+  @ManyToMany(() => User, { nullable: true })
   @ApiProperty({ type: () => User })
-  @JoinTable({ name: "muted" })
+  @JoinTable({ name: "mutedUsers" })
   mutedUsers: User[];
 
-  @ManyToMany(() => User, (user) => user.bannedChannels, { nullable: true })
+  @ManyToMany(() => User, { nullable: true })
   @ApiProperty({ type: () => User })
-  @JoinTable({ name: "banned" })
+  @JoinTable({ name: "bannedUsers" })
   bannedUsers: User[];
 }

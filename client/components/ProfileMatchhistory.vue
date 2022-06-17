@@ -42,7 +42,7 @@
               <v-avatar>
                 <v-img
                   :src="
-                   
+
                    getAvatarPath(match.FirstPlayer)
                   "
                 />
@@ -58,7 +58,7 @@
             <v-btn> {{ match.FirstPlayer.display_name }} {{match.scoreFirstPlayer}} </v-btn>
           </v-list-item-action>
           <v-list-item-content class="justify-center">
-            
+
           </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
             <v-badge
@@ -72,7 +72,7 @@
                    :src="
                   getAvatarPath(match.SecondPlayer)
                 "
-               
+
                 />
               </v-avatar>
             </v-badge>
@@ -113,7 +113,7 @@ export default Vue.extend({
       selectedUserMatches: (state: any): IMatch[] =>
         state.user.selectedUserMatches,
     }),
-    userMatches() { 
+    userMatches() {
       console.log(this.authUserMatches)
 
       return this.selectedLogin
@@ -142,7 +142,7 @@ export default Vue.extend({
 
     getAvatarPath(userName: IUser): string {
 
-      return 'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
+      return 'https://trans.nabentay.fr:4500/api/image/' + userName.user_name + '.png'
     },
 
     clearSearch() {

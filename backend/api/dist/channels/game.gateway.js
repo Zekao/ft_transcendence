@@ -70,6 +70,20 @@ let GameGateway = class GameGateway {
                 pos2 = 25;
             console.log(pos1);
             console.log(pos2);
+            if (message == "ADD1") {
+                ++match.scoreFirstPlayer;
+                this.matchService.saveMatch(match);
+            }
+            if (message == "ADD2") {
+                ++match.scoreSecondPlayer;
+                this.matchService.saveMatch(match);
+            }
+            if (message == "FINISH") {
+                console.log("TEST");
+                client.disconnect();
+                match.status = matchs_enum_1.MatchStatus.ENDED;
+                this.matchService.saveMatch(match);
+            }
             if (player.user_name == match.FirstPlayer.user_name) {
                 if (message == "up") {
                     await this.matchService.setPosFirstPlayer(match, pos1 - 13);

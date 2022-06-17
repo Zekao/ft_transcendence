@@ -34,26 +34,6 @@ export class UserDto {
         this.matchs = user.matchs.map((match) => {
           return new MatchDto(match);
         });
-      if (user.joinedChannels)
-        this.joinedChannels = user.joinedChannels.map((channel) => {
-          return new Channel();
-        });
-      if (user.ownedChannels)
-        this.ownedChannels = user.ownedChannels.map((channel) => {
-          return new ChannelsDto();
-        })
-      if (user.adminedChannels)
-        this.adminedChannels = user.adminedChannels.map((channel) => {
-          return new ChannelsDto();
-        });
-      if (user.bannedChannels)
-        this.bannedChannels = user.bannedChannels.map((channel) => {
-          return new ChannelsDto();
-        });
-      if (user.mutedChannels)
-        this.mutedChannels = user.mutedChannels.map((channel) => {
-          return new ChannelsDto();
-        });
     }
   }
   id: string;
@@ -74,9 +54,4 @@ export class UserDto {
   matchs: MatchDto[];
   friends: UserDto[];
   blockedUsers: UserDto[];
-  joinedChannels: Channel[];
-  ownedChannels: ChannelsDto[];
-  adminedChannels: ChannelsDto[];
-  mutedChannels: ChannelsDto[];
-  bannedChannels: ChannelsDto[];
 }
