@@ -36,9 +36,8 @@ export default Vue.extend({
     const accessToken = $cookies.get('access_token')
     if (!accessToken) redirect('/login')
     try {
-      const res = await store.dispatch('user/fetchAuth')
+      await store.dispatch('user/fetchAuth')
       store.commit('AUTH_SUCCESS', { accessToken })
-      console.log(res)
     } catch (err) {
       store.dispatch('logout')
       redirect('/login')
