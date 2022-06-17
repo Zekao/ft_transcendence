@@ -1,26 +1,17 @@
 import {
   Controller,
   Param,
-  Res,
   Query,
   Get,
-  Post,
   Delete,
   Patch,
-  UploadedFile,
-  UseInterceptors,
-  UseGuards,
   Request,
-  UnauthorizedException,
-  NotFoundException,
-  Body,
 } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { MatchsFilteDto } from "./dto/matchs-filter.dto";
 import { Matchs } from "./matchs.entity";
 import { MatchsService } from "./matchs.service";
 import { MatchDto } from "./dto/matchs.dto";
-import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
 @ApiTags("matchs")
 @Controller("matchs")
