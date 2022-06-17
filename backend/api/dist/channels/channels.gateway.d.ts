@@ -21,6 +21,7 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     unadminPlayer(client: Socket, message: any): Promise<void>;
     SendMessageToChannel(client: Socket, message: any): Promise<void>;
     emitChannel(channel: any, event: string, ...args: any): void;
+    emitSingle(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     createOrAddUserToChannel(client: Socket): Promise<void>;
     isChannel(client: Socket): Promise<boolean>;
