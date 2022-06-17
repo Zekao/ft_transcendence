@@ -279,7 +279,7 @@ export default Vue.extend({
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
       } catch(err) {
-        console.log(err)
+        this.newPassword = ''
       }
     },
     async deleteChannel() {
