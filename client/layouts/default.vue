@@ -123,6 +123,7 @@
     <v-main>
       <Nuxt></Nuxt>
     </v-main>
+    <FriendMenu/>
     <v-card v-if="invite" style="position: fixed; bottom: 40px; right: 50px">
         <v-list-item>
           <v-list-item-content class="text-center">
@@ -141,8 +142,6 @@
             </v-btn>
           </v-list-item-action>
         </v-list-item>
-
-
     </v-card>
   </v-app>
 </template>
@@ -237,8 +236,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('notification', (game: string, matchId: string, userName: string) => {
-      if (game === 'game') {
+    this.socket.on('notification', (authUserName: string, game: string, matchId: string, userName: string) => {
+      if (authUserName === this.username && game === 'game') {
         this.invite = true
         this.inviteMatchId = matchId
         this.inviteUserName = userName
@@ -294,9 +293,6 @@ export default Vue.extend({
 </script>
 
 <style>
-html {
-  overflow: hidden;
-}
 .accent-text {
   color: #ffffff !important;
 }

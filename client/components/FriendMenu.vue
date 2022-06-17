@@ -25,7 +25,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-btn class="mr-2" @click="emitInvitation">
+        <v-btn :loading="waitingGame" class="mr-2" @click="emitInvitation">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
         </v-btn>
@@ -63,25 +63,18 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'FriendMenu',
 
-  props: {
-    friend: {
-      type: Object as () => IUser,
-      required: true,
-    },
-  },
-
-  data() {
-    return {
-      socket: null as NuxtSocket | null,
-      isfriend: true,
-    }
-  },
+  data: () => ({
+    socket: null as NuxtSocket | null,
+    isfriend: true,
+    waitingGame: false,
+  }),
 
   computed: {
     ...mapState({
+      friend: (state: any): IUser => state.selectedUser,
       accessToken: (state: any): string => state.token.accessToken,
-      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       userID: (state: any): string => state.user.authUser.id,
+      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
     value: {
@@ -92,6 +85,10 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
+    // function who return true if friend id is the same as userID or false if not
+    isMe() {
+      return this.friend.id === this.userID
+    },
     // function who return true if friend id is in authUserFriends or false if not
     isFriend() {
       return (
@@ -99,20 +96,6 @@ export default Vue.extend({
         undefined
       )
     },
-
-    // function who return true if friend id is the same as userID or false if not
-    isMe() {
-      return this.friend.id === this.userID
-    },
-
-  // function who return true if friend is ONLINE and if he is IN_GAME and if he doesn't block you or false if not
-  canWatch()
-  {
-    return this.friend.status === 'ONLINE' && this.friend.in_game === 'IN_GAME' && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
-  },
-  
-
-
     // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe() {
       return (
@@ -154,11 +137,11 @@ export default Vue.extend({
         console.log(err)
       }
     },
-    
+
 
     // function who launch the spectator game of the friend id
     async watchGame(userID: string) {
-      // console.log(userID) 
+      // console.log(userID)
 
     },
 
@@ -173,6 +156,7 @@ export default Vue.extend({
 
     emitInvitation() {
       if (this.socket) {
+        this.waitingGame = true
         this.socket.emit('notification', 'invite', this.friend.user_name)
       }
     }

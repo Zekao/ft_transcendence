@@ -92,7 +92,6 @@
         </v-btn>
       </v-toolbar>
       <v-card :id="channel.name" height="320px" class="overflow-y-auto">
-        <FriendMenu :key="selectedUser.id" :friend="selectedUser"/>
         <v-list>
           <v-list-item
             v-for="(message, i) in messages"
@@ -166,6 +165,7 @@ import { IUser } from '@/store/user'
 declare module 'vue/types/vue' {
   interface Vue {
     scrollToBottom: () => void
+    getUser: (displayName: string) => IUser
   }
 }
 
@@ -180,7 +180,6 @@ export default Vue.extend({
     unlocked: false,
     password: '',
     newPassword: '',
-    selectedUser: {} as IUser,
     messageText: '',
     messages: [] as { login: string; message: string }[],
     admins: [] as IUser[],
@@ -205,7 +204,8 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      accessToken: (state: any) => state.token.accessToken,
+      accessToken: (state: any): string => state.token.accessToken,
+      selectedUser: (state: any): IUser => state.selectedUser,
       users: (state: any): IUser[] => state.user.users,
     }),
     value: {
@@ -264,7 +264,7 @@ export default Vue.extend({
       }
     },
     async changePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
       channel.password = this.newPassword
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
@@ -273,7 +273,7 @@ export default Vue.extend({
       }
     },
     async updatePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
       channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
@@ -328,8 +328,8 @@ export default Vue.extend({
       return this.users.find(el => el.display_name === displayName) || {} as IUser
     },
     changeUser(displayName: string) {
-      this.value = false
-      this.selectedUser = this.getUser(displayName)
+      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+      this.value = true
     }
   },
 })

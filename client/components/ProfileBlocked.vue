@@ -2,7 +2,7 @@
   <v-card
     height="calc(100% - 114px)"
     color="grey lighten-1"
-    class="d-flex justify-center align-center ma-6"
+    class="d-flex justify-center align-center ma-6 pa-4"
   >
     <v-progress-circular
       v-if="$fetchState.pending"

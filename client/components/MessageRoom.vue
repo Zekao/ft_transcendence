@@ -10,7 +10,7 @@
           >
             <v-list-item-content>
               <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <v-btn class="mr-2">{{ message.login }}</v-btn>
+                <v-btn class="mr-2" @click="changeUser(message.login)">{{ message.login }}</v-btn>
               </v-list-item-title>
               <v-list-item-subtitle class="text-right">{{
                 message.message
@@ -51,9 +51,18 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      authUser: (state: any) => state.user.authUser,
-      accessToken: (state: any) => state.token.accessToken,
+      accessToken: (state: any): string => state.token.accessToken,
+      authUser: (state: any): IUser => state.user.authUser,
+      users: (state: any): IUser[] => state.user.users,
     }),
+    value: {
+      get(): boolean {
+        return this.$store.state.isFriendMenu
+      },
+      set(value: boolean) {
+        this.$store.commit('FRIEND_MENU', value)
+      },
+    },
   },
 
   async fetch() {
@@ -80,10 +89,12 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('msg', (login, message) => {
-      this.messages.push({ login, message })
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
+      if (this.authUser.display_name === login) {
+        this.messages.push({ login, message })
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
+      }
     })
   },
 
@@ -98,17 +109,18 @@ export default Vue.extend({
       }
     },
 
-    
+
     scrollToBottom() {
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
-
-    // function who get display_name of user by id
-  //  getUserDisplayName(id: string) : string {
-      //const user = this.state.find((el: IUser) => el.id === id)
-      //return user.display_name
-   // },
+    getUser(displayName: string): IUser {
+      return this.users.find(el => el.display_name === displayName) || {} as IUser
+    },
+    changeUser(displayName: string) {
+      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+      this.value = true
+    }
   },
 })
 </script>
