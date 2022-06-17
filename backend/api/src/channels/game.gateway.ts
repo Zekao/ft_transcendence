@@ -101,7 +101,7 @@ export class GameGateway
         }
         if (message == "down")
           await this.matchService.setPosFirstPlayer(match, pos1 + 13);
-        this.emitGame(client.data, "move", pos1, pos2);
+        this.emitGame(client.data, "move", pos1, 1);
       } else {
         if (message == "up") {
           await this.matchService.setPosSecondPlayer(match, pos2 - 13);
@@ -109,7 +109,7 @@ export class GameGateway
         if (message == "down") {
           await this.matchService.setPosSecondPlayer(match, pos2 + 13);
         }
-        this.emitGame(client.data, "move", pos1, pos2);
+        this.emitGame(client.data, "move", pos2, 2);
       }
     } catch {}
   }

@@ -81,21 +81,26 @@ export default V.extend({
          },
          path: '/api/socket.io/',
        } as any)
-        this.socket.on('move', (data, data2) => {
+        this.socket.on('move', (data, boolplayer) => {
+          if (boolplayer == 1) {
             if (this.position.y !== data) {
                 this.position.y = data;
             }
-            else if (this.position2.y !== data2) {
-                this.position2.y = data2;
-            }
             if (this.score.player1 >= 5) {
-                this.context.clearRect(0, 0, 1080, 1920);
-                this.$emit('next')
+                 this.context.clearRect(0, 0, 1080, 1920);
+                 this.$emit('next')
+            }
+          }
+          else if (boolplayer == 2)
+          {
+            if (this.position2.y !== data) {
+                this.position2.y = data;
             }
             else if (this.score.player2 >= 5) {
                 this.context.clearRect(0, 0, 1080, 1920);
                 this.$emit('next')
             }
+          }
         })
           setInterval(this.updateContent, 17);
       }
