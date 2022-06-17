@@ -86,7 +86,8 @@ let ChannelsService = class ChannelsService {
         return found;
     }
     async getChannelMembers(channelId, Role) {
-        const { role, id } = Role;
+        if (Role)
+            var { role, id } = Role;
         const relations = [];
         if (role) {
             if (role === "all")
@@ -194,7 +195,7 @@ let ChannelsService = class ChannelsService {
             { withMuted: true },
         ]);
         if (!(await this.getChannelMembers(channelId)).find((user) => user.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not in channel`);
+            throw new common_1.ForbiddenException(`User ${me} is not in channel`);
         if (channel.owner.id === found.id)
             throw new common_1.ConflictException(`User ${me} is owner of this channel`);
         if (channel.admins.find((admin) => admin.id === found.id))
@@ -217,7 +218,7 @@ let ChannelsService = class ChannelsService {
             { withMuted: true },
         ]);
         if (!(await this.getChannelMembers(channelId)).find((user) => user.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not in channel`);
+            throw new common_1.ForbiddenException(`User ${me} is not in channel`);
         if (channel.owner.id === found.id)
             throw new common_1.ConflictException(`User ${me} is owner of this channel`);
         if (channel.admins.find((admin) => admin.id === found.id))

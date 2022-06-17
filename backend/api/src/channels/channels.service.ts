@@ -114,7 +114,7 @@ export class ChannelsService {
     channelId: string,
     Role?: ChannelMembersDto
   ): Promise<User[]> {
-    const { role, id } = Role;
+    if (Role) var { role, id } = Role;
     const relations: ChannelRelationsPicker[] = [];
     if (role) {
       if (role === "all") relations.push({ withAllMembers: true });
@@ -242,7 +242,7 @@ export class ChannelsService {
         (user) => user.id === found.id
       )
     )
-      throw new ForbiddenException(`User ${me} has not in channel`);
+      throw new ForbiddenException(`User ${me} is not in channel`);
     if (channel.owner.id === found.id)
       throw new ConflictException(`User ${me} is owner of this channel`);
     if (channel.admins.find((admin) => admin.id === found.id))
@@ -277,7 +277,7 @@ export class ChannelsService {
         (user) => user.id === found.id
       )
     )
-      throw new ForbiddenException(`User ${me} has not in channel`);
+      throw new ForbiddenException(`User ${me} is not in channel`);
     if (channel.owner.id === found.id)
       throw new ConflictException(`User ${me} is owner of this channel`);
     if (channel.admins.find((admin) => admin.id === found.id))

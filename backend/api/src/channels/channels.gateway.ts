@@ -12,7 +12,6 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 import { Channel } from "./channels.entity";
-
 @WebSocketGateway({ namespace: "channel" })
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -30,42 +29,76 @@ export class ChannelsGateway
     this.logger.log("Init");
   }
 
+  async addToHistory(channel: Channel, login: string, message: string) {
+    if (!channel.history) channel.history = [];
+    const history = { login, message: message };
+    channel.history.push(history);
+    await this.channelService.saveChannel(channel);
+  }
+
+  async mutePlayer(client: Socket, message: any) {
+    try {
+      const channel = client.data.channel;
+      const user: string = message[2];
+      const time = message[3];
+
+      const completeMessage = " is mute for " + time + " minute.";
+      this.channelService.addUserToMuted(client.data.user.id, channel.id, {
+        user,
+        role: "",
+        id: "",
+      });
+      this.emitChannel(client.data, "channel", user, completeMessage);
+    } catch (err) {}
+  }
+
+  async unmutePlayer(client: Socket, message: any) {
+    const login = message[2];
+    this.emitChannel(client.data, "channel", login, " is unmute");
+  }
+
+  async banPlayer(client: Socket, message: any) {
+    const login = message[2];
+    this.emitChannel(client.data, "channel", login, " is ban");
+  }
+
+  async unbanPlayer(client: Socket, message: any) {
+    const login = message[2];
+    this.emitChannel(client.data, "channel", login, " is unban");
+  }
+
+  async adminPlayer(client: Socket, message: any) {
+    const login = message[2];
+    this.emitChannel(client.data, "channel", login, " is admin");
+  }
+
+  async unadminPlayer(client: Socket, message: any) {
+    const login = message[2];
+    this.emitChannel(client.data, "channel", login, " is not more admin");
+  }
+
   @SubscribeMessage("channel")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
       const channel: Channel = client.data.channel;
       const login: string = client.data.user.display_name;
       if (message[0] === "msg") {
-        if (!channel.history) channel.history = [];
-        const history = { login, message: message[1] };
-        channel.history.push(history);
-        this.channelService.saveChannel(channel);
+        this.addToHistory(channel, login, message[1]);
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] === "action") {
         if (message[1] === "logout") client.disconnect();
         if (message[1] === "mute") {
-          const login = message[2];
-          const time = message[3];
-          this.emitChannel(
-            client.data,
-            "channel",
-            login,
-            " is mute for ",
-            time,
-            "minute"
-          );
+          this.mutePlayer(client, message);
         } else if (message[1] === "unmute") {
-          const login = message[2];
-          this.emitChannel(client.data, "channel", login, " is unmute");
+          this.unmutePlayer(client, message);
         } else if (message[1] === "ban") {
-          const login = message[2];
-          this.emitChannel(client.data, "channel", login, " is ban");
+          this.banPlayer(client, message);
         } else if (message[1] === "unban") {
-          const login = message[2];
-          this.emitChannel(client.data, "channel", login, " is unban");
+          this.unbanPlayer(client, message);
         } else if (message[1] === "admin") {
-          const login = message[2];
-          this.emitChannel(client.data, "channel", login, " is admin");
+          this.adminPlayer(client, message);
+        } else if (message[1] === "unadmin") {
+          this.unadminPlayer(client, message);
         }
       }
     } catch {}
@@ -96,6 +129,17 @@ export class ChannelsGateway
       );
       if (client.data.channel == false) return false;
       else {
+        try {
+          await this.channelService.addUserToMember(
+            client.data.user.id,
+            client.data.channel.id,
+            {
+              user: client.data.user.id,
+              role: "",
+              id: "",
+            }
+          );
+        } catch (err) {}
         this.logger.log(`Client connected: ${client.id}`);
         return true;
       }
