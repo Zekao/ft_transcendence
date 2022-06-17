@@ -59,6 +59,7 @@ let ChannelsController = class ChannelsController {
         return this.channelService.deleteChannel(id);
     }
     editChannel(id, edit) {
+        console.log(edit);
         return this.channelService.editChannel(id, edit);
     }
 };
@@ -196,7 +197,7 @@ __decorate([
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, channels_dto_1.ChannelsDto]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "editChannel", null);
 ChannelsController = __decorate([

@@ -20,5 +20,5 @@ export declare class ChannelsController {
     addUserToMuted(req: any, id: string, query: any): Promise<User>;
     addUserToBanned(req: any, id: string, query: any): Promise<User>;
     deleteUser(id: string): Promise<boolean>;
-    editChannel(id: string, edit: ChannelsDto): Promise<Channel>;
+    editChannel(id: string, edit: any): Promise<Channel>;
 }

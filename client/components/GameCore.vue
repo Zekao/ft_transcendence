@@ -109,35 +109,35 @@ export default V.extend({
   mounted() {
     this.context = (this.$refs.game as any).getContext('2d')
     this.context.clearRect(0, 0, 1080, 1920);
-    console.log('both values:', this.position.x, this.position.y)
   },
-  shortcuts: {
-    keydown (event) {
-      if (event.key === 'w') {
-        // console.log('both positions of player: ', this.position.y, this.position2.y)
-        if (this.position.y >= 13 && this.position2.y >= 13)
-          this.move('up');
-        else
-          return false;
-      }
-      else if (event.key === 's') {
-        // console.log('both positions of player: ', this.position.y, this.position2.y)
-        // faudrait que je puisse savoir si c'est le joueur 1 ou le joueur 2 mais je vois pas trop comment pcq j'suis fatigue
-        if (this.position.y <= 585 && this.position2.y <= 585)
-          this.move('down');
-        else
-          return false;
-      }
-      else if (event.key === 'Escape') {
-        this.move('stop');
-      }
-      return false // stop alias calling
-    },
-    cancel () {
-        // a utiliser si un joueur deco mais je le fais plus tard la je vais rompich ++
-        return false // stop propagation
-    },
-  },
+      shortcuts: {
+        keydown (event) {
+          if (event.key === 'w') {
+            // console.log('both positions of player: ', this.position.y, this.position2.y)
+            if (this.position.y >= 13 || this.position2.y >= 13)
+              this.move('up');
+            else
+              return false;
+          }
+          else if (event.key === 's') {
+            // console.log('both positions of player: ', this.position.y, this.position2.y)
+            // faudrait que je puisse savoir si c'est le joueur 1 ou le joueur 2 mais je vois pas trop comment pcq j'suis fatigue
+            if (this.position.y <= 585 || this.position2.y <= 585)
+              this.move('down');
+            else
+              return false;
+          }
+          else if (event.key === 'Escape') {
+            this.move('stop');
+            console.log('pressed escape key!!!!!')
+          }
+          return false // stop alias calling
+        },
+        cancel () {
+            // a utiliser si un joueur deco mais je le fais plus tard la je vais rompich ++
+            return false // stop propagation
+        },
+      },
        methods: {
         updateContent( ) {
             const call = 0;

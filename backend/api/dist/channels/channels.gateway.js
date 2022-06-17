@@ -34,35 +34,62 @@ let ChannelsGateway = class ChannelsGateway {
         await this.channelService.saveChannel(channel);
     }
     async mutePlayer(client, message) {
+        const channel = client.data.channel;
+        const user = message[2];
+        const time = message[3];
         try {
-            const channel = client.data.channel;
-            const user = message[2];
-            const time = message[3];
             const completeMessage = " is mute for " + time + " minute.";
-            this.channelService.addUserToMuted(client.data.user.id, channel.id, {
-                user,
+            await this.channelService.addUserToMuted(client.data.user.id, channel.id, {
+                user: user,
                 role: "",
                 id: "",
             });
             this.emitChannel(client.data, "channel", user, completeMessage);
         }
-        catch (err) { }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async unmutePlayer(client, message) {
-        const login = message[2];
-        this.emitChannel(client.data, "channel", login, " is unmute");
+        const channel = client.data.channel;
+        const user = message[2];
+        this.emitChannel(client.data, "channel", user, " is unmute");
     }
     async banPlayer(client, message) {
-        const login = message[2];
-        this.emitChannel(client.data, "channel", login, " is ban");
+        const channel = client.data.channel;
+        const user = message[2];
+        try {
+            const completeMessage = user + " is ban from the channel";
+            await this.channelService.addUserToBanned(client.data.user.id, channel.id, {
+                user: user,
+                role: "",
+                id: "",
+            });
+            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+        }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async unbanPlayer(client, message) {
         const login = message[2];
         this.emitChannel(client.data, "channel", login, " is unban");
     }
     async adminPlayer(client, message) {
-        const login = message[2];
-        this.emitChannel(client.data, "channel", login, " is admin");
+        const channel = client.data.channel;
+        const user = message[2];
+        try {
+            const completeMessage = user + " is now admin of the channel";
+            await this.channelService.addUserToAdmin(client.data.user.id, channel.id, {
+                user: user,
+                role: "",
+                id: "",
+            });
+            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+        }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async unadminPlayer(client, message) {
         const login = message[2];
@@ -108,6 +135,19 @@ let ChannelsGateway = class ChannelsGateway {
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
                 if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                    socket.emit(event, ...args);
+            });
+        }
+        catch (_a) { }
+    }
+    emitSingle(channel, event, ...args) {
+        try {
+            if (!channel.user)
+                return;
+            const sockets = Array.from(this.server.sockets.values());
+            sockets.forEach((socket) => {
+                if (channel.ConnectedChannel == socket.data.ConnectedChannel &&
+                    socket.data.user === channel.user)
                     socket.emit(event, ...args);
             });
         }
