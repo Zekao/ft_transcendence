@@ -158,10 +158,8 @@ export class ChannelsController {
   @ApiOperation({
     summary: "Modify attribute of a specified channel",
   })
-  editChannel(
-    @Param("id") id: string,
-    @Body() edit: ChannelsDto
-  ): Promise<Channel> {
+  editChannel(@Param("id") id: string, @Body() edit): Promise<Channel> {
+    console.log(edit);
     return this.channelService.editChannel(id, edit);
   }
 }
