@@ -87,6 +87,10 @@ export default Vue.extend({
     selectedLogin: '',
   }),
 
+  async fetch() {
+    await this.$store.dispatch('user/fetchAuthMatchs')
+  },
+
   computed: {
     ...mapState({
       users: (state: any): IUser[] => state.user.users,
@@ -101,10 +105,6 @@ export default Vue.extend({
         ? this.selectedUserMatches
         : this.authUserMatches
     },
-  },
-
-  async fetch() {
-    await this.$store.dispatch('user/fetchAuthMatchs')
   },
 
   methods: {

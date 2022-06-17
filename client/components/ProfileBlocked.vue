@@ -46,14 +46,14 @@ export default Vue.extend({
   //   ],
   // }),
 
+  async fetch() {
+    await this.$store.dispatch('user/fetchAuthBlocked')
+  },
+
   computed: {
     ...mapState({
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
-  },
-
-  async fetch() {
-    await this.$store.dispatch('user/fetchAuthBlocked')
   },
 
   methods: {

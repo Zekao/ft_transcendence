@@ -47,6 +47,10 @@ export default Vue.extend({
   //   ],
   // }),
 
+  async fetch() {
+    await this.$store.dispatch('user/fetchAuthFriends')
+  },
+
   computed: {
     ...mapState({
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
@@ -59,10 +63,6 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-  },
-
-  async fetch() {
-    await this.$store.dispatch('user/fetchAuthFriends')
   },
 
   methods: {

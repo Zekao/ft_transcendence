@@ -42,7 +42,10 @@ import { IUser } from '@/store/user'
 
 export default Vue.extend({
   props: {
-    user: Object as () => IUser,
+    user: {
+      type: Object as () => IUser,
+      default: {} as IUser,
+    },
   },
 
   data: () => ({
@@ -50,6 +53,20 @@ export default Vue.extend({
     messages: [] as { login: string; message: string }[],
     socket: null as NuxtSocket | null,
   }),
+
+  async fetch() {
+    try {
+      const res = await this.$axios.$get(`/chat/me/${this.user.display_name}`)
+      this.messages = res.length
+        ? [...res.map((el: string) => JSON.parse(el))]
+        : []
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
 
   computed: {
     ...mapState({
@@ -65,20 +82,6 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-  },
-
-  async fetch() {
-    try {
-      const res = await this.$axios.$get(`/chat/me/${this.user.display_name}`)
-      this.messages = res.length
-        ? [...res.map((el: string) => JSON.parse(el))]
-        : []
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
-    } catch (err) {
-      console.log(err)
-    }
   },
 
   mounted() {
