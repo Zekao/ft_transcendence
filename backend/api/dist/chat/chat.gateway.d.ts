@@ -12,7 +12,7 @@ export declare class ChatGateway implements OnGatewayInit, OnGatewayConnection, 
     private logger;
     afterInit(server: Server): void;
     SendPrivateMessage(client: Socket, msg: string): Promise<void>;
-    emitChannel(channel: any, event: string, ...args: any): void;
+    emitChat(channel: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): void;
     isMsg(client: Socket): Promise<boolean>;
     handleConnection(client: Socket, ...args: any[]): Promise<Socket<import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, import("socket.io/dist/typed-events").DefaultEventsMap, any>>;

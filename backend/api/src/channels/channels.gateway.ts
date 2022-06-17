@@ -70,7 +70,6 @@ export class ChannelsGateway
   async unmutePlayer(client: Socket, message: any) {
     const channel = client.data.channel;
     const user: string = message[2];
-    const time = message[3];
 
     try {
       const completeMessage = " is unmute";
@@ -128,7 +127,6 @@ export class ChannelsGateway
   async unbanPlayer(client: Socket, message: any) {
     const channel = client.data.channel;
     const user: string = message[2];
-    const time = message[3];
 
     try {
       const completeMessage = " is unban in this channel";

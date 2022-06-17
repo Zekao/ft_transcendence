@@ -53,7 +53,6 @@ let ChannelsGateway = class ChannelsGateway {
     async unmutePlayer(client, message) {
         const channel = client.data.channel;
         const user = message[2];
-        const time = message[3];
         try {
             const completeMessage = " is unmute";
             await this.channelService.deleteChannelMute(client.data.user.id, channel.id, {
@@ -86,7 +85,6 @@ let ChannelsGateway = class ChannelsGateway {
     async unbanPlayer(client, message) {
         const channel = client.data.channel;
         const user = message[2];
-        const time = message[3];
         try {
             const completeMessage = " is unban in this channel";
             await this.channelService.deleteChannelBan(client.data.user.id, channel.id, {

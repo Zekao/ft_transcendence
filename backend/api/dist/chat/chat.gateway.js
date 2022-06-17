@@ -34,17 +34,18 @@ let ChatGateway = class ChatGateway {
             const history = { login, message: msg };
             chat.history.push(history);
             this.chatService.saveChat(chat);
-            this.emitChannel(client.data, "msg", login, msg);
+            client.emit("msg", "test", "ok");
+            this.emitChat(client.data, "msg", login, msg);
         }
         catch (_a) { }
     }
-    emitChannel(channel, event, ...args) {
+    emitChat(channel, event, ...args) {
         try {
             if (!channel.user)
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel)
+                if (channel.chat.id === socket.data.chat.id)
                     socket.emit(event, ...args);
             });
         }
