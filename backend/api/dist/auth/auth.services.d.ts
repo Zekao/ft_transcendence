@@ -11,10 +11,10 @@ export declare class AuthService {
     private userRepository;
     private userService;
     constructor(jwtService: JwtService, userRepository: Repository<User>, userService: UsersService);
-    GenerateJwtToken(FortyTwoID: number, firstime: boolean): {
+    GenerateJwtToken(FortyTwoID: number): Promise<{
         accessToken: string;
         firstime: boolean;
-    };
+    }>;
     GenerateGToken(Gtoken: number): {
         gtoken: string;
     };

@@ -29,9 +29,15 @@ let AuthService = class AuthService {
         this.userRepository = userRepository;
         this.userService = userService;
     }
-    GenerateJwtToken(FortyTwoID, firstime) {
+    async GenerateJwtToken(FortyTwoID) {
+        let player = null;
         const payload = { FortyTwoID };
+        try {
+            player = await this.userService.getUserFortyTwo(FortyTwoID);
+        }
+        catch (err) { }
         const accessToken = this.jwtService.sign(payload);
+        const firstime = player.First_time;
         return { accessToken, firstime };
     }
     GenerateGToken(Gtoken) {
@@ -75,7 +81,7 @@ let AuthService = class AuthService {
                 user.First_time = false;
                 await this.userService.saveUser(user);
             }
-            this.GenerateJwtToken(FortyTwoID, user.First_time);
+            this.GenerateJwtToken(FortyTwoID);
         }
         else {
             throw new common_1.UnauthorizedException("Incorrect user id");
@@ -95,7 +101,7 @@ let AuthService = class AuthService {
             avatar: "default.png",
         };
         this.signUp(AuthCredentialsDto);
-        return this.GenerateJwtToken(FTwoID, true);
+        return this.GenerateJwtToken(FTwoID);
     }
     async getUserFromSocket(client) {
         const token = client.handshake.auth.Authorization;
