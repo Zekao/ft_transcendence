@@ -48,7 +48,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://trans.nabentay.fr:4500/api',
+    baseURL: 'https://ft.localhost:4500/api',
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -79,7 +79,7 @@ export default {
   },
 
   publicRuntimeConfig: {
-    serverLogin: 'https://trans.nabentay.fr:4500/api/auth/login',
+    serverLogin: 'https://ft.localhost:4500/api/auth/login',
   },
 
   io: {
@@ -87,7 +87,7 @@ export default {
     sockets: [
       {
         default: true,
-        url: 'https://trans.nabentay.fr:4500',
+        url: 'https://ft.localhost:4500',
       },
     ],
   },

@@ -6,7 +6,7 @@
     <v-list>
       <v-list-item class="justify-center">
           <v-avatar class="mr-4">
-            <v-img :src="'https://trans.nabentay.fr:4500/api/image/' + friend.avatar" />
+            <v-img :src="'https://ft.localhost:4500/api/image/' + friend.avatar" />
           </v-avatar>
           <v-list-item-title> {{ friend.display_name }} </v-list-item-title>
       </v-list-item>
@@ -64,12 +64,10 @@ export default Vue.extend({
     },
   },
 
-  data() {
-    return {
-      socket: null as NuxtSocket | null,
-      isfriend: true,
-    }
-  },
+  data: () => ({
+    socket: null as NuxtSocket | null,
+    isfriend: true,
+  }),
 
   computed: {
     ...mapState({

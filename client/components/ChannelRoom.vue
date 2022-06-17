@@ -166,6 +166,7 @@ import { IUser } from '@/store/user'
 declare module 'vue/types/vue' {
   interface Vue {
     scrollToBottom: () => void
+    getUser: (displayName: string) => IUser
   }
 }
 
@@ -264,7 +265,7 @@ export default Vue.extend({
       }
     },
     async changePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
       channel.password = this.newPassword
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
@@ -273,7 +274,7 @@ export default Vue.extend({
       }
     },
     async updatePassword() {
-      const channel = this.channel
+      const channel = { ...this.channel }
       channel.status = this.channel.status === 'PROTECTED' ? 'PUBLIC' : 'PROTECTED'
       try {
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
