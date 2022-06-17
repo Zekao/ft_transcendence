@@ -18,7 +18,14 @@
           <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+   
       <v-list-item v-if="!isMe" class="justify-center">
+            <v-list-item-content>
+          <v-btn :disabled="!canWatch" class="mr-2" @click="watchGame(friend.id)">
+          Watch
+          <v-icon>mdi-binoculars</v-icon>
+          </v-btn>
+        </v-list-item-content>
         <v-btn :disabled="friend.status !== 'ONLINE'" :loading="waitingGame" class="mr-2" @click="emitInvitation">
           Play with
           <v-icon>mdi-sword-cross</v-icon>
@@ -96,6 +103,10 @@ export default Vue.extend({
         this.authUserBlocked.find((friend) => friend.id === this.friend.id) !==
         undefined
       )
+    },
+   canWatch() {   
+      return this.friend.status === 'ONLINE' && this.friend.in_game === 'IN_GAME' && !this.isMe
+      //&& this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
   },
 
