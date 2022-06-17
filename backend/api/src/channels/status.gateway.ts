@@ -42,6 +42,7 @@ export class StatusGateway
     try {
       const user: User = client.data.user;
       if (message[0] === "invite") {
+        console.log("OKK");
         if (message[1]) {
           const invited = await this.userService.getUserId(message[1]);
           const match = await this.matchSevice.createMatch(invited.id);
@@ -53,16 +54,18 @@ export class StatusGateway
             invited.user_name,
             "game",
             match.id,
-            invited.user_name
+            user.user_name
           );
         }
       }
       if (message[0] === "join") {
         const gameID = message[1];
-        const match = await this.matchSevice.getMatchsId(gameID);
+        const match = await this.matchSevice.getMatchsId(gameID, [
+          { withUsers: true },
+        ]);
         this.emitNotif(
           client.data,
-          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
           "join",
           gameID
         );

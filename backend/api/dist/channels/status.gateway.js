@@ -31,18 +31,21 @@ let StatusGateway = class StatusGateway {
         try {
             const user = client.data.user;
             if (message[0] === "invite") {
+                console.log("OKK");
                 if (message[1]) {
                     const invited = await this.userService.getUserId(message[1]);
                     const match = await this.matchSevice.createMatch(invited.id);
                     this.matchSevice.addPlayerToMatch(client.data.user, match);
                     console.log(message);
-                    this.emitNotif(client.data, "notification", invited.user_name, "game", match.id, invited.user_name);
+                    this.emitNotif(client.data, "notification", invited.user_name, "game", match.id, user.user_name);
                 }
             }
             if (message[0] === "join") {
                 const gameID = message[1];
-                const match = await this.matchSevice.getMatchsId(gameID);
-                this.emitNotif(client.data, match.FirstPlayer.user_name, "join", gameID);
+                const match = await this.matchSevice.getMatchsId(gameID, [
+                    { withUsers: true },
+                ]);
+                this.emitNotif(client.data, match.SecondPlayer.user_name, "join", gameID);
             }
             if (message[0] === "deny") {
                 const gameID = message[1];
