@@ -99,29 +99,24 @@ export class GameGateway
         if (message == "up") {
           if (pos1 >= 0)
             await this.matchService.setPosFirstPlayer(match, pos1 - 13);
-          else  
-            await this.matchService.setPosFirstPlayer(match, pos1);
+          else await this.matchService.setPosFirstPlayer(match, pos1);
         }
-        if (message == "down")
-        {
+        if (message == "down") {
           if (pos1 <= 580)
             await this.matchService.setPosFirstPlayer(match, pos1 + 13);
-          else
-            await this.matchService.setPosFirstPlayer(match, pos1);
+          else await this.matchService.setPosFirstPlayer(match, pos1);
         }
-          this.emitGame(client.data, "move", pos1, 1);
+        this.emitGame(client.data, "move", pos1, 1);
       } else {
         if (message == "up") {
           if (pos2 >= 0)
             await this.matchService.setPosSecondPlayer(match, pos2 - 13);
-          else  
-            await this.matchService.setPosSecondPlayer(match, pos2);
+          else await this.matchService.setPosSecondPlayer(match, pos2);
         }
         if (message == "down") {
           if (pos2 <= 580)
             await this.matchService.setPosSecondPlayer(match, pos2 + 13);
-          else
-            await this.matchService.setPosSecondPlayer(match, pos2);
+          else await this.matchService.setPosSecondPlayer(match, pos2);
 
           // await this.matchService.setPosSecondPlayer(match, pos2 + 13);
         }
