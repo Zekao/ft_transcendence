@@ -344,7 +344,7 @@ export default Vue.extend({
     },
     setMute(user: string) {
       if (this.socket && user) {
-        this.socket.emit('channel', 'action', 'mute', user)
+        this.socket.emit('channel', 'action', 'mute', user, '5')
       }
     },
     unsetAdmin(user: string) {
