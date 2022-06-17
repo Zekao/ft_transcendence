@@ -59,7 +59,6 @@ let ChannelsController = class ChannelsController {
         return this.channelService.deleteChannel(id);
     }
     editChannel(id, edit) {
-        console.log(edit);
         return this.channelService.editChannel(id, edit);
     }
 };

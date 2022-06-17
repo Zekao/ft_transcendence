@@ -340,7 +340,6 @@ export class ChannelsService {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
   async editChannel(id: string, ChannelDto: ChannelsDto): Promise<Channel> {
-    console.log(ChannelDto);
     const { name, status, permissions, password } = ChannelDto;
     const found = await this.getChannelId(id);
     const salt = await bcrypt.genSalt();

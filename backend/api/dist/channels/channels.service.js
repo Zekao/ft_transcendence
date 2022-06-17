@@ -263,7 +263,6 @@ let ChannelsService = class ChannelsService {
         return true;
     }
     async editChannel(id, ChannelDto) {
-        console.log(ChannelDto);
         const { name, status, permissions, password } = ChannelDto;
         const found = await this.getChannelId(id);
         const salt = await bcrypt.genSalt();

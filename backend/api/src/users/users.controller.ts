@@ -16,20 +16,15 @@ import {
   Body,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth,
   ApiConsumes,
-  ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { FileUploadDto } from "./dto/file-upload.dto";
-import { Express, query } from "express";
+import { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UsersFiltesDTO } from "./dto/user-filter.dto";
-import { UserGameStatus, UserStatus } from "./users.enum";
 import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 import { User } from "./users.entity";
 import { UsersService } from "./users.service";
@@ -46,7 +41,7 @@ import { UserDto } from "./dto/user.dto";
 @ApiTags("users")
 @Controller("users")
 export class UsersController {
-  constructor(private UsersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   /* ************************************************************************** */
   /*                   GET                                                      */
@@ -59,8 +54,8 @@ export class UsersController {
   })
   getUsers(@Query() filters: UsersFiltesDTO): Promise<User[]> {
     if (Object.keys(filters).length)
-      return this.UsersService.getUserByFilter(filters);
-    return this.UsersService.getUsers();
+      return this.usersService.getUserByFilter(filters);
+    return this.usersService.getUsers();
   }
 
   @Get("/ranklist")
@@ -70,7 +65,7 @@ export class UsersController {
     type: [User],
   })
   getRankedUsers(): Promise<User[]> {
-    return this.UsersService.getRankedUsers();
+    return this.usersService.getRankedUsers();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -90,7 +85,7 @@ export class UsersController {
   })
   @ApiException(() => UnauthorizedException, { description: "Unauthorized" })
   getUserId(@Request() req, @Param("id") id: string): Promise<User> {
-    return this.UsersService.getUserId(id === "me" ? req.user.id : id);
+    return this.usersService.getUserId(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -103,13 +98,13 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getAvatar(@Request() req, @Param("id") id: string, @Res() res) {
-    return this.UsersService.getAvatar(id === "me" ? req.user.id : id, res);
+    return this.usersService.getAvatar(id === "me" ? req.user.id : id, res);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get("/me/friends")
   @ApiOperation({
-    summary: "Return the list of friends of a specified user profile",
+    summary: "Return the list of friends w/crediential",
   })
   @ApiOkResponse({
     description: "Ok.",
@@ -117,7 +112,7 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   getFriends(@Request() req): Promise<UserDto[]> {
     const user = req.user;
-    return this.UsersService.getFriends(user.id);
+    return this.usersService.getFriends(user.id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -130,34 +125,34 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   getMatch(@Request() req, @Param("id") id: string) {
-    return this.UsersService.getMatchs(id === "me" ? req.user.id : id);
+    return this.usersService.getMatchs(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get("/me/blocked")
   @ApiOperation({
-    summary: "Return the list of blocked users of a specified user profile",
+    summary: "Return the list of blocked users w/credential",
   })
   @ApiOkResponse({
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
-  getBlocked(@Request() req, @Param("id") id: string): Promise<UserDto[]> {
+  getBlocked(@Request() req): Promise<UserDto[]> {
     const user = req.user;
-    return this.UsersService.getBlocked(user.id);
+    return this.usersService.getBlocked(user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get("/me/whofollowme")
   @ApiOperation({
-    summary: "Return all users who have you in friends list",
+    summary: "Return all users that are in your friends list w/credential",
   })
   @ApiOkResponse({
     description: "Ok.",
   })
   @UserApiException(() => NotFoundException)
   getWhoFollowMe(@Request() req): Promise<User[]> {
-    return this.UsersService.getWhoFollowMe(req.user.id);
+    return this.usersService.getWhoFollowMe(req.user.id);
   }
 
   /* ************************************************************************** */
@@ -167,21 +162,21 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post("/me/friends")
   @ApiOperation({
-    summary: "Add a friend to a specified user profile",
+    summary: "Add a friend w/crediential",
   })
   addFriend(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
-    return this.UsersService.addFriend(user.id, query.friend);
+    return this.usersService.addFriend(user.id, query.friend);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("/me/blocked")
   @ApiOperation({
-    summary: "Add a blocked user to a specified user profile",
+    summary: "Add a blocked user w/credential",
   })
   addBlocked(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
-    return this.UsersService.addBlocked(user.id, query.blocked);
+    return this.usersService.addBlocked(user.id, query.blocked);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -209,7 +204,7 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File
   ) {
     const user = req.user;
-    return this.UsersService.uploadFile(user, file);
+    return this.usersService.uploadFile(user, file);
   }
 
   /* ************************************************************************** */
@@ -226,7 +221,7 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   deleteUser(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteUser(id === "me" ? req.user.id : id);
+    return this.usersService.deleteUser(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -241,23 +236,23 @@ export class UsersController {
   @UserApiException(() => NotFoundException)
   @AvatarApiException(() => UnauthorizedException)
   deleteAvatar(@Request() req, @Param("id") id: string): Promise<boolean> {
-    return this.UsersService.deleteAvatar(id === "me" ? req.user.id : id);
+    return this.usersService.deleteAvatar(id === "me" ? req.user.id : id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete("/me/friends")
   @ApiOperation({
-    summary: "delete a friend to a specified user profile",
+    summary: "delete a friend w/crediential",
   })
   removeFriend(@Request() req, @Query() query): Promise<User> {
     const user = req.user;
-    return this.UsersService.removeFriend(user.id, query.friend);
+    return this.usersService.removeFriend(user.id, query.friend);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete("/me/blocked")
   @ApiOperation({
-    summary: "delete a friend to a specified user profile",
+    summary: "delete a friend w/credential",
   })
   removeBlocked(
     @Request() req,
@@ -265,7 +260,7 @@ export class UsersController {
     @Query() query
   ): Promise<User> {
     const user = req.user;
-    return this.UsersService.removeBlocked(user.id, query.blocked);
+    return this.usersService.removeBlocked(user.id, query.blocked);
   }
 
   /* ************************************************************************** */
@@ -287,7 +282,7 @@ export class UsersController {
     @Param("id") id: string,
     @Body() body
   ): Promise<User> {
-    return this.UsersService.patchUser(id === "me" ? req.user.id : id, body);
+    return this.usersService.patchUser(id === "me" ? req.user.id : id, body);
   }
 
   @Patch("/updateRank")
@@ -300,6 +295,6 @@ export class UsersController {
   })
   @UserApiException(() => NotFoundException)
   patchUpdateRank(): Promise<User[]> {
-    return this.UsersService.patchUpdateRank();
+    return this.usersService.patchUpdateRank();
   }
 }
