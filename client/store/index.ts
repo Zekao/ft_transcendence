@@ -11,6 +11,7 @@ export interface IToken {
 export const state = () => ({
   selectedUser: {} as IUser,
   selectedMatchId: '',
+  matchDone: false,
   isFriendMenu: false,
   isAuthenticated: false,
   is2FAuthenticated: false,
@@ -28,6 +29,9 @@ export const mutations: MutationTree<RootState> = {
   },
   SELECTED_MATCH_ID: (state, matchID: string) => {
     state.selectedMatchId = matchID
+  },
+  MATCH_DONE: (state, value: boolean) => {
+    state.matchDone = value
   },
   FRIEND_MENU: (state, value: boolean) => {
     state.isFriendMenu = value

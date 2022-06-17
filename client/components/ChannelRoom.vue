@@ -204,8 +204,8 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
-      accessToken: (state: any) => state.token.accessToken,
-      selectedUser: (state: any) => state.selectedUser,
+      accessToken: (state: any): string => state.token.accessToken,
+      selectedUser: (state: any): IUser => state.selectedUser,
       users: (state: any): IUser[] => state.user.users,
     }),
     value: {

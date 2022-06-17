@@ -32,16 +32,16 @@ export default Vue.extend({
   middleware: 'auth',
 
   data: () => ({
+    yes: '',
+    windowHeight: window.innerHeight,
     componentSelected: '',
     componentList: ['Infos', 'Friends', 'Blocked', 'Match history'],
   }),
+
+  watch: {
+    windowHeight(value: number) {
+      this.yes = (value - 128).toString()
+    }
+  }
 })
 </script>
-
-<style>
-.v-window,
-.v-window__container,
-.v-window-item {
-  height: inherit;
-}
-</style>

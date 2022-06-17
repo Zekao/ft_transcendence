@@ -293,9 +293,6 @@ export default Vue.extend({
 </script>
 
 <style>
-html {
-  overflow: hidden;
-}
 .accent-text {
   color: #ffffff !important;
 }

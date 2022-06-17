@@ -66,8 +66,8 @@ export default Vue.extend({
     ...mapState({
       friend: (state: any): IUser => state.selectedUser,
       accessToken: (state: any): string => state.token.accessToken,
-      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       userID: (state: any): string => state.user.authUser.id,
+      authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
     value: {
@@ -78,6 +78,10 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
+    // function who return true if friend id is the same as userID or false if not
+    isMe() {
+      return this.friend.id === this.userID
+    },
     // function who return true if friend id is in authUserFriends or false if not
     isFriend() {
       return (
@@ -85,12 +89,6 @@ export default Vue.extend({
         undefined
       )
     },
-
-    // function who return true if friend id is the same as userID or false if not
-    isMe() {
-      return this.friend.id === this.userID
-    },
-
     // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe() {
       return (

@@ -164,7 +164,7 @@ export default Vue.extend({
         this.code = ''
         this.loading = false
       }
-    }
+    },
   },
 
   },
