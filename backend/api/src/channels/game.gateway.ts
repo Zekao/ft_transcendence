@@ -47,8 +47,7 @@ export class GameGateway
         );
         if (findedMatch.id) {
           console.log("FIND A MATCH");
-          this.server.emit("wait", "ready", findedMatch.id);
-          // this.emitGame(client.data, "waitinglist", "ready", findedMatch.id);
+          this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
@@ -61,6 +60,17 @@ export class GameGateway
         client.data.match = null;
         console.log("LEAVE THE WAITING LIST MATCH");
       }
+    } catch {}
+  }
+
+  emitReady(player: any, event: string, ...args: any): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.game == socket.data.game)
+          socket.emit(event, socket.data.user.user_name, ...args);
+      });
     } catch {}
   }
 
@@ -138,12 +148,14 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const waiting = client.data.waiting;
     const user = client.data.user;
-    if (client.data.match && client.data.match.status === MatchStatus.PENDING)
-      await this.matchService.deleteMatch(client.data.match.id);
-    if (user || waiting) {
-      user.in_game = UserGameStatus.OUT_GAME;
-      this.userService.saveUser(user);
-    }
+    try {
+      if (client.data.match && client.data.match.status === MatchStatus.PENDING)
+        await this.matchService.deleteMatch(client.data.match.id);
+      if (user || waiting) {
+        user.in_game = UserGameStatus.OUT_GAME;
+        this.userService.saveUser(user);
+      }
+    } catch (err) {}
     console.log("OUT GAME");
     this.logger.log(`Client disconnected: ${client.id}`);
   }
