@@ -17,6 +17,12 @@
         <v-list-item-content class="text-center">
           <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
         </v-list-item-content>
+        <v-list-item-content>
+          <v-btn :disabled="!canWatch" class="mr-2" @click="watchGame(friend.id)">
+          Watch
+          <v-icon>mdi-binoculars</v-icon>
+          </v-btn>
+        </v-list-item-content>
       </v-list-item>
       <v-list-item v-if="!isMe" class="justify-center">
         <v-btn class="mr-2" @click="emitInvitation">
@@ -99,6 +105,14 @@ export default Vue.extend({
       return this.friend.id === this.userID
     },
 
+  // function who return true if friend is ONLINE and if he is IN_GAME and if he doesn't block you or false if not
+  canWatch()
+  {
+    return this.friend.status === 'ONLINE' && this.friend.in_game === 'IN_GAME' && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
+  },
+  
+
+
     // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe() {
       return (
@@ -139,6 +153,13 @@ export default Vue.extend({
       } catch (err) {
         console.log(err)
       }
+    },
+    
+
+    // function who launch the spectator game of the friend id
+    async watchGame(userID: string) {
+      // console.log(userID) 
+
     },
 
     // function remove friend from authUserFriends
