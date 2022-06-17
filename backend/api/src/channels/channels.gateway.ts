@@ -70,8 +70,28 @@ export class ChannelsGateway
   async unmutePlayer(client: Socket, message: any) {
     const channel = client.data.channel;
     const user: string = message[2];
+    const time = message[3];
 
-    this.emitChannel(client.data, "channel", user, " is unmute");
+    try {
+      const completeMessage = " is unmute";
+      await this.channelService.deleteChannelMute(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user,
+          role: "",
+          id: "",
+        }
+      );
+      this.emitChannel(client.data, "channel", user, completeMessage);
+    } catch (err) {
+      this.emitSingle(
+        client.data,
+        "channel",
+        client.data.user.display_name,
+        err.response.message
+      );
+    }
   }
 
   async banPlayer(client: Socket, message: any) {
@@ -106,8 +126,30 @@ export class ChannelsGateway
   }
 
   async unbanPlayer(client: Socket, message: any) {
-    const login = message[2];
-    this.emitChannel(client.data, "channel", login, " is unban");
+    const channel = client.data.channel;
+    const user: string = message[2];
+    const time = message[3];
+
+    try {
+      const completeMessage = " is unban in this channel";
+      await this.channelService.deleteChannelBan(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user,
+          role: "",
+          id: "",
+        }
+      );
+      this.emitChannel(client.data, "channel", user, completeMessage);
+    } catch (err) {
+      this.emitSingle(
+        client.data,
+        "channel",
+        client.data.user.display_name,
+        err.response.message
+      );
+    }
   }
 
   async adminPlayer(client: Socket, message: any) {
@@ -115,7 +157,7 @@ export class ChannelsGateway
     const user: string = message[2];
 
     try {
-      const completeMessage = user + " is now admin of the channel";
+      const completeMessage = user + " is now a new admin of the channel";
       await this.channelService.addUserToAdmin(
         client.data.user.id,
         channel.id,
@@ -142,8 +184,34 @@ export class ChannelsGateway
   }
 
   async unadminPlayer(client: Socket, message: any) {
-    const login = message[2];
-    this.emitChannel(client.data, "channel", login, " is not more admin");
+    const channel = client.data.channel;
+    const user: string = message[2];
+
+    try {
+      const completeMessage = user + " is not more an admin of this channel";
+      await this.channelService.deleteChannelAdmin(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user,
+          role: "",
+          id: "",
+        }
+      );
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.display_name,
+        completeMessage
+      );
+    } catch (err) {
+      this.emitSingle(
+        client.data,
+        "channel",
+        client.data.user.display_name,
+        err.response.message
+      );
+    }
   }
 
   @SubscribeMessage("channel")

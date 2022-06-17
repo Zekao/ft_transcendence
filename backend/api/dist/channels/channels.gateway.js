@@ -53,7 +53,19 @@ let ChannelsGateway = class ChannelsGateway {
     async unmutePlayer(client, message) {
         const channel = client.data.channel;
         const user = message[2];
-        this.emitChannel(client.data, "channel", user, " is unmute");
+        const time = message[3];
+        try {
+            const completeMessage = " is unmute";
+            await this.channelService.deleteChannelMute(client.data.user.id, channel.id, {
+                user: user,
+                role: "",
+                id: "",
+            });
+            this.emitChannel(client.data, "channel", user, completeMessage);
+        }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async banPlayer(client, message) {
         const channel = client.data.channel;
@@ -72,14 +84,27 @@ let ChannelsGateway = class ChannelsGateway {
         }
     }
     async unbanPlayer(client, message) {
-        const login = message[2];
-        this.emitChannel(client.data, "channel", login, " is unban");
+        const channel = client.data.channel;
+        const user = message[2];
+        const time = message[3];
+        try {
+            const completeMessage = " is unban in this channel";
+            await this.channelService.deleteChannelBan(client.data.user.id, channel.id, {
+                user: user,
+                role: "",
+                id: "",
+            });
+            this.emitChannel(client.data, "channel", user, completeMessage);
+        }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async adminPlayer(client, message) {
         const channel = client.data.channel;
         const user = message[2];
         try {
-            const completeMessage = user + " is now admin of the channel";
+            const completeMessage = user + " is now a new admin of the channel";
             await this.channelService.addUserToAdmin(client.data.user.id, channel.id, {
                 user: user,
                 role: "",
@@ -92,8 +117,20 @@ let ChannelsGateway = class ChannelsGateway {
         }
     }
     async unadminPlayer(client, message) {
-        const login = message[2];
-        this.emitChannel(client.data, "channel", login, " is not more admin");
+        const channel = client.data.channel;
+        const user = message[2];
+        try {
+            const completeMessage = user + " is not more an admin of this channel";
+            await this.channelService.deleteChannelAdmin(client.data.user.id, channel.id, {
+                user: user,
+                role: "",
+                id: "",
+            });
+            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+        }
+        catch (err) {
+            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+        }
     }
     async SendMessageToChannel(client, message) {
         try {
