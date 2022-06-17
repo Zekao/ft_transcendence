@@ -83,6 +83,101 @@ let GameGateway = class GameGateway {
             this.emitGame(client.data, "action", "RESET");
         }
     }
+    async updateBall(client, message) {
+        let direction = client.data.direction;
+        let ball = client.data.posBall;
+        let velocity = client.data.velocity;
+        const match = client.data.match;
+        const pOne = client.data.posPlayer.pOne;
+        const pTwo = client.data.posPlayer.pTwo;
+        if (!ball.x || !ball.y)
+            ball = { x: 420, y: 400 };
+        if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+            this.emitGame(client.data, "action", "FINISH");
+            return;
+        }
+        if (direction.x === 1 || direction.x === -1) {
+            while (direction.x <= 0.2 || direction.x >= 0.9) {
+                if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
+                    direction = { x: 0.45312, y: 0.6291837 };
+                else
+                    direction = { x: -0.45312, y: -0.6291837 };
+            }
+        }
+        const deltaTime = 300;
+        ball.x += direction.x * velocity * deltaTime;
+        ball.y += direction.y * velocity * deltaTime;
+        this.saveAllData(client, direction, velocity, ball);
+        this.collisionDetect(client);
+        if (ball.x <= 0) {
+            if (match.scoreSecondPlayer >= 5) {
+                this.emitGame(client.data, "action", "FINISH");
+            }
+            else {
+                velocity = 0.00005;
+                this.matchService.addOnePointToPlayer(match, "TWO");
+            }
+        }
+        else if (ball.x >= 850) {
+            if (match.scoreFirstPlayer >= 5) {
+                this.emitGame(client.data, "action", "FINISH");
+            }
+            else {
+                velocity = 0.00005;
+                this.matchService.addOnePointToPlayer(match, "ONE");
+            }
+        }
+        if (ball.x < 0 || ball.x > 850) {
+            direction.x = -direction.x;
+        }
+        if (ball.y < 0 || ball.y > 720) {
+            direction.y = -direction.y;
+        }
+        if (ball.x >= pOne.x &&
+            ball.x <= pOne.x + 20 &&
+            ball.y >= pOne.y &&
+            ball.y <= pOne.y + 120) {
+            direction.x = -direction.x;
+        }
+        if (ball.x >= pTwo.x &&
+            ball.x <= pTwo.x + 20 &&
+            ball.y >= pTwo.y &&
+            ball.y <= pTwo.y + 120) {
+            direction.x = -direction.x;
+        }
+        if (velocity < 0.05)
+            velocity += 0.00005;
+        velocity += 0.00005;
+    }
+    saveAllData(client, direction, velocity, ball) {
+        if (direction)
+            client.data.direction = direction;
+        if (velocity)
+            client.data.velocity = velocity;
+        if (ball)
+            client.data.ball = ball;
+    }
+    async collisionDetect(client) {
+        const direction = client.data.direction;
+        const ball = client.data.posBall;
+        const pOne = client.data.posPlayer.pOne;
+        const pTwo = client.data.posPlayer.pTwo;
+        if (ball.x + ball.radius >= pOne.x &&
+            ball.x - ball.radius <= pOne.x + 20 &&
+            ball.y + ball.radius >= pOne.y &&
+            ball.y - ball.radius <= pOne.y + 120) {
+            ball.x += 4;
+            direction.x = -direction.x;
+        }
+        else if (ball.x + ball.radius >= pTwo.x &&
+            ball.x - ball.radius <= pTwo.x + 20 &&
+            ball.y + ball.radius >= pTwo.y &&
+            ball.y - ball.radius <= pTwo.y + 120) {
+            ball.x -= 4;
+            direction.x = -direction.x;
+        }
+        this.saveAllData(client, direction, null, ball);
+    }
     async gamecontrol(client, message) {
         try {
             let pOne = client.data.posPlayer.pOne;
@@ -149,6 +244,9 @@ let GameGateway = class GameGateway {
         client.data.match = match;
         client.data.game = client.handshake.auth.game;
         client.data.posPlayer = { pOne: 250, pTwo: 250 };
+        client.data.posBall = { x: 420, y: 400, rad: 10 };
+        client.data.direction = { x: 1, y: 1 };
+        client.data.velocity = 0.00005;
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);

@@ -191,7 +191,7 @@ export default V.extend({
           this.ball.x = 420;
           this.ball.y = 400;
           }
-          if (this.score.player1 >= 5 || this.score.player2 >= 5) {
+          if (this.score.player1 >= 5 || this.score.player2 >= 5) { //TO PUT IN FUCTION CALLED WHEN FINISHED
             this.context.clearRect(0, 0, 1080, 1920);
             this.context.font = "45px Arial";
             this.context.fillText("THE GAME IS FINISHED", 180, 150);
@@ -211,7 +211,7 @@ export default V.extend({
             this.ball.y += this.direction.y * this.velocity.speed * deltaTime;
             // this.context.fillStyle = "purple";
             // this.context.clearRect(0, 0, 1080, 1920);
-            this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI);
+            this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI); // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
             this.context.fill();
             this.context.restore();
             this.context.closePath();
