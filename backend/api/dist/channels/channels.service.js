@@ -274,9 +274,9 @@ let ChannelsService = class ChannelsService {
         if (!channel.members.find((user) => user.id === found.id) &&
             !channel.admins.find((user) => user.id === found.id) &&
             !(channel.owner.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not in channel`);
+            throw new common_1.ForbiddenException(`User ${me} was not in channel`);
         if (channel.owner.id === found.id)
-            channel.owner = null;
+            throw new common_1.ForbiddenException(`${me} is the owner of this channel, it can't be remove`);
         channel.admins = channel.admins.filter((admin) => admin.id !== found.id);
         channel.members = channel.members.filter((member) => member.id !== found.id);
         channel.mutedUsers = channel.mutedUsers.filter((muted) => muted.id !== found.id);
@@ -294,7 +294,7 @@ let ChannelsService = class ChannelsService {
         if (!channel.admins.find((user) => user.id === found.id) &&
             !(channel.owner.id === found.id) &&
             !channel.members.find((user) => user.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not in channel`);
+            throw new common_1.ForbiddenException(`User ${me} was not in channel`);
         if (!channel.admins.find((user) => user.id === found.id))
             throw new common_1.ForbiddenException(`User ${me} is not admin on this channel`);
         if (channel.owner.id === found.id)
@@ -316,9 +316,9 @@ let ChannelsService = class ChannelsService {
         if (!channel.members.find((user) => user.id === found.id) &&
             !(channel.admins.find((user) => user.id === found.id) &&
                 !(channel.owner.id === found.id)))
-            throw new common_1.ForbiddenException(`User ${me} has not in channel`);
+            throw new common_1.ForbiddenException(`User ${me} is not in the channel`);
         if (!channel.mutedUsers.find((user) => user.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not muted in channel`);
+            throw new common_1.ForbiddenException(`User ${me} is not muted in the channel`);
         channel.mutedUsers = channel.mutedUsers.filter((muted) => muted.id !== found.id);
         await this.ChannelsRepository.save(channel);
         return found;
@@ -333,7 +333,7 @@ let ChannelsService = class ChannelsService {
             { withBanned: true },
         ]);
         if (!channel.bannedUsers.find((user) => user.id === found.id))
-            throw new common_1.ForbiddenException(`User ${me} has not banned in channel`);
+            throw new common_1.ForbiddenException(`User ${me} is not banned in the channel`);
         channel.bannedUsers = channel.bannedUsers.filter((banned) => banned.id !== found.id);
         await this.ChannelsRepository.save(channel);
         return found;
