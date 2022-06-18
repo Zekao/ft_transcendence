@@ -185,6 +185,7 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
+    console.log("pONE: ", pOne, "ball", ball)
     if (
       ball.x + ball.radius >= pOne.x &&
       ball.x - ball.radius <= pOne.x + 20 &&
