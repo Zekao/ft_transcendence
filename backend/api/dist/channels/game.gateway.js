@@ -76,7 +76,7 @@ let GameGateway = class GameGateway {
             client.disconnect();
         }
         else if (message == "updateBall" &&
-            user.user_name === match.SecondPlayer.user_name)
+            user.user_name === match.FirstPlayer.user_name)
             this.updateBall(client);
     }
     async updateBall(client) {
