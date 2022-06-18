@@ -16,6 +16,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 import { Channel } from "./channels.entity";
+import { User } from "../users/users.entity";
 @WebSocketGateway({ namespace: "channel" })
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -42,21 +43,27 @@ export class ChannelsGateway
 
   async mutePlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
     const time = message[3];
 
     try {
-      const completeMessage = " is mute for " + time + " minute.";
+      const completeMessage =
+        user.display_name + " is mute for " + time + " minute.";
       await this.channelService.addUserToMuted(
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
           role: "",
           id: "",
         }
       );
-      this.emitChannel(client.data, "channel", user, completeMessage);
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.id,
+        completeMessage
+      );
     } catch (err) {
       this.emitSingle(
         client.data,
@@ -69,7 +76,7 @@ export class ChannelsGateway
 
   async unmutePlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
 
     try {
       const completeMessage = " is unmute";
@@ -77,12 +84,17 @@ export class ChannelsGateway
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
           role: "",
           id: "",
         }
       );
-      this.emitChannel(client.data, "channel", user, completeMessage);
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.id,
+        completeMessage
+      );
     } catch (err) {
       this.emitSingle(
         client.data,
@@ -95,15 +107,15 @@ export class ChannelsGateway
 
   async banPlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
 
     try {
-      const completeMessage = user + " is ban from the channel";
+      const completeMessage = user.display_name + " is ban from the channel";
       await this.channelService.addUserToBanned(
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
           role: "",
           id: "",
         }
@@ -126,20 +138,25 @@ export class ChannelsGateway
 
   async unbanPlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
 
     try {
-      const completeMessage = " is unban in this channel";
+      const completeMessage = user.display_name + " is unban in this channel";
       await this.channelService.deleteChannelBan(
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
           role: "",
           id: "",
         }
       );
-      this.emitChannel(client.data, "channel", user, completeMessage);
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.id,
+        completeMessage
+      );
     } catch (err) {
       this.emitSingle(
         client.data,
@@ -152,15 +169,16 @@ export class ChannelsGateway
 
   async adminPlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
 
     try {
-      const completeMessage = user + " is now a new admin of the channel";
+      const completeMessage =
+        user.display_name + " is now a new admin of the channel";
       await this.channelService.addUserToAdmin(
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
           role: "",
           id: "",
         }
@@ -183,15 +201,48 @@ export class ChannelsGateway
 
   async unadminPlayer(client: Socket, message: any) {
     const channel = client.data.channel;
-    const user: string = message[2];
+    const user = await this.userService.getUserId(message[2]);
 
     try {
-      const completeMessage = user + " is not more an admin of this channel";
+      const completeMessage =
+        user.display_name + " is not more an admin of this channel";
       await this.channelService.deleteChannelAdmin(
         client.data.user.id,
         channel.id,
         {
-          user: user,
+          user: user.display_name,
+          role: "",
+          id: "",
+        }
+      );
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.id,
+        completeMessage
+      );
+    } catch (err) {
+      this.emitSingle(
+        client.data,
+        "channel",
+        client.data.user.id,
+        err.response.message
+      );
+    }
+  }
+
+  async deletePlayerMember(client: Socket) {
+    const channel = client.data.channel;
+    const user: User = client.data.user;
+
+    try {
+      const completeMessage =
+        user.display_name + " is not more a member of this channel";
+      await this.channelService.deleteChannelMember(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user.display_name,
           role: "",
           id: "",
         }
@@ -235,7 +286,7 @@ export class ChannelsGateway
         }
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] === "action") {
-        if (message[1] === "logout") client.disconnect();
+        if (message[1] === "logout") this.deletePlayerMember(client);
         if (message[1] === "mute") {
           this.mutePlayer(client, message);
         } else if (message[1] === "unmute") {
