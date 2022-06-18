@@ -259,8 +259,12 @@ export class GameGateway
     const waiting = client.data.waiting;
     const user = client.data.user;
     try {
-      if (client.data.match && client.data.match.status === MatchStatus.PENDING)
+      if (
+        client.data.match &&
+        client.data.match.status === MatchStatus.PENDING
+      ) {
         await this.matchService.deleteMatch(client.data.match.id);
+      }
       if (user || waiting) {
         user.in_game = UserGameStatus.OUT_GAME;
         this.userService.saveUser(user);
