@@ -88,7 +88,7 @@ export class GameGateway
       client.disconnect();
     } else if (
       message == "updateBall" &&
-      user.user_name === match.SecondPlayer.user_name
+      user.user_name === match.FirstPlayer.user_name
     )
       this.updateBall(client);
   }
@@ -118,6 +118,7 @@ export class GameGateway
     this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
     this.collisionDetect(client);
     ball = client.data.posBall;
+    // console.log("BALLL: ", ball);
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
         this.emitGame(client.data, "gameAction", "FINISH");
