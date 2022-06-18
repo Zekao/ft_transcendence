@@ -7,14 +7,14 @@
             :src="'https://ft.localhost:4500/api/image/' + friend.avatar"
           />
         </v-avatar>
-        <v-list-item-title> {{ getDisplayName() }} </v-list-item-title>
+        <v-list-item-title> {{ friend.display_name }} </v-list-item-title>
       </v-list-item>
       <v-list-item class="justify-center">
         <v-list-item-content class="text-center">
-          <v-list-item-title> Win : {{ getWin()}} </v-list-item-title>
+          <v-list-item-title> Win : {{ friend.win }} </v-list-item-title>
         </v-list-item-content>
         <v-list-item-content class="text-center">
-          <v-list-item-title> Lost : {{ getLoose() }} </v-list-item-title>
+          <v-list-item-title> Lost : {{ friend.loose }} </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -76,7 +76,6 @@ export default Vue.extend({
       userID: (state: any): string => state.user.authUser.id,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
-      authUser: (state: any): IUser[] => state.user,
     }),
     value: {
       get(): boolean {
@@ -97,8 +96,8 @@ export default Vue.extend({
     //   }
    // },
 
-   
-  
+
+
 
     // function who return true if friend id is the same as userID or false if not
     isMe(): boolean {
@@ -130,7 +129,7 @@ export default Vue.extend({
   },
 
   mounted() {
-      
+
    this.socket = this.$nuxtSocket({
       auth: {
         Authorization: this.accessToken,
@@ -138,7 +137,7 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
 
-    
+
 
   },
 
@@ -181,69 +180,6 @@ export default Vue.extend({
         this.socket.emit('notification', 'invite', this.friend.user_name)
       }
     },
-
-    getWin() : number
-    {
-       if(!this.friend.id)
-       {
-         return this.authUser.win  
-       }
-      else  
-        return this.friend.win        
-    },
-
-
-    getLoose() : number
-    {
-        if(!this.friend.id)
-       {
-         return this.authUser.loose  
-       }
-      else  
-        return this.friend.loose  
-    },
-
-    getDisplayName() :string 
-    {
-       if(!this.friend.id)
-       {
-         return this.authUser.display_name  
-       }
-      else  
-        return this.friend.display_name
-    },
-
-    getAvatar() :string 
-    {
-
-
-       if(!this.friend.id)
-       {
-          return (
-        'https://ft.localhost:4500/api/image/' +
-        this.authUser?.avatar
-      )
-       }
-      else {
-         return (
-        'https://ft.localhost:4500/api/image/' +
-        this.friend?.avatar
-         )
-      }
-        
-
-
-      
-
-    }
-    
-
-
-
-
-
-
-
   },
 })
 </script>
