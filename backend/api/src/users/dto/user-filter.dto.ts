@@ -14,4 +14,6 @@ export class UsersFiltesDTO {
   rank: number;
   ratio: number;
   TwoFA: boolean;
+  color: string;
+  backgroundColor: string;
 }
