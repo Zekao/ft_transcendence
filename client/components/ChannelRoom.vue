@@ -279,10 +279,12 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('channel', (id, message) => {
-      this.messages.push({ id, message })
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
+      if (this.loggedIn) {
+        this.messages.push({ id, message })
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
+      }
     })
   },
 
