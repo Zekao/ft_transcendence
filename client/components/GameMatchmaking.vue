@@ -50,7 +50,7 @@ export default Vue.extend({
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
       authUser: (state: any): IUser => state.user.authUser,
-      // matchDone: (state: any) => state.matchStarted, // Need to create a new store for this
+      // matchDone: (state: any) => state.matchStarted, // Need to create a new store for this ?????????????????????????????? => no
     }),
   },
 

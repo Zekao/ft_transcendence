@@ -212,12 +212,16 @@ export default Vue.extend({
       login: (state: any): string => state.user.authUser.display_name,
       username: (state: any): string => state.user.authUser.user_name,
       avatar: (state: any): string => state.user.authUser.avatar,
+      authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
       accessToken: (state: any): string => state.token.accessToken,
       channels: (state: any): IChannel[] => state.channel.channels,
       users: (state: any): IUser[] => state.user.users,
     }),
+    authUserBlockedIds(): string[] {
+      return this.authUserBlocked.map(el => el.id)
+    },
     usersFiltered(): IUser[] {
-      return this.users.filter((el) => el.id !== this.id)
+      return this.users.filter((el) => el.id !== this.id && !this.authUserBlockedIds.includes(el.id))
     },
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar

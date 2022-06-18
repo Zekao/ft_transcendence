@@ -114,16 +114,14 @@ export default Vue.extend({
     getAvatarOne() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.FirstPlayer?.user_name +
-        '.png'
+        this.match.FirstPlayer?.avatar
       )
     },
 
     getAvatarTwo() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.SecondPlayer?.user_name +
-        '.png'
+        this.match.SecondPlayer?.avatar
       )
     },
   },
