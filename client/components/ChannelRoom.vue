@@ -166,8 +166,11 @@
           class="mr-2"
           @keyup.enter="emitMessageOnChannel"
         ></v-text-field>
-        <v-btn icon @click="emitLogoutOnChannel"
+        <v-btn v-if="loggedIn" icon @click="emitLogoutOnChannel"
           ><v-icon>mdi-logout</v-icon></v-btn
+        >
+        <v-btn v-else icon @click="emitLoginOnChannel"
+          ><v-icon>mdi-login</v-icon></v-btn
         >
       </v-toolbar>
     </v-sheet>
@@ -193,6 +196,7 @@ export default Vue.extend({
     valid: false,
     unlocked: false,
     password: '',
+    loggedIn: false,
     newPassword: '',
     messageText: '',
     messages: [] as { id: string; message: string }[],
@@ -229,6 +233,7 @@ export default Vue.extend({
       this.$nextTick(() => {
         this.scrollToBottom()
       })
+      this.loggedIn = true
     } catch (err) {
       console.log(err)
     }
@@ -345,11 +350,14 @@ export default Vue.extend({
         this.$nextTick(() => {
           this.scrollToBottom()
         })
+        this.loggedIn = true
       }
     },
     emitLogoutOnChannel() {
       if (this.socket) {
         this.socket.emit('channel', 'action', 'logout')
+        this.messages = []
+        this.loggedIn = false
       }
     },
     setAdmin(user: string) {
