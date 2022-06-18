@@ -20,10 +20,10 @@
           <v-avatar v-else>
             <v-img src="getAvatarOne" />
           </v-avatar>
-          <v-btn> {{ getPlayerOne() }}</v-btn>
+          <v-btn> {{ getPlayerOne }}</v-btn>
         </v-list-item-action>
         <v-list-item-content class="justify-center">
-          {{ getPlayerOne() }} - {{ getPlayerTwo() }}
+          {{ getPlayerOne }} - {{ getPlayerTwo }}
         </v-list-item-content>
         <v-list-item-action class="justify-center align-center">
           <v-badge
@@ -39,7 +39,7 @@
           <v-avatar v-else>
             <v-img src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{ getPlayerTwo() }} </v-btn>
+          <v-btn> {{ getPlayerTwo }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -104,24 +104,24 @@ export default Vue.extend({
     },
 
     getScoreOne() {
-      return this.match.scoreFirstPlayer || 0
+      return this.match.scoreFirstPlayer
     },
 
     getScoreTwo() {
-      return this.match.scoreSecondPlayer || 0
+      return this.match.scoreSecondPlayer
     },
 
     getAvatarOne() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.FirstPlayer?.avatar
+        this.match.FirstPlayer?.avatar || ''
       )
     },
 
     getAvatarTwo() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.SecondPlayer?.avatar
+        this.match.SecondPlayer?.avatar || ''
       )
     },
   },

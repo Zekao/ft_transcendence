@@ -50,7 +50,7 @@ export default Vue.extend({
 
   data: () => ({
     messageText: '',
-    messages: [] as { userID: string; message: string }[],
+    messages: [] as { id: string; message: string }[],
     socket: null as NuxtSocket | null,
   }),
 
@@ -93,8 +93,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('msg', (userID, message) => {
-      this.messages.push({ userID, message })
+    this.socket.on('msg', (id, message) => {
+      this.messages.push({ id, message })
       this.$nextTick(() => {
         this.scrollToBottom()
       })
@@ -116,14 +116,14 @@ export default Vue.extend({
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
-    getUser(userID: string): IUser {
+    getUser(id: string): IUser {
       return (
-        this.users.find((el) => el.id === userID) ||
+        this.users.find((el) => el.id === id) ||
         ({} as IUser)
       )
     },
-    changeUser(userID: string) {
-      this.$store.commit('SELECTED_USER', this.getUser(userID))
+    changeUser(id: string) {
+      this.$store.commit('SELECTED_USER', this.getUser(id))
       this.value = true
     },
   },
