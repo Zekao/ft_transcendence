@@ -47,7 +47,7 @@ let ChannelsGateway = class ChannelsGateway {
             this.emitChannel(client.data, "channel", user, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async unmutePlayer(client, message) {
@@ -63,7 +63,7 @@ let ChannelsGateway = class ChannelsGateway {
             this.emitChannel(client.data, "channel", user, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async banPlayer(client, message) {
@@ -76,10 +76,10 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+            this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async unbanPlayer(client, message) {
@@ -95,7 +95,7 @@ let ChannelsGateway = class ChannelsGateway {
             this.emitChannel(client.data, "channel", user, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async adminPlayer(client, message) {
@@ -108,10 +108,10 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+            this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async unadminPlayer(client, message) {
@@ -124,10 +124,10 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.emitChannel(client.data, "channel", client.data.user.display_name, completeMessage);
+            this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
-            this.emitSingle(client.data, "channel", client.data.user.display_name, err.response.message);
+            this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
     }
     async SendMessageToChannel(client, message) {

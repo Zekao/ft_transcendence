@@ -61,7 +61,7 @@ export class ChannelsGateway
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -87,7 +87,7 @@ export class ChannelsGateway
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -111,14 +111,14 @@ export class ChannelsGateway
       this.emitChannel(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         completeMessage
       );
     } catch (err) {
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -144,7 +144,7 @@ export class ChannelsGateway
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -168,14 +168,14 @@ export class ChannelsGateway
       this.emitChannel(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         completeMessage
       );
     } catch (err) {
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -199,14 +199,14 @@ export class ChannelsGateway
       this.emitChannel(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         completeMessage
       );
     } catch (err) {
       this.emitSingle(
         client.data,
         "channel",
-        client.data.user.display_name,
+        client.data.user.id,
         err.response.message
       );
     }
@@ -233,7 +233,6 @@ export class ChannelsGateway
             return;
           }
         }
-
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] === "action") {
         if (message[1] === "logout") client.disconnect();

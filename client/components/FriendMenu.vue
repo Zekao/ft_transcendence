@@ -68,7 +68,6 @@ export default Vue.extend({
     isfriend: true,
     waitingGame: false,
   }),
-
   computed: {
     ...mapState({
       friend: (state: any): IUser => state.selectedUser,
@@ -85,7 +84,6 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-
     // ImaGhost()
     // {
     //   console.log(this.friend)
