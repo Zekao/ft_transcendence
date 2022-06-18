@@ -274,8 +274,8 @@ export default Vue.extend({
           this.inviteMatchId = matchId
           this.inviteUserName = userName
         } else if (authUserName === this.username && game === 'join') {
-          this.$store.commit('SELECTED_MATCH_ID', matchId)
           if (this.$route.path !== '/') this.$router.replace('/')
+          this.$store.commit('SELECTED_MATCH_ID', matchId)
           this.$store.commit('SET_VALUE', 2)
           this.invite = false
           this.inviteMatchId = ''
@@ -311,9 +311,9 @@ export default Vue.extend({
     },
     acceptInvitation() {
       if (this.socket) {
+        if (this.$route.path !== '/') this.$router.replace('/')
         this.socket.emit('notification', 'join', this.inviteMatchId)
         this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
-        if (this.$route.path !== '/') this.$router.replace('/')
         this.$store.commit('SET_VALUE', 2)
         this.invite = false
         this.inviteMatchId = ''
