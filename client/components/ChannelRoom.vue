@@ -333,6 +333,20 @@ export default Vue.extend({
         this.messageText = ''
       }
     },
+    async emitLoginOnChannel() {
+      if (this.socket) {
+        this.socket.emit('channel', 'action', 'login')
+        const history = await this.$axios.$get(
+        `/channel/${this.channel.id}/history`
+        )
+        this.messages = history.length
+          ? [...history.map((el: string) => JSON.parse(el))]
+          : []
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
+      }
+    },
     emitLogoutOnChannel() {
       if (this.socket) {
         this.socket.emit('channel', 'action', 'logout')
