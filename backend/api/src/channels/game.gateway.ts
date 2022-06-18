@@ -75,7 +75,7 @@ export class GameGateway
     } catch {}
   }
 
-  @SubscribeMessage("action")
+  @SubscribeMessage("gameAction")
   async GameAction(client: Socket, message: string): Promise<void> {
     const match: Matchs = client.data.match;
 
@@ -85,24 +85,21 @@ export class GameGateway
       this.matchService.saveMatch(match);
       client.data.match = null;
       client.disconnect();
-    } else if (message == "ADD P1") {
-      await this.matchService.addOnePointToPlayer(match, "ONE");
-      this.emitGame(client.data, "action", "RESET");
-    } else if (message == "ADD P2") {
-      await this.matchService.addOnePointToPlayer(match, "TWO");
-      this.emitGame(client.data, "action", "RESET");
-    }
+    } else if (message == "updateBall") this.updateBall(client);
   }
 
   async updateBall(client: Socket): Promise<void> {
     let direction = client.data.direction;
-    let ball = client.data.posBall;
+    const ball = client.data.posBall;
     let velocity = client.data.velocity;
     const match: Matchs = client.data.match;
-    const pOne = client.data.posPlayer.pOne;
-    const pTwo = client.data.posPlayer.pTwo;
+    const pOne = client.data.posPlayerOne;
+    const pTwo = client.data.posPlayerTwo;
 
-    if (!ball.x || !ball.y) ball = { x: 420, y: 400 };
+    // if (!ball.x || !ball.y) {
+    //   ball.x = 420;
+    //   ball.y = 400;
+    // }
 
     if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
       this.emitGame(client.data, "action", "FINISH");
@@ -110,17 +107,17 @@ export class GameGateway
     }
     if (direction.x === 1 || direction.x === -1) {
       while (direction.x <= 0.2 || direction.x >= 0.9) {
-        if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
-          direction = { x: 0.45312, y: 0.6291837 };
-        else direction = { x: -0.45312, y: -0.6291837 };
+        const heading = this.randomNumberBetween(0, 2 * Math.PI);
+        direction = { x: Math.cos(heading), y: Math.sin(heading) };
       }
     }
     const deltaTime = 300;
     ball.x += direction.x * velocity * deltaTime;
     ball.y += direction.y * velocity * deltaTime;
-    //EMIT FUNCTION 2
     this.saveAllData(client, direction, velocity, ball);
+    this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
     this.collisionDetect(client);
+    this.saveAllData(client, direction, velocity, ball);
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
         this.emitGame(client.data, "action", "FINISH"); // EMIT FINISH GAME
@@ -166,6 +163,7 @@ export class GameGateway
     }
     if (velocity < 0.05) velocity += 0.00005;
     velocity += 0.00005;
+    this.saveAllData(client, direction, velocity, ball);
   }
 
   saveAllData(
@@ -182,8 +180,8 @@ export class GameGateway
   collisionDetect(client: Socket) {
     const direction = client.data.direction;
     const ball = client.data.posBall;
-    const pOne = client.data.posPlayer.pOne;
-    const pTwo = client.data.posPlayer.pTwo;
+    const pOne = client.data.posPlayerOne;
+    const pTwo = client.data.posPlayerTwo;
 
     if (
       ball.x + ball.radius >= pOne.x &&
@@ -205,7 +203,7 @@ export class GameGateway
     this.saveAllData(client, direction, null, ball);
   }
 
-  randomNumberBetween(min, max) {
+  randomNumberBetween(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
 
@@ -220,9 +218,6 @@ export class GameGateway
     while (Math.abs(direction.x) <= 0.2 || Math.abs(direction.x) >= 0.9) {
       const heading = this.randomNumberBetween(0, 2 * Math.PI);
       direction = { x: Math.cos(heading), y: Math.sin(heading) };
-      // if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
-      //   direction = { x: 0.45312, y: 0.6291837 };
-      // else direction = { x: -0.45312, y: -0.6291837 };
     }
     this.emitGame(client.data, "reset");
   }
@@ -230,34 +225,22 @@ export class GameGateway
   @SubscribeMessage("move")
   async gamecontrol(client: Socket, message: string): Promise<void> {
     try {
-      let pOne = client.data.posPlayer.pOne;
-      let pTwo = client.data.posPlayer.pTwo;
+      const pOne = client.data.posPlayerOne;
+      const pTwo = client.data.posPlayerTwo;
       const player = client.data.user;
       const match: Matchs = client.data.match;
       if (player.user_name == match.FirstPlayer.user_name) {
-        if (message === "up" && pOne >= 0) pOne -= 13;
-        else if (message === "down" && pOne <= 580) pOne += 13;
-        this.emitGame(client.data, "move", pOne, 1);
+        if (message === "up" && pOne.y >= 0) pOne.y -= 13;
+        else if (message === "down" && pOne.y <= 580) pOne.y += 13;
+        this.emitGame(client.data, "move", pOne.y, 1);
       } else {
-        if (message === "up" && pTwo >= 0) pTwo -= 13;
-        else if (message === "down" && pTwo <= 580) pTwo += 13;
-        this.emitGame(client.data, "move", pTwo, 2);
+        if (message === "up" && pTwo.y >= 0) pTwo.y -= 13;
+        else if (message === "down" && pTwo.y <= 580) pTwo.y += 13;
+        this.emitGame(client.data, "move", pTwo.y, 2);
       }
       client.data.posPlayer.pOne = pOne;
       client.data.posPlayer.pTwo = pTwo;
     } catch {}
-  }
-
-  x(client: Socket) {
-    this.emitGame(client.data, "reset");
-  }
-
-  emitAdd1(client: Socket) {
-    this.emitGame(client.data, "add1");
-  }
-
-  emitAdd2(client: Socket) {
-    this.emitGame(client.data, "add2");
   }
 
   emitGame(player: any, event: string, ...args: any): void {
@@ -302,7 +285,8 @@ export class GameGateway
     );
     client.data.match = match;
     client.data.game = client.handshake.auth.game;
-    client.data.posPlayer = { pOne: 250, pTwo: 250 };
+    client.data.posPlayerOne = { x: 0, y: 250 };
+    client.data.posPlayerTwo = { x: 0, y: 250 };
     client.data.posBall = { x: 420, y: 400, rad: 10 };
     client.data.direction = { x: 1, y: 1 };
     client.data.velocity = 0.00005;
