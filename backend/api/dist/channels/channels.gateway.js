@@ -151,19 +151,22 @@ let ChannelsGateway = class ChannelsGateway {
             const channel = client.data.channel;
             const login = client.data.user.id;
             if (message[0] === "msg") {
-                this.addToHistory(channel, login, message[1]);
-                const mutedUser = await this.channelService.getChannelMembers(channel.id, {
-                    role: "muted",
-                    user: "",
-                    id: "",
-                });
-                for (const el of mutedUser) {
-                    if (el.id === login) {
-                        this.emitSingle(client.data, "channel", login, "You are muted");
-                        return;
+                try {
+                    this.addToHistory(channel, login, message[1]);
+                    const mutedUser = await this.channelService.getChannelMembers(channel.id, {
+                        role: "muted",
+                        user: "",
+                        id: "",
+                    });
+                    for (const el of mutedUser) {
+                        if (el.id === login) {
+                            this.emitSingle(client.data, "channel", login, "You are muted");
+                            return;
+                        }
                     }
+                    this.emitChannel(client.data, "channel", login, message[1]);
                 }
-                this.emitChannel(client.data, "channel", login, message[1]);
+                catch (err) { }
             }
             else if (message[0] === "action") {
                 if (message[1] === "logout")
