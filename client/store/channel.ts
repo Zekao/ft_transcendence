@@ -10,12 +10,16 @@ export interface IChannel {
 }
 
 export const state = () => ({
+  authUserChannels: [] as IChannel[],
   channels: [] as IChannel[],
 })
 
 export type ChannelState = ReturnType<typeof state>
 
 export const mutations: MutationTree<ChannelState> = {
+  FETCH_AUTH: (state, channels: IChannel[]) => {
+    state.authUserChannels = channels
+  },
   FETCH: (state, channels: IChannel[]) => {
     state.channels = channels
   },
@@ -33,6 +37,15 @@ export const mutations: MutationTree<ChannelState> = {
 }
 
 export const actions: ActionTree<ChannelState, RootState> = {
+  async fetchAuth({ commit }) {
+    try {
+      const res = await this.$axios.$get(`/users/me/channel`)
+      commit('FETCH_AUTH', res)
+      return res
+    } catch (err) {
+      throw err
+    }
+  },
   async fetch({ commit }) {
     try {
       const res = await this.$axios.$get(`/channel`)
