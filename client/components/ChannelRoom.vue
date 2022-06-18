@@ -359,7 +359,7 @@ export default Vue.extend({
         return
       }
       try {
-        await this.$axios.$post(`/channel/${this.channel.id}/members?user=${user.id}`)
+        await this.$axios.$post(`/channel/${this.channel.id}/members?member=${user.id}`)
       } catch (err) {
         this.newUser = ''
       }
