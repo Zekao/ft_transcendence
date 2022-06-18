@@ -66,7 +66,7 @@ export class StatusGateway
         this.emitNotif(
           client.data,
           "notification",
-          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
           "join",
           gameID
         );
