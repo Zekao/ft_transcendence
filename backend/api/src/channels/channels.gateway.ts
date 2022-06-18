@@ -16,6 +16,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 import { Channel } from "./channels.entity";
+import { User } from "../users/users.entity";
 @WebSocketGateway({ namespace: "channel" })
 export class ChannelsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -212,6 +213,37 @@ export class ChannelsGateway
     }
   }
 
+  async deletePlayerMember(client: Socket) {
+    const channel = client.data.channel;
+    const user: User = client.data.user;
+    try {
+      const completeMessage =
+        user.display_name + " is not more a member of this channel";
+      await this.channelService.deleteChannelMember(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user.id,
+          role: "",
+          id: "",
+        }
+      );
+      this.emitChannel(
+        client.data,
+        "channel",
+        client.data.user.id,
+        completeMessage
+      );
+    } catch (err) {
+      this.emitSingle(
+        client.data,
+        "channel",
+        client.data.user.id,
+        err.response.message
+      );
+    }
+  }
+
   @SubscribeMessage("channel")
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
@@ -235,7 +267,9 @@ export class ChannelsGateway
         }
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] === "action") {
-        if (message[1] === "logout") client.disconnect();
+        if (message[1] === "logout") {
+          this.deletePlayerMember(client);
+        }
         if (message[1] === "mute") {
           this.mutePlayer(client, message);
         } else if (message[1] === "unmute") {
