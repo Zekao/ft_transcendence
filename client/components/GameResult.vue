@@ -108,6 +108,7 @@ export default Vue.extend({
       this.$store.commit('SELECTED_MATCH_ID', '')
       this.$store.commit('MATCH_DONE', false)
       this.$store.commit('SET_VALUE', 1)
+      this.$emit('next')
     },
 
     getPlayerOne() {
