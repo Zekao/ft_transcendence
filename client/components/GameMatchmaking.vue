@@ -19,11 +19,11 @@
       v-for="(match, i) in matches"
       :key="i"
       three-line
-      class="d-flex d-flex-column"> 
-      
-      
-      
-      
+      class="d-flex d-flex-column">
+
+
+
+
       </v-list-item>
   </v-list> -->
   </v-card>
@@ -66,6 +66,7 @@ export default Vue.extend({
     this.socket.on('wait', (userName, msg, matchID) => {
       if (userName === this.authUser.user_name && msg === 'ready') {
         this.$store.commit('SELECTED_MATCH_ID', matchID)
+        this.waiting = false
         this.ready = true
         this.$emit('next')
       }
