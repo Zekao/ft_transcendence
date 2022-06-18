@@ -100,7 +100,6 @@ let GameGateway = class GameGateway {
         this.saveAllData(client, direction, velocity, ball);
         this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
         this.collisionDetect(client);
-        this.saveAllData(client, direction, velocity, ball);
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
                 this.emitGame(client.data, "gameAction", "FINISH");
