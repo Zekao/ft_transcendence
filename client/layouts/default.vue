@@ -78,7 +78,7 @@
       <v-divider></v-divider>
       <v-toolbar>
         <v-icon class="mr-3"> mdi-playlist-minus </v-icon>
-        Browse channels
+        Browse public channels
       </v-toolbar>
       <v-list v-if="!channels.length">
         <v-list-item>
@@ -87,6 +87,28 @@
       </v-list>
       <v-list v-else>
         <v-list-group v-for="(channel, i) in channels" :key="i">
+          <template #activator>
+            <v-list-item-content>
+              <v-list-item-title>{{ channel.name }}</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item class="px-0">
+            <ChannelRoom :key="i" :channel="channel"></ChannelRoom>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+      <v-divider></v-divider>
+      <v-toolbar>
+        <v-icon class="mr-3"> mdi-playlist-minus </v-icon>
+        Private channels
+      </v-toolbar>
+      <v-list v-if="!channelsPrivate.length">
+        <v-list-item>
+          <v-list-item-subtitle> No channel available. </v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-group v-for="(channel, i) in channelsPrivate" :key="i">
           <template #activator>
             <v-list-item-content>
               <v-list-item-title>{{ channel.name }}</v-list-item-title>
@@ -161,7 +183,7 @@ export default Vue.extend({
     channelVisible: false,
     channelName: '',
     channelStatus: '',
-    channelStatusList: ['Public', 'Protected'],
+    channelStatusList: ['Public', 'Protected', 'Private'],
     channelPassword: '',
     items: [
       {
@@ -215,6 +237,7 @@ export default Vue.extend({
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
       accessToken: (state: any): string => state.token.accessToken,
       channels: (state: any): IChannel[] => state.channel.channels,
+      channelsPrivate: (state: any): IChannel[] => state.channel.authUserChannels,
       users: (state: any): IUser[] => state.user.users,
     }),
     authUserBlockedIds(): string[] {
