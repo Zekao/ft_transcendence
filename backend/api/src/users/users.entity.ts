@@ -67,6 +67,14 @@ export class User {
   @Column({ type: "real" })
   ratio: number;
 
+  @ApiProperty()
+  @Column({ nullable: true })
+  color: string;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  backgroundColor: string;
+
   @ApiProperty({ type: () => Matchs })
   @OneToMany(
     () => Matchs,

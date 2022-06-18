@@ -7,6 +7,7 @@ export declare class ChannelsController {
     private channelService;
     constructor(channelService: ChannelsService);
     GetAllChannel(filters: ChannelFilteDto): Promise<Channel[]>;
+    getChannelPrivate(req: any): Promise<Channel[]>;
     getChannelMembers(id: string, query?: any): Promise<User[]>;
     getChannel(id: string): Promise<Channel>;
     getHistory(id: string): Promise<{

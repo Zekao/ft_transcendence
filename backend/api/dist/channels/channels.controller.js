@@ -28,6 +28,9 @@ let ChannelsController = class ChannelsController {
             return this.channelService.getChannelByFilter(filters);
         return this.channelService.getChannel();
     }
+    getChannelPrivate(req) {
+        return this.channelService.getPrivateChannel(req.user);
+    }
     getChannelMembers(id, query) {
         return this.channelService.getChannelMembers(id, query);
     }
@@ -82,6 +85,15 @@ __decorate([
     __metadata("design:paramtypes", [channels_filter_dto_1.ChannelFilteDto]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "GetAllChannel", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("/me"),
+    (0, swagger_1.ApiOperation)({ summary: "Return list of all members of channel" }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "getChannelPrivate", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)("/:id/members"),

@@ -24,6 +24,7 @@ import { User } from "src/users/users.entity";
 import { ChannelStatus } from "./channels.enum";
 import * as bcrypt from "bcrypt";
 import { UserDto } from "src/users/dto/user.dto";
+import { channel } from "diagnostics_channel";
 
 export class ChannelRelationsPicker {
   withAllMembers?: boolean;
@@ -108,6 +109,27 @@ export class ChannelsService {
       });
     if (!found) throw new NotFoundException(`Channel \`${id}' not found`);
     return found;
+  }
+
+  async getPrivateChannel(user: User): Promise<Channel[]> {
+    const channels = await this.getChannel({ status: ChannelStatus.PRIVATE });
+    let privateChannel = [];
+    for (const channel of channels) {
+      privateChannel.push(
+        await this.getChannelId(channel.id, [{ withAllMembers: true }])
+      );
+    }
+    console.log(privateChannel);
+    privateChannel = privateChannel.filter((channel) => {
+      channel.members.find((member) => {
+        member === user;
+      }) ||
+        channel.admins.find((ad) => {
+          ad === user;
+        }) ||
+        channel.owner === user;
+    });
+    return privateChannel;
   }
 
   async getChannelMembers(

@@ -9,6 +9,7 @@ import {
   Patch,
   UseGuards,
   Request,
+  Req,
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { User } from "src/users/users.entity";
@@ -33,6 +34,13 @@ export class ChannelsController {
     if (Object.keys(filters).length)
       return this.channelService.getChannelByFilter(filters);
     return this.channelService.getChannel();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get("/me")
+  @ApiOperation({ summary: "Return list of all members of channel" })
+  getChannelPrivate(@Req() req): Promise<Channel[]> {
+    return this.channelService.getPrivateChannel(req.user);
   }
 
   @UseGuards(JwtAuthGuard)

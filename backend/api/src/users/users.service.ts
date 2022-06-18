@@ -406,6 +406,8 @@ export class UsersService {
       rank,
       ratio,
       TwoFA,
+      color,
+      backgroundColor,
     } = body;
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
@@ -419,6 +421,8 @@ export class UsersService {
     if (loose) found.loose = loose;
     if (rank) found.rank = rank;
     if (ratio) found.ratio = ratio;
+    if (color) found.color = color;
+    if (backgroundColor) found.backgroundColor = backgroundColor;
     await this.UserRepository.save(found);
     return found;
   }

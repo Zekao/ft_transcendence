@@ -349,7 +349,7 @@ let UsersService = class UsersService {
         return blockedUser;
     }
     async patchUser(id, body) {
-        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, } = body;
+        const { firstname, lastname, display_name, email, status, ingame, win, loose, rank, ratio, TwoFA, color, backgroundColor, } = body;
         const found = await this.getUserId(id);
         if (firstname)
             found.first_name = firstname;
@@ -373,6 +373,10 @@ let UsersService = class UsersService {
             found.rank = rank;
         if (ratio)
             found.ratio = ratio;
+        if (color)
+            found.color = color;
+        if (backgroundColor)
+            found.backgroundColor = backgroundColor;
         await this.UserRepository.save(found);
         return found;
     }
