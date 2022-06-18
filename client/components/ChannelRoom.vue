@@ -14,6 +14,7 @@
     </v-toolbar>
     <v-sheet v-else width="100%">
       <v-toolbar v-if="isAuthUserAdmin" class="d-flex justify-center">
+        <template v-if="channel.status !== 'PRIVATE'">
         <v-menu v-if="isAuthUserOwner" :close-on-content-click="false">
           <template #activator="{ on }">
             <v-btn small icon class="mr-2" v-on="on">
@@ -40,6 +41,30 @@
             </v-form>
           </v-card>
         </v-menu>
+        </template>
+        <template v-else>
+        <v-menu :close-on-content-click="false">
+          <template #activator="{ on }">
+            <v-btn small icon class="mr-2" v-on="on">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <v-card class="d-flex flex-column justify-center">
+            <v-form v-model="valid">
+              <v-text-field
+                v-model="newUser"
+                label="Login"
+                dense
+                outlined
+                class="ma-2"
+              ></v-text-field>
+              <v-btn :disabled="!valid" class="ma-2" @click="addUser">
+                Add
+              </v-btn>
+            </v-form>
+          </v-card>
+        </v-menu>
+        </template>
         <v-menu v-if="isAuthUserOwner">
           <template #activator="{ on }">
             <v-btn small class="mr-2" v-on="on" @click="fetchAdmin">
@@ -198,6 +223,7 @@ export default Vue.extend({
     password: '',
     loggedIn: false,
     newPassword: '',
+    newUser: '',
     messageText: '',
     messages: [] as { id: string; message: string }[],
     owner: {} as IUser,
@@ -324,6 +350,18 @@ export default Vue.extend({
         await this.$axios.$patch(`/channel/${this.channel.id}`, channel)
       } catch (err) {
         this.newPassword = ''
+      }
+    },
+    async addUser() {
+      const user = this.users.find(el => el.display_name === this.newUser)
+      if (!user) {
+        this.newUser = ''
+        return
+      }
+      try {
+        await this.$axios.$post(`/channel/${this.channel.id}/members?user=${user.id}`)
+      } catch (err) {
+        this.newUser = ''
       }
     },
     async deleteChannel() {
