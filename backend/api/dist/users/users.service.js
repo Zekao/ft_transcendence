@@ -355,13 +355,8 @@ let UsersService = class UsersService {
             found.first_name = firstname;
         if (lastname)
             found.last_name = lastname;
-        if (display_name) {
-            for (const el of await this.getUsers()) {
-                if (el.display_name === display_name)
-                    throw new common_1.UnauthorizedException("Display name already exist");
-                found.display_name = display_name;
-            }
-        }
+        if (display_name)
+            found.display_name = display_name;
         if (TwoFA != null)
             found.TwoFA = TwoFA;
         if (email)
