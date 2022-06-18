@@ -45,7 +45,7 @@ let StatusGateway = class StatusGateway {
                 const match = await this.matchSevice.getMatchsId(gameID, [
                     { withUsers: true },
                 ]);
-                this.emitNotif(client.data, match.SecondPlayer.user_name, "join", gameID);
+                this.emitNotif(client.data, "notification", match.FirstPlayer.user_name, "join", gameID);
             }
             if (message[0] === "deny") {
                 const gameID = message[1];
