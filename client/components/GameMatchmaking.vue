@@ -7,13 +7,13 @@
     <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin">
       Join queue
     </v-btn>
-    <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn> 
+    <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
 
-  <!-- IMPLEMENT LIST OF MATCHS PENDING -->
-  <!-- SAME HAS FRIENDLIST BUT FROM MATCH TABLE WITH STARTED STATUS  -->
-  <!-- DONT FORGET TO SHOW ONLY GAMES WITH NON_BLOCKED USER --> 
+    <!-- IMPLEMENT LIST OF MATCHS PENDING -->
+    <!-- SAME HAS FRIENDLIST BUT FROM MATCH TABLE WITH STARTED STATUS  -->
+    <!-- DONT FORGET TO SHOW ONLY GAMES WITH NON_BLOCKED USER -->
 
-  <!-- <v-list>
+    <!-- <v-list>
     <v-subheader> Watch current games </v-subheader>
     <v-list-item
       v-for="(match, i) in matches"
@@ -26,9 +26,6 @@
       
       </v-list-item>
   </v-list> -->
-
-
-
   </v-card>
 </template>
 
@@ -52,7 +49,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
-      authUser: (state: any): IUser => state.user.authUser, 
+      authUser: (state: any): IUser => state.user.authUser,
       // matchDone: (state: any) => state.matchStarted, // Need to create a new store for this
     }),
   },

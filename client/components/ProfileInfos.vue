@@ -166,7 +166,7 @@ export default Vue.extend({
 
     setLoginInput(val: string) {
       this.newLogin = val
-    }
+    },
   },
 })
 </script>

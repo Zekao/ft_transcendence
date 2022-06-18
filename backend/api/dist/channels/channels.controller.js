@@ -58,6 +58,18 @@ let ChannelsController = class ChannelsController {
     deleteUser(id) {
         return this.channelService.deleteChannel(id);
     }
+    removeUserToMember(req, id, query) {
+        return this.channelService.deleteChannelMember(req.user.id, id, query);
+    }
+    removeUserToAdmin(req, id, query) {
+        return this.channelService.deleteChannelAdmin(req.user.id, id, query);
+    }
+    removeUserToMuted(req, id, query) {
+        return this.channelService.deleteChannelMute(req.user.id, id, query);
+    }
+    removeUserToBanned(req, id, query) {
+        return this.channelService.deleteChannelBan(req.user.id, id, query);
+    }
     editChannel(id, edit) {
         return this.channelService.editChannel(id, edit);
     }
@@ -188,6 +200,58 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "deleteUser", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/:id/members"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete a member to a channel",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "removeUserToMember", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/:id/admin"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete a member to a Admin channel",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "removeUserToAdmin", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/:id/mute"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete a member to a Muted Users",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "removeUserToMuted", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)("/:id/ban"),
+    (0, swagger_1.ApiOperation)({
+        summary: "Delete a member to a Banned Users",
+    }),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)("id")),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChannelsController.prototype, "removeUserToBanned", null);
 __decorate([
     (0, common_1.Patch)("/:id"),
     (0, swagger_1.ApiOperation)({

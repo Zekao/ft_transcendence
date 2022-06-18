@@ -19,8 +19,7 @@
       </v-list-item>
 
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-list-item-content>
-        </v-list-item-content>
+        <v-list-item-content> </v-list-item-content>
         <v-btn
           :disabled="friend.status !== 'ONLINE'"
           :loading="waitingGame"

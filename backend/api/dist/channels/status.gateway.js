@@ -45,6 +45,7 @@ let StatusGateway = class StatusGateway {
                 const match = await this.matchSevice.getMatchsId(gameID, [
                     { withUsers: true },
                 ]);
+                console.log(match.SecondPlayer.user_name);
                 this.emitNotif(client.data, match.SecondPlayer.user_name, "join", gameID);
             }
             if (message[0] === "deny") {
@@ -58,6 +59,7 @@ let StatusGateway = class StatusGateway {
         try {
             const sockets = Array.from(this.server.sockets.sockets.values());
             sockets.forEach((socket) => {
+                console.log("SEND");
                 socket.emit(event, ...args);
             });
         }

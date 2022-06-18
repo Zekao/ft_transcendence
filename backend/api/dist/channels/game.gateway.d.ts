@@ -14,7 +14,19 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     afterInit(server: Server): void;
     waitingList(client: Socket, message: string): Promise<void>;
     emitReady(player: any, event: string, ...args: any): void;
+    GameAction(client: Socket, message: string): Promise<void>;
+    updateBall(client: Socket): Promise<void>;
+    saveAllData(client: Socket, direction: number, velocity: number, ball: {
+        x: number;
+        y: number;
+    }): void;
+    collisionDetect(client: Socket): void;
+    randomNumberBetween(min: any, max: any): any;
+    resetBall(client: Socket): void;
     gamecontrol(client: Socket, message: string): Promise<void>;
+    x(client: Socket): void;
+    emitAdd1(client: Socket): void;
+    emitAdd2(client: Socket): void;
     emitGame(player: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): Promise<void>;
     isWaitinglist(client: Socket, user: User): Promise<boolean>;

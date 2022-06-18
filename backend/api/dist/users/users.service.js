@@ -65,16 +65,13 @@ let UsersService = class UsersService {
         return friends;
     }
     async getMatchs(id) {
-        const user = await this.getUserId(id, [{ withMatchs: true }]);
-        if (!user.matchs)
-            return [];
-        console.log(user.matchs);
-        const matchs = [];
-        for (const match of user.matchs) {
-            matchs.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
+        const users = await this.getUserId(id);
+        const matches = await this.MatchsService.getMatchs();
+        const matchesWithUser = [];
+        for (const match of matches) {
+            matchesWithUser.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
-        console.log(matchs);
-        return matchs;
+        return matchesWithUser.filter((match) => match.FirstPlayer.id === users.id || match.SecondPlayer.id === users.id);
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);

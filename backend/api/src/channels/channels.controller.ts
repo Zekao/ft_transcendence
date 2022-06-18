@@ -151,6 +151,58 @@ export class ChannelsController {
     return this.channelService.deleteChannel(id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Delete("/:id/members")
+  @ApiOperation({
+    summary: "Delete a member to a channel",
+  })
+  removeUserToMember(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.deleteChannelMember(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete("/:id/admin")
+  @ApiOperation({
+    summary: "Delete a member to a Admin channel",
+  })
+  removeUserToAdmin(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.deleteChannelAdmin(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete("/:id/mute")
+  @ApiOperation({
+    summary: "Delete a member to a Muted Users",
+  })
+  removeUserToMuted(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.deleteChannelMute(req.user.id, id, query);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete("/:id/ban")
+  @ApiOperation({
+    summary: "Delete a member to a Banned Users",
+  })
+  removeUserToBanned(
+    @Request() req,
+    @Param("id") id: string,
+    @Query() query
+  ): Promise<User> {
+    return this.channelService.deleteChannelBan(req.user.id, id, query);
+  }
+
   /* ************************************************************************** */
   /*                   PATCH                                                    */
   /* ************************************************************************** */

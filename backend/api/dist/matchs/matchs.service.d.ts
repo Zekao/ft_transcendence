@@ -14,19 +14,11 @@ export declare class MatchsService {
     getMatchs(): Promise<Matchs[]>;
     getMatchsByFilter(filter: MatchsFilteDto): Promise<Matchs[]>;
     getMatchsId(id: any, RelationsPicker?: MatchsRelationPicker[]): Promise<Matchs>;
-    getPosFirstPlayer(id: Matchs): Promise<number>;
-    getPosSecondPlayer(id: Matchs): Promise<number>;
-    getPosBall(id: Matchs): Promise<{
-        posx: number;
-        posy: number;
-    }>;
-    setPosFirstPlayer(id: Matchs, pos: number): Promise<boolean>;
-    setPosSecondPlayer(id: Matchs, pos: number): Promise<boolean>;
-    setPosBall(id: Matchs, posx: number, posy: number): Promise<boolean>;
     createMatch(id: string): Promise<Matchs>;
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
     defineMatch(player: User): Promise<Matchs>;
     saveMatch(match: Matchs): Promise<Matchs>;
+    addOnePointToPlayer(id: Matchs, player: string): Promise<void>;
     deleteMatch(id: string): Promise<boolean>;
     editMatch(id: string, matchDto: MatchDto): Promise<Matchs>;
 }

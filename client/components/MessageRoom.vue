@@ -94,12 +94,10 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('msg', (login, message) => {
-      if (this.authUser.display_name === login) {
-        this.messages.push({ login, message })
-        this.$nextTick(() => {
-          this.scrollToBottom()
-        })
-      }
+      this.messages.push({ login, message })
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
     })
   },
 

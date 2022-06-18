@@ -262,6 +262,82 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return true;
     }
+    async deleteChannelMember(me, channelId, channelMembers) {
+        const { user } = channelMembers;
+        if (user)
+            me = user;
+        const found = await this.UsersService.getUserId(me);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withMuted: true },
+        ]);
+        if (!channel.members.find((user) => user.id === found.id) &&
+            !channel.admins.find((user) => user.id === found.id) &&
+            !(channel.owner.id === found.id))
+            throw new common_1.ForbiddenException(`User ${me} was not in channel`);
+        if (channel.owner.id === found.id)
+            throw new common_1.ForbiddenException(`${me} is the owner of this channel, it can't be remove`);
+        channel.admins = channel.admins.filter((admin) => admin.id !== found.id);
+        channel.members = channel.members.filter((member) => member.id !== found.id);
+        channel.mutedUsers = channel.mutedUsers.filter((muted) => muted.id !== found.id);
+        await this.ChannelsRepository.save(channel);
+        return found;
+    }
+    async deleteChannelAdmin(me, channelId, channelMembers) {
+        const { user } = channelMembers;
+        if (user)
+            me = user;
+        const found = await this.UsersService.getUserId(me);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+        ]);
+        if (!channel.admins.find((user) => user.id === found.id) &&
+            !(channel.owner.id === found.id) &&
+            !channel.members.find((user) => user.id === found.id))
+            throw new common_1.ForbiddenException(`User ${me} was not in channel`);
+        if (!channel.admins.find((user) => user.id === found.id))
+            throw new common_1.ForbiddenException(`User ${me} is not admin on this channel`);
+        if (channel.owner.id === found.id)
+            throw new common_1.ConflictException(`User ${me} is owner of this channel`);
+        channel.admins = channel.admins.filter((admin) => admin.id !== found.id);
+        channel.members.push(found);
+        await this.ChannelsRepository.save(channel);
+        return found;
+    }
+    async deleteChannelMute(me, channelId, channelMembers) {
+        const { user } = channelMembers;
+        if (user)
+            me = user;
+        const found = await this.UsersService.getUserId(me);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withMuted: true },
+        ]);
+        if (!channel.members.find((user) => user.id === found.id) &&
+            !(channel.admins.find((user) => user.id === found.id) &&
+                !(channel.owner.id === found.id)))
+            throw new common_1.ForbiddenException(`User ${me} is not in the channel`);
+        if (!channel.mutedUsers.find((user) => user.id === found.id))
+            throw new common_1.ForbiddenException(`User ${me} is not muted in the channel`);
+        channel.mutedUsers = channel.mutedUsers.filter((muted) => muted.id !== found.id);
+        await this.ChannelsRepository.save(channel);
+        return found;
+    }
+    async deleteChannelBan(me, channelId, channelMembers) {
+        const { user } = channelMembers;
+        if (user)
+            me = user;
+        const found = await this.UsersService.getUserId(me);
+        const channel = await this.getChannelId(channelId, [
+            { withAllMembers: true },
+            { withBanned: true },
+        ]);
+        if (!channel.bannedUsers.find((user) => user.id === found.id))
+            throw new common_1.ForbiddenException(`User ${me} is not banned in the channel`);
+        channel.bannedUsers = channel.bannedUsers.filter((banned) => banned.id !== found.id);
+        await this.ChannelsRepository.save(channel);
+        return found;
+    }
     async editChannel(id, ChannelDto) {
         const { name, status, permissions, password } = ChannelDto;
         const found = await this.getChannelId(id);
