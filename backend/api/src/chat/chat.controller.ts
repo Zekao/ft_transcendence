@@ -24,7 +24,7 @@ export class ChatController {
   async GetHistoryMessage(
     @Param("id") id: string,
     @Request() req
-  ): Promise<{ login: string; message: string }[]> {
+  ): Promise<{ id: string; message: string }[]> {
     const user = await this.usersService.getUserId(id);
     const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
     return this.chatService.getHistory(chat);

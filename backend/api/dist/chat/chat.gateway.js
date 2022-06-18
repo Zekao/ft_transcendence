@@ -30,11 +30,11 @@ let ChatGateway = class ChatGateway {
         try {
             client.data.chat = await this.chatService.FindTwoChat(client.data.user.id, client.data.receiver.id);
             const chat = client.data.chat;
-            const login = client.data.user.display_name;
-            const history = { login, message: msg };
+            const id = client.data.user.id;
+            const history = { id, message: msg };
             chat.history.push(history);
             this.chatService.saveChat(chat);
-            this.emitChat(client.data, "msg", login, msg);
+            this.emitChat(client.data, "msg", id, msg);
         }
         catch (_a) { }
     }

@@ -58,7 +58,7 @@ export class ChannelsController {
   })
   getHistory(
     @Param("id") id: string
-  ): Promise<{ login: string; message: string }[]> {
+  ): Promise<{ id: string; message: string }[]> {
     return this.channelService.getChannelHistory(id);
   }
 

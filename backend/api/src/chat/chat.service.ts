@@ -53,7 +53,7 @@ export class ChatService {
     return found;
   }
 
-  async getHistory(chat: Chat): Promise<{ login: string; message: string }[]> {
+  async getHistory(chat: Chat): Promise<{ id: string; message: string }[]> {
     return chat.history;
   }
 

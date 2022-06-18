@@ -33,9 +33,9 @@ export class ChannelsGateway
     this.logger.log("Init");
   }
 
-  async addToHistory(channel: Channel, login: string, message: string) {
+  async addToHistory(channel: Channel, id: string, message: string) {
     if (!channel.history) channel.history = [];
-    const history = { login, message: message };
+    const history = { id, message: message };
     channel.history.push(history);
     await this.channelService.saveChannel(channel);
   }
@@ -216,7 +216,7 @@ export class ChannelsGateway
   async SendMessageToChannel(client: Socket, message: any): Promise<void> {
     try {
       const channel: Channel = client.data.channel;
-      const login: string = client.data.user.display_name;
+      const login: string = client.data.user.id;
       if (message[0] === "msg") {
         this.addToHistory(channel, login, message[1]);
         const mutedUser = await this.channelService.getChannelMembers(
@@ -228,7 +228,7 @@ export class ChannelsGateway
           }
         );
         for (const el of mutedUser) {
-          if (el.display_name === login) {
+          if (el.id === login) {
             this.emitSingle(client.data, "channel", login, "You are muted");
             return;
           }

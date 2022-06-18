@@ -38,11 +38,11 @@ export class ChatGateway
         client.data.receiver.id
       );
       const chat: Chat = client.data.chat;
-      const login: string = client.data.user.display_name;
-      const history = { login, message: msg };
+      const id: string = client.data.user.id;
+      const history = { id, message: msg };
       chat.history.push(history);
       this.chatService.saveChat(chat);
-      this.emitChat(client.data, "msg", login, msg);
+      this.emitChat(client.data, "msg", id, msg);
     } catch {}
   }
 

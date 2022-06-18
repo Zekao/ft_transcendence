@@ -10,7 +10,7 @@ export declare class ChannelsController {
     getChannelMembers(id: string, query?: any): Promise<User[]>;
     getChannel(id: string): Promise<Channel>;
     getHistory(id: string): Promise<{
-        login: string;
+        id: string;
         message: string;
     }[]>;
     getChannelPassword(id: string, body: any): Promise<Channel>;

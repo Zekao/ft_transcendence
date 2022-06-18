@@ -3,7 +3,7 @@ export declare class Chat {
     first: string;
     second: string;
     history: {
-        login: string;
+        id: string;
         message: string;
     }[];
 }

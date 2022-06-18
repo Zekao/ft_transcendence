@@ -101,10 +101,10 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
-    if (!ball.x || !ball.y) {
-      ball.x = 420;
-      ball.y = 400;
-    }
+    // if (!ball.x || !ball.y) {
+    //   ball.x = 420;
+    //   ball.y = 400;
+    // }
 
     if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
       this.emitGame(client.data, "gameAction", "FINISH");

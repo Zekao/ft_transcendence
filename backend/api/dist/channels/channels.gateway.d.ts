@@ -12,7 +12,7 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     server: any;
     private logger;
     afterInit(server: Server): void;
-    addToHistory(channel: Channel, login: string, message: string): Promise<void>;
+    addToHistory(channel: Channel, id: string, message: string): Promise<void>;
     mutePlayer(client: Socket, message: any): Promise<void>;
     unmutePlayer(client: Socket, message: any): Promise<void>;
     banPlayer(client: Socket, message: any): Promise<void>;
