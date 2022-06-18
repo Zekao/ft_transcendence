@@ -130,16 +130,12 @@ export class ChannelsService {
         await this.getChannelId(channel.id, [{ withAllMembers: true }])
       );
     }
-    privateChannel = privateChannel.filter((channel) => {
-      channel.members.find((member) => {
-        member === user;
-      }) ||
-        channel.admins.find((ad) => {
-          ad === user;
-        }) ||
-        channel.owner.id === user.id;
-      return channel;
-    });
+    privateChannel = privateChannel.filter(
+      (channel) =>
+        channel.members.find((member) => member === user) ||
+        channel.admins.find((ad) => ad === user) ||
+        channel.owner.id === user.id
+    );
     return privateChannel;
   }
 
