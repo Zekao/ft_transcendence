@@ -276,6 +276,7 @@ export default Vue.extend({
         } else if (authUserName === this.username && game === 'join') {
           this.$store.commit('SELECTED_MATCH_ID', matchId)
           if (this.$route.path !== '/') this.$router.replace('/')
+          this.$store.commit('SET_VALUE', 2)
           this.invite = false
           this.inviteMatchId = ''
           this.inviteUserName = ''
@@ -313,6 +314,7 @@ export default Vue.extend({
         this.socket.emit('notification', 'join', this.inviteMatchId)
         this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
         if (this.$route.path !== '/') this.$router.replace('/')
+        this.$store.commit('SET_VALUE', 2)
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''

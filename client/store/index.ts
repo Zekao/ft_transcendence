@@ -9,6 +9,7 @@ export interface IToken {
 }
 
 export const state = () => ({
+  easyFix: 1,
   selectedUser: {} as IUser,
   selectedMatchId: '',
   matchDone: false,
@@ -24,6 +25,9 @@ export const state = () => ({
 export type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
+  SET_VALUE: (state, value: number) => {
+    state.easyFix = value
+  },
   SELECTED_USER: (state, user: IUser) => {
     state.selectedUser = user
   },
