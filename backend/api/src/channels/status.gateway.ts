@@ -82,7 +82,6 @@ export class StatusGateway
     try {
       const sockets: any[] = Array.from(this.server.sockets.sockets.values());
       sockets.forEach((socket) => {
-        console.log("SEND");
         socket.emit(event, ...args);
       });
     } catch {}

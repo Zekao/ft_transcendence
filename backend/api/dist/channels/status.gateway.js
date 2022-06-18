@@ -58,7 +58,6 @@ let StatusGateway = class StatusGateway {
         try {
             const sockets = Array.from(this.server.sockets.sockets.values());
             sockets.forEach((socket) => {
-                console.log("SEND");
                 socket.emit(event, ...args);
             });
         }
