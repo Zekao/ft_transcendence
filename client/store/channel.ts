@@ -39,7 +39,7 @@ export const mutations: MutationTree<ChannelState> = {
 export const actions: ActionTree<ChannelState, RootState> = {
   async fetchAuth({ commit }) {
     try {
-      const res = await this.$axios.$get(`/users/me/channel`)
+      const res = await this.$axios.$get(`/channel/me`)
       commit('FETCH_AUTH', res)
       return res
     } catch (err) {
