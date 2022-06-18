@@ -127,6 +127,7 @@ export class ChannelsService {
           ad === user;
         }) ||
         channel.owner.id === user.id;
+      return channel;
     });
     return privateChannel;
   }
