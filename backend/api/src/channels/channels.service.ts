@@ -132,8 +132,8 @@ export class ChannelsService {
     }
     privateChannel = privateChannel.filter(
       (channel) =>
-        channel.members.find((member) => member === user) ||
-        channel.admins.find((ad) => ad === user) ||
+        channel.members.find((member) => member.id === user.id) ||
+        channel.admins.find((ad) => ad.id === user.id) ||
         channel.owner.id === user.id
     );
     return privateChannel;
