@@ -126,7 +126,7 @@
                   x-small
                   icon
                   class="mr-2"
-                  @click="setAdmin(getUser(message.id).display_name)"
+                  @click="setAdmin(message.id)"
                 >
                   <v-icon>mdi-account-supervisor</v-icon>
                 </v-btn>
@@ -136,7 +136,7 @@
                   x-small
                   icon
                   class="mr-2"
-                  @click="setBan(getUser(message.id).display_name)"
+                  @click="setBan(message.id)"
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -145,7 +145,7 @@
                   v-if="isAuthUserAdmin"
                   x-small
                   icon
-                  @click="setMute(getUser(message.id).display_name)"
+                  @click="setMute(message.id)"
                 >
                   <v-icon>mdi-volume-off</v-icon>
                 </v-btn>
