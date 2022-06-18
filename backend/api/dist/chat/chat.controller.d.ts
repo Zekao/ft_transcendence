@@ -5,7 +5,7 @@ export declare class ChatController {
     private usersService;
     constructor(chatService: ChatService, usersService: UsersService);
     GetHistoryMessage(id: string, req: any): Promise<{
-        login: string;
+        id: string;
         message: string;
     }[]>;
 }

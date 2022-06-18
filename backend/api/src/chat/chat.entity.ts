@@ -12,5 +12,5 @@ export class Chat {
   second: string;
 
   @Column("text", { array: true, nullable: true })
-  history: { login: string; message: string }[];
+  history: { id: string; message: string }[];
 }

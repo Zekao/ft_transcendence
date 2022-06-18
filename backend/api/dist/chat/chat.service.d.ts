@@ -8,7 +8,7 @@ export declare class ChatService {
     GetMessageID(id: string): Promise<Chat>;
     FindTwoChat(id: string, id2: string): Promise<Chat>;
     getHistory(chat: Chat): Promise<{
-        login: string;
+        id: string;
         message: string;
     }[]>;
     saveChat(chat: Chat): Promise<boolean>;

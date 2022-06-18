@@ -86,10 +86,6 @@ let GameGateway = class GameGateway {
         const match = client.data.match;
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
-        if (!ball.x || !ball.y) {
-            ball.x = 420;
-            ball.y = 400;
-        }
         if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
             this.emitGame(client.data, "gameAction", "FINISH");
             return;
@@ -187,7 +183,6 @@ let GameGateway = class GameGateway {
     resetBall(client) {
         let direction = client.data.direction;
         const ball = client.data.posBall;
-        const match = client.data.match;
         ball.x = 420;
         ball.y = 400;
         direction = { x: 0 };

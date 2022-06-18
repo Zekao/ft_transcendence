@@ -7,6 +7,7 @@ import {
   Res,
   Inject,
   forwardRef,
+  UnauthorizedException,
 } from "@nestjs/common";
 import * as fs from "fs";
 import { UserStatus, UserGameStatus } from "./users.enum";
