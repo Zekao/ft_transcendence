@@ -8,26 +8,26 @@
       <v-list-item>
         <v-list-item-action class="justify-center align-center">
           <v-badge
-            v-if="getScoreOne > getScoreTwo"
+            v-if="getScoreOne() > getScoreTwo()"
             color="orange"
             icon="mdi-crown"
             overlap
           >
             <v-avatar>
-              <v-img src="getAvatarTwo" />
+              <v-img src=getAvatarTwo() />
             </v-avatar>
           </v-badge>
           <v-avatar v-else>
-            <v-img src="getAvatarOne" />
+            <v-img src=getAvatarOne() />
           </v-avatar>
-          <v-btn> {{ getPlayerOne }}</v-btn>
+          <v-btn> {{getPlayerOne()}}   {{getScoreOne()}}</v-btn>
         </v-list-item-action>
         <v-list-item-content class="justify-center">
-          {{ getPlayerOne }} - {{ getPlayerTwo }}
+          <!-- {{ getPlayerOne() }} - {{ getPlayerTwo() }} -->
         </v-list-item-content>
         <v-list-item-action class="justify-center align-center">
           <v-badge
-            v-if="getScoreTwo > getScoreOne"
+            v-if="getScoreTwo() > getScoreOne()"
             color="orange"
             icon="mdi-crown"
             overlap
@@ -39,7 +39,7 @@
           <v-avatar v-else>
             <v-img src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{ getPlayerTwo }} </v-btn>
+          <v-btn> {{getScoreTwo()}}   {{getPlayerTwo() }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -64,7 +64,22 @@ export default Vue.extend({
   name: 'GameResult',
 
   data: () => ({
-    match: {} as IMatch,
+   // match: {} as IMatch,
+   match: {
+    id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e', 
+    FirstPlayer: {
+      display_name: 'lusehair', 
+      avatar: 'default.png'
+    }, 
+    SecondPlayer: {
+      display_name: 'gamarcha', 
+      avatar: 'default.png'
+    }, 
+    scoreFirstPlayer: 7,
+    scoreSecondPlayer: 4,
+    winner: null, 
+    status: 'ENDED'
+   }
   }),
 
   computed: {
@@ -80,7 +95,7 @@ export default Vue.extend({
         try {
           const res = await this.$axios.$get(`/match/${this.selectedMatchId}`)
           this.match = res
-          console.log(this.match)
+          console.log(res)
         } catch (err) {
           console.log(err)
         }
@@ -96,32 +111,32 @@ export default Vue.extend({
     },
 
     getPlayerOne() {
-      return this.match.FirstPlayer?.display_name || ''
+      return this.match.FirstPlayer?.display_name || 'Superman'
     },
 
     getPlayerTwo() {
-      return this.match.SecondPlayer?.display_name || ''
+      return this.match.SecondPlayer?.display_name || 'Homelander'
     },
 
     getScoreOne() {
-      return this.match.scoreFirstPlayer
+      return this.match.scoreFirstPlayer || 69
     },
 
     getScoreTwo() {
-      return this.match.scoreSecondPlayer
+      return this.match.scoreSecondPlayer || 64
     },
 
     getAvatarOne() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.FirstPlayer?.avatar || ''
+        this.match.FirstPlayer?.avatar
       )
     },
 
     getAvatarTwo() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.SecondPlayer?.avatar || ''
+        this.match.SecondPlayer?.avatar
       )
     },
   },
