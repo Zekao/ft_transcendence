@@ -19,6 +19,7 @@ export declare class ChannelsService {
     getChannel(StatusDto?: ChannelStatusDto): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
     getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
+    getPrivateChannel(user: User): Promise<Channel[]>;
     getChannelMembers(channelId: string, Role?: ChannelMembersDto): Promise<User[]>;
     getChannelBanMembers(channelId: string): Promise<User[]>;
     getChannelHistory(id: string): Promise<{

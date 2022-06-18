@@ -86,6 +86,23 @@ let ChannelsService = class ChannelsService {
             throw new common_1.NotFoundException(`Channel \`${id}' not found`);
         return found;
     }
+    async getPrivateChannel(user) {
+        const channels = await this.getChannel({ status: channels_enum_1.ChannelStatus.PRIVATE });
+        let privateChannel = [];
+        for (const channel of channels) {
+            privateChannel.push(await this.getChannelId(channel.id, [{ withAllMembers: true }]));
+        }
+        privateChannel = privateChannel.filter((channel) => {
+            channel.members.find((member) => {
+                member.id === user.id;
+            }) ||
+                channel.admins.find((ad) => {
+                    ad.id === user.id;
+                }) ||
+                channel.owner.id === user.id;
+        });
+        return privateChannel;
+    }
     async getChannelMembers(channelId, Role) {
         if (Role)
             var { role, id } = Role;
