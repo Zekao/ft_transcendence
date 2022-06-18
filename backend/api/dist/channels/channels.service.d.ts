@@ -17,6 +17,7 @@ export declare class ChannelsService {
     private UsersService;
     constructor(ChannelsRepository: Repository<Channel>, UsersService: UsersService);
     getChannel(StatusDto?: ChannelStatusDto): Promise<Channel[]>;
+    getAuthChannel(): Promise<Channel[]>;
     getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]>;
     getChannelId(id: string, RelationsPicker?: ChannelRelationsPicker[]): Promise<Channel>;
     getPrivateChannel(user: User): Promise<Channel[]>;

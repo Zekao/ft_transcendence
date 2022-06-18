@@ -31,9 +31,9 @@ export class ChannelsController {
   @Get()
   @ApiOperation({ summary: "Return list of all existing channels" })
   GetAllChannel(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
-    if (Object.keys(filters).length)
-      return this.channelService.getChannelByFilter(filters);
-    return this.channelService.getChannel();
+    // if (Object.keys(filters).length)
+    //   return this.channelService.getChannelByFilter(filters);
+    return this.channelService.getAuthChannel();
   }
 
   @UseGuards(JwtAuthGuard)

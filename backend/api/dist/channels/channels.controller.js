@@ -24,9 +24,7 @@ let ChannelsController = class ChannelsController {
         this.channelService = channelService;
     }
     GetAllChannel(filters) {
-        if (Object.keys(filters).length)
-            return this.channelService.getChannelByFilter(filters);
-        return this.channelService.getChannel();
+        return this.channelService.getAuthChannel();
     }
     getChannelPrivate(req) {
         return this.channelService.getPrivateChannel(req.user);
