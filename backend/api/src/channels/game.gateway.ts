@@ -120,22 +120,20 @@ export class GameGateway
     this.saveAllData(client, direction, velocity, ball);
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
-        this.emitGame(client.data, "action", "FINISH"); // EMIT FINISH GAME
+        this.emitGame(client.data, "gameAction", "FINISH"); // EMIT FINISH GAME
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO"); // EMIT TO ADD POINT IN FRONT
         this.emitGame(client.data, "gameAction", "addTwo");
-        console.log("added point to player two");
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
-        this.emitGame(client.data, "action", "FINISH"); // EMIT FINISH GAME
+        this.emitGame(client.data, "gameAction", "FINISH"); // EMIT FINISH GAME
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE"); // EMIT TO ADD POINT IN FRONT
         this.emitGame(client.data, "gameAction", "addOne");
-        console.log("added point to player one");
         this.resetBall(client);
       }
     }
