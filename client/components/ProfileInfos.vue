@@ -117,6 +117,7 @@ export default Vue.extend({
       (v: string) => !!v || 'Login is required',
       (v: string) => v.length > 3 || 'Login must be more than 3 characters',
       (v: string) => v.length <= 24 || 'Login must be less than 24 characters',
+      (v: string) => v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null || 'Login must contain valid characters',
     ],
   }),
 
