@@ -59,10 +59,8 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
 import { IUser } from '@/store/user'
-
 export default Vue.extend({
   name: 'FriendMenu',
-
   data: () => ({
     socket: null as NuxtSocket | null,
     isfriend: true,
@@ -93,10 +91,6 @@ export default Vue.extend({
     //     this.friend = this.authUser
     //   }
    // },
-
-
-
-
     // function who return true if friend id is the same as userID or false if not
     isMe(): boolean {
       // this.ImaGhost
@@ -125,20 +119,14 @@ export default Vue.extend({
       // && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
   },
-
   mounted() {
-
    this.socket = this.$nuxtSocket({
       auth: {
         Authorization: this.accessToken,
       },
       path: '/api/socket.io/',
     } as any)
-
-
-
   },
-
   methods: {
     async block(userID: string) {
       try {
@@ -154,7 +142,6 @@ export default Vue.extend({
         console.log(err)
       }
     },
-
     async addFriend(userID: string) {
       try {
         await this.$store.dispatch('user/createAuthFriend', userID)
@@ -162,7 +149,6 @@ export default Vue.extend({
         console.log(err)
       }
     },
-
     // function remove friend from authUserFriends
     async removeFriend(userID: string) {
       try {
@@ -171,7 +157,6 @@ export default Vue.extend({
         console.log(err)
       }
     },
-
     emitInvitation() {
       if (this.socket) {
         this.waitingGame = true
