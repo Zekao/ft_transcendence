@@ -30,9 +30,16 @@ export default Vue.extend({
 
   middleware: 'auth',
 
-  data: () => ({
-    e1: 1,
-  }),
+  computed: {
+    e1: {
+      get(): boolean {
+        return this.$store.state.easyFix
+      },
+      set(value: boolean) {
+        this.$store.commit('SET_VALUE', value)
+      },
+    },
+  }
 })
 </script>
 

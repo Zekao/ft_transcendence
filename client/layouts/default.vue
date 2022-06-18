@@ -205,6 +205,7 @@ export default Vue.extend({
     channelNameRules: [
       (v: string) => !!v || 'Name is required',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
+      (v: string) => v.match(/^[a-zA-Z]/) !== null || 'Name must start with a letter',
     ],
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
@@ -275,6 +276,7 @@ export default Vue.extend({
         } else if (authUserName === this.username && game === 'join') {
           this.$store.commit('SELECTED_MATCH_ID', matchId)
           if (this.$route.path !== '/') this.$router.replace('/')
+          this.$store.commit('SET_VALUE', 2)
           this.invite = false
           this.inviteMatchId = ''
           this.inviteUserName = ''
@@ -312,6 +314,7 @@ export default Vue.extend({
         this.socket.emit('notification', 'join', this.inviteMatchId)
         this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
         if (this.$route.path !== '/') this.$router.replace('/')
+        this.$store.commit('SET_VALUE', 2)
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''
