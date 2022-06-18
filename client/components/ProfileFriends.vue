@@ -18,7 +18,7 @@
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i" class="my-2">
         <v-badge
-          :color="user.status === 'ONLINE' ? 'green' : 'red'"
+          :color="colorStatus(user)"
           overlap
           class="mr-4"
         >
@@ -69,7 +69,23 @@ export default Vue.extend({
     changeUser(user: IUser) {
       this.$store.commit('SELECTED_USER', user)
       this.value = true
-    },
+    }, 
+
+    colorStatus(user: IUser)
+    {
+      if(user.in_game === 'IN_GAME' && user.status === 'ONLINE')
+      {
+        return 'blue'
+      }
+      else if(user.status === 'ONLINE')
+      {
+        return 'green'
+      }
+      else
+      {
+        return 'red'
+      }
+    }
   },
 })
 </script>
