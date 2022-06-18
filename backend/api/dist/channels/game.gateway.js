@@ -117,7 +117,7 @@ let GameGateway = class GameGateway {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "TWO");
                 this.emitGame(client.data, "addTwo");
-                console.log('added point to player two');
+                console.log("added point to player two");
                 this.resetBall(client);
             }
         }
@@ -129,7 +129,7 @@ let GameGateway = class GameGateway {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "ONE");
                 this.emitGame(client.data, "addOne");
-                console.log('added point to player one');
+                console.log("added point to player one");
                 this.resetBall(client);
             }
         }
@@ -198,7 +198,7 @@ let GameGateway = class GameGateway {
             const heading = this.randomNumberBetween(0, 2 * Math.PI);
             direction = { x: Math.cos(heading), y: Math.sin(heading) };
         }
-        this.emitGame(client.data, 'reset');
+        this.emitGame(client.data, "reset");
     }
     async gamecontrol(client, message) {
         try {

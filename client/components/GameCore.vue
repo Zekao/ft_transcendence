@@ -167,7 +167,8 @@ export default V.extend({
             return Math.random() * (max - min) + min;
         },
         resetBall() {
-        this.socket.emit('reset');
+        if (this.socket)
+          this.socket.emit('reset');
         this.ball.x = 420;
         this.ball.y = 400;
         this.direction = { x: 0 } as { x: number, y: number }
@@ -210,7 +211,7 @@ export default V.extend({
           this.ball.x = 420;
           this.ball.y = 400;
           }
-          if (this.score.player1 >= 5 || this.score.player2 >= 5) { //TO PUT IN FUCTION CALLED WHEN FINISHED
+          if (this.score.player1 >= 5 || this.score.player2 >= 5) { // TO PUT IN FUCTION CALLED WHEN FINISHED
             this.context.clearRect(0, 0, 1080, 1920);
             this.context.font = "45px Arial";
             this.context.fillText("THE GAME IS FINISHED", 180, 150);
