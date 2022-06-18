@@ -101,13 +101,22 @@ export default V.extend({
                 this.$emit('next')
             }
           }
-          })
+          }),
         this.socket.on('action', (data) => {
             if (data === "RESET") {
               this.resetBall();
               this.velocity.speed = 0.00005;
             }
+        }),
+
+        this.socket.on('addOne', (data) => {
+          this.score.player1 += 1;
+        }),
+
+        this.socket.on('addTwo', (data) => {
+          this.score.player2 += 1;
         })
+
           setInterval(this.updateContent, 17);
       }
     }
@@ -151,6 +160,7 @@ export default V.extend({
             return Math.random() * (max - min) + min;
         },
         resetBall() {
+        this.socket.emit('reset');
         this.ball.x = 420;
         this.ball.y = 400;
         this.direction = { x: 0 } as { x: number, y: number }

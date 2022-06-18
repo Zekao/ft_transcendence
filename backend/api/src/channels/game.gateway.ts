@@ -127,6 +127,8 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO"); // EMIT TO ADD POINT IN FRONT
+        this.emitGame(client.data, "addTwo");
+        console.log('added point to player two');
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
@@ -135,6 +137,8 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE"); // EMIT TO ADD POINT IN FRONT
+        this.emitGame(client.data, "addOne");
+        console.log('added point to player one');
         this.resetBall(client);
       }
     }
@@ -201,6 +205,10 @@ export class GameGateway
     this.saveAllData(client, direction, null, ball);
   }
 
+  randomNumberBetween(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
   resetBall(client: Socket) {
     let direction = client.data.direction;
     const ball = client.data.posBall;
@@ -210,10 +218,13 @@ export class GameGateway
     ball.y = 400;
     direction = { x: 0 } as { x: number; y: number };
     while (Math.abs(direction.x) <= 0.2 || Math.abs(direction.x) >= 0.9) {
-      if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
-        direction = { x: 0.45312, y: 0.6291837 };
-      else direction = { x: -0.45312, y: -0.6291837 };
+      const heading = this.randomNumberBetween(0, 2 * Math.PI)
+      direction = { x: Math.cos(heading), y: Math.sin(heading) }
+      // if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
+      //   direction = { x: 0.45312, y: 0.6291837 };
+      // else direction = { x: -0.45312, y: -0.6291837 };
     }
+    this.emitGame(client.data, 'reset');
   }
 
   @SubscribeMessage("move")
@@ -237,7 +248,7 @@ export class GameGateway
     } catch {}
   }
 
-  emitReset(client: Socket) {
+  x(client: Socket) {
     this.emitGame(client.data, "reset");
   }
 

@@ -116,6 +116,8 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "TWO");
+                this.emitGame(client.data, "addTwo");
+                console.log('added point to player two');
                 this.resetBall(client);
             }
         }
@@ -126,6 +128,8 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "ONE");
+                this.emitGame(client.data, "addOne");
+                console.log('added point to player one');
                 this.resetBall(client);
             }
         }
@@ -180,6 +184,9 @@ let GameGateway = class GameGateway {
         }
         this.saveAllData(client, direction, null, ball);
     }
+    randomNumberBetween(min, max) {
+        return Math.random() * (max - min) + min;
+    }
     resetBall(client) {
         let direction = client.data.direction;
         const ball = client.data.posBall;
@@ -188,11 +195,10 @@ let GameGateway = class GameGateway {
         ball.y = 400;
         direction = { x: 0 };
         while (Math.abs(direction.x) <= 0.2 || Math.abs(direction.x) >= 0.9) {
-            if (match.scoreFirstPlayer >= match.scoreSecondPlayer)
-                direction = { x: 0.45312, y: 0.6291837 };
-            else
-                direction = { x: -0.45312, y: -0.6291837 };
+            const heading = this.randomNumberBetween(0, 2 * Math.PI);
+            direction = { x: Math.cos(heading), y: Math.sin(heading) };
         }
+        this.emitGame(client.data, 'reset');
     }
     async gamecontrol(client, message) {
         try {
@@ -218,6 +224,15 @@ let GameGateway = class GameGateway {
             client.data.posPlayer.pTwo = pTwo;
         }
         catch (_a) { }
+    }
+    x(client) {
+        this.emitGame(client.data, "reset");
+    }
+    emitAdd1(client) {
+        this.emitGame(client.data, "add1");
+    }
+    emitAdd2(client) {
+        this.emitGame(client.data, "add2");
     }
     emitGame(player, event, ...args) {
         try {
