@@ -22,7 +22,7 @@
           overlap
           class="mr-4"
         >
-          <v-avatar><v-img :src="user.avatar" /></v-avatar>
+          <v-avatar><v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar" /></v-avatar>
         </v-badge>
         <v-btn @click="changeUser(user)">
           {{ user.display_name }}
