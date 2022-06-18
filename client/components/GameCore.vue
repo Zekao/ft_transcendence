@@ -103,8 +103,10 @@ export default V.extend({
           }
           })
         this.socket.on('action', (data) => {
-            if (data === "RESET")
+            if (data === "RESET") {
               this.resetBall();
+              this.velocity.speed = 0.00005;
+            }
         })
           setInterval(this.updateContent, 17);
       }

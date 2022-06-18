@@ -237,6 +237,19 @@ export class GameGateway
     } catch {}
   }
 
+  emitReset(client: Socket) {
+    this.emitGame(client.data, "reset");
+  }
+
+  emitAdd1(client: Socket) {
+    this.emitGame(client.data, "add1");
+  }
+
+
+  emitAdd2(client: Socket) {
+    this.emitGame(client.data, "add2");
+  }
+
   emitGame(player: any, event: string, ...args: any): void {
     try {
       if (!player.user) return;
