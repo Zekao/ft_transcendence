@@ -37,6 +37,7 @@ let ChannelsGateway = class ChannelsGateway {
         const channel = client.data.channel;
         const user = message[2];
         const time = message[3];
+        console.log(user);
         try {
             const completeMessage = " is mute for " + time + " minute.";
             await this.channelService.addUserToMuted(client.data.user.id, channel.id, {

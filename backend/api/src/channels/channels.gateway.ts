@@ -46,6 +46,7 @@ export class ChannelsGateway
     const user: string = message[2];
     const time = message[3];
 
+    console.log(user);
     try {
       const completeMessage = " is mute for " + time + " minute.";
       await this.channelService.addUserToMuted(
@@ -267,8 +268,7 @@ export class ChannelsGateway
         }
         this.emitChannel(client.data, "channel", login, message[1]);
       } else if (message[0] === "action") {
-        if (message[1] === "logout")
-          this.deletePlayerMember(client);
+        if (message[1] === "logout") this.deletePlayerMember(client);
         if (message[1] === "mute") {
           this.mutePlayer(client, message);
         } else if (message[1] === "unmute") {
