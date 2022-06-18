@@ -221,6 +221,8 @@ let UsersService = class UsersService {
             rank: 0,
             ratio: 1,
             First_time: true,
+            color: 0xffffff,
+            backgroundColor: 0x808080,
             avatar: "default.png" + "?" + new Date().getTime(),
         });
         try {

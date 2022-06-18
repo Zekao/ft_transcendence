@@ -18,8 +18,8 @@ export declare class User {
     loose: number;
     rank: number;
     ratio: number;
-    color: string;
-    backgroundColor: string;
+    color: number;
+    backgroundColor: number;
     matchs: Matchs[];
     friends: User[];
     blockedUsers: User[];
