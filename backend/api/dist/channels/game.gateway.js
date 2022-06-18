@@ -76,7 +76,7 @@ let GameGateway = class GameGateway {
             client.disconnect();
         }
         else if (message == "updateBall" &&
-            user.user_name === match.FirstPlayer.user_name)
+            user.user_name === match.SecondPlayer.user_name)
             this.updateBall(client);
     }
     async updateBall(client) {
@@ -102,6 +102,7 @@ let GameGateway = class GameGateway {
         this.saveAllData(client, direction, velocity, ball);
         this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
         this.collisionDetect(client);
+        this.saveAllData(client, direction, velocity, ball);
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
                 this.emitGame(client.data, "gameAction", "FINISH");
@@ -160,18 +161,17 @@ let GameGateway = class GameGateway {
         const ball = client.data.posBall;
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
-        console.log("pONE: ", pOne, "ball", ball);
-        if (ball.x + ball.radius >= pOne.x &&
-            ball.x - ball.radius <= pOne.x + 20 &&
-            ball.y + ball.radius >= pOne.y &&
-            ball.y - ball.radius <= pOne.y + 120) {
+        if (ball.x + ball.rad >= pOne.x &&
+            ball.x - ball.rad <= pOne.x + 20 &&
+            ball.y + ball.rad >= pOne.y &&
+            ball.y - ball.rad <= pOne.y + 120) {
             ball.x += 4;
             direction.x = -direction.x;
         }
-        else if (ball.x + ball.radius >= pTwo.x &&
-            ball.x - ball.radius <= pTwo.x + 20 &&
-            ball.y + ball.radius >= pTwo.y &&
-            ball.y - ball.radius <= pTwo.y + 120) {
+        else if (ball.x + ball.rad >= pTwo.x &&
+            ball.x - ball.rad <= pTwo.x + 20 &&
+            ball.y + ball.rad >= pTwo.y &&
+            ball.y - ball.rad <= pTwo.y + 120) {
             ball.x -= 4;
             direction.x = -direction.x;
         }
@@ -258,7 +258,7 @@ let GameGateway = class GameGateway {
         client.data.match = match;
         client.data.game = client.handshake.auth.game;
         client.data.posPlayerOne = { x: 0, y: 250 };
-        client.data.posPlayerTwo = { x: 0, y: 250 };
+        client.data.posPlayerTwo = { x: 850, y: 250 };
         client.data.posBall = { x: 420, y: 400, rad: 10 };
         client.data.direction = { x: 1, y: 1 };
         client.data.velocity = 0.00005;

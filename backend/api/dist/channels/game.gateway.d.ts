@@ -16,7 +16,10 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     emitReady(player: any, event: string, ...args: any): void;
     GameAction(client: Socket, message: string): Promise<void>;
     updateBall(client: Socket): Promise<void>;
-    saveAllData(client: Socket, direction: number, velocity: number, ball: {
+    saveAllData(client: Socket, direction: {
+        x: number;
+        y: number;
+    }, velocity: number, ball: {
         x: number;
         y: number;
     }): void;
