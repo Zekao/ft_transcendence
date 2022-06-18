@@ -66,18 +66,18 @@ export default Vue.extend({
   data: () => ({
    // match: {} as IMatch,
    match: {
-    id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e', 
+    id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
     FirstPlayer: {
-      display_name: 'lusehair', 
+      display_name: 'lusehair',
       avatar: 'default.png'
-    }, 
+    },
     SecondPlayer: {
-      display_name: 'gamarcha', 
+      display_name: 'gamarcha',
       avatar: 'default.png'
-    }, 
+    },
     scoreFirstPlayer: 7,
     scoreSecondPlayer: 4,
-    winner: null, 
+    winner: null,
     status: 'ENDED'
    }
   }),
@@ -129,14 +129,14 @@ export default Vue.extend({
     getAvatarOne() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.FirstPlayer?.avatar
+        this.match.FirstPlayer?.avatar || 'default.png'
       )
     },
 
     getAvatarTwo() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.SecondPlayer?.avatar
+        this.match.SecondPlayer?.avatar || 'default.png'
       )
     },
   },
