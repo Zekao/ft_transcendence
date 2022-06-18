@@ -205,6 +205,7 @@ export default Vue.extend({
     channelNameRules: [
       (v: string) => !!v || 'Name is required',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
+      (v: string) => v.match(/^[a-zA-Z]/) !== null || 'Name must start with a letter',
     ],
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
