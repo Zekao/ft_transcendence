@@ -23,6 +23,9 @@ export const mutations: MutationTree<ChannelState> = {
   FETCH: (state, channels: IChannel[]) => {
     state.channels = channels
   },
+  CREATE_AUTH: (state, channel: IChannel) => {
+    state.authUserChannels.push(channel)
+  },
   CREATE: (state, channel: IChannel) => {
     state.channels.push(channel)
   },
@@ -58,7 +61,8 @@ export const actions: ActionTree<ChannelState, RootState> = {
   async create({ commit }, channel: IChannel) {
     try {
       const res = await this.$axios.$post(`/channel/create`, channel)
-      commit('CREATE', res)
+      if (channel.status === 'PRIVATE') commit('CREATE_AUTH', res)
+      else commit('CREATE', res)
       return res
     } catch (err) {
       throw err

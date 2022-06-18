@@ -17,6 +17,8 @@ export interface IUser {
   loose: number
   rank: number
   ratio: number
+  color: string
+  backgroundColor: string
 }
 
 export const state = () => ({
