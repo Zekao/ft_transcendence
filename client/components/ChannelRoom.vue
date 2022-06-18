@@ -394,7 +394,7 @@ export default Vue.extend({
     async fetchMuted() {
       try {
         const res = await this.$axios.$get(
-          `/channel/${this.channel.id}/members?role=mute`
+          `/channel/${this.channel.id}/members?role=muted`
         )
         this.muted = res
       } catch (err) {
