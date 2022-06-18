@@ -58,7 +58,6 @@ export class ChannelsDto {
   @IsString()
   @MinLength(2)
   @MaxLength(24)
-  @Matches("^[a-zA-Z0-9]+$")
   @ApiProperty()
   name: string;
 
