@@ -67,6 +67,7 @@ let GameGateway = class GameGateway {
     }
     async GameAction(client, message) {
         const match = client.data.match;
+        const user = client.data.user;
         if (message == "FINISH") {
             console.log("GAME IS FINISH");
             match.status = matchs_enum_1.MatchStatus.ENDED;
@@ -74,7 +75,8 @@ let GameGateway = class GameGateway {
             client.data.match = null;
             client.disconnect();
         }
-        else if (message == "updateBall")
+        else if (message == "updateBall" &&
+            user.user_name === match.FirstPlayer.user_name)
             this.updateBall(client);
     }
     async updateBall(client) {

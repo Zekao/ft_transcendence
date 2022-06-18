@@ -78,6 +78,7 @@ export class GameGateway
   @SubscribeMessage("gameAction")
   async GameAction(client: Socket, message: string): Promise<void> {
     const match: Matchs = client.data.match;
+    const user = client.data.user;
 
     if (message == "FINISH") {
       console.log("GAME IS FINISH");
@@ -85,7 +86,11 @@ export class GameGateway
       this.matchService.saveMatch(match);
       client.data.match = null;
       client.disconnect();
-    } else if (message == "updateBall") this.updateBall(client);
+    } else if (
+      message == "updateBall" &&
+      user.user_name === match.FirstPlayer.user_name
+    )
+      this.updateBall(client);
   }
 
   async updateBall(client: Socket): Promise<void> {
@@ -119,19 +124,19 @@ export class GameGateway
     this.collisionDetect(client);
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
-        this.emitGame(client.data, "gameAction", "FINISH"); // EMIT FINISH GAME
+        this.emitGame(client.data, "gameAction", "FINISH");
       } else {
         velocity = 0.00005;
-        this.matchService.addOnePointToPlayer(match, "TWO"); // EMIT TO ADD POINT IN FRONT
+        this.matchService.addOnePointToPlayer(match, "TWO");
         this.emitGame(client.data, "gameAction", "addTwo");
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
-        this.emitGame(client.data, "gameAction", "FINISH"); // EMIT FINISH GAME
+        this.emitGame(client.data, "gameAction", "FINISH");
       } else {
         velocity = 0.00005;
-        this.matchService.addOnePointToPlayer(match, "ONE"); // EMIT TO ADD POINT IN FRONT
+        this.matchService.addOnePointToPlayer(match, "ONE");
         this.emitGame(client.data, "gameAction", "addOne");
         this.resetBall(client);
       }
