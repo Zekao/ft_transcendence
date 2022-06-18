@@ -76,7 +76,7 @@ let GameGateway = class GameGateway {
             client.disconnect();
         }
         else if (message == "updateBall" &&
-            user.user_name === match.FirstPlayer.user_name)
+            user.user_name === match.SecondPlayer.user_name)
             this.updateBall(client);
     }
     async updateBall(client) {
@@ -103,6 +103,7 @@ let GameGateway = class GameGateway {
         this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
         this.collisionDetect(client);
         ball = client.data.posBall;
+        console.log("BALLL: ", ball, "pTWO: ", pTwo);
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
                 this.emitGame(client.data, "gameAction", "FINISH");
@@ -229,16 +230,16 @@ let GameGateway = class GameGateway {
         catch (_a) { }
     }
     async handleDisconnect(client) {
-        const waiting = client.data.waiting;
         const user = client.data.user;
         try {
             if (client.data.match &&
                 client.data.match.status === matchs_enum_1.MatchStatus.PENDING) {
                 await this.matchService.deleteMatch(client.data.match.id);
             }
-            if (user || waiting) {
+            if (user) {
                 user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
                 this.userService.saveUser(user);
+                this.emitGame(client.data, "notification", "outgame", client.data.user.id);
             }
         }
         catch (err) { }

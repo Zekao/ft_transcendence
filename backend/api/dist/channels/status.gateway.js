@@ -67,6 +67,7 @@ let StatusGateway = class StatusGateway {
         if (client.data.user) {
             const user = await this.userService.getUserId(client.data.user.id);
             user.status = users_enum_1.UserStatus.OFFLINE;
+            this.emitNotif(client.data, "notification", "disconnect", client.data.user.id);
             this.userService.saveUser(user);
         }
         this.logger.log(`Client disconnected: ${client.id}`);
@@ -74,6 +75,7 @@ let StatusGateway = class StatusGateway {
     isStatus(client, user) {
         user.status = users_enum_1.UserStatus.ONLINE;
         this.userService.saveUser(user);
+        this.emitNotif(client.data, "notification", "connect", client.data.user.id);
         this.logger.log(`Client connected: ${client.id}`);
         return true;
     }
