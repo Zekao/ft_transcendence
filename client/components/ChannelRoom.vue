@@ -118,15 +118,15 @@
           >
             <v-list-item-content>
               <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-                <v-btn small class="mr-2" @click="changeUser(message.login)">{{
-                  message.login
+                <v-btn small class="mr-2" @click="changeUser(message.id)">{{
+                  getUser(message.id).display_name
                 }}</v-btn>
                 <v-btn
                   v-if="isAuthUserOwner"
                   x-small
                   icon
                   class="mr-2"
-                  @click="setAdmin(message.login)"
+                  @click="setAdmin(getUser(message.id).display_name)"
                 >
                   <v-icon>mdi-account-supervisor</v-icon>
                 </v-btn>
@@ -136,7 +136,7 @@
                   x-small
                   icon
                   class="mr-2"
-                  @click="setBan(message.login)"
+                  @click="setBan(getUser(message.id).display_name)"
                 >
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -145,7 +145,7 @@
                   v-if="isAuthUserAdmin"
                   x-small
                   icon
-                  @click="setMute(message.login)"
+                  @click="setMute(getUser(message.id).display_name)"
                 >
                   <v-icon>mdi-volume-off</v-icon>
                 </v-btn>
@@ -195,7 +195,7 @@ export default Vue.extend({
     password: '',
     newPassword: '',
     messageText: '',
-    messages: [] as { login: string; message: string }[],
+    messages: [] as { userID: string; message: string }[],
     owner: {} as IUser,
     admins: [] as IUser[],
     banned: [] as IUser[],
@@ -273,8 +273,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('channel', (login, message) => {
-      this.messages.push({ login, message })
+    this.socket.on('channel', (userID, message) => {
+      this.messages.push({ userID, message })
       this.$nextTick(() => {
         this.scrollToBottom()
       })
@@ -401,14 +401,14 @@ export default Vue.extend({
         this.muted = []
       }
     },
-    getUser(displayName: string): IUser {
+    getUser(userID: string): IUser {
       return (
-        this.users.find((el) => el.display_name === displayName) ||
+        this.users.find((el) => el.id === userID) ||
         ({} as IUser)
       )
     },
-    changeUser(displayName: string) {
-      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+    changeUser(userID: string) {
+      this.$store.commit('SELECTED_USER', this.getUser(userID))
       this.value = true
     },
   },

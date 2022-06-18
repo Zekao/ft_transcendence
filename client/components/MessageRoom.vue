@@ -10,8 +10,8 @@
         >
           <v-list-item-content>
             <v-list-item-title class="d-flex d-flex-column align-center mb-1">
-              <v-btn class="mr-2" @click="changeUser(message.login)">{{
-                message.login
+              <v-btn class="mr-2" @click="changeUser(message.id)">{{
+                getUser(message.id).display_name
               }}</v-btn>
             </v-list-item-title>
             <v-list-item-subtitle class="text-right">{{
@@ -50,7 +50,7 @@ export default Vue.extend({
 
   data: () => ({
     messageText: '',
-    messages: [] as { login: string; message: string }[],
+    messages: [] as { userID: string; message: string }[],
     socket: null as NuxtSocket | null,
   }),
 
@@ -93,8 +93,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('msg', (login, message) => {
-      this.messages.push({ login, message })
+    this.socket.on('msg', (userID, message) => {
+      this.messages.push({ userID, message })
       this.$nextTick(() => {
         this.scrollToBottom()
       })
@@ -116,14 +116,14 @@ export default Vue.extend({
       const container = this.$el.querySelector('#' + this.user.display_name)
       if (container !== null) container.scrollTop = container.scrollHeight
     },
-    getUser(displayName: string): IUser {
+    getUser(userID: string): IUser {
       return (
-        this.users.find((el) => el.display_name === displayName) ||
+        this.users.find((el) => el.id === userID) ||
         ({} as IUser)
       )
     },
-    changeUser(displayName: string) {
-      this.$store.commit('SELECTED_USER', this.getUser(displayName))
+    changeUser(userID: string) {
+      this.$store.commit('SELECTED_USER', this.getUser(userID))
       this.value = true
     },
   },
