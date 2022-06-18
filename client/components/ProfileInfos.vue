@@ -43,21 +43,17 @@
       <v-list-item>
         <v-menu :close-on-content-click="false">
           <template #activator="{ on }">
-            <v-btn class="mr-2" v-on="on">
-              Player color
-            </v-btn>
+            <v-btn class="mr-2" v-on="on"> Player color </v-btn>
           </template>
           <v-color-picker v-model="color"></v-color-picker>
         </v-menu>
         <v-btn icon @click="updateColor">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-spacer/>
+        <v-spacer />
         <v-menu :close-on-content-click="false">
           <template #activator="{ on }">
-            <v-btn v-on="on">
-              Game color
-            </v-btn>
+            <v-btn v-on="on"> Game color </v-btn>
           </template>
           <v-color-picker v-model="backgroundColor"></v-color-picker>
         </v-menu>
@@ -117,7 +113,9 @@ export default Vue.extend({
       (v: string) => !!v || 'Login is required',
       (v: string) => v.length > 3 || 'Login must be more than 3 characters',
       (v: string) => v.length <= 24 || 'Login must be less than 24 characters',
-      (v: string) => v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null || 'Login must contain valid characters',
+      (v: string) =>
+        v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null ||
+        'Login must contain valid characters',
     ],
   }),
 

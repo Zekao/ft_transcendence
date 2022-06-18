@@ -40,11 +40,21 @@
               overlap
             >
               <v-avatar>
-                <v-img :src="'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar" />
+                <v-img
+                  :src="
+                    'https://ft.localhost:4500/api/image/' +
+                    match.FirstPlayer.avatar
+                  "
+                />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-               <v-img :src="'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar" />
+              <v-img
+                :src="
+                  'https://ft.localhost:4500/api/image/' +
+                  match.FirstPlayer.avatar
+                "
+              />
             </v-avatar>
             <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
           </v-list-item-action>
@@ -59,11 +69,21 @@
               overlap
             >
               <v-avatar>
-                 <v-img :src="'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar" />
+                <v-img
+                  :src="
+                    'https://ft.localhost:4500/api/image/' +
+                    match.SecondPlayer.avatar
+                  "
+                />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-                <v-img :src="'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar" />
+              <v-img
+                :src="
+                  'https://ft.localhost:4500/api/image/' +
+                  match.SecondPlayer.avatar
+                "
+              />
             </v-avatar>
             <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
           </v-list-item-action>

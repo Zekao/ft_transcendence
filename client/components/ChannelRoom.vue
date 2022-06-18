@@ -15,55 +15,55 @@
     <v-sheet v-else width="100%">
       <v-toolbar v-if="isAuthUserAdmin" class="d-flex justify-center">
         <template v-if="channel.status !== 'PRIVATE'">
-        <v-menu v-if="isAuthUserOwner" :close-on-content-click="false">
-          <template #activator="{ on }">
-            <v-btn small icon class="mr-2" v-on="on">
-              <v-icon>mdi-lock</v-icon>
-            </v-btn>
-          </template>
-          <v-card class="d-flex flex-column justify-center">
-            <v-form v-model="valid">
-              <v-text-field
-                v-model="newPassword"
-                :rules="passwordRules"
-                :counter="24"
-                label="Password"
-                dense
-                outlined
-                class="ma-2"
-              ></v-text-field>
-              <v-btn :disabled="!valid" class="ma-2" @click="changePassword">
-                Change password
+          <v-menu v-if="isAuthUserOwner" :close-on-content-click="false">
+            <template #activator="{ on }">
+              <v-btn small icon class="mr-2" v-on="on">
+                <v-icon>mdi-lock</v-icon>
               </v-btn>
-              <v-btn :disabled="!valid" class="ma-2" @click="updatePassword">
-                {{ channel.status === 'PROTECTED' ? 'Disable' : 'Enable' }}
-              </v-btn>
-            </v-form>
-          </v-card>
-        </v-menu>
+            </template>
+            <v-card class="d-flex flex-column justify-center">
+              <v-form v-model="valid">
+                <v-text-field
+                  v-model="newPassword"
+                  :rules="passwordRules"
+                  :counter="24"
+                  label="Password"
+                  dense
+                  outlined
+                  class="ma-2"
+                ></v-text-field>
+                <v-btn :disabled="!valid" class="ma-2" @click="changePassword">
+                  Change password
+                </v-btn>
+                <v-btn :disabled="!valid" class="ma-2" @click="updatePassword">
+                  {{ channel.status === 'PROTECTED' ? 'Disable' : 'Enable' }}
+                </v-btn>
+              </v-form>
+            </v-card>
+          </v-menu>
         </template>
         <template v-else>
-        <v-menu :close-on-content-click="false">
-          <template #activator="{ on }">
-            <v-btn small icon class="mr-2" v-on="on">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <v-card class="d-flex flex-column justify-center">
-            <v-form v-model="valid">
-              <v-text-field
-                v-model="newUser"
-                label="Login"
-                dense
-                outlined
-                class="ma-2"
-              ></v-text-field>
-              <v-btn :disabled="!valid" class="ma-2" @click="addUser">
-                Add
+          <v-menu :close-on-content-click="false">
+            <template #activator="{ on }">
+              <v-btn small icon class="mr-2" v-on="on">
+                <v-icon>mdi-plus</v-icon>
               </v-btn>
-            </v-form>
-          </v-card>
-        </v-menu>
+            </template>
+            <v-card class="d-flex flex-column justify-center">
+              <v-form v-model="valid">
+                <v-text-field
+                  v-model="newUser"
+                  label="Login"
+                  dense
+                  outlined
+                  class="ma-2"
+                ></v-text-field>
+                <v-btn :disabled="!valid" class="ma-2" @click="addUser">
+                  Add
+                </v-btn>
+              </v-form>
+            </v-card>
+          </v-menu>
         </template>
         <v-menu v-if="isAuthUserOwner">
           <template #activator="{ on }">
@@ -353,13 +353,15 @@ export default Vue.extend({
       }
     },
     async addUser() {
-      const user = this.users.find(el => el.display_name === this.newUser)
+      const user = this.users.find((el) => el.display_name === this.newUser)
       if (!user) {
         this.newUser = ''
         return
       }
       try {
-        await this.$axios.$post(`/channel/${this.channel.id}/members?user=${user.id}`)
+        await this.$axios.$post(
+          `/channel/${this.channel.id}/members?user=${user.id}`
+        )
       } catch (err) {
         this.newUser = ''
       }
@@ -382,7 +384,7 @@ export default Vue.extend({
       if (this.socket) {
         this.socket.emit('channel', 'action', 'login')
         const history = await this.$axios.$get(
-        `/channel/${this.channel.id}/history`
+          `/channel/${this.channel.id}/history`
         )
         this.messages = history.length
           ? [...history.map((el: string) => JSON.parse(el))]
@@ -464,10 +466,7 @@ export default Vue.extend({
       }
     },
     getUser(id: string): IUser {
-      return (
-        this.users.find((el) => el.id === id) ||
-        ({} as IUser)
-      )
+      return this.users.find((el) => el.id === id) || ({} as IUser)
     },
     changeUser(id: string) {
       this.$store.commit('SELECTED_USER', this.getUser(id))

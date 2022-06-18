@@ -205,7 +205,9 @@ export default Vue.extend({
     channelNameRules: [
       (v: string) => !!v || 'Name is required',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
-      (v: string) => v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null || 'Name must contain valid characters',
+      (v: string) =>
+        v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null ||
+        'Name must contain valid characters',
     ],
     channelStatusRules: [(v: string) => !!v || 'Channel status is required'],
     channelPasswordRules: [
@@ -239,14 +241,17 @@ export default Vue.extend({
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
       accessToken: (state: any): string => state.token.accessToken,
       channels: (state: any): IChannel[] => state.channel.channels,
-      channelsPrivate: (state: any): IChannel[] => state.channel.authUserChannels,
+      channelsPrivate: (state: any): IChannel[] =>
+        state.channel.authUserChannels,
       users: (state: any): IUser[] => state.user.users,
     }),
     authUserBlockedIds(): string[] {
-      return this.authUserBlocked.map(el => el.id)
+      return this.authUserBlocked.map((el) => el.id)
     },
     usersFiltered(): IUser[] {
-      return this.users.filter((el) => el.id !== this.id && !this.authUserBlockedIds.includes(el.id))
+      return this.users.filter(
+        (el) => el.id !== this.id && !this.authUserBlockedIds.includes(el.id)
+      )
     },
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar

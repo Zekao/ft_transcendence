@@ -14,13 +14,13 @@
             overlap
           >
             <v-avatar>
-              <v-img src=getAvatarTwo() />
+              <v-img src="getAvatarTwo()" />
             </v-avatar>
           </v-badge>
           <v-avatar v-else>
-            <v-img src=getAvatarOne() />
+            <v-img src="getAvatarOne()" />
           </v-avatar>
-          <v-btn> {{getPlayerOne()}}   {{getScoreOne()}}</v-btn>
+          <v-btn> {{ getPlayerOne() }} {{ getScoreOne() }}</v-btn>
         </v-list-item-action>
         <v-list-item-content class="justify-center">
           <!-- {{ getPlayerOne() }} - {{ getPlayerTwo() }} -->
@@ -39,7 +39,7 @@
           <v-avatar v-else>
             <v-img src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{getScoreTwo()}}   {{getPlayerTwo() }} </v-btn>
+          <v-btn> {{ getScoreTwo() }} {{ getPlayerTwo() }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -64,22 +64,22 @@ export default Vue.extend({
   name: 'GameResult',
 
   data: () => ({
-   // match: {} as IMatch,
-   match: {
-    id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-    FirstPlayer: {
-      display_name: 'lusehair',
-      avatar: 'default.png'
+    // match: {} as IMatch,
+    match: {
+      id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
+      FirstPlayer: {
+        display_name: 'lusehair',
+        avatar: 'default.png',
+      },
+      SecondPlayer: {
+        display_name: 'gamarcha',
+        avatar: 'default.png',
+      },
+      scoreFirstPlayer: 7,
+      scoreSecondPlayer: 4,
+      winner: null,
+      status: 'ENDED',
     },
-    SecondPlayer: {
-      display_name: 'gamarcha',
-      avatar: 'default.png'
-    },
-    scoreFirstPlayer: 7,
-    scoreSecondPlayer: 4,
-    winner: null,
-    status: 'ENDED'
-   }
   }),
 
   computed: {
@@ -130,14 +130,14 @@ export default Vue.extend({
     getAvatarOne() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.FirstPlayer?.avatar || 'default.png'
+          this.match.FirstPlayer?.avatar || 'default.png'
       )
     },
 
     getAvatarTwo() {
       return (
         'https://ft.localhost:4500/api/image/' +
-        this.match.SecondPlayer?.avatar || 'default.png'
+          this.match.SecondPlayer?.avatar || 'default.png'
       )
     },
   },

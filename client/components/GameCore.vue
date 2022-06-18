@@ -22,15 +22,15 @@ export default V.extend({
     context: {} as any, // canvas context
     score: {
       player1: 0,
-      player2: 0
+      player2: 0,
     },
     position: {
       x: 0,
-      y: 250
+      y: 250,
     },
     position2: {
       x: 850,
-      y: 250
+      y: 250,
     },
     ball: {
       x: 420,
@@ -39,34 +39,43 @@ export default V.extend({
     },
     direction: {
       x: 1,
-      y: 1
+      y: 1,
     },
-    velocity:
-    {
+    velocity: {
       speed: 0.00005,
-    }
+    },
   }),
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       selectedMatchId: (state: any) => state.selectedMatchId,
     }),
-    height () {
-    switch (this.$vuetify.breakpoint.name) {
-      case 'xs': return 120
-      case 'sm': return 720
-      case 'md': return 720
-      case 'lg': return 720
-      case 'xl': return 720
+    height() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 120
+        case 'sm':
+          return 720
+        case 'md':
+          return 720
+        case 'lg':
+          return 720
+        case 'xl':
+          return 720
       }
     },
-     width () {
-    switch (this.$vuetify.breakpoint.name) {
-      case 'xs': return 580
-      case 'sm': return 580
-      case 'md': return 580
-      case 'lg': return 580
-      case 'xl': return 580
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 580
+        case 'sm':
+          return 580
+        case 'md':
+          return 580
+        case 'lg':
+          return 580
+        case 'xl':
+          return 580
       }
     },
   },
@@ -74,106 +83,109 @@ export default V.extend({
     selectedMatchId(value: string) {
       if (value) {
         this.socket = this.$nuxtSocket({
-         channel: '/game',
-         auth: {
-           Authorization: this.accessToken,
-           game: this.selectedMatchId,
-         },
-         path: '/api/socket.io/',
-       } as any)
+          channel: '/game',
+          auth: {
+            Authorization: this.accessToken,
+            game: this.selectedMatchId,
+          },
+          path: '/api/socket.io/',
+        } as any)
         this.socket.on('move', (data, boolplayer) => {
           if (boolplayer === 1) {
-            if (this.position.y !== data)
-                this.position.y = data;
+            if (this.position.y !== data) this.position.y = data
             if (this.score.player1 >= 5) {
-                 this.context.clearRect(0, 0, 1080, 1920);
-                 this.$emit('next')
+              this.context.clearRect(0, 0, 1080, 1920)
+              this.$emit('next')
             }
           } else if (boolplayer === 2) {
-              if (this.position2.y !== data)
-                  this.position2.y = data;
-              else if (this.score.player2 >= 5) {
-                  this.context.clearRect(0, 0, 1080, 1920);
-                  this.$emit('next')
-              }
-          }
-        }),
-        this.socket.on('gameAction', (data, x, y) => {
-          if (data === "moveBall")
-          {
-            this.ball.x = x;
-            this.ball.y = y;
-            this.moveBall();
-          }
-          else if (data === "FINISH") {
-              this.endGame();
+            if (this.position2.y !== data) this.position2.y = data
+            else if (this.score.player2 >= 5) {
+              this.context.clearRect(0, 0, 1080, 1920)
               this.$emit('next')
+            }
           }
-          else if (data === "addOne")
-              this.score.player1 += 1;
-          else if (data === "addTwo")
-            this.score.player2 += 1;
         }),
-        setInterval(this.updateContent, 17);
+          this.socket.on('gameAction', (data, x, y) => {
+            if (data === 'moveBall') {
+              this.ball.x = x
+              this.ball.y = y
+              this.moveBall()
+            } else if (data === 'FINISH') {
+              this.endGame()
+              this.$emit('next')
+            } else if (data === 'addOne') this.score.player1 += 1
+            else if (data === 'addTwo') this.score.player2 += 1
+          }),
+          setInterval(this.updateContent, 17)
       }
-    }
+    },
   },
   mounted() {
     this.context = (this.$refs.game as any).getContext('2d')
-    this.context.clearRect(0, 0, 1080, 1920);
+    this.context.clearRect(0, 0, 1080, 1920)
   },
-      shortcuts: {
-        keydown (event) {
-          if (event.key === 'w' && (this.position.y >= 13 || this.position2.y >= 13))
-            this.move('up');
-          else if (event.key === 's' && (this.position.y <= 585 || this.position2.y <= 585))
-              this.move('down');
-          return false // stop alias calling
-        },
-        cancel () {
-            // a utiliser si un joueur deco mais je le fais plus tard la je vais rompich ++
-            return false // stop propagation
-        },
-      },
-       methods: {
-        updateContent( ) {
-            this.context.clearRect(0, 0, 1080, 1920);
-            this.context.fillStyle = "white";
-            this.context.font = "30px Arial";
-            this.context.fillText(this.score.player1, 370, 50);
-            this.context.fillRect(420, 0, 3, 1000);
-            this.context.fillText(this.score.player2, 460, 50);
-            this.context.fillStyle = "grey";
-            this.context.fillRect(this.position.x, this.position.y, 20, 120);
-            this.context.fillRect(this.position2.x, this.position2.y, 20, 120);
-            if (this.socket)
-              this.socket.emit("gameAction", "updateBall");
-        },
-        // fonction de mouvement de la balle
-        clearCircle( x: number , y: number , r: number ) {
-          for( let i = 0 ; i < Math.round( Math.PI * r ) ; i++ ){
-              const angle = ( i / Math.round( Math.PI * r )) * 360;
-              this.context.clearRect( x , y , Math.sin( angle * ( Math.PI / 180 )) * r , Math.cos( angle * ( Math.PI / 180 )) * r );
-          }
-        },
-        endGame() {
-          this.context.clearRect(0, 0, 1080, 1920);
-          this.clearCircle(this.ball.x, this.ball.y, this.ball.radius);
-          this.context.font = "30px Arial";
-          this.context.fillText("THE GAME IS FINISHED", 370, 50);
-        },
-        moveBall() {
-            this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI); // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
-            this.context.fill();
-            this.context.restore();
-            this.context.closePath();
-            this.context.beginPath();
-        },
-        move(direction: string) {
-          if (this.socket) this.socket.emit("move", direction);
-        }
+  shortcuts: {
+    keydown(event) {
+      if (
+        event.key === 'w' &&
+        (this.position.y >= 13 || this.position2.y >= 13)
+      )
+        this.move('up')
+      else if (
+        event.key === 's' &&
+        (this.position.y <= 585 || this.position2.y <= 585)
+      )
+        this.move('down')
+      return false // stop alias calling
+    },
+    cancel() {
+      // a utiliser si un joueur deco mais je le fais plus tard la je vais rompich ++
+      return false // stop propagation
+    },
+  },
+  methods: {
+    updateContent() {
+      this.context.clearRect(0, 0, 1080, 1920)
+      this.context.fillStyle = 'white'
+      this.context.font = '30px Arial'
+      this.context.fillText(this.score.player1, 370, 50)
+      this.context.fillRect(420, 0, 3, 1000)
+      this.context.fillText(this.score.player2, 460, 50)
+      this.context.fillStyle = 'grey'
+      this.context.fillRect(this.position.x, this.position.y, 20, 120)
+      this.context.fillRect(this.position2.x, this.position2.y, 20, 120)
+      if (this.socket) this.socket.emit('gameAction', 'updateBall')
+    },
+    // fonction de mouvement de la balle
+    clearCircle(x: number, y: number, r: number) {
+      for (let i = 0; i < Math.round(Math.PI * r); i++) {
+        const angle = (i / Math.round(Math.PI * r)) * 360
+        this.context.clearRect(
+          x,
+          y,
+          Math.sin(angle * (Math.PI / 180)) * r,
+          Math.cos(angle * (Math.PI / 180)) * r
+        )
       }
-  })
+    },
+    endGame() {
+      this.context.clearRect(0, 0, 1080, 1920)
+      this.clearCircle(this.ball.x, this.ball.y, this.ball.radius)
+      this.context.font = '30px Arial'
+      this.context.fillText('THE GAME IS FINISHED', 370, 50)
+    },
+    moveBall() {
+      this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI) // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
+      this.context.fill()
+      this.context.restore()
+      this.context.closePath()
+      this.context.beginPath()
+    },
+    move(direction: string) {
+      if (this.socket) this.socket.emit('move', direction)
+    },
+  },
+})
 </script>
 
 <style scoped></style>

@@ -18,7 +18,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="!isMe"  class="justify-center">
+      <v-list-item v-if="!isMe" class="justify-center">
         <v-list-item-content> </v-list-item-content>
         <v-btn
           :disabled="friend.status !== 'ONLINE'"
@@ -90,7 +90,7 @@ export default Vue.extend({
     //     console.log(this.authUser)
     //     this.friend = this.authUser
     //   }
-   // },
+    // },
     // function who return true if friend id is the same as userID or false if not
     isMe(): boolean {
       // this.ImaGhost
@@ -120,7 +120,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-   this.socket = this.$nuxtSocket({
+    this.socket = this.$nuxtSocket({
       auth: {
         Authorization: this.accessToken,
       },

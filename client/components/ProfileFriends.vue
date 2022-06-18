@@ -17,12 +17,10 @@
     </v-list>
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i" class="my-2">
-        <v-badge
-          :color="colorStatus(user)"
-          overlap
-          class="mr-4"
-        >
-          <v-avatar><v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar" /></v-avatar>
+        <v-badge :color="colorStatus(user)" overlap class="mr-4">
+          <v-avatar
+            ><v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar"
+          /></v-avatar>
         </v-badge>
         <v-btn @click="changeUser(user)">
           {{ user.display_name }}
@@ -69,23 +67,17 @@ export default Vue.extend({
     changeUser(user: IUser) {
       this.$store.commit('SELECTED_USER', user)
       this.value = true
-    }, 
+    },
 
-    colorStatus(user: IUser)
-    {
-      if(user.in_game === 'IN_GAME' && user.status === 'ONLINE')
-      {
+    colorStatus(user: IUser) {
+      if (user.in_game === 'IN_GAME' && user.status === 'ONLINE') {
         return 'blue'
-      }
-      else if(user.status === 'ONLINE')
-      {
+      } else if (user.status === 'ONLINE') {
         return 'green'
-      }
-      else
-      {
+      } else {
         return 'red'
       }
-    }
+    },
   },
 })
 </script>

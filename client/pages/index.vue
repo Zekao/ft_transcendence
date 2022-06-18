@@ -39,7 +39,7 @@ export default Vue.extend({
         this.$store.commit('SET_VALUE', value)
       },
     },
-  }
+  },
 })
 </script>
 

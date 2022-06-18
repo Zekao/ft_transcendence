@@ -117,10 +117,7 @@ export default Vue.extend({
       if (container !== null) container.scrollTop = container.scrollHeight
     },
     getUser(id: string): IUser {
-      return (
-        this.users.find((el) => el.id === id) ||
-        ({} as IUser)
-      )
+      return this.users.find((el) => el.id === id) || ({} as IUser)
     },
     changeUser(id: string) {
       this.$store.commit('SELECTED_USER', this.getUser(id))
