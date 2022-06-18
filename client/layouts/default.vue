@@ -288,8 +288,7 @@ export default Vue.extend({
       this.$router.replace('/login')
     },
     convertChannelStatus(channelStatus: string): string {
-      if (channelStatus === 'Protected') return 'PROTECTED'
-      return 'PUBLIC'
+      return channelStatus.toUpperCase()
     },
     async createChannel() {
       try {
