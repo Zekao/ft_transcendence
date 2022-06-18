@@ -105,12 +105,12 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], User.prototype, "color", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], User.prototype, "backgroundColor", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: () => matchs_entity_1.Matchs }),
