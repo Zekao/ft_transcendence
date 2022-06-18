@@ -221,6 +221,7 @@ export default Vue.extend({
     try {
       await Promise.all([
         this.$store.dispatch('channel/fetch'),
+        this.$store.dispatch('channel/fetchAuth'),
         this.$store.dispatch('user/fetch'),
       ])
     } catch (err) {
