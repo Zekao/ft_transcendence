@@ -235,8 +235,8 @@ export class GameGateway
         else if (message === "down" && pTwo.y <= 580) pTwo.y += 13;
         this.emitGame(client.data, "move", pTwo.y, 2);
       }
-      client.data.posPlayer.pOne = pOne;
-      client.data.posPlayer.pTwo = pTwo;
+      client.data.posPlayerOne = pOne;
+      client.data.posPlayerOne = pTwo;
     } catch {}
   }
 
