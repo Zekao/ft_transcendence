@@ -187,7 +187,6 @@ let GameGateway = class GameGateway {
     resetBall(client) {
         let direction = client.data.direction;
         const ball = client.data.posBall;
-        const match = client.data.match;
         ball.x = 420;
         ball.y = 400;
         direction = { x: 0 };
