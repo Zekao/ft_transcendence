@@ -166,9 +166,8 @@ let ChannelsGateway = class ChannelsGateway {
                 this.emitChannel(client.data, "channel", login, message[1]);
             }
             else if (message[0] === "action") {
-                if (message[1] === "logout") {
+                if (message[1] === "logout")
                     this.deletePlayerMember(client);
-                }
                 if (message[1] === "mute") {
                     this.mutePlayer(client, message);
                 }
