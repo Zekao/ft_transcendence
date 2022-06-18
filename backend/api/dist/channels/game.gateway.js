@@ -81,11 +81,15 @@ let GameGateway = class GameGateway {
     }
     async updateBall(client) {
         let direction = client.data.direction;
-        const ball = client.data.posBall;
+        let ball = client.data.posBall;
         let velocity = client.data.velocity;
         const match = client.data.match;
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
+        if (!ball.x || !ball.y) {
+            ball.x = 420;
+            ball.y = 400;
+        }
         if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
             this.emitGame(client.data, "gameAction", "FINISH");
             return;
@@ -102,7 +106,7 @@ let GameGateway = class GameGateway {
         this.saveAllData(client, direction, velocity, ball);
         this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
         this.collisionDetect(client);
-        this.saveAllData(client, direction, velocity, ball);
+        ball = client.data.posBall;
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
                 this.emitGame(client.data, "gameAction", "FINISH");
