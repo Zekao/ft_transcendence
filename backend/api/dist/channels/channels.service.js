@@ -43,6 +43,14 @@ let ChannelsService = class ChannelsService {
             channels = channels.filter((channel) => channel.status === channels_enum_1.ChannelStatus.PROTECTED);
         return channels;
     }
+    async getAuthChannel() {
+        let channels = await this.ChannelsRepository.find();
+        if (!channels)
+            throw new common_1.NotFoundException(`Channel not found`);
+        channels = channels.filter((channel) => channel.status === channels_enum_1.ChannelStatus.PUBLIC ||
+            channel.status === channels_enum_1.ChannelStatus.PROTECTED);
+        return channels;
+    }
     async getChannelByFilter(filter) {
         const { name, permissions, status } = filter;
         let channels = await this.getChannel();

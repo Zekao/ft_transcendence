@@ -64,6 +64,17 @@ export class ChannelsService {
     return channels;
   }
 
+  async getAuthChannel(): Promise<Channel[]> {
+    let channels = await this.ChannelsRepository.find();
+    if (!channels) throw new NotFoundException(`Channel not found`);
+    channels = channels.filter(
+      (channel) =>
+        channel.status === ChannelStatus.PUBLIC ||
+        channel.status === ChannelStatus.PROTECTED
+    );
+    return channels;
+  }
+
   async getChannelByFilter(filter: ChannelFilteDto): Promise<Channel[]> {
     const { name, permissions, status } = filter;
     let channels = await this.getChannel();
