@@ -195,7 +195,7 @@ export default Vue.extend({
     password: '',
     newPassword: '',
     messageText: '',
-    messages: [] as { userID: string; message: string }[],
+    messages: [] as { id: string; message: string }[],
     owner: {} as IUser,
     admins: [] as IUser[],
     banned: [] as IUser[],
@@ -273,8 +273,8 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('channel', (userID, message) => {
-      this.messages.push({ userID, message })
+    this.socket.on('channel', (id, message) => {
+      this.messages.push({ id, message })
       this.$nextTick(() => {
         this.scrollToBottom()
       })
@@ -401,14 +401,14 @@ export default Vue.extend({
         this.muted = []
       }
     },
-    getUser(userID: string): IUser {
+    getUser(id: string): IUser {
       return (
-        this.users.find((el) => el.id === userID) ||
+        this.users.find((el) => el.id === id) ||
         ({} as IUser)
       )
     },
-    changeUser(userID: string) {
-      this.$store.commit('SELECTED_USER', this.getUser(userID))
+    changeUser(id: string) {
+      this.$store.commit('SELECTED_USER', this.getUser(id))
       this.value = true
     },
   },
