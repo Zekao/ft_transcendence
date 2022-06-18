@@ -102,7 +102,7 @@ export class GameGateway
     // }
 
     if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-      this.emitGame(client.data, "action", "FINISH");
+      this.emitGame(client.data, "gameAction", "FINISH");
       return;
     }
     if (direction.x === 1 || direction.x === -1) {
