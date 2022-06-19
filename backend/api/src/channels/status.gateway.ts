@@ -105,6 +105,8 @@ export class StatusGateway
   isStatus(client: Socket, user: User) {
     user.status = UserStatus.ONLINE;
     this.userService.saveUser(user);
+    if (user.First_time == true)
+      this.emitNotif(client.data, "notification", "update");
     this.emitNotif(client.data, "notification", client.data.user.id, "connect");
     this.logger.log(`Client connected: ${client.id}`);
     return true;
