@@ -47,6 +47,7 @@ export class UsersController {
   /*                   GET                                                      */
   /* ************************************************************************** */
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Return list of all existing users" })
   @ApiOkResponse({
     description: "Ok.",
@@ -59,6 +60,7 @@ export class UsersController {
   }
 
   @Get("/ranklist")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Return all user in ranked order" })
   @ApiOkResponse({
     description: "Ok.",
@@ -286,6 +288,7 @@ export class UsersController {
   }
 
   @Patch("/updateRank")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Update the rank for the specified user profile",
   })

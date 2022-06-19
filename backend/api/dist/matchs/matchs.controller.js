@@ -18,6 +18,7 @@ const swagger_1 = require("@nestjs/swagger");
 const matchs_filter_dto_1 = require("./dto/matchs-filter.dto");
 const matchs_service_1 = require("./matchs.service");
 const matchs_dto_1 = require("./dto/matchs.dto");
+const jwt_auth_guard_1 = require("../auth/guard/jwt.auth.guard");
 let MatchsController = class MatchsController {
     constructor(matchService) {
         this.matchService = matchService;
@@ -39,6 +40,7 @@ let MatchsController = class MatchsController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Return list of all existing matchs" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -47,6 +49,7 @@ __decorate([
 ], MatchsController.prototype, "getMatchs", null);
 __decorate([
     (0, common_1.Get)("/:id"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Return a match by id" }),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Request)()),
@@ -56,6 +59,7 @@ __decorate([
 ], MatchsController.prototype, "getMatchsId", null);
 __decorate([
     (0, common_1.Delete)("/:id"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({
         summary: "Delete the specified matchs",
     }),
@@ -66,6 +70,7 @@ __decorate([
 ], MatchsController.prototype, "deleteUser", null);
 __decorate([
     (0, common_1.Patch)("/:id/edit"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({
         summary: "Modify attribute of a specified matchs",
     }),
