@@ -172,23 +172,23 @@ export default V.extend({
           } else if (boolplayer === 2) {
             if (this.position2.y !== data) this.position2.y = data
           }
-        }),
-          this.socket.on('gameAction', (data, x, y) => {
-            if (data === 'moveBall') {
-              this.ball.x = x
-              this.ball.y = y
-            } else if (data === 'FINISH') {
-              this.endGame()
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            } else if (data === 'addOne') this.score.player1 += 1
-            else if (data === 'addTwo') this.score.player2 += 1
-            else if (data === 'Give up') {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
-          })
+        })
+        this.socket.on('gameAction', (data, x, y) => {
+          if (data === 'moveBall') {
+            this.ball.x = x
+            this.ball.y = y
+          } else if (data === 'FINISH') {
+            this.endGame()
+            this.$store.commit('MATCH_DONE', true)
+            this.$emit('next')
+          } else if (data === 'addOne') this.score.player1 += 1
+          else if (data === 'addTwo') this.score.player2 += 1
+          else if (data === 'Give up') {
+            this.context.clearRect(0, 0, 1080, 1920)
+            this.$store.commit('MATCH_DONE', true)
+            this.$emit('next')
+          }
+        })
         setInterval(this.updateContent, 17)
       }
     },

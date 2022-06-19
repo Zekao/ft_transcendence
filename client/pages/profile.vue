@@ -42,8 +42,8 @@ export default Vue.extend({
       },
       set(val: number) {
         this.$store.commit('SET_COMPONENT', val)
-      }
-    }
-  }
+      },
+    },
+  },
 })
 </script>

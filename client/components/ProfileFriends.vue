@@ -35,20 +35,6 @@ export default Vue.extend({
     socket: null as NuxtSocket | null,
   }),
 
-  watch: {
-    async componentSelected(val: number) {
-      if (val !== 1) return
-      try {
-        await this.$store.dispatch('user/fetchAuthFriends')
-    } catch (err: any) {
-      if (err.response.status === 401) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
-      }
-    }
-  },
-  },
-
   computed: {
     ...mapState({
       componentSelected: (state: any): number => state.selectedComponent,
@@ -62,6 +48,20 @@ export default Vue.extend({
       set(value: boolean) {
         this.$store.commit('FRIEND_MENU', value)
       },
+    },
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 1) return
+      try {
+        await this.$store.dispatch('user/fetchAuthFriends')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
     },
   },
 

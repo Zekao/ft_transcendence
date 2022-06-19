@@ -78,28 +78,13 @@ export default Vue.extend({
     isSelected: {
       type: Boolean as () => boolean,
       default: false,
-    }
+    },
   },
 
   data: () => ({
     search: '',
     selectedLogin: '',
   }),
-
-  watch: {
-
-  async componentSelected(val: number) {
-    if (val !== 3) return
-    try {
-      await this.$store.dispatch('user/fetchAuthMatchs')
-    } catch (err: any) {
-      if (err.response.status === 401) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
-      }
-    }
-  },
-  },
 
   computed: {
     ...mapState({
@@ -113,6 +98,20 @@ export default Vue.extend({
       return this.selectedLogin
         ? this.selectedUserMatches
         : this.authUserMatches
+    },
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 3) return
+      try {
+        await this.$store.dispatch('user/fetchAuthMatchs')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
     },
   },
 

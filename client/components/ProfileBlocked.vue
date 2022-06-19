@@ -35,29 +35,28 @@ export default Vue.extend({
     isSelected: {
       type: Boolean as () => boolean,
       default: false,
-    }
+    },
   },
-
-  watch: {
-
-    async componentSelected(val: number) {
-    if (val !== 2) return
-      try {
-        await this.$store.dispatch('user/fetchAuthBlocked')
-    } catch (err: any) {
-      if (err.response.status === 401) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
-      }
-    }
-  },
-        },
 
   computed: {
     ...mapState({
       componentSelected: (state: any): number => state.selectedComponent,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 2) return
+      try {
+        await this.$store.dispatch('user/fetchAuthBlocked')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
+    },
   },
 
   methods: {

@@ -115,7 +115,11 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <ChannelRoom :key="i" :channel="channel" @delete="deleteChannel"></ChannelRoom>
+            <ChannelRoom
+              :key="i"
+              :channel="channel"
+              @delete="deleteChannel"
+            ></ChannelRoom>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -272,7 +276,7 @@ export default Vue.extend({
     } as any)
     this.socket.on(
       'notification',
-      async (
+      (
         authUserName: string,
         status: string,
         matchId: string,
@@ -280,8 +284,7 @@ export default Vue.extend({
       ) => {
         if (authUserName === 'update') {
           this.$fetch()
-        }
-        else if (authUserName === this.username && status === 'game') {
+        } else if (authUserName === this.username && status === 'game') {
           this.invite = true
           this.inviteMatchId = matchId
           this.inviteUserName = userName

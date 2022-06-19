@@ -94,7 +94,6 @@ export default Vue.extend({
       if (msg === 'ready') {
         try {
           const res = await this.$axios.$get(`/matchs/${matchID}`)
-          console.log(res)
           this.matches.push(res)
         } catch (err: any) {
           if (err.response.status === 401) {
