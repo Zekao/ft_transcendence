@@ -226,6 +226,7 @@ export default Vue.extend({
         this.$store.dispatch('channel/fetch'),
         this.$store.dispatch('channel/fetchAuth'),
         this.$store.dispatch('user/fetch'),
+        this.$store.dispatch('user/fetchAuthBlocked'),
       ])
     } catch (err) {
       console.log(err)

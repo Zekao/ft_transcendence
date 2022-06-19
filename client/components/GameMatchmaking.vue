@@ -19,9 +19,7 @@
 
         <v-avatar class="mr-2">
           <v-img
-            :src="
-              'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar
-            "
+            :src="getAvatarPath(match.FirstPlayer)"
           />
         </v-avatar>
         <v-btn class="mr-2">
@@ -30,9 +28,7 @@
 
         <v-avatar class="mr-2">
           <v-img
-            :src="
-              'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar
-            "
+            :src="getAvatarPath(match.SecondPlayer)"
           />
         </v-avatar>
         <v-btn>
@@ -101,6 +97,11 @@ export default Vue.extend({
   },
 
   methods: {
+    getAvatarPath(user: IUser): string {
+      return (
+        'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
+      )
+    },
     emitJoin() {
       if (this.socket) {
         this.waiting = true
