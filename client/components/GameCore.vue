@@ -169,18 +169,8 @@ export default V.extend({
         this.socket.on('move', (data, boolplayer) => {
           if (boolplayer === 1) {
             if (this.position.y !== data) this.position.y = data
-            if (this.score.player1 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
           } else if (boolplayer === 2) {
             if (this.position2.y !== data) this.position2.y = data
-            else if (this.score.player2 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
           }
         }),
           this.socket.on('gameAction', (data, x, y) => {

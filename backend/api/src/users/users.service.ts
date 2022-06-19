@@ -254,8 +254,8 @@ export class UsersService {
       rank: 0,
       ratio: 1,
       First_time: true,
-      color: '#ffffff',
-      backgroundColor: '#808080',
+      color: "#ffffff",
+      backgroundColor: "#808080",
       avatar: "default.png" + "?" + new Date().getTime(),
     });
     try {
@@ -418,7 +418,9 @@ export class UsersService {
       const users = await this.getUsers();
       for (const user of users) {
         if (user.display_name == display_name && user.id != id)
-          throw new ConflictException(`Display name \`${display_name}' already used`);
+          throw new ConflictException(
+            `Display name \`${display_name}' already used`
+          );
       }
       found.display_name = display_name;
     }
