@@ -59,9 +59,20 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.game === socket.data.game)
-                    console.log(socket.data.user.user_name);
-                socket.emit(event, socket.data.user.user_name, ...args);
+                if (player.match.id === socket.data.match.id)
+                    socket.emit(event, socket.data.user.user_name, ...args);
+            });
+        }
+        catch (_a) { }
+    }
+    emitGame(player, event, ...args) {
+        try {
+            if (!player.user)
+                return;
+            const sockets = Array.from(this.server.sockets.values());
+            sockets.forEach((socket) => {
+                if (player.match.id == socket.data.match.id)
+                    socket.emit(event, ...args);
             });
         }
         catch (_a) { }
@@ -233,18 +244,6 @@ let GameGateway = class GameGateway {
                     socket.data.posPlayerOne = pOne;
                     socket.data.posPlayerTwo = pTwo;
                 }
-            });
-        }
-        catch (_a) { }
-    }
-    emitGame(player, event, ...args) {
-        try {
-            if (!player.user)
-                return;
-            const sockets = Array.from(this.server.sockets.values());
-            sockets.forEach((socket) => {
-                if (socket.data.match != null && player.game == socket.data.game)
-                    socket.emit(event, ...args);
             });
         }
         catch (_a) { }
