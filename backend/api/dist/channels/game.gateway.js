@@ -250,11 +250,14 @@ let GameGateway = class GameGateway {
     async handleDisconnect(client) {
         const user = client.data.user;
         try {
-            const match = client.data.match;
+            let match = client.data.match;
+            match = this.matchService.getMatchsId(match.id);
             if (match) {
                 if (match.status === matchs_enum_1.MatchStatus.PENDING)
                     await this.matchService.deleteMatch(match.id);
-                else if (match.status === matchs_enum_1.MatchStatus.STARTED) {
+                else if (match.status === matchs_enum_1.MatchStatus.STARTED &&
+                    match.scoreFirstPlayer != 5 &&
+                    match.scoreSecondPlayer != 5) {
                     if (client.data.user === match.FirstPlayer) {
                         match.scoreFirstPlayer = 0;
                         match.scoreSecondPlayer = 5;

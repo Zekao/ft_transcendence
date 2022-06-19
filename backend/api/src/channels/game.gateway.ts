@@ -269,11 +269,16 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const user = client.data.user;
     try {
-      const match: Matchs = client.data.match;
+      let match = client.data.match;
+      match = this.matchService.getMatchsId(match.id);
       if (match) {
         if (match.status === MatchStatus.PENDING)
           await this.matchService.deleteMatch(match.id);
-        else if (match.status === MatchStatus.STARTED) {
+        else if (
+          match.status === MatchStatus.STARTED &&
+          match.scoreFirstPlayer != 5 &&
+          match.scoreSecondPlayer != 5
+        ) {
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
             match.scoreSecondPlayer = 5;
