@@ -40,19 +40,20 @@ let StatusGateway = class StatusGateway {
                     this.emitNotif(client.data, "notification", invited.user_name, "game", match.id, user.user_name);
                 }
             }
-            if (message[0] === "join") {
+            else if (message[0] === "join") {
                 const gameID = message[1];
                 const match = await this.matchSevice.getMatchsId(gameID, [
                     { withUsers: true },
                 ]);
                 this.emitNotif(client.data, "notification", match.SecondPlayer.user_name, "join", gameID);
             }
-            if (message[0] === "deny") {
+            else if (message[0] === "deny") {
                 const gameID = message[1];
                 this.matchSevice.deleteMatch(gameID);
             }
-            if (message[0] === "create")
+            else if (message === "create") {
                 this.emitNotif(client.data, "notification", "update");
+            }
         }
         catch (_a) { }
     }
