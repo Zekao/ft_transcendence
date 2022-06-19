@@ -50,6 +50,7 @@ export class GameGateway
           client.data.match = this.matchService.getMatchsId(findedMatch.id, [
             { withUsers: true },
           ]);
+          console.log("EMIT READY");
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
