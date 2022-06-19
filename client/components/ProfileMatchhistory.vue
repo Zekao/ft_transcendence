@@ -43,7 +43,7 @@
                 <v-img
                   :src="
                     'https://ft.localhost:4500/api/image/' +
-                    match.FirstPlayer.avatar
+                    match.FirstPlayer?.avatar || 'default.png'
                   "
                 />
               </v-avatar>
@@ -52,7 +52,7 @@
               <v-img
                 :src="
                   'https://ft.localhost:4500/api/image/' +
-                  match.FirstPlayer.avatar
+                  match.FirstPlayer?.avatar || 'default.png'
                 "
               />
             </v-avatar>
@@ -72,7 +72,7 @@
                 <v-img
                   :src="
                     'https://ft.localhost:4500/api/image/' +
-                    match.SecondPlayer.avatar
+                    match.SecondPlayer?.avatar || 'default.png'
                   "
                 />
               </v-avatar>
@@ -81,7 +81,7 @@
               <v-img
                 :src="
                   'https://ft.localhost:4500/api/image/' +
-                  match.SecondPlayer.avatar
+                  match.SecondPlayer?.avatar || 'default.png'
                 "
               />
             </v-avatar>
