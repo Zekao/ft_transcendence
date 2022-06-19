@@ -102,7 +102,7 @@ export default Vue.extend({
     async matchDone(value) {
       if (value) {
         try {
-          const res = await this.$axios.$get(`/match/${this.selectedMatchId}`)
+          const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
           this.match = res
           console.log(res)
         } catch (err) {

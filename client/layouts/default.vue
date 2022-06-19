@@ -280,11 +280,11 @@ export default Vue.extend({
           this.inviteMatchId = matchId
           this.inviteUserName = userName
         } else if (authUserName === this.username && status === 'join') {
+          this.$store.commit('SELECTED_MATCH_ID', matchId)
+          this.$store.commit('SET_VALUE', 2)
           this.invite = false
           this.inviteMatchId = ''
           this.inviteUserName = ''
-          this.$store.commit('SELECTED_MATCH_ID', matchId)
-          this.$store.commit('SET_VALUE', 2)
           if (this.$route.path !== '/') this.$router.replace('/')
         }
       }
@@ -317,21 +317,21 @@ export default Vue.extend({
     },
     acceptInvitation() {
       if (this.socket) {
+        this.socket.emit('notification', 'join', this.inviteMatchId)
+        this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
+        this.$store.commit('SET_VALUE', 2)
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''
-        this.$store.commit('SELECTED_MATCH_ID', this.inviteMatchId)
-        this.$store.commit('SET_VALUE', 2)
-        this.socket.emit('notification', 'join', this.inviteMatchId)
         if (this.$route.path !== '/') this.$router.replace('/')
       }
     },
     refuseInvitation() {
       if (this.socket) {
+        this.socket.emit('notification', 'deny', this.inviteMatchId)
         this.invite = false
         this.inviteMatchId = ''
         this.inviteUserName = ''
-        this.socket.emit('notification', 'deny', this.inviteMatchId)
       }
     },
   },

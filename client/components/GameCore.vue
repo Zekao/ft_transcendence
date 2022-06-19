@@ -95,12 +95,14 @@ export default V.extend({
             if (this.position.y !== data) this.position.y = data
             if (this.score.player1 >= 5) {
               this.context.clearRect(0, 0, 1080, 1920)
+              this.$store.commit('MATCH_DONE', true)
               this.$emit('next')
             }
           } else if (boolplayer === 2) {
             if (this.position2.y !== data) this.position2.y = data
             else if (this.score.player2 >= 5) {
               this.context.clearRect(0, 0, 1080, 1920)
+              this.$store.commit('MATCH_DONE', true)
               this.$emit('next')
             }
           }
@@ -112,6 +114,7 @@ export default V.extend({
               this.moveBall()
             } else if (data === 'FINISH') {
               this.endGame()
+              this.$store.commit('MATCH_DONE', true)
               this.$emit('next')
             } else if (data === 'addOne') this.score.player1 += 1
             else if (data === 'addTwo') this.score.player2 += 1
