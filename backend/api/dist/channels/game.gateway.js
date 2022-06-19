@@ -187,6 +187,16 @@ let GameGateway = class GameGateway {
         const match = client.data.match;
         if (match) {
             match.status = matchs_enum_1.MatchStatus.ENDED;
+            if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
+                match.FirstPlayer.win++;
+                match.SecondPlayer.loose++;
+            }
+            if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
+                match.FirstPlayer.loose++;
+                match.SecondPlayer.win++;
+            }
+            this.userService.saveUser(match.FirstPlayer);
+            this.userService.saveUser(match.SecondPlayer);
             this.matchService.saveMatch(match);
             this.emitGame(client.data, "gameAction", "FINISH", match.id);
             client.data.match = null;
