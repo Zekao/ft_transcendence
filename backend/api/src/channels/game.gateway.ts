@@ -45,7 +45,7 @@ export class GameGateway
         const findedMatch = await this.matchService.defineMatch(player);
         console.log("JOIN");
 
-        if (findedMatch.id) {
+        if (findedMatch != null && findedMatch.id) {
           console.log("FIND MATCH");
           client.data.match = this.matchService.getMatchsId(findedMatch.id, [
             { withUsers: true },
@@ -84,8 +84,7 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id == socket.data.match.id)
-          socket.emit(event, ...args);
+        if (player.game == socket.data.game) socket.emit(event, ...args);
       });
     } catch {}
   }
@@ -329,6 +328,7 @@ export class GameGateway
   }
 
   async isInGame(client: Socket, user: User) {
+    console.log("CLIENT: ", client.handshake.auth.game);
     const match: Matchs = await this.matchService.getMatchsId(
       client.handshake.auth.game,
       [{ withUsers: true }]

@@ -34,7 +34,7 @@ let GameGateway = class GameGateway {
             if (message === "join") {
                 const findedMatch = await this.matchService.defineMatch(player);
                 console.log("JOIN");
-                if (findedMatch.id) {
+                if (findedMatch != null && findedMatch.id) {
                     console.log("FIND MATCH");
                     client.data.match = this.matchService.getMatchsId(findedMatch.id, [
                         { withUsers: true },
@@ -76,7 +76,7 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.match.id == socket.data.match.id)
+                if (player.game == socket.data.game)
                     socket.emit(event, ...args);
             });
         }
@@ -298,6 +298,7 @@ let GameGateway = class GameGateway {
         return false;
     }
     async isInGame(client, user) {
+        console.log("CLIENT: ", client.handshake.auth.game);
         const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
         client.data.match = match;
         client.data.game = client.handshake.auth.game;
