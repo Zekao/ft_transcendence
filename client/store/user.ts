@@ -121,7 +121,7 @@ export const actions: ActionTree<UserState, RootState> = {
       const res = await this.$axios.$delete(
         `/users/me/friends?friend=${userID}`
       )
-      commit('DELETE_AUTH_FRIEND', res)
+      commit('DELETE_AUTH_FRIEND', userID)
       return res
     } catch (err) {
       throw err
@@ -150,7 +150,7 @@ export const actions: ActionTree<UserState, RootState> = {
       const res = await this.$axios.$delete(
         `/users/me/blocked?blocked=${userID}`
       )
-      commit('DELETE_AUTH_BLOCKED', res)
+      commit('DELETE_AUTH_BLOCKED', userID)
       return res
     } catch (err) {
       throw err
