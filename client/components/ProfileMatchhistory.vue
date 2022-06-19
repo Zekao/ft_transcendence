@@ -23,7 +23,11 @@
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
       <v-list v-else width="40%">
-        <v-list-item v-for="(match, i) in userMatches" :key="i" class="justify-center align-center">
+        <v-list-item
+          v-for="(match, i) in userMatches"
+          :key="i"
+          class="justify-center align-center"
+        >
           <v-list-item-action class="justify-center align-center">
             <v-badge
               v-if="match.scoreFirstPlayer > match.scoreSecondPlayer"
@@ -38,7 +42,10 @@
             <v-avatar v-else>
               <v-img :src="getAvatarPath(match.FirstPlayer)" />
             </v-avatar>
-            <v-btn> {{ match.FirstPlayer.display_name }} - {{ match.scoreFirstPlayer }}</v-btn>
+            <v-btn>
+              {{ match.FirstPlayer.display_name }} -
+              {{ match.scoreFirstPlayer }}</v-btn
+            >
           </v-list-item-action>
           <v-list-item-action class="justify-center align-center">
             <v-badge
@@ -54,7 +61,10 @@
             <v-avatar v-else>
               <v-img :src="getAvatarPath(match.SecondPlayer)" />
             </v-avatar>
-            <v-btn> {{ match.scoreSecondPlayer }} - {{ match.SecondPlayer.display_name }} </v-btn>
+            <v-btn>
+              {{ match.scoreSecondPlayer }} -
+              {{ match.SecondPlayer.display_name }}
+            </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
