@@ -54,11 +54,6 @@ export default Vue.extend({
     loading: false,
   }),
 
-  created() {
-    if (this.error) {
-      console.log(this.error)
-    }
-  },
   methods: {
     login() {
       this.loading = true

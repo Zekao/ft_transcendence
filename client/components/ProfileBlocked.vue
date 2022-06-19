@@ -61,7 +61,8 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('user/deleteAuthBlocked', userID)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
   },

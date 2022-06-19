@@ -229,7 +229,8 @@ export default Vue.extend({
         this.$store.dispatch('user/fetchAuthBlocked'),
       ])
     } catch (err) {
-      console.log(err)
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
     }
   },
 
@@ -312,7 +313,8 @@ export default Vue.extend({
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     acceptInvitation() {

@@ -242,17 +242,19 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const owners = await this.$axios.$get(
-        `/channel/${this.channel.id}/members?role=owner`
-      )
+      const [ owners, admins, history ] = await Promise.all([
+        this.$axios.$get(
+          `/channel/${this.channel.id}/members?role=owner`
+        ),
+        this.$axios.$get(
+          `/channel/${this.channel.id}/members?role=admin`
+        ),
+        await this.$axios.$get(
+          `/channel/${this.channel.id}/history`
+        ),
+      ])
       this.owner = owners[0]
-      const admins = await this.$axios.$get(
-        `/channel/${this.channel.id}/members?role=admin`
-      )
       this.admins = admins
-      const history = await this.$axios.$get(
-        `/channel/${this.channel.id}/history`
-      )
       this.messages = history.length
         ? [...history.map((el: string) => JSON.parse(el))]
         : []
@@ -261,7 +263,8 @@ export default Vue.extend({
       })
       this.loggedIn = true
     } catch (err) {
-      console.log(err)
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
     }
   },
 
@@ -370,7 +373,8 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('channel/delete', this.channel.id)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     emitMessageOnChannel() {

@@ -64,7 +64,8 @@ export default Vue.extend({
         this.scrollToBottom()
       })
     } catch (err) {
-      console.log(err)
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
     }
   },
 
@@ -105,9 +106,7 @@ export default Vue.extend({
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
       if (this.socket && messageTextFormated) {
-        this.socket.emit('msg', messageTextFormated, (resp: any) => {
-          console.log(resp)
-        })
+        this.socket.emit('msg', messageTextFormated)
         this.messageText = ''
       }
     },

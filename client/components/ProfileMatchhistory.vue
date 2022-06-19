@@ -113,7 +113,8 @@ export default Vue.extend({
         await this.$store.dispatch('user/fetchMatchs', user.id)
         this.selectedLogin = this.search
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 

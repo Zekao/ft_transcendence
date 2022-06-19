@@ -140,7 +140,8 @@ export default Vue.extend({
           await this.$store.dispatch('user/updateAuthAvatar', formData)
           this.file = {} as Blob
         } catch (err) {
-          console.log(err)
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
         }
       }
     },
@@ -151,7 +152,8 @@ export default Vue.extend({
           display_name: this.newLogin,
         })
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 
@@ -161,7 +163,8 @@ export default Vue.extend({
           TwoFA: !this.isTwoFactorAuth,
         })
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 
@@ -172,7 +175,8 @@ export default Vue.extend({
           color: this.color,
         })
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 
@@ -183,7 +187,8 @@ export default Vue.extend({
           backgroundColor: this.backgroundColor,
         })
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 
@@ -196,7 +201,8 @@ export default Vue.extend({
           this.is2FADialog = true
         }, 2000)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
 

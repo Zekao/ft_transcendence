@@ -65,7 +65,8 @@ export default Vue.extend({
       const res = await this.$axios.$get('/matchs?status=PENDING')
       this.matches = res
     } catch (err) {
-      console.log(err)
+      this.$store.dispatch('logout')
+      this.$router.push('/login')
     }
   },
 
@@ -97,7 +98,8 @@ export default Vue.extend({
           const res = await this.$axios.$get(`/matchs/${matchID}`)
           this.matches.push(res)
         } catch (err) {
-          console.log(err)
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
         }
       }
     })

@@ -83,28 +83,16 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-    // ImaGhost()
-    // {
-    //   console.log(this.friend)
-    //   if(!this.friend.id)
-    //   {
-    //     console.log(this.authUser)
-    //     this.friend = this.authUser
-    //   }
-    // },
-    // function who return true if friend id is the same as userID or false if not
     isMe(): boolean {
       // this.ImaGhost
       return this.friend.id === this.userID || !this.friend.id
     },
-    // function who return true if friend id is in authUserFriends or false if not
     isFriend(): boolean {
       return (
         this.authUserFriends.find((friend) => friend.id === this.friend.id) !==
         undefined
       )
     },
-    // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe(): boolean {
       return (
         this.authUserBlocked.find((friend) => friend.id === this.friend.id) !==
@@ -117,7 +105,6 @@ export default Vue.extend({
         this.friend.in_game === 'IN_GAME' &&
         !this.isMe
       )
-      // && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
   },
   watch: {
@@ -190,22 +177,25 @@ export default Vue.extend({
     async block(userID: string) {
       try {
         await this.$store.dispatch('user/createAuthBlocked', userID)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     async unblocked(userID: string) {
       try {
         await this.$store.dispatch('user/deleteAuthBlocked', userID)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     async addFriend(userID: string) {
       try {
         await this.$store.dispatch('user/createAuthFriend', userID)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     // function remove friend from authUserFriends
@@ -213,7 +203,8 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('user/deleteAuthFriend', userID)
       } catch (err) {
-        console.log(err)
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
       }
     },
     emitInvitation() {
