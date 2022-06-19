@@ -40,7 +40,8 @@ let GameGateway = class GameGateway {
                         { withUsers: true },
                     ]);
                     console.log("EMIT READY");
-                    this.emitReady(client.data, "wait", "ready", findedMatch.id);
+                    console.log("FINDED MATCH ID: ", findedMatch.id);
+                    this.emitReady(client.data, "wait", findedMatch.FirstPlayer.user_name, findedMatch.SecondPlayer.user_name, "ready", findedMatch.id);
                 }
                 else {
                     console.log("CREATION OF THE MATCH");

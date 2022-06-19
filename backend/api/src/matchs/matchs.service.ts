@@ -138,7 +138,7 @@ export class MatchsService {
     let match = null;
     try {
       match = await this.getMatchs();
-      if (match.length === 0) return null;
+      if (!match.length) return null;
       for (let el of match) {
         el = await this.getMatchsId(el.id, [{ withUsers: true }]);
         if (
