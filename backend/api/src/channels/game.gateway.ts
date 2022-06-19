@@ -46,10 +46,7 @@ export class GameGateway
           client.data.user
         );
         if (findedMatch.id) {
-          client.data.match = findedMatch;
-          console.log("FIND A MATCH");
-          findedMatch.status = MatchStatus.STARTED;
-          this.matchService.saveMatch(findedMatch);
+          console.log("FIND MATCH");
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
@@ -327,6 +324,8 @@ export class GameGateway
     client.data.posBall = { x: 420, y: 400, rad: 10 };
     client.data.direction = { x: 1, y: 1 };
     client.data.velocity = 0.00005;
+    match.status = MatchStatus.STARTED;
+    this.matchService.saveMatch(match);
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);

@@ -34,10 +34,7 @@ let GameGateway = class GameGateway {
             if (message === "join") {
                 const findedMatch = await this.matchService.defineMatch(client.data.user);
                 if (findedMatch.id) {
-                    client.data.match = findedMatch;
-                    console.log("FIND A MATCH");
-                    findedMatch.status = matchs_enum_1.MatchStatus.STARTED;
-                    this.matchService.saveMatch(findedMatch);
+                    console.log("FIND MATCH");
                     this.emitReady(client.data, "wait", "ready", findedMatch.id);
                 }
                 else {
@@ -297,6 +294,8 @@ let GameGateway = class GameGateway {
         client.data.posBall = { x: 420, y: 400, rad: 10 };
         client.data.direction = { x: 1, y: 1 };
         client.data.velocity = 0.00005;
+        match.status = matchs_enum_1.MatchStatus.STARTED;
+        this.matchService.saveMatch(match);
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
