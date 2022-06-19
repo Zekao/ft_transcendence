@@ -93,13 +93,6 @@ let GameGateway = class GameGateway {
         const match = client.data.match;
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
-        if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-            match.status = matchs_enum_1.MatchStatus.ENDED;
-            this.matchService.saveMatch(match);
-            this.emitGame(client.data, "gameAction", "FINISH", match.id);
-            client.data.match = null;
-            return;
-        }
         if (direction.x === 1 || direction.x === -1) {
             while (direction.x <= 0.2 || direction.x >= 0.9) {
                 const heading = this.randomNumberBetween(0, 2 * Math.PI);
@@ -116,11 +109,7 @@ let GameGateway = class GameGateway {
         direction = client.data.direction;
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
-                match.status = matchs_enum_1.MatchStatus.ENDED;
-                this.matchService.saveMatch(match);
-                this.emitGame(client.data, "gameAction", "FINISH", match.id);
-                client.data.match = null;
-                client.disconnect();
+                this.finishGame(client);
             }
             else {
                 velocity = 0.00005;
@@ -131,11 +120,7 @@ let GameGateway = class GameGateway {
         }
         else if (ball.x >= 850) {
             if (match.scoreFirstPlayer >= 5) {
-                match.status = matchs_enum_1.MatchStatus.ENDED;
-                this.matchService.saveMatch(match);
-                this.emitGame(client.data, "gameAction", "FINISH", match.id);
-                client.data.match = null;
-                client.disconnect();
+                this.finishGame(client);
             }
             else {
                 velocity = 0.00005;
@@ -194,6 +179,16 @@ let GameGateway = class GameGateway {
             direction.x = -direction.x;
         }
         this.saveAllData(client, direction, null, ball);
+    }
+    finishGame(client) {
+        const match = client.data.match;
+        if (match) {
+            match.status = matchs_enum_1.MatchStatus.ENDED;
+            this.matchService.saveMatch(match);
+            this.emitGame(client.data, "gameAction", "FINISH", match.id);
+            client.data.match = null;
+            client.disconnect();
+        }
     }
     randomNumberBetween(min, max) {
         return Math.random() * (max - min) + min;

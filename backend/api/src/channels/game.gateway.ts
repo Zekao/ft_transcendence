@@ -105,13 +105,6 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
-    if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-      match.status = MatchStatus.ENDED;
-      this.matchService.saveMatch(match);
-      this.emitGame(client.data, "gameAction", "FINISH", match.id);
-      client.data.match = null;
-      return;
-    }
     if (direction.x === 1 || direction.x === -1) {
       while (direction.x <= 0.2 || direction.x >= 0.9) {
         const heading = this.randomNumberBetween(0, 2 * Math.PI);
@@ -128,11 +121,7 @@ export class GameGateway
     direction = client.data.direction;
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
-        match.status = MatchStatus.ENDED;
-        this.matchService.saveMatch(match);
-        this.emitGame(client.data, "gameAction", "FINISH", match.id);
-        client.data.match = null;
-        client.disconnect();
+        this.finishGame(client);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
@@ -141,11 +130,7 @@ export class GameGateway
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
-        match.status = MatchStatus.ENDED;
-        this.matchService.saveMatch(match);
-        this.emitGame(client.data, "gameAction", "FINISH", match.id);
-        client.data.match = null;
-        client.disconnect();
+        this.finishGame(client);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");
@@ -214,6 +199,18 @@ export class GameGateway
       direction.x = -direction.x;
     }
     this.saveAllData(client, direction, null, ball);
+  }
+
+  finishGame(client: Socket) {
+    const match: Matchs = client.data.match;
+
+    if (match) {
+      match.status = MatchStatus.ENDED;
+      this.matchService.saveMatch(match);
+      this.emitGame(client.data, "gameAction", "FINISH", match.id);
+      client.data.match = null;
+      client.disconnect();
+    }
   }
 
   randomNumberBetween(min: number, max: number) {
