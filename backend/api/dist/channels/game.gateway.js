@@ -82,6 +82,7 @@ let GameGateway = class GameGateway {
             match.status = matchs_enum_1.MatchStatus.ENDED;
             this.matchService.saveMatch(match);
             this.emitGame(client.data, "gameAction", "FINISH", match.id);
+            client.data.match = null;
             return;
         }
         if (direction.x === 1 || direction.x === -1) {
