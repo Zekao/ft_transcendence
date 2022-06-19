@@ -52,7 +52,7 @@ let StatusGateway = class StatusGateway {
                 this.matchSevice.deleteMatch(gameID);
             }
             if (message[0] === "create")
-                client.emit("notification", "update");
+                this.emitNotif(client.data, "notification", "update");
         }
         catch (_a) { }
     }
