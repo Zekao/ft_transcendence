@@ -69,11 +69,11 @@ export class User {
 
   @ApiProperty()
   @Column({ nullable: true })
-  color: number;
+  color: string;
 
   @ApiProperty()
   @Column({ nullable: true })
-  backgroundColor: number;
+  backgroundColor: string;
 
   @ApiProperty({ type: () => Matchs })
   @OneToMany(

@@ -13,6 +13,6 @@ export declare class UsersFiltesDTO {
     rank: number;
     ratio: number;
     TwoFA: boolean;
-    color: number;
-    backgroundColor: number;
+    color: string;
+    backgroundColor: string;
 }
