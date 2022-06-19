@@ -4,15 +4,7 @@
     color="grey lighten-1"
     class="d-flex justify-center align-center ma-6 pa-4"
   >
-    <v-progress-circular
-      v-if="$fetchState.pending"
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-    <v-list v-else-if="$fetchState.error">
-      <v-list-item dense>Failed to load friend list.</v-list-item>
-    </v-list>
-    <v-list v-else-if="!authUserFriends.length">
+    <v-list v-if="!authUserFriends.length">
       <v-list-item dense>No friends yet.</v-list-item>
     </v-list>
     <v-list v-else>
@@ -43,9 +35,11 @@ export default Vue.extend({
     socket: null as NuxtSocket | null,
   }),
 
-  async fetch() {
-    try {
-      await this.$store.dispatch('user/fetchAuthFriends')
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 1) return
+      try {
+        await this.$store.dispatch('user/fetchAuthFriends')
     } catch (err: any) {
       if (err.response.status === 401) {
         this.$store.dispatch('logout')
@@ -53,9 +47,11 @@ export default Vue.extend({
       }
     }
   },
+  },
 
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       accessToken: (state: any): string => state.token.accessToken,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
     }),

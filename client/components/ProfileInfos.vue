@@ -98,7 +98,9 @@ import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'ProfileInfos',
+
   middleware: 'auth',
+
   data: () => ({
     isImageLoading: false,
     is2FADialog: false,

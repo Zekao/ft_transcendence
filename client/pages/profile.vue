@@ -7,17 +7,17 @@
         </v-tab>
       </v-tabs>
     </v-toolbar>
-    <v-tabs-items :key="componentSelected" v-model="componentSelected">
-      <v-tab-item key="Infos">
+    <v-tabs-items v-model="componentSelected">
+      <v-tab-item>
         <ProfileInfos />
       </v-tab-item>
-      <v-tab-item key="Friends">
+      <v-tab-item>
         <ProfileFriends />
       </v-tab-item>
-      <v-tab-item key="Blocked">
+      <v-tab-item>
         <ProfileBlocked />
       </v-tab-item>
-      <v-tab-item key="Match history">
+      <v-tab-item>
         <ProfileMatchhistory />
       </v-tab-item>
     </v-tabs-items>
@@ -32,8 +32,18 @@ export default Vue.extend({
   middleware: 'auth',
 
   data: () => ({
-    componentSelected: '',
     componentList: ['Infos', 'Friends', 'Blocked', 'Match history'],
   }),
+
+  computed: {
+    componentSelected: {
+      get(): number {
+        return this.$store.state.selectedComponent
+      },
+      set(val: number) {
+        this.$store.commit('SET_COMPONENT', val)
+      }
+    }
+  }
 })
 </script>
