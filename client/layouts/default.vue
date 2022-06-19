@@ -115,7 +115,7 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <ChannelRoom :key="i" :channel="channel"></ChannelRoom>
+            <ChannelRoom :key="i" :channel="channel" @delete="deleteChannel"></ChannelRoom>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -324,6 +324,9 @@ export default Vue.extend({
           this.$router.push('/login')
         }
       }
+    },
+    deleteChannel() {
+      if (this.socket) this.socket.emit('notification', 'create')
     },
     acceptInvitation() {
       if (this.socket) {

@@ -368,6 +368,7 @@ export default Vue.extend({
     async deleteChannel() {
       try {
         await this.$store.dispatch('channel/delete', this.channel.id)
+        this.$emit('delete')
       } catch (err: any) {
         if (err.response.status === 401) {
           this.$store.dispatch('logout')
