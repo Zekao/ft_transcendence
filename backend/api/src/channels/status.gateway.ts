@@ -57,8 +57,7 @@ export class StatusGateway
             user.user_name
           );
         }
-      }
-      if (message[0] === "join") {
+      } else if (message[0] === "join") {
         const gameID = message[1];
         const match = await this.matchSevice.getMatchsId(gameID, [
           { withUsers: true },
@@ -70,12 +69,12 @@ export class StatusGateway
           "join",
           gameID
         );
-      }
-      if (message[0] === "deny") {
+      } else if (message[0] === "deny") {
         const gameID = message[1];
         this.matchSevice.deleteMatch(gameID);
+      } else if (message === "create") {
+        this.emitNotif(client.data, "notification", "update");
       }
-      if (message[0] === "create") this.emitNotif(client.data, "notification", "update");
     } catch {}
   }
 
