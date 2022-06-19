@@ -121,6 +121,7 @@ export default V.extend({
       this.context.fillStyle = this.color
       this.context.fillRect(this.position.x, this.position.y, 20, 120)
       this.context.fillRect(this.position2.x, this.position2.y, 20, 120)
+      this.moveBall()
       if (this.socket) this.socket.emit('gameAction', 'updateBall')
     },
     // fonction de mouvement de la balle
@@ -142,7 +143,7 @@ export default V.extend({
       this.context.fillText('THE GAME IS FINISHED', 370, 50)
     },
     moveBall() {
-      if (this.ball.x == 420 || this.ball.y == 400)
+      if (this.ball.x === 420 || this.ball.y === 400)
         return ;
       this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI) // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
       this.context.fill()
