@@ -126,7 +126,7 @@ let GameGateway = class GameGateway {
                 this.resetBall(client);
             }
         }
-        if (ball.x <= 0 || ball.x >= 850) {
+        if (ball.x < 0 || ball.x > 850) {
             direction.x = -direction.x;
         }
         if (ball.y < 0 || ball.y > 720) {
