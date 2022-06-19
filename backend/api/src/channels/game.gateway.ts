@@ -46,6 +46,7 @@ export class GameGateway
           client.data.user
         );
         if (findedMatch.id) {
+          console.log("FIND MATCH");
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
