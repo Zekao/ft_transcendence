@@ -40,6 +40,11 @@ export const mutations: MutationTree<UserState> = {
   FETCH_AUTH_FRIENDS: (state, users: IUser[]) => {
     state.authUserFriends = users
   },
+  UPDATE_AUTH_FRIEND: (state, user: IUser) => {
+    state.authUserFriends = state.authUserFriends.map(
+      (el) => el.id === user.id ? user : el
+    )
+  },
   CREATE_AUTH_FRIEND: (state, user: IUser) => {
     state.authUserFriends.push(user)
   },

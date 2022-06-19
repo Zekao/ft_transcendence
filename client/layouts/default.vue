@@ -270,15 +270,15 @@ export default Vue.extend({
       'notification',
       (
         authUserName: string,
-        game: string,
+        status: string,
         matchId: string,
         userName: string
       ) => {
-        if (authUserName === this.username && game === 'game') {
+        if (authUserName === this.username && status === 'game') {
           this.invite = true
           this.inviteMatchId = matchId
           this.inviteUserName = userName
-        } else if (authUserName === this.username && game === 'join') {
+        } else if (authUserName === this.username && status === 'join') {
           if (this.$route.path !== '/') this.$router.replace('/')
           this.$store.commit('SELECTED_MATCH_ID', matchId)
           this.$store.commit('SET_VALUE', 2)
