@@ -111,7 +111,7 @@ let MatchsService = class MatchsService {
         let match = null;
         try {
             match = await this.getMatchs();
-            if (!match.length)
+            if (match.length === 0)
                 return null;
             for (let el of match) {
                 el = await this.getMatchsId(el.id, [{ withUsers: true }]);
