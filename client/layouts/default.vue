@@ -310,7 +310,7 @@ export default Vue.extend({
       return channelStatus.toUpperCase()
     },
     async createChannel() {
-      const channel = this.channels.find(el => el.name === this.channelName)
+      const channel = this.channels.find((el) => el.name === this.channelName)
       if (channel) return
       try {
         const channel = {

@@ -71,7 +71,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
-      authUser: (state: any): IUser => state.user.authUser,
+      username: (state: any): string => state.user.authUser.user_name,
     }),
   },
 
@@ -84,14 +84,14 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('wait', async (userName, msg, matchID) => {
-      if (userName === this.authUser.user_name && msg === 'ready') {
-        this.$store.commit('SELECTED_MATCH_ID', matchID)
-        this.waiting = false
-        this.ready = true
-        this.$emit('next')
-      }
+    this.socket.on('wait', async (username1, username2, msg, matchID) => {
       if (msg === 'ready') {
+        if (this.username === username1 || this.username === username2) {
+          this.$store.commit('SELECTED_MATCH_ID', matchID)
+          this.waiting = false
+          this.ready = true
+          this.$emit('next')
+        }
         try {
           const res = await this.$axios.$get(`/matchs/${matchID}`)
           this.matches.push(res)
