@@ -23,7 +23,7 @@
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
       <v-list v-else width="40%">
-        <v-list-item v-for="(match, i) in userMatches" :key="i">
+        <v-list-item v-for="(match, i) in userMatches" :key="i" class="justify-center align-center">
           <v-list-item-action class="justify-center align-center">
             <v-badge
               v-if="match.scoreFirstPlayer > match.scoreSecondPlayer"
