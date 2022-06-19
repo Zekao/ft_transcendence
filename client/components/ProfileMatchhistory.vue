@@ -88,7 +88,14 @@ export default Vue.extend({
   }),
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthMatchs')
+    try {
+      await this.$store.dispatch('user/fetchAuthMatchs')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
