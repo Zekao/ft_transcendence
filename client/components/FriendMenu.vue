@@ -127,28 +127,28 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('notification', (userID, status) => {
-        if (status === 'connect') {
-          if (this.friend.id !== userID) return
-          const user = { ...this.friend}
-          user.status = 'ONLINE'
-          this.$store.commit('SELECTED_USER', user)
-        } else if (status === 'disconnect') {
-          if (this.friend.id !== userID) return
-          const user = { ...this.friend}
-          user.status = 'OFFLINE'
-          this.$store.commit('SELECTED_USER', user)
-        } else if (status === 'ingame') {
-          if (this.friend.id !== userID) return
-          const user = { ...this.friend}
-          user.in_game = 'IN_GAME'
-          this.$store.commit('SELECTED_USER', user)
-        } else if (status === 'outgame') {
-          if (this.friend.id !== userID) return
-          const user = { ...this.friend}
-          user.in_game = 'OUT_GAME'
-          this.$store.commit('SELECTED_USER', user)
-        }
-      })
+      if (status === 'connect') {
+        if (this.friend.id !== userID) return
+        const user = { ...this.friend }
+        user.status = 'ONLINE'
+        this.$store.commit('SELECTED_USER', user)
+      } else if (status === 'disconnect') {
+        if (this.friend.id !== userID) return
+        const user = { ...this.friend }
+        user.status = 'OFFLINE'
+        this.$store.commit('SELECTED_USER', user)
+      } else if (status === 'ingame') {
+        if (this.friend.id !== userID) return
+        const user = { ...this.friend }
+        user.in_game = 'IN_GAME'
+        this.$store.commit('SELECTED_USER', user)
+      } else if (status === 'outgame') {
+        if (this.friend.id !== userID) return
+        const user = { ...this.friend }
+        user.in_game = 'OUT_GAME'
+        this.$store.commit('SELECTED_USER', user)
+      }
+    })
   },
   methods: {
     async block(userID: string) {

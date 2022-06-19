@@ -18,8 +18,7 @@
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserBlocked" :key="i">
         <v-list-item-avatar>
-         <v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar"
-          />
+          <v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar" />
         </v-list-item-avatar>
         <v-list-item-content>
           {{ user.display_name }}

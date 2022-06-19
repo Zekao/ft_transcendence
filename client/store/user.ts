@@ -41,8 +41,8 @@ export const mutations: MutationTree<UserState> = {
     state.authUserFriends = users
   },
   UPDATE_AUTH_FRIEND: (state, user: IUser) => {
-    state.authUserFriends = state.authUserFriends.map(
-      (el) => el.id === user.id ? user : el
+    state.authUserFriends = state.authUserFriends.map((el) =>
+      el.id === user.id ? user : el
     )
   },
   CREATE_AUTH_FRIEND: (state, user: IUser) => {

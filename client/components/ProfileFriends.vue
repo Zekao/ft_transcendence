@@ -33,18 +33,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapState } from 'vuex'
-import { IUser } from '@/store/user'
 import { NuxtSocket } from 'nuxt-socket-io'
+import { IUser } from '@/store/user'
 
 export default Vue.extend({
   name: 'ProfileFriends',
 
   data: () => ({
     socket: null as NuxtSocket | null,
-  //   authUserFriends: [
-  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: '' },
-  //   ],
+    //   authUserFriends: [
+    //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
+    //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: '' },
+    //   ],
   }),
 
   async fetch() {
@@ -74,32 +74,32 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('notification', (userID, status) => {
-        if (status === 'connect') {
-          const user = this.authUserFriends.find(el => el.id === userID)
-          if (!user) return
-          const newUser = { ...user }
-          newUser.status = 'ONLINE'
-          this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
-        } else if (status === 'disconnect') {
-          const user = this.authUserFriends.find(el => el.id === userID)
-          if (!user) return
-          const newUser = { ...user }
-          newUser.status = 'OFFLINE'
-          this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
-        } else if (status === 'ingame') {
-          const user = this.authUserFriends.find(el => el.id === userID)
-          if (!user) return
-          const newUser = { ...user }
-          newUser.in_game = 'IN_GAME'
-          this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
-        } else if (status === 'outgame') {
-          const user = this.authUserFriends.find(el => el.id === userID)
-          if (!user) return
-          const newUser = { ...user }
-          newUser.in_game = 'OUT_GAME'
-          this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
-        }
-      })
+      if (status === 'connect') {
+        const user = this.authUserFriends.find((el) => el.id === userID)
+        if (!user) return
+        const newUser = { ...user }
+        newUser.status = 'ONLINE'
+        this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
+      } else if (status === 'disconnect') {
+        const user = this.authUserFriends.find((el) => el.id === userID)
+        if (!user) return
+        const newUser = { ...user }
+        newUser.status = 'OFFLINE'
+        this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
+      } else if (status === 'ingame') {
+        const user = this.authUserFriends.find((el) => el.id === userID)
+        if (!user) return
+        const newUser = { ...user }
+        newUser.in_game = 'IN_GAME'
+        this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
+      } else if (status === 'outgame') {
+        const user = this.authUserFriends.find((el) => el.id === userID)
+        if (!user) return
+        const newUser = { ...user }
+        newUser.in_game = 'OUT_GAME'
+        this.$store.commit('user/UPDATE_AUTH_FRIEND', newUser)
+      }
+    })
   },
 
   methods: {
