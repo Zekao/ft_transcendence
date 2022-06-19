@@ -103,8 +103,8 @@ export default Vue.extend({
         }
       }
     })
-    this.socket.on('wait', (msg, matchID) => {
-      if (msg === 'gameAction') {
+    this.socket.on('gameAction', (msg, matchID) => {
+      if (msg === 'FINISH') {
         this.matches = this.matches.filter((el) => el.id !== matchID)
       }
     })
