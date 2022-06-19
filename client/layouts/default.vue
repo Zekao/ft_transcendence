@@ -278,7 +278,6 @@ export default Vue.extend({
         matchId: string,
         userName: string
       ) => {
-        console.log(authUserName)
         if (authUserName === 'update') {
           await this.$fetch()
         }
