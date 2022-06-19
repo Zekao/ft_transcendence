@@ -226,21 +226,25 @@ export class GameGateway
     this.saveAllData(client, direction, null, ball);
   }
 
-  finishGame(client: Socket) {
+  async finishGame(client: Socket) {
     const match: Matchs = client.data.match;
 
     if (match) {
       match.status = MatchStatus.ENDED;
+      const [ user1, user2 ] = await Promise.all([
+        this.userService.getUserId(match.FirstPlayer.id),
+        this.userService.getUserId(match.SecondPlayer.id),
+      ])
       if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
-        match.FirstPlayer.win++
-        match.SecondPlayer.loose++
+        user1.win++
+        user2.loose++
       }
       if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
-        match.FirstPlayer.loose++
-        match.SecondPlayer.win++
+        user1.loose++
+        user2.win++
       }
-      this.userService.saveUser(match.FirstPlayer)
-      this.userService.saveUser(match.SecondPlayer)
+      this.userService.saveUser(user1)
+      this.userService.saveUser(user2)
       this.matchService.saveMatch(match);
       this.emitGame(
         client.data,
