@@ -113,6 +113,9 @@ export default Vue.extend({
         this.socket.emit('action', 'leave')
       }
     },
+    gameWatcher(gameId: string) {
+      console.log(gameId)
+    },
   },
 })
 </script>
