@@ -40,6 +40,20 @@ let ChannelsGateway = class ChannelsGateway {
         channel.muteTime.push(muteTime);
         await this.channelService.saveChannel(channel);
     }
+    async CanTalk(channel, id, time) {
+        for (let el of channel.muteTime) {
+            el = JSON.parse(el);
+            if (el.id === id) {
+                if (Math.abs(el.time - time) >= 5) {
+                    await this.removeMuteTime(channel, id);
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+        return true;
+    }
     async removeMuteTime(channel, id) {
         let i = 0;
         for (const el of channel.muteTime) {
@@ -57,13 +71,12 @@ let ChannelsGateway = class ChannelsGateway {
         const time = message[3];
         try {
             const completeMessage = user.display_name + " is mute for " + time + " minute.";
-            await this.addMuteTime(channel, user.id, new Date().getMinutes());
-            console.log(channel.muteTime);
             await this.channelService.addUserToMuted(client.data.user.id, channel.id, {
                 user: user.display_name,
                 role: "",
                 id: "",
             });
+            await this.addMuteTime(channel, user.id, new Date().getMinutes());
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
@@ -75,13 +88,13 @@ let ChannelsGateway = class ChannelsGateway {
         const user = await this.userService.getUserId(message[2]);
         try {
             const completeMessage = " is unmute";
-            await this.removeMuteTime(channel, user.id);
             console.log(channel.muteTime);
             await this.channelService.deleteChannelMute(client.data.user.id, channel.id, {
                 user: user.display_name,
                 role: "",
                 id: "",
             });
+            await this.removeMuteTime(channel, user.id);
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
@@ -182,8 +195,13 @@ let ChannelsGateway = class ChannelsGateway {
                     });
                     for (const el of mutedUser) {
                         if (el.id === login) {
-                            this.emitSingle(client.data, "channel", login, "You are muted");
-                            return;
+                            if ((await this.CanTalk(channel, login, new Date().getMinutes())) !=
+                                false)
+                                break;
+                            else {
+                                this.emitSingle(client.data, "channel", login, "You are muted");
+                                return;
+                            }
                         }
                     }
                     this.emitChannel(client.data, "channel", login, message[1]);
