@@ -49,6 +49,8 @@ export default V.extend({
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       selectedMatchId: (state: any) => state.selectedMatchId,
+      color: (state: any): string => state.user.authUser.color,
+      backgroundColor: (state: any): string => state.user.authUser.backgroundColor,
     }),
     height() {
       switch (this.$vuetify.breakpoint.name) {
@@ -111,12 +113,12 @@ export default V.extend({
   methods: {
     updateContent() {
       this.context.clearRect(0, 0, 1080, 1920)
-      this.context.fillStyle = 'white'
+      this.context.fillStyle = this.backgroundColor
       this.context.font = '30px Arial'
       this.context.fillText(this.score.player1, 370, 50)
       this.context.fillRect(420, 0, 3, 1000)
       this.context.fillText(this.score.player2, 460, 50)
-      this.context.fillStyle = 'grey'
+      this.context.fillStyle = this.color
       this.context.fillRect(this.position.x, this.position.y, 20, 120)
       this.context.fillRect(this.position2.x, this.position2.y, 20, 120)
       if (this.socket) this.socket.emit('gameAction', 'updateBall')

@@ -166,6 +166,7 @@ export default Vue.extend({
     },
 
     async updateColor() {
+      if (!this.color) return
       try {
         await this.$store.dispatch('user/updateAuth', {
           color: this.color,
@@ -176,6 +177,7 @@ export default Vue.extend({
     },
 
     async updateBackgroundColor() {
+      if (!this.backgroundColor) return
       try {
         await this.$store.dispatch('user/updateAuth', {
           backgroundColor: this.backgroundColor,
