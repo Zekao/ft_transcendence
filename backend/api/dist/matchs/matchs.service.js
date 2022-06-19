@@ -111,7 +111,8 @@ let MatchsService = class MatchsService {
         let match = null;
         try {
             match = await this.getMatchs();
-            for (const el of match) {
+            for (let el of match) {
+                el = await this.getMatchsId(el.id, [{ withUsers: true }]);
                 if (el.status == matchs_enum_1.MatchStatus.PENDING &&
                     el.FirstPlayer.id != player.id) {
                     await this.addPlayerToMatch(player, el);

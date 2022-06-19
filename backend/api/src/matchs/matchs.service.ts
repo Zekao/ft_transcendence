@@ -138,7 +138,8 @@ export class MatchsService {
     let match = null;
     try {
       match = await this.getMatchs();
-      for (const el of match) {
+      for (let el of match) {
+        el = await this.getMatchsId(el.id, [{ withUsers: true }]);
         if (
           el.status == MatchStatus.PENDING &&
           el.FirstPlayer.id != player.id
