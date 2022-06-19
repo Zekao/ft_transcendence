@@ -73,7 +73,7 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id === socket.data.match.id)
+        if (player.game === socket.data.game)
           socket.emit(event, socket.data.user.user_name, ...args);
       });
     } catch {}
@@ -84,7 +84,8 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id == socket.data.match.id) socket.emit(event, ...args);
+        if (player.game == socket.data.game)
+          socket.emit(event, ...args);
       });
     } catch {}
   }
