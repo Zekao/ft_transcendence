@@ -8,8 +8,7 @@
         outlined
         dense
         hide-details
-        class="mr-2" 
-        :rules="searchRules"
+        class="mr-2"
       />
       <v-btn outlined class="mr-2" @click="searchUserMatches"> Search </v-btn>
       <v-btn outlined @click="clearSearch"> Clear </v-btn>
@@ -85,8 +84,7 @@ export default Vue.extend({
 
   data: () => ({
     search: '',
-    selectedLogin: '', 
-    searchRules : [ (v: string ) => !!v || 'Login is required']
+    selectedLogin: '',
   }),
 
   async fetch() {
@@ -110,8 +108,9 @@ export default Vue.extend({
   methods: {
     async searchUserMatches() {
       const user = this.users.find((el) => el.display_name === this.search)
+      if (!user) return
       try {
-        await this.$store.dispatch('user/fetchMatchs', user)
+        await this.$store.dispatch('user/fetchMatchs', user.id)
         this.selectedLogin = this.search
       } catch (err) {
         console.log(err)
