@@ -29,6 +29,9 @@ export class Channel {
   @Column("text", { array: true, nullable: true })
   history: { id: string; message: string }[];
 
+  @Column("text", { nullable: true, array: true })
+  muteTime: { id: string; time: number }[];
+
   @ManyToMany(() => User, { nullable: true })
   @JoinTable({ name: "members" })
   members: User[];

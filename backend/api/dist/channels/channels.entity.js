@@ -41,6 +41,10 @@ __decorate([
     __metadata("design:type", Array)
 ], Channel.prototype, "history", void 0);
 __decorate([
+    (0, typeorm_1.Column)("text", { nullable: true, array: true }),
+    __metadata("design:type", Array)
+], Channel.prototype, "muteTime", void 0);
+__decorate([
     (0, typeorm_1.ManyToMany)(() => users_entity_1.User, { nullable: true }),
     (0, typeorm_1.JoinTable)({ name: "members" }),
     __metadata("design:type", Array)

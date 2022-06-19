@@ -10,6 +10,10 @@ export declare class Channel {
         id: string;
         message: string;
     }[];
+    muteTime: {
+        id: string;
+        time: number;
+    }[];
     members: User[];
     admins: User[];
     owner: User;

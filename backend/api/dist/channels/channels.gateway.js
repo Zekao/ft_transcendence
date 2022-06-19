@@ -33,12 +33,32 @@ let ChannelsGateway = class ChannelsGateway {
         channel.history.push(history);
         await this.channelService.saveChannel(channel);
     }
+    async addMuteTime(channel, id, time) {
+        if (!channel.muteTime)
+            channel.muteTime = [];
+        const muteTime = { id, time };
+        channel.muteTime.push(muteTime);
+        await this.channelService.saveChannel(channel);
+    }
+    async removeMuteTime(channel, id) {
+        let i = 0;
+        for (const el of channel.muteTime) {
+            if (el.id === id) {
+                channel.muteTime.splice(i);
+                break;
+            }
+            i++;
+        }
+        await this.channelService.saveChannel(channel);
+    }
     async mutePlayer(client, message) {
         const channel = client.data.channel;
         const user = await this.userService.getUserId(message[2]);
         const time = message[3];
         try {
             const completeMessage = user.display_name + " is mute for " + time + " minute.";
+            await this.addMuteTime(channel, user.id, new Date().getMinutes());
+            console.log(channel.muteTime);
             await this.channelService.addUserToMuted(client.data.user.id, channel.id, {
                 user: user.display_name,
                 role: "",
@@ -55,6 +75,8 @@ let ChannelsGateway = class ChannelsGateway {
         const user = await this.userService.getUserId(message[2]);
         try {
             const completeMessage = " is unmute";
+            await this.removeMuteTime(channel, user.id);
+            console.log(channel.muteTime);
             await this.channelService.deleteChannelMute(client.data.user.id, channel.id, {
                 user: user.display_name,
                 role: "",
