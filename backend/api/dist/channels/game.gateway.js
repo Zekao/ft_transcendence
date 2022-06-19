@@ -80,7 +80,7 @@ let GameGateway = class GameGateway {
     async GameAction(client, message) {
         const match = client.data.match;
         const user = client.data.user;
-        if (match == null)
+        if (match === null)
             client.disconnect();
         if (message == "updateBall" &&
             user.user_name === match.SecondPlayer.user_name)

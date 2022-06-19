@@ -89,7 +89,7 @@ export class GameGateway
     const match: Matchs = client.data.match;
     const user = client.data.user;
 
-    if (match == null) client.disconnect();
+    if (match === null) client.disconnect();
     if (
       message == "updateBall" &&
       user.user_name === match.SecondPlayer.user_name
