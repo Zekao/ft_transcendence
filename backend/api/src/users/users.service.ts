@@ -414,7 +414,14 @@ export class UsersService {
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
-    if (display_name) found.display_name = display_name;
+    if (display_name) {
+      const users = await this.getUsers();
+      for (const user of users) {
+        if (user.display_name == display_name && user.id != id)
+          throw new ConflictException(`Display name \`${display_name}' already used`);
+      }
+      found.display_name = display_name;
+    }
     if (TwoFA != null) found.TwoFA = TwoFA;
     if (email) found.email = email;
     if (status) found.status = status;
