@@ -8,38 +8,38 @@
       <v-list-item>
         <v-list-item-action class="justify-center align-center">
           <v-badge
-            v-if="getScoreOne() > getScoreTwo()"
+            v-if="getScoreOne > getScoreTwo"
             color="orange"
             icon="mdi-crown"
             overlap
           >
             <v-avatar>
-              <v-img src="getAvatarTwo()" />
+              <v-img :src="getAvatarOne" />
             </v-avatar>
           </v-badge>
           <v-avatar v-else>
-            <v-img src="getAvatarOne()" />
+            <v-img :src="getAvatarOne" />
           </v-avatar>
-          <v-btn> {{ getPlayerOne() }} {{ getScoreOne() }}</v-btn>
+          <v-btn> {{ getPlayerOne }} </v-btn>
         </v-list-item-action>
         <v-list-item-content class="justify-center">
-          <!-- {{ getPlayerOne() }} - {{ getPlayerTwo() }} -->
+          {{ getScoreOne }} - {{ getScoreTwo }}
         </v-list-item-content>
         <v-list-item-action class="justify-center align-center">
           <v-badge
-            v-if="getScoreTwo() > getScoreOne()"
+            v-if="getScoreTwo > getScoreOne"
             color="orange"
             icon="mdi-crown"
             overlap
           >
             <v-avatar>
-              <v-img src="getAvatarOne" />
+              <v-img :src="getAvatarTwo" />
             </v-avatar>
           </v-badge>
           <v-avatar v-else>
-            <v-img src="getAvatarTwo" />
+            <v-img :src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{ getScoreTwo() }} {{ getPlayerTwo() }} </v-btn>
+          <v-btn> {{ getPlayerTwo }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -64,22 +64,7 @@ export default Vue.extend({
   name: 'GameResult',
 
   data: () => ({
-    // match: {} as IMatch,
-    match: {
-      id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-      FirstPlayer: {
-        display_name: 'lusehair',
-        avatar: 'default.png',
-      },
-      SecondPlayer: {
-        display_name: 'gamarcha',
-        avatar: 'default.png',
-      },
-      scoreFirstPlayer: 7,
-      scoreSecondPlayer: 4,
-      winner: null,
-      status: 'ENDED',
-    },
+    match: {} as IMatch,
   }),
 
   computed: {
@@ -112,19 +97,19 @@ export default Vue.extend({
     },
 
     getPlayerOne() {
-      return this.match.FirstPlayer?.display_name || 'Superman'
+      return this.match.FirstPlayer?.display_name || ''
     },
 
     getPlayerTwo() {
-      return this.match.SecondPlayer?.display_name || 'Homelander'
+      return this.match.SecondPlayer?.display_name || ''
     },
 
     getScoreOne() {
-      return this.match.scoreFirstPlayer || 69
+      return this.match.scoreFirstPlayer || 0
     },
 
     getScoreTwo() {
-      return this.match.scoreSecondPlayer || 64
+      return this.match.scoreSecondPlayer || 0
     },
 
     getAvatarOne() {
