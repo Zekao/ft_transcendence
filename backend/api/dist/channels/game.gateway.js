@@ -126,7 +126,7 @@ let GameGateway = class GameGateway {
                 this.resetBall(client);
             }
         }
-        if (ball.x < 0 || ball.x > 850) {
+        if (ball.x <= 0 || ball.x >= 850) {
             direction.x = -direction.x;
         }
         if (ball.y < 0 || ball.y > 720) {
@@ -190,6 +190,7 @@ let GameGateway = class GameGateway {
             const heading = this.randomNumberBetween(0, 2 * Math.PI);
             direction = { x: Math.cos(heading), y: Math.sin(heading) };
         }
+        this.saveAllData(client, direction, null, ball);
     }
     async gamecontrol(client, message) {
         try {
@@ -212,7 +213,7 @@ let GameGateway = class GameGateway {
                 this.emitGame(client.data, "move", pTwo.y, 2);
             }
             client.data.posPlayerOne = pOne;
-            client.data.posPlayerOne = pTwo;
+            client.data.posPlayerTwo = pTwo;
         }
         catch (_a) { }
     }
