@@ -312,7 +312,9 @@ let GameGateway = class GameGateway {
         console.log("CLIENT: ", client.handshake.auth.game);
         const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
         client.data.match = match;
+        console.log("MATCH ID", match.id);
         client.data.game = client.handshake.auth.game;
+        console.log("GAME ID", game);
         client.data.posPlayerOne = { x: 0, y: 250 };
         client.data.posPlayerTwo = { x: 850, y: 250 };
         client.data.posBall = { x: 420, y: 400, rad: 10 };
