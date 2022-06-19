@@ -19,15 +19,7 @@
       color="#00000000"
       class="d-flex justify-center align-center pa-4"
     >
-      <v-progress-circular
-        v-if="$fetchState.pending"
-        indeterminate
-        color="primary"
-      ></v-progress-circular>
-      <v-list v-else-if="$fetchState.error">
-        <v-list-item dense>Failed to load match history.</v-list-item>
-      </v-list>
-      <v-list v-else-if="!userMatches.length">
+      <v-list v-if="!userMatches.length">
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
       <v-list v-else width="40%">
@@ -82,24 +74,21 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileMatchhistory',
 
+  props: {
+    isSelected: {
+      type: Boolean as () => boolean,
+      default: false,
+    },
+  },
+
   data: () => ({
     search: '',
     selectedLogin: '',
   }),
 
-  async fetch() {
-    try {
-      await this.$store.dispatch('user/fetchAuthMatchs')
-    } catch (err: any) {
-      if (err.response.status === 401) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
-      }
-    }
-  },
-
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       users: (state: any): IUser[] => state.user.users,
       authUserMatches: (state: any): IMatch[] => state.user.authUserMatches,
       selectedUserMatches: (state: any): IMatch[] =>
@@ -109,6 +98,20 @@ export default Vue.extend({
       return this.selectedLogin
         ? this.selectedUserMatches
         : this.authUserMatches
+    },
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 3) return
+      try {
+        await this.$store.dispatch('user/fetchAuthMatchs')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
     },
   },
 

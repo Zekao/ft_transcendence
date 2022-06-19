@@ -10,6 +10,7 @@ export interface IToken {
 
 export const state = () => ({
   easyFix: 1,
+  selectedComponent: 0,
   selectedUser: {} as IUser,
   selectedMatchId: '',
   matchDone: false,
@@ -27,6 +28,9 @@ export type RootState = ReturnType<typeof state>
 export const mutations: MutationTree<RootState> = {
   SET_VALUE: (state, value: number) => {
     state.easyFix = value
+  },
+  SET_COMPONENT: (state, value: number) => {
+    state.selectedComponent = value
   },
   SELECTED_USER: (state, user: IUser) => {
     state.selectedUser = user
@@ -91,7 +95,6 @@ export const actions: ActionTree<RootState, RootState> = {
     commit('TWO_FACTOR_REQUEST')
     try {
       const res = await this.$axios.$post(`/auth/qrcode?gcode=${code}`)
-      console.log(res)
       const { gtoken } = res
       this.$cookies.set('g_token', gtoken)
       commit('TWO_FACTOR_SUCCESS', gtoken)

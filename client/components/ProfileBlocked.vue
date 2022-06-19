@@ -4,15 +4,7 @@
     color="grey lighten-1"
     class="d-flex justify-center align-center ma-6 pa-4"
   >
-    <v-progress-circular
-      v-if="$fetchState.pending"
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-    <v-list v-else-if="$fetchState.error">
-      <v-list-item dense>Failed to load blocked user list.</v-list-item>
-    </v-list>
-    <v-list v-else-if="!authUserBlocked.length">
+    <v-list v-if="!authUserBlocked.length">
       <v-list-item dense>No user blocked yet.</v-list-item>
     </v-list>
     <v-list v-else>
@@ -39,21 +31,32 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileBlocked',
 
-  async fetch() {
-    try {
-      await this.$store.dispatch('user/fetchAuthBlocked')
-    } catch (err: any) {
-      if (err.response.status === 401) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
-      }
-    }
+  props: {
+    isSelected: {
+      type: Boolean as () => boolean,
+      default: false,
+    },
   },
 
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 2) return
+      try {
+        await this.$store.dispatch('user/fetchAuthBlocked')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
+    },
   },
 
   methods: {
