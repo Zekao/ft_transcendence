@@ -139,7 +139,10 @@ export class MatchsService {
     try {
       match = await this.getMatchs();
       for (const el of match) {
-        if (el.status == MatchStatus.PENDING && el.FirstPlayer != player.id) {
+        if (
+          el.status == MatchStatus.PENDING &&
+          el.FirstPlayer.id != player.id
+        ) {
           await this.addPlayerToMatch(player, el);
           match.status = MatchStatus.STARTED;
           this.MatchsRepository.save(el);
