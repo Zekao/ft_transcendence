@@ -265,8 +265,8 @@ export class GameGateway
         this.emitGame(
           client.data,
           "notification",
-          "outgame",
-          client.data.user.id
+          client.data.user.id,
+          "outgame"
         );
       }
     } catch (err) {}
@@ -299,6 +299,7 @@ export class GameGateway
     if (client.data.game) {
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
+      this.emitGame(client.data, "notification", client.data.user.id, "ingame");
       console.log("CONNECTED TO THE PONG GAME");
       this.logger.log(`Client connected: ${client.id}`);
       return true;

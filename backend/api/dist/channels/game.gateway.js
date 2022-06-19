@@ -239,7 +239,7 @@ let GameGateway = class GameGateway {
             if (user) {
                 user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
                 this.userService.saveUser(user);
-                this.emitGame(client.data, "notification", "outgame", client.data.user.id);
+                this.emitGame(client.data, "notification", client.data.user.id, "outgame");
             }
         }
         catch (err) { }
@@ -267,6 +267,7 @@ let GameGateway = class GameGateway {
         if (client.data.game) {
             user.in_game = users_enum_1.UserGameStatus.IN_GAME;
             this.userService.saveUser(user);
+            this.emitGame(client.data, "notification", client.data.user.id, "ingame");
             console.log("CONNECTED TO THE PONG GAME");
             this.logger.log(`Client connected: ${client.id}`);
             return true;

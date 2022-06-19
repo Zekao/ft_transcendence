@@ -94,8 +94,8 @@ export class StatusGateway
       this.emitNotif(
         client.data,
         "notification",
-        "disconnect",
-        client.data.user.id
+        client.data.user.id,
+        "disconnect"
       );
       this.userService.saveUser(user);
     }
@@ -105,7 +105,7 @@ export class StatusGateway
   isStatus(client: Socket, user: User) {
     user.status = UserStatus.ONLINE;
     this.userService.saveUser(user);
-    this.emitNotif(client.data, "notification", "connect", client.data.user.id);
+    this.emitNotif(client.data, "notification", client.data.user.id, "connect");
     this.logger.log(`Client connected: ${client.id}`);
     return true;
   }
