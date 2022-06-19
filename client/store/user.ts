@@ -60,7 +60,7 @@ export const mutations: MutationTree<UserState> = {
     state.authUserBlocked.push(user)
   },
   DELETE_AUTH_BLOCKED: (state, userID: string) => {
-    state.authUserBlocked = state.authUserFriends.filter(
+    state.authUserBlocked = state.authUserBlocked.filter(
       (el) => el.id !== userID
     )
   },
