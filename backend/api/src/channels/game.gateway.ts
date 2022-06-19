@@ -42,9 +42,7 @@ export class GameGateway
     try {
       const player: User = client.data.user;
       if (message === "join") {
-        const findedMatch = await this.matchService.defineMatch(
-          client.data.user
-        );
+        const findedMatch = await this.matchService.defineMatch(player);
         if (findedMatch.id) {
           console.log("FIND MATCH");
           this.emitReady(client.data, "wait", "ready", findedMatch.id);

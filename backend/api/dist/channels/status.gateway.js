@@ -51,6 +51,8 @@ let StatusGateway = class StatusGateway {
                 const gameID = message[1];
                 this.matchSevice.deleteMatch(gameID);
             }
+            if (message[0] === "create")
+                this.emitNotif(client.data, "notification", "update");
         }
         catch (_a) { }
     }
