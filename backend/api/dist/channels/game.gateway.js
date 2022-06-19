@@ -59,9 +59,9 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                console.log("PLAYER GAME ID: ", player.game.id);
+                console.log("PLAYER GAME ID: ", player.game);
                 console.log("SOCKET GAME ID: ", socket.data.game.id);
-                if (player.game.id === socket.data.game.id)
+                if (player.game && player.game.id === socket.data.game.id)
                     socket.emit(event, socket.data.user.user_name, ...args);
             });
         }
