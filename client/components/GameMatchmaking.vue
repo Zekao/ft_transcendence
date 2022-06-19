@@ -11,6 +11,10 @@
       <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
     </v-sheet>
 
+    <v-list v-if="!matches.length">
+      <v-list-item>No matches to spectate.</v-list-item>
+    </v-list>
+
     <v-list>
       <v-list-item v-for="(match, i) in matches" :key="i" class="my-2">
         <v-btn class="mr-2" @click="gameWatcher(match.id)">
