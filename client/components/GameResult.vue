@@ -5,7 +5,7 @@
     class="d-flex justify-center align-center"
   >
     <v-list width="40%">
-      <v-list-item>
+      <v-list-item class="justify-center align-center">
         <v-list-item-action class="justify-center align-center">
           <v-badge
             v-if="getScoreOne > getScoreTwo"
