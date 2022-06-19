@@ -34,14 +34,17 @@ let GameGateway = class GameGateway {
             if (message === "join") {
                 const findedMatch = await this.matchService.defineMatch(player);
                 if (findedMatch.id) {
-                    console.log("FIND MATCH");
-                    client.data.match = findedMatch;
+                    client.data.match = this.matchService.getMatchsId(findedMatch.id, [
+                        { withUsers: true },
+                    ]);
                     this.emitReady(client.data, "wait", "ready", findedMatch.id);
                 }
                 else {
                     console.log("CREATION OF THE MATCH");
                     const match = await this.matchService.createMatch(player.id);
-                    client.data.match = match;
+                    client.data.match = this.matchService.getMatchsId(match.id, [
+                        { withUsers: true },
+                    ]);
                 }
             }
             if (message === "leave") {
