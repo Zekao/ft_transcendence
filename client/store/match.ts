@@ -26,7 +26,7 @@ export const mutations: MutationTree<MatchState> = {
 export const actions: ActionTree<MatchState, RootState> = {
   async fetch({ commit }) {
     try {
-      const res = await this.$axios.$get('/matchs')
+      const res = await this.$axios.$get('/matchs?status=PENDING')
       commit('FETCH', res)
       return res
     } catch (err) {

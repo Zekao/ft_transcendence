@@ -108,8 +108,9 @@ export default Vue.extend({
   methods: {
     async searchUserMatches() {
       const user = this.users.find((el) => el.display_name === this.search)
+      if (!user) return
       try {
-        await this.$store.dispatch('user/fetchMatchs', user)
+        await this.$store.dispatch('user/fetchMatchs', user.id)
         this.selectedLogin = this.search
       } catch (err) {
         console.log(err)

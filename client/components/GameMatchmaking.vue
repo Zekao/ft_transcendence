@@ -53,22 +53,17 @@ export default Vue.extend({
     waiting: false,
     ready: false,
     socket: null as NuxtSocket | null,
-    matches: [
-      {
-        id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-        FirstPlayer: {
-          display_name: 'lusehair',
-          avatar: 'default.png',
-        } as IUser,
-        SecondPlayer: {
-          display_name: 'gamarcha',
-          avatar: 'default.png',
-        } as IUser,
-        scoreFirstPlayer: 7,
-        scoreSecondPlayer: 4,
-      },
-    ] as IMatch[],
+    matches: [] as IMatch[],
   }),
+
+  async fetch() {
+    try {
+      const res = await this.$axios.$get('/matchs?status=PENDING')
+      this.matches = res
+    } catch (err) {
+      console.log(err)
+    }
+  },
 
   computed: {
     ...mapState({
@@ -86,12 +81,25 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('wait', (userName, msg, matchID) => {
+    this.socket.on('wait', async (userName, msg, matchID) => {
       if (userName === this.authUser.user_name && msg === 'ready') {
         this.$store.commit('SELECTED_MATCH_ID', matchID)
         this.waiting = false
         this.ready = true
         this.$emit('next')
+      }
+      if (msg === 'ready') {
+        try {
+          const res = await this.$axios.$get(`/matchs/${matchID}`)
+          this.matches.push(res)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    })
+    this.socket.on('wait', (msg, matchID) => {
+      if (msg === 'gameAction') {
+        this.matches = this.matches.filter(el => el.id !== matchID)
       }
     })
   },
