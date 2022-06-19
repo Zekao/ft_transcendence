@@ -278,7 +278,10 @@ export default Vue.extend({
         matchId: string,
         userName: string
       ) => {
-        if (authUserName === this.username && status === 'game') {
+        if (authUserName === 'update') {
+          this.$nuxt.refresh()
+        }
+        else if (authUserName === this.username && status === 'game') {
           this.invite = true
           this.inviteMatchId = matchId
           this.inviteUserName = userName
@@ -314,6 +317,7 @@ export default Vue.extend({
               : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
+        if (this.socket) this.socket.emit('notification', 'create')
       } catch (err: any) {
         if (err.response.status === 401) {
           this.$store.dispatch('logout')
