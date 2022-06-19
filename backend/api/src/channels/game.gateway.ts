@@ -102,7 +102,7 @@ export class GameGateway
     const pTwo = client.data.posPlayerTwo;
 
     if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-      this.emitGame(client.data, "gameAction", "FINISH");
+      this.emitGame(client.data, "gameAction", "FINISH", match.id);
       return;
     }
     if (direction.x === 1 || direction.x === -1) {
@@ -121,7 +121,7 @@ export class GameGateway
     direction = client.data.direction;
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
-        this.emitGame(client.data, "gameAction", "FINISH");
+        this.emitGame(client.data, "gameAction", "FINISH", match.id);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
@@ -130,7 +130,7 @@ export class GameGateway
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
-        this.emitGame(client.data, "gameAction", "FINISH");
+        this.emitGame(client.data, "gameAction", "FINISH", match.id);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");
@@ -138,7 +138,7 @@ export class GameGateway
         this.resetBall(client);
       }
     }
-    if (ball.x <= 0 || ball.x >= 850) {
+    if (ball.x < 0 || ball.x > 850) {
       direction.x = -direction.x;
     }
     if (ball.y < 0 || ball.y > 720) {
@@ -237,6 +237,20 @@ export class GameGateway
       }
       client.data.posPlayerOne = pOne;
       client.data.posPlayerTwo = pTwo;
+      this.saveDataOnAllSocket(client.data, pOne, pTwo);
+    } catch {}
+  }
+
+  saveDataOnAllSocket(player: any, pOne, pTwo): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.game == socket.data.game) {
+          socket.data.posPlayerOne = pOne;
+          socket.data.posPlayerTwo = pTwo;
+        }
+      });
     } catch {}
   }
 

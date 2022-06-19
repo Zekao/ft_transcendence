@@ -27,6 +27,7 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     randomNumberBetween(min: number, max: number): number;
     resetBall(client: Socket): void;
     gamecontrol(client: Socket, message: string): Promise<void>;
+    saveDataOnAllSocket(player: any, pOne: any, pTwo: any): void;
     emitGame(player: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): Promise<void>;
     isWaitinglist(client: Socket, user: User): Promise<boolean>;
