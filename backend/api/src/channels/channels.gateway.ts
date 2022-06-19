@@ -306,13 +306,26 @@ export class ChannelsGateway
     } catch {}
   }
 
-  emitChannel(channel: any, event: string, ...args: any): void {
+  async emitChannel(channel: any, event: string, ...args: any): Promise<void> {
     try {
+      let blocked = false;
       if (!channel.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
-      sockets.forEach((socket) => {
-        if (channel.ConnectedChannel == socket.data.ConnectedChannel)
-          socket.emit(event, ...args);
+      sockets.forEach(async (socket) => {
+        socket.data.user = await this.userService.getUserId(
+          socket.data.user.id,
+          [{ withBlocked: true }]
+        );
+        if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
+          for (const el of socket.data.user.blockedUsers) {
+            if (el.id === channel.user.id) {
+              blocked = true;
+              break;
+            }
+          }
+          if (blocked === false) socket.emit(event, ...args);
+          blocked = false;
+        }
       });
     } catch {}
   }
