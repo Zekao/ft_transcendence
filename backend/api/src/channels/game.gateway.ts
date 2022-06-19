@@ -43,7 +43,10 @@ export class GameGateway
       const player: User = client.data.user;
       if (message === "join") {
         const findedMatch = await this.matchService.defineMatch(player);
-        if (findedMatch.id) {
+        console.log("JOIN");
+
+        if (findedMatch != null && findedMatch.id) {
+          console.log("FIND MATCH");
           client.data.match = this.matchService.getMatchsId(findedMatch.id, [
             { withUsers: true },
           ]);
@@ -81,8 +84,7 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id == socket.data.match.id)
-          socket.emit(event, ...args);
+        if (player.game == socket.data.game) socket.emit(event, ...args);
       });
     } catch {}
   }
@@ -118,7 +120,15 @@ export class GameGateway
     ball.x += direction.x * velocity * deltaTime;
     ball.y += direction.y * velocity * deltaTime;
     this.saveAllData(client, direction, velocity, ball);
-    this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
+    this.emitGame(
+      client.data,
+      "gameAction",
+      match.FirstPlayer.user_name,
+      match.SecondPlayer.user_name,
+      "moveBall",
+      ball.x,
+      ball.y
+    );
     this.collisionDetect(client);
     ball = client.data.posBall;
     direction = client.data.direction;
@@ -128,7 +138,13 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
-        this.emitGame(client.data, "gameAction", "addTwo");
+        this.emitGame(
+          client.data,
+          "gameAction",
+          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
+          "addTwo"
+        );
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
@@ -137,7 +153,13 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");
-        this.emitGame(client.data, "gameAction", "addOne");
+        this.emitGame(
+          client.data,
+          "gameAction",
+          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
+          "addOne"
+        );
         this.resetBall(client);
       }
     }
@@ -220,7 +242,14 @@ export class GameGateway
       this.userService.saveUser(match.FirstPlayer)
       this.userService.saveUser(match.SecondPlayer)
       this.matchService.saveMatch(match);
-      this.emitGame(client.data, "gameAction", "FINISH", match.id);
+      this.emitGame(
+        client.data,
+        "gameAction",
+        match.FirstPlayer.user_name,
+        match.SecondPlayer.user_name,
+        "FINISH",
+        match.id
+      );
       client.data.match = null;
       client.disconnect();
     }
@@ -254,11 +283,25 @@ export class GameGateway
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message === "up" && pOne.y >= 0) pOne.y -= 13;
         else if (message === "down" && pOne.y <= 580) pOne.y += 13;
-        this.emitGame(client.data, "move", pOne.y, 1);
+        this.emitGame(
+          client.data,
+          "move",
+          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
+          pOne.y,
+          1
+        );
       } else {
         if (message === "up" && pTwo.y >= 0) pTwo.y -= 13;
         else if (message === "down" && pTwo.y <= 580) pTwo.y += 13;
-        this.emitGame(client.data, "move", pTwo.y, 2);
+        this.emitGame(
+          client.data,
+          "move",
+          match.FirstPlayer.user_name,
+          match.SecondPlayer.user_name,
+          pTwo.y,
+          2
+        );
       }
       client.data.posPlayerOne = pOne;
       client.data.posPlayerTwo = pTwo;
@@ -303,7 +346,13 @@ export class GameGateway
           }
           match.status = MatchStatus.ENDED;
           this.matchService.saveMatch(match);
-          this.emitGame(client.data, "gameAction", "Give up");
+          this.emitGame(
+            client.data,
+            "gameAction",
+            match.FirstPlayer.user_name,
+            match.SecondPlayer.user_name,
+            "Give up"
+          );
         }
       }
       if (client.data.waitinglist) {
@@ -336,6 +385,7 @@ export class GameGateway
   }
 
   async isInGame(client: Socket, user: User) {
+    console.log("CLIENT: ", client.handshake.auth.game);
     const match: Matchs = await this.matchService.getMatchsId(
       client.handshake.auth.game,
       [{ withUsers: true }]

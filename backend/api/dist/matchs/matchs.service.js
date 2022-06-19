@@ -111,13 +111,15 @@ let MatchsService = class MatchsService {
         let match = null;
         try {
             match = await this.getMatchs();
+            if (match.length === 0)
+                return null;
             for (let el of match) {
                 el = await this.getMatchsId(el.id, [{ withUsers: true }]);
-                if (el.status == matchs_enum_1.MatchStatus.PENDING &&
+                if (el.status === matchs_enum_1.MatchStatus.PENDING &&
                     el.FirstPlayer.id != player.id) {
                     await this.addPlayerToMatch(player, el);
                     match.status = matchs_enum_1.MatchStatus.STARTED;
-                    this.MatchsRepository.save(el);
+                    await this.MatchsRepository.save(el);
                     return el;
                 }
             }

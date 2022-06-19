@@ -138,15 +138,16 @@ export class MatchsService {
     let match = null;
     try {
       match = await this.getMatchs();
+      if (match.length === 0) return null;
       for (let el of match) {
         el = await this.getMatchsId(el.id, [{ withUsers: true }]);
         if (
-          el.status == MatchStatus.PENDING &&
+          el.status === MatchStatus.PENDING &&
           el.FirstPlayer.id != player.id
         ) {
           await this.addPlayerToMatch(player, el);
           match.status = MatchStatus.STARTED;
-          this.MatchsRepository.save(el);
+          await this.MatchsRepository.save(el);
           return el;
         }
       }
