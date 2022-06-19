@@ -64,12 +64,12 @@ export class GameGateway
 
   emitReady(player: any, event: string, ...args: any): void {
     try {
-      if (!player.user) return;
+      // if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
         console.log("PLAYER GAME ID: ", player.game);
-        console.log("SOCKET GAME ID: ", socket.data.game.id);
-        if (player.game && player.game.id === socket.data.game.id)
+        console.log("SOCKET GAME ID: ", socket.data.game);
+        if (player.game && socket.data.game && player.game.id === socket.data.game.id)
           socket.emit(event, socket.data.user.user_name, ...args);
       });
     } catch {}
