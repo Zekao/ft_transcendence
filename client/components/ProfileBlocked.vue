@@ -39,15 +39,15 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileBlocked',
 
-  // data: () => ({
-  //   authUserBlocked: [
-  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
-  //   ],
-  // }),
-
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthBlocked')
+    try {
+      await this.$store.dispatch('user/fetchAuthBlocked')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
