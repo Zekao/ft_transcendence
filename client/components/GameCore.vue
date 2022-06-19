@@ -118,7 +118,7 @@ export default V.extend({
               this.$emit('next')
             } else if (data === 'addOne') this.score.player1 += 1
             else if (data === 'addTwo') this.score.player2 += 1
-          }),
+          })
           setInterval(this.updateContent, 17)
       }
     },
