@@ -67,8 +67,9 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id === socket.data.match.id) {
-          console.log(socket.data.user.user_name);
+        console.log(player.match);
+        console.log(socket.data.match);
+        if (player.match === socket.data.match) {
           socket.emit(event, socket.data.user.user_name, ...args);
         }
       });
