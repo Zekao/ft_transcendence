@@ -19,7 +19,6 @@
       </v-list-item>
 
       <v-list-item v-if="!isMe" class="justify-center">
-        <v-list-item-content> </v-list-item-content>
         <v-btn
           :disabled="friend.status !== 'ONLINE'"
           :loading="waitingGame"
@@ -74,6 +73,7 @@ export default Vue.extend({
       userID: (state: any): string => state.user.authUser.id,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
+      users: (state: any): IUser[] => state.user.users,
     }),
     value: {
       get(): boolean {
@@ -136,25 +136,53 @@ export default Vue.extend({
     } as any)
     this.socket.on('notification', (userID, status) => {
       if (status === 'connect') {
-        if (this.friend.id !== userID) return
-        const user = { ...this.friend }
-        user.status = 'ONLINE'
-        this.$store.commit('SELECTED_USER', user)
+        const user = this.users.find(el => el.id === userID)
+        if (user) {
+          const newUser = { ...user }
+          newUser.status = 'ONLINE'
+          this.$store.commit('user/UPDATE', newUser)
+        }
+        if (this.friend.id === userID) {
+          const user = { ...this.friend }
+          user.status = 'ONLINE'
+          this.$store.commit('SELECTED_USER', user)
+        }
       } else if (status === 'disconnect') {
-        if (this.friend.id !== userID) return
-        const user = { ...this.friend }
-        user.status = 'OFFLINE'
-        this.$store.commit('SELECTED_USER', user)
+        const user = this.users.find(el => el.id === userID)
+        if (user) {
+          const newUser = { ...user }
+          newUser.status = 'OFFLINE'
+          this.$store.commit('user/UPDATE', newUser)
+        }
+        if (this.friend.id === userID) {
+          const user = { ...this.friend }
+          user.status = 'OFFLINE'
+          this.$store.commit('SELECTED_USER', user)
+        }
       } else if (status === 'ingame') {
-        if (this.friend.id !== userID) return
-        const user = { ...this.friend }
-        user.in_game = 'IN_GAME'
-        this.$store.commit('SELECTED_USER', user)
+        const user = this.users.find(el => el.id === userID)
+        if (user) {
+          const newUser = { ...user }
+          newUser.in_game = 'IN_GAME'
+          this.$store.commit('user/UPDATE', newUser)
+        }
+        if (this.friend.id === userID) {
+          const user = { ...this.friend }
+          user.in_game = 'IN_GAME'
+          this.$store.commit('SELECTED_USER', user)
+        }
       } else if (status === 'outgame') {
-        if (this.friend.id !== userID) return
-        const user = { ...this.friend }
-        user.in_game = 'OUT_GAME'
-        this.$store.commit('SELECTED_USER', user)
+        const user = this.users.find(el => el.id === userID)
+        if (user) {
+          const newUser = { ...user }
+          newUser.in_game = 'OUT_GAME'
+          this.$store.commit('user/UPDATE', newUser)
+        }
+        if (this.friend.id === userID) {
+          const user = { ...this.friend }
+          user.in_game = 'OUT_GAME'
+          this.$store.commit('SELECTED_USER', user)
+        }
       }
     })
   },
