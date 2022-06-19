@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="e1" height="100%">
+  <v-stepper v-model="e1" height="100%" :key="index">
     <v-stepper-header>
       <v-stepper-step :complete="e1 > 1" step="1"> Matchmaking </v-stepper-step>
       <v-divider></v-divider>
@@ -16,7 +16,7 @@
         <GameCore @next="e1 = 3" />
       </v-stepper-content>
       <v-stepper-content step="3">
-        <GameResult @next="$forceUpdate()" />
+        <GameResult @next="index++" />
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -29,6 +29,10 @@ export default Vue.extend({
   name: 'IndexPage',
 
   middleware: 'auth',
+
+  data: () => ({
+    index: 0,
+  }),
 
   computed: {
     e1: {
