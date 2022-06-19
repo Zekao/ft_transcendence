@@ -35,6 +35,7 @@ let GameGateway = class GameGateway {
                 const findedMatch = await this.matchService.defineMatch(player);
                 if (findedMatch.id) {
                     console.log("FIND MATCH");
+                    client.data.match = findedMatch;
                     this.emitReady(client.data, "wait", "ready", findedMatch.id);
                 }
                 else {
@@ -242,7 +243,7 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.game == socket.data.game)
+                if (socket.data.match != null && player.game == socket.data.game)
                     socket.emit(event, ...args);
             });
         }
