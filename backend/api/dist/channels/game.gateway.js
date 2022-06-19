@@ -39,8 +39,6 @@ let GameGateway = class GameGateway {
                     client.data.match = this.matchService.getMatchsId(findedMatch.id, [
                         { withUsers: true },
                     ]);
-                    console.log("EMIT READY");
-                    console.log("FINDED MATCH ID: ", findedMatch.id);
                     this.emitReady(client.data, "wait", findedMatch.FirstPlayer.user_name, findedMatch.SecondPlayer.user_name, "ready", findedMatch.id);
                 }
                 else {
@@ -67,8 +65,7 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.match.id === socket.data.match.id)
-                    socket.emit(event, socket.data.user.user_name, ...args);
+                socket.emit(event, ...args);
             });
         }
         catch (_a) { }
