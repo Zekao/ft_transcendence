@@ -58,13 +58,15 @@ export const mutations: MutationTree<UserState> = {
   },
   CREATE_AUTH_BLOCKED: (state, user: IUser) => {
     state.authUserBlocked.push(user)
+    state.authUserFriends = state.authUserFriends.filter(
+      (el) => el.id !== user.id
+    )
   },
   DELETE_AUTH_BLOCKED: (state, userID: string) => {
     state.authUserBlocked = state.authUserBlocked.filter(
       (el) => el.id !== userID
     )
   },
-
   FETCH_AUTH_MATCHES: (state, matches: IMatch[]) => {
     state.authUserMatches = matches
   },
