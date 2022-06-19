@@ -59,8 +59,10 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.match === socket.data.match)
-                    socket.emit(event, socket.data.user.user_name, ...args);
+                if (player.match === socket.data.match) {
+                    console.log(socket.data.user.id);
+                    socket.emit(event, socket.data.user.id, ...args);
+                }
             });
         }
         catch (_a) { }
