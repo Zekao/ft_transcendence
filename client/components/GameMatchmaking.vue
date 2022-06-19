@@ -23,7 +23,7 @@
           />
         </v-avatar>
         <v-btn class="mr-2">
-          {{ match.FirstPlayer.display_name }}
+          {{ getLogin(match.FirstPlayer) }}
         </v-btn>
 
         <v-avatar class="mr-2">
@@ -32,7 +32,7 @@
           />
         </v-avatar>
         <v-btn>
-          {{ match.SecondPlayer.display_name }}
+          {{ getLogin(match.SecondPlayer) }}
         </v-btn>
       </v-list-item>
     </v-list>
@@ -105,6 +105,9 @@ export default Vue.extend({
   },
 
   methods: {
+    getLogin(user: IUser): string {
+      return user?.display_name || ''
+    },
     getAvatarPath(user: IUser): string {
       return (
         'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
