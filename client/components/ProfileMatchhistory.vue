@@ -74,17 +74,21 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileMatchhistory',
 
-  props: {
-    isSelected: {
-      type: Boolean as () => boolean,
-      default: false,
-    },
-  },
-
   data: () => ({
     search: '',
     selectedLogin: '',
   }),
+
+  async fetch() {
+    try {
+      await this.$store.dispatch('user/fetchAuthMatchs')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
+  },
 
   computed: {
     ...mapState({

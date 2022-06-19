@@ -35,6 +35,17 @@ export default Vue.extend({
     socket: null as NuxtSocket | null,
   }),
 
+  async fetch() {
+    try {
+      await this.$store.dispatch('user/fetchAuthFriends')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
+  },
+
   computed: {
     ...mapState({
       componentSelected: (state: any): number => state.selectedComponent,
