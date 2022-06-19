@@ -40,15 +40,11 @@
               overlap
             >
               <v-avatar>
-                <v-img
-                  :src="getAvatarPath(match.FirstPlayer)"
-                />
+                <v-img :src="getAvatarPath(match.FirstPlayer)" />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-              <v-img
-                :src="getAvatarPath(match.FirstPlayer)"
-              />
+              <v-img :src="getAvatarPath(match.FirstPlayer)" />
             </v-avatar>
             <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
           </v-list-item-action>
@@ -63,15 +59,11 @@
               overlap
             >
               <v-avatar>
-                <v-img
-                  :src="getAvatarPath(match.SecondPlayer)"
-                />
+                <v-img :src="getAvatarPath(match.SecondPlayer)" />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
-              <v-img
-                :src="getAvatarPath(match.SecondPlayer)"
-              />
+              <v-img :src="getAvatarPath(match.SecondPlayer)" />
             </v-avatar>
             <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
           </v-list-item-action>
