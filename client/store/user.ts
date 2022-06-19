@@ -78,6 +78,9 @@ export const mutations: MutationTree<UserState> = {
   },
   UPDATE_AUTH_AVATAR: (state, userAvatar: string) => {
     state.authUser.avatar = userAvatar + '#' + new Date().getTime()
+    state.users = state.users.map((el) =>
+      el.id === state.authUser.id ? state.authUser : el
+    )
   },
   UPDATE_AUTH: (state, user: IUser) => {
     state.authUser = user

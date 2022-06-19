@@ -31,11 +31,15 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileBlocked',
 
-  props: {
-    isSelected: {
-      type: Boolean as () => boolean,
-      default: false,
-    },
+  async fetch() {
+    try {
+      await this.$store.dispatch('user/fetchAuthBlocked')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
