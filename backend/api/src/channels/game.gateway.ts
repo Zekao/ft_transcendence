@@ -181,6 +181,7 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
+    // console.log("pOne : ", pOne, "Ball : ", ball);
     if (
       ball.x + ball.rad >= pOne.x &&
       ball.x - ball.rad <= pOne.x + 20 &&
@@ -237,6 +238,20 @@ export class GameGateway
       }
       client.data.posPlayerOne = pOne;
       client.data.posPlayerTwo = pTwo;
+      this.saveDataOnAllSocket(client.data, pOne, pTwo);
+    } catch {}
+  }
+
+  saveDataOnAllSocket(player: any, pOne, pTwo): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.game == socket.data.game) {
+          socket.data.posPlayerOne = pOne;
+          socket.data.posPlayerTwo = pTwo;
+        }
+      });
     } catch {}
   }
 

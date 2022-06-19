@@ -214,6 +214,21 @@ let GameGateway = class GameGateway {
             }
             client.data.posPlayerOne = pOne;
             client.data.posPlayerTwo = pTwo;
+            this.saveDataOnAllSocket(client.data, pOne, pTwo);
+        }
+        catch (_a) { }
+    }
+    saveDataOnAllSocket(player, pOne, pTwo) {
+        try {
+            if (!player.user)
+                return;
+            const sockets = Array.from(this.server.sockets.values());
+            sockets.forEach((socket) => {
+                if (player.game == socket.data.game) {
+                    socket.data.posPlayerOne = pOne;
+                    socket.data.posPlayerTwo = pTwo;
+                }
+            });
         }
         catch (_a) { }
     }
