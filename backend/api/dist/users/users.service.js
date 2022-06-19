@@ -221,8 +221,8 @@ let UsersService = class UsersService {
             rank: 0,
             ratio: 1,
             First_time: true,
-            color: '#ffffff',
-            backgroundColor: '#808080',
+            color: "#ffffff",
+            backgroundColor: "#808080",
             avatar: "default.png" + "?" + new Date().getTime(),
         });
         try {
@@ -357,8 +357,14 @@ let UsersService = class UsersService {
             found.first_name = firstname;
         if (lastname)
             found.last_name = lastname;
-        if (display_name)
+        if (display_name) {
+            const users = await this.getUsers();
+            for (const user of users) {
+                if (user.display_name == display_name && user.id != id)
+                    throw new common_1.ConflictException(`Display name \`${display_name}' already used`);
+            }
             found.display_name = display_name;
+        }
         if (TwoFA != null)
             found.TwoFA = TwoFA;
         if (email)

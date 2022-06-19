@@ -79,13 +79,7 @@ export class GameGateway
     const match: Matchs = client.data.match;
     const user = client.data.user;
 
-    if (message == "FINISH") {
-      console.log("GAME IS FINISH");
-      match.status = MatchStatus.ENDED;
-      this.matchService.saveMatch(match);
-      client.data.match = null;
-      client.disconnect();
-    } else if (
+    if (
       message == "updateBall" &&
       user.user_name === match.SecondPlayer.user_name
     )
@@ -101,6 +95,8 @@ export class GameGateway
     const pTwo = client.data.posPlayerTwo;
 
     if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+      match.status = MatchStatus.ENDED;
+      this.matchService.saveMatch(match);
       this.emitGame(client.data, "gameAction", "FINISH", match.id);
       return;
     }
@@ -120,7 +116,11 @@ export class GameGateway
     direction = client.data.direction;
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
+        match.status = MatchStatus.ENDED;
+        this.matchService.saveMatch(match);
         this.emitGame(client.data, "gameAction", "FINISH", match.id);
+        client.data.match = null;
+        client.disconnect();
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
@@ -129,7 +129,11 @@ export class GameGateway
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
+        match.status = MatchStatus.ENDED;
+        this.matchService.saveMatch(match);
         this.emitGame(client.data, "gameAction", "FINISH", match.id);
+        client.data.match = null;
+        client.disconnect();
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");

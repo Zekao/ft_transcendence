@@ -67,14 +67,7 @@ let GameGateway = class GameGateway {
     async GameAction(client, message) {
         const match = client.data.match;
         const user = client.data.user;
-        if (message == "FINISH") {
-            console.log("GAME IS FINISH");
-            match.status = matchs_enum_1.MatchStatus.ENDED;
-            this.matchService.saveMatch(match);
-            client.data.match = null;
-            client.disconnect();
-        }
-        else if (message == "updateBall" &&
+        if (message == "updateBall" &&
             user.user_name === match.SecondPlayer.user_name)
             this.updateBall(client);
     }
@@ -86,6 +79,8 @@ let GameGateway = class GameGateway {
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
         if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+            match.status = matchs_enum_1.MatchStatus.ENDED;
+            this.matchService.saveMatch(match);
             this.emitGame(client.data, "gameAction", "FINISH", match.id);
             return;
         }
@@ -105,7 +100,11 @@ let GameGateway = class GameGateway {
         direction = client.data.direction;
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
+                match.status = matchs_enum_1.MatchStatus.ENDED;
+                this.matchService.saveMatch(match);
                 this.emitGame(client.data, "gameAction", "FINISH", match.id);
+                client.data.match = null;
+                client.disconnect();
             }
             else {
                 velocity = 0.00005;
@@ -116,7 +115,11 @@ let GameGateway = class GameGateway {
         }
         else if (ball.x >= 850) {
             if (match.scoreFirstPlayer >= 5) {
+                match.status = matchs_enum_1.MatchStatus.ENDED;
+                this.matchService.saveMatch(match);
                 this.emitGame(client.data, "gameAction", "FINISH", match.id);
+                client.data.match = null;
+                client.disconnect();
             }
             else {
                 velocity = 0.00005;
