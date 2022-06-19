@@ -78,7 +78,8 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id == socket.data.match.id) socket.emit(event, ...args);
+        if (player.match.id == socket.data.match.id)
+          socket.emit(event, ...args);
       });
     } catch {}
   }
@@ -272,7 +273,8 @@ export class GameGateway
     try {
       let match = client.data.match;
       if (match) {
-        match = this.matchService.getMatchsId(match.id);
+        match = this.matchService.getMatchsId(match.id, [{ withUsers: true }]);
+        console.log(match);
         if (match.status === MatchStatus.PENDING)
           await this.matchService.deleteMatch(match.id);
         else if (
@@ -280,7 +282,6 @@ export class GameGateway
           match.scoreFirstPlayer != 5 &&
           match.scoreSecondPlayer != 5
         ) {
-          console.log("TEST");
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
             match.scoreSecondPlayer = 5;

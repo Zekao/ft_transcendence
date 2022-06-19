@@ -253,13 +253,13 @@ let GameGateway = class GameGateway {
         try {
             let match = client.data.match;
             if (match) {
-                match = this.matchService.getMatchsId(match.id);
+                match = this.matchService.getMatchsId(match.id, [{ withUsers: true }]);
+                console.log(match);
                 if (match.status === matchs_enum_1.MatchStatus.PENDING)
                     await this.matchService.deleteMatch(match.id);
                 else if (match.status === matchs_enum_1.MatchStatus.STARTED &&
                     match.scoreFirstPlayer != 5 &&
                     match.scoreSecondPlayer != 5) {
-                    console.log("TEST");
                     if (client.data.user === match.FirstPlayer) {
                         match.scoreFirstPlayer = 0;
                         match.scoreSecondPlayer = 5;
