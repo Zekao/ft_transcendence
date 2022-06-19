@@ -75,6 +75,7 @@ export class StatusGateway
         const gameID = message[1];
         this.matchSevice.deleteMatch(gameID);
       }
+      if (message[0] === "create") client.emit("notification", "update");
     } catch {}
   }
 
