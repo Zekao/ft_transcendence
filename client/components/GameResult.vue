@@ -104,9 +104,11 @@ export default Vue.extend({
         try {
           const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
           this.match = res
-          console.log(res)
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     },

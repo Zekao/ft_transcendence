@@ -139,8 +139,11 @@ export default Vue.extend({
         try {
           await this.$store.dispatch('user/updateAuthAvatar', formData)
           this.file = {} as Blob
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     },
@@ -150,8 +153,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -160,8 +166,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           TwoFA: !this.isTwoFactorAuth,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -171,8 +180,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           color: this.color,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -182,8 +194,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           backgroundColor: this.backgroundColor,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -195,8 +210,11 @@ export default Vue.extend({
           this.isImageLoading = false
           this.is2FADialog = true
         }, 2000)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 

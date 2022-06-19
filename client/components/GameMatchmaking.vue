@@ -22,18 +22,14 @@
         </v-btn>
 
         <v-avatar class="mr-2">
-          <v-img
-            :src="getAvatarPath(match.FirstPlayer)"
-          />
+          <v-img :src="getAvatarPath(match.FirstPlayer)" />
         </v-avatar>
         <v-btn class="mr-2">
           {{ getLogin(match.FirstPlayer) }}
         </v-btn>
 
         <v-avatar class="mr-2">
-          <v-img
-            :src="getAvatarPath(match.SecondPlayer)"
-          />
+          <v-img :src="getAvatarPath(match.SecondPlayer)" />
         </v-avatar>
         <v-btn>
           {{ getLogin(match.SecondPlayer) }}
@@ -62,10 +58,13 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get('/matchs?status=PENDING')
+      const res = await this.$axios.$get('/matchs?status=STARTED')
       this.matches = res
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
     }
   },
 
@@ -96,14 +95,17 @@ export default Vue.extend({
         try {
           const res = await this.$axios.$get(`/matchs/${matchID}`)
           this.matches.push(res)
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     })
     this.socket.on('wait', (msg, matchID) => {
       if (msg === 'gameAction') {
-        this.matches = this.matches.filter(el => el.id !== matchID)
+        this.matches = this.matches.filter((el) => el.id !== matchID)
       }
     })
   },

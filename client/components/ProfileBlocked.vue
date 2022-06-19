@@ -60,8 +60,11 @@ export default Vue.extend({
     async unblocked(userID: string) {
       try {
         await this.$store.dispatch('user/deleteAuthBlocked', userID)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
   },
