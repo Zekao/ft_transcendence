@@ -125,7 +125,7 @@ export default Vue.extend({
       if (!value) {
         this.waitingGame = false
       }
-    }
+    },
   },
   mounted() {
     this.socket = this.$nuxtSocket({

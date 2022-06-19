@@ -5,38 +5,39 @@
     class="d-flex flex-column justify-center align-center"
   >
     <v-sheet color="#00000000" class="mb-8">
-    <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin">
-      Join queue
-    </v-btn>
-    <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
-
+      <v-btn x-large :loading="waiting" class="mr-4" @click="emitJoin">
+        Join queue
+      </v-btn>
+      <v-btn x-large :disabled="!waiting" @click="emitLeave"> Leave </v-btn>
     </v-sheet>
 
     <v-list>
-      <v-list-item
-        v-for="(match, i) in matches"
-        :key="i"
-        class="my-2">
-            <v-btn class="mr-2" @click="gameWatcher(match.id)">
-              <v-icon> mdi-binoculars </v-icon>
-            </v-btn>
+      <v-list-item v-for="(match, i) in matches" :key="i" class="my-2">
+        <v-btn class="mr-2" @click="gameWatcher(match.id)">
+          <v-icon> mdi-binoculars </v-icon>
+        </v-btn>
 
-              <v-avatar class="mr-2">
-                <v-img :src="'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar" />
-              </v-avatar>
-              <v-btn class="mr-2">
-             {{ match.FirstPlayer.display_name }}
+        <v-avatar class="mr-2">
+          <v-img
+            :src="
+              'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar
+            "
+          />
+        </v-avatar>
+        <v-btn class="mr-2">
+          {{ match.FirstPlayer.display_name }}
+        </v-btn>
 
-              </v-btn>
-
-
-              <v-avatar class="mr-2">
-                 <v-img :src="'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar" />
-              </v-avatar>
-              <v-btn>
-              {{ match.SecondPlayer.display_name }}
-
-              </v-btn>
+        <v-avatar class="mr-2">
+          <v-img
+            :src="
+              'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar
+            "
+          />
+        </v-avatar>
+        <v-btn>
+          {{ match.SecondPlayer.display_name }}
+        </v-btn>
       </v-list-item>
     </v-list>
   </v-card>
@@ -56,19 +57,21 @@ export default Vue.extend({
     waiting: false,
     ready: false,
     socket: null as NuxtSocket | null,
-    matches: [{
-      id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-      FirstPlayer: {
-        display_name: 'lusehair',
-        avatar: 'default.png',
-      } as IUser,
-      SecondPlayer: {
-        display_name: 'gamarcha',
-        avatar: 'default.png',
-      } as IUser,
-      scoreFirstPlayer: 7,
-      scoreSecondPlayer: 4,
-    }] as IMatch[],
+    matches: [
+      {
+        id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
+        FirstPlayer: {
+          display_name: 'lusehair',
+          avatar: 'default.png',
+        } as IUser,
+        SecondPlayer: {
+          display_name: 'gamarcha',
+          avatar: 'default.png',
+        } as IUser,
+        scoreFirstPlayer: 7,
+        scoreSecondPlayer: 4,
+      },
+    ] as IMatch[],
   }),
 
   computed: {

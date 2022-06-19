@@ -1,6 +1,5 @@
 <template>
   <v-card height="calc(100% - 114px)" color="grey lighten-1" class="ma-6">
-    
     <v-card
       height="calc(100% - 64px)"
       color="#00000000"
@@ -19,22 +18,32 @@
       </v-list>
       <v-list v-else width="40%">
         <v-list-item v-for="(match, i) in matchs" :key="i">
-           <v-list-item>
+          <v-list-item>
             <v-btn @click="gameWatcher(match.id)">
               <v-icon> mdi-binoculars </v-icon>
             </v-btn>
           </v-list-item>
           <v-list-item class="justify-center align-center">
-              <v-avatar>
-                <v-img :src="'https://ft.localhost:4500/api/image/' + match.FirstPlayer.avatar" />
-              </v-avatar>
-             {{ match.FirstPlayer.display_name }}
+            <v-avatar>
+              <v-img
+                :src="
+                  'https://ft.localhost:4500/api/image/' +
+                  match.FirstPlayer.avatar
+                "
+              />
+            </v-avatar>
+            {{ match.FirstPlayer.display_name }}
           </v-list-item>
-         
+
           <v-list-item class="justify-center align-center">
-              <v-avatar>
-                 <v-img :src="'https://ft.localhost:4500/api/image/' + match.SecondPlayer.avatar" />
-              </v-avatar>
+            <v-avatar>
+              <v-img
+                :src="
+                  'https://ft.localhost:4500/api/image/' +
+                  match.SecondPlayer.avatar
+                "
+              />
+            </v-avatar>
             {{ match.SecondPlayer.display_name }}
           </v-list-item>
         </v-list-item>
@@ -54,58 +63,55 @@ export default Vue.extend({
 
   data: () => ({
     matchs: [
+      {
+        id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
+        FirstPlayer: {
+          display_name: 'lusehair',
+          avatar: 'default.png',
+        },
+        SecondPlayer: {
+          display_name: 'gamarcha',
+          avatar: 'default.png',
+        },
+        scoreFirstPlayer: 7,
+        scoreSecondPlayer: 4,
+        winner: null,
+        status: 'ENDED',
+      },
 
-    
-    {id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-    FirstPlayer: {
-      display_name: 'lusehair',
-      avatar: 'default.png'
-    },
-    SecondPlayer: {
-      display_name: 'gamarcha',
-      avatar: 'default.png'
-    },
-    scoreFirstPlayer: 7,
-    scoreSecondPlayer: 4,
-    winner: null,
-    status: 'ENDED'
-    },
-    
-    {id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-    FirstPlayer: {
-      display_name: 'lusehair',
-      avatar: 'default.png'
-    },
-    SecondPlayer: {
-      display_name: 'gamarcha',
-      avatar: 'default.png'
-    },
-    scoreFirstPlayer: 7,
-    scoreSecondPlayer: 4,
-    winner: null,
-    status: 'ENDED'
-    },
+      {
+        id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
+        FirstPlayer: {
+          display_name: 'lusehair',
+          avatar: 'default.png',
+        },
+        SecondPlayer: {
+          display_name: 'gamarcha',
+          avatar: 'default.png',
+        },
+        scoreFirstPlayer: 7,
+        scoreSecondPlayer: 4,
+        winner: null,
+        status: 'ENDED',
+      },
 
-    {id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
-    FirstPlayer: {
-      display_name: 'lusehair',
-      avatar: 'default.png'
-    },
-    SecondPlayer: {
-      display_name: 'gamarcha',
-      avatar: 'default.png'
-    },
-    scoreFirstPlayer: 7,
-    scoreSecondPlayer: 4,
-    winner: null,
-    status: 'ENDED'
-    },
-    
-    
-    ]
-
+      {
+        id: 'fb85a072-5b90-4a2d-afe9-045cd0335c5e',
+        FirstPlayer: {
+          display_name: 'lusehair',
+          avatar: 'default.png',
+        },
+        SecondPlayer: {
+          display_name: 'gamarcha',
+          avatar: 'default.png',
+        },
+        scoreFirstPlayer: 7,
+        scoreSecondPlayer: 4,
+        winner: null,
+        status: 'ENDED',
+      },
+    ],
   }),
- 
 
   async fetch() {
     await this.$store.dispatch('user/fetchAuthMatchs')
@@ -125,13 +131,10 @@ export default Vue.extend({
     },
   },
 
-  methods: { 
-
-    gameWatcher(gameId: string)
-    {
-      // Do somes stuff for redirecting to the game 
-    }
-  
+  methods: {
+    gameWatcher(gameId: string) {
+      // Do somes stuff for redirecting to the game
+    },
   },
 })
 </script>
