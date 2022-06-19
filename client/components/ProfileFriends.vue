@@ -41,14 +41,17 @@ export default Vue.extend({
 
   data: () => ({
     socket: null as NuxtSocket | null,
-    //   authUserFriends: [
-    //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-    //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: '' },
-    //   ],
   }),
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthFriends')
+    try {
+      await this.$store.dispatch('user/fetchAuthFriends')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
