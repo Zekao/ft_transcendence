@@ -41,19 +41,13 @@
             >
               <v-avatar>
                 <v-img
-                  :src="
-                    'https://ft.localhost:4500/api/image/' +
-                    match.FirstPlayer?.avatar || 'default.png'
-                  "
+                  :src="getAvatarPath(match.FirstPlayer)"
                 />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
               <v-img
-                :src="
-                  'https://ft.localhost:4500/api/image/' +
-                  match.FirstPlayer?.avatar || 'default.png'
-                "
+                :src="getAvatarPath(match.FirstPlayer)"
               />
             </v-avatar>
             <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
@@ -70,19 +64,13 @@
             >
               <v-avatar>
                 <v-img
-                  :src="
-                    'https://ft.localhost:4500/api/image/' +
-                    match.SecondPlayer?.avatar || 'default.png'
-                  "
+                  :src="getAvatarPath(match.SecondPlayer)"
                 />
               </v-avatar>
             </v-badge>
             <v-avatar v-else>
               <v-img
-                :src="
-                  'https://ft.localhost:4500/api/image/' +
-                  match.SecondPlayer?.avatar || 'default.png'
-                "
+                :src="getAvatarPath(match.SecondPlayer)"
               />
             </v-avatar>
             <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
@@ -136,9 +124,9 @@ export default Vue.extend({
       }
     },
 
-    getAvatarPath(userName: IUser): string {
+    getAvatarPath(user: IUser): string {
       return (
-        'https://ft.localhost:4500/api/image/' + userName.user_name + '.png'
+        'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
       )
     },
 
