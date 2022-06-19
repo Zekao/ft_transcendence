@@ -228,9 +228,11 @@ export default Vue.extend({
         this.$store.dispatch('user/fetch'),
         this.$store.dispatch('user/fetchAuthBlocked'),
       ])
-    } catch (err) {
-      this.$store.dispatch('logout')
-      this.$router.push('/login')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
     }
   },
 
@@ -312,9 +314,11 @@ export default Vue.extend({
               : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
-      } catch (err) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
     acceptInvitation() {

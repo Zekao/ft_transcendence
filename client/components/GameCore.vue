@@ -50,7 +50,8 @@ export default V.extend({
       accessToken: (state: any) => state.token.accessToken,
       selectedMatchId: (state: any) => state.selectedMatchId,
       color: (state: any): string => state.user.authUser.color,
-      backgroundColor: (state: any): string => state.user.authUser.backgroundColor,
+      backgroundColor: (state: any): string =>
+        state.user.authUser.backgroundColor,
     }),
     height() {
       switch (this.$vuetify.breakpoint.name) {
@@ -143,8 +144,7 @@ export default V.extend({
       this.context.fillText('THE GAME IS FINISHED', 370, 50)
     },
     moveBall() {
-      if (this.ball.x === 420 || this.ball.y === 400)
-        return ;
+      if (this.ball.x === 420 || this.ball.y === 400) return
       this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI) // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
       this.context.fill()
       this.context.restore()
@@ -193,15 +193,15 @@ export default V.extend({
               this.$emit('next')
             } else if (data === 'addOne') this.score.player1 += 1
             else if (data === 'addTwo') this.score.player2 += 1
-            else if (data === "Give up") {
+            else if (data === 'Give up') {
               this.context.clearRect(0, 0, 1080, 1920)
               this.$store.commit('MATCH_DONE', true)
               this.$emit('next')
             }
           })
-          setInterval(this.updateContent, 17)
+        setInterval(this.updateContent, 17)
       }
-    }
+    },
   },
 })
 </script>

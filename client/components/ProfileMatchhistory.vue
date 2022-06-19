@@ -112,9 +112,11 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('user/fetchMatchs', user.id)
         this.selectedLogin = this.search
-      } catch (err) {
-        this.$store.dispatch('logout')
-        this.$router.push('/login')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
