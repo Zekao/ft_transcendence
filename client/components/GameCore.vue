@@ -81,51 +81,13 @@ export default V.extend({
   },
   watch: {
     selectedMatchId(value: string) {
-      if (value) {
-        this.socket = this.$nuxtSocket({
-          channel: '/game',
-          auth: {
-            Authorization: this.accessToken,
-            game: this.selectedMatchId,
-          },
-          path: '/api/socket.io/',
-        } as any)
-        this.socket.on('move', (data, boolplayer) => {
-          if (boolplayer === 1) {
-            if (this.position.y !== data) this.position.y = data
-            if (this.score.player1 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
-          } else if (boolplayer === 2) {
-            if (this.position2.y !== data) this.position2.y = data
-            else if (this.score.player2 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
-          }
-        }),
-          this.socket.on('gameAction', (data, x, y) => {
-            if (data === 'moveBall') {
-              this.ball.x = x
-              this.ball.y = y
-              this.moveBall()
-            } else if (data === 'FINISH') {
-              this.endGame()
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            } else if (data === 'addOne') this.score.player1 += 1
-            else if (data === 'addTwo') this.score.player2 += 1
-          })
-          setInterval(this.updateContent, 17)
-      }
+      this.socketInit(value)
     },
   },
   mounted() {
     this.context = (this.$refs.game as any).getContext('2d')
     this.context.clearRect(0, 0, 1080, 1920)
+    this.socketInit(this.selectedMatchId)
   },
   shortcuts: {
     keydown(event) {
@@ -189,6 +151,50 @@ export default V.extend({
     move(direction: string) {
       if (this.socket) this.socket.emit('move', direction)
     },
+
+    // SOCKET INIT
+    socketInit(matchID: string) {
+      if (matchID) {
+        this.socket = this.$nuxtSocket({
+          channel: '/game',
+          auth: {
+            Authorization: this.accessToken,
+            game: this.selectedMatchId,
+          },
+          path: '/api/socket.io/',
+        } as any)
+        this.socket.on('move', (data, boolplayer) => {
+          if (boolplayer === 1) {
+            if (this.position.y !== data) this.position.y = data
+            if (this.score.player1 >= 5) {
+              this.context.clearRect(0, 0, 1080, 1920)
+              this.$store.commit('MATCH_DONE', true)
+              this.$emit('next')
+            }
+          } else if (boolplayer === 2) {
+            if (this.position2.y !== data) this.position2.y = data
+            else if (this.score.player2 >= 5) {
+              this.context.clearRect(0, 0, 1080, 1920)
+              this.$store.commit('MATCH_DONE', true)
+              this.$emit('next')
+            }
+          }
+        }),
+          this.socket.on('gameAction', (data, x, y) => {
+            if (data === 'moveBall') {
+              this.ball.x = x
+              this.ball.y = y
+              this.moveBall()
+            } else if (data === 'FINISH') {
+              this.endGame()
+              this.$store.commit('MATCH_DONE', true)
+              this.$emit('next')
+            } else if (data === 'addOne') this.score.player1 += 1
+            else if (data === 'addTwo') this.score.player2 += 1
+          })
+          setInterval(this.updateContent, 17)
+      }
+    }
   },
 })
 </script>
