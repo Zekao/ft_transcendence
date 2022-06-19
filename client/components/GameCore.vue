@@ -49,6 +49,7 @@ export default V.extend({
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       selectedMatchId: (state: any) => state.selectedMatchId,
+      username: (state: any) => state.user.authUser.user_name,
       color: (state: any): string => state.user.authUser.color,
       backgroundColor: (state: any): string =>
         state.user.authUser.backgroundColor,
@@ -166,16 +167,21 @@ export default V.extend({
           },
           path: '/api/socket.io/',
         } as any)
-        this.socket.on('move', (data, boolplayer) => {
-          if (boolplayer === 1) {
-            if (this.position.y !== data) this.position.y = data
+        this.socket.on('move', (username1, username2, data, boolplayer) => {
+          if (this.username === username1 || this.username === username2) {
+
+            if (boolplayer === 1) {
+              if (this.position.y !== data) this.position.y = data
           } else if (boolplayer === 2) {
             if (this.position2.y !== data) this.position2.y = data
           }
+            }
         })
-        this.socket.on('gameAction', (data, x, y) => {
-          if (data === 'moveBall') {
-            this.ball.x = x
+        this.socket.on('gameAction', (username1, username2, data, x, y) => {
+          if (this.username === username1 || this.username === username2) {
+
+            if (data === 'moveBall') {
+              this.ball.x = x
             this.ball.y = y
           } else if (data === 'FINISH') {
             this.endGame()
@@ -188,6 +194,7 @@ export default V.extend({
             this.$store.commit('MATCH_DONE', true)
             this.$emit('next')
           }
+        }
         })
         setInterval(this.updateContent, 17)
       }
