@@ -220,7 +220,7 @@ export default Vue.extend({
     socket: null as NuxtSocket | null,
   }),
 
-  async fetch(): Promise<void> {
+  async fetch() {
     try {
       await Promise.all([
         this.$store.dispatch('channel/fetch'),
@@ -279,7 +279,7 @@ export default Vue.extend({
         userName: string
       ) => {
         if (authUserName === 'update') {
-          await this.$fetch()
+          this.$fetch()
         }
         else if (authUserName === this.username && status === 'game') {
           this.invite = true
