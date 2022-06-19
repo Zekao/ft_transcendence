@@ -25,8 +25,12 @@ let ChatController = class ChatController {
     }
     async GetHistoryMessage(id, req) {
         const user = await this.usersService.getUserId(id);
-        const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
-        return this.chatService.getHistory(chat);
+        try {
+            const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
+            return this.chatService.getHistory(chat);
+        }
+        catch (err) { }
+        return null;
     }
 };
 __decorate([

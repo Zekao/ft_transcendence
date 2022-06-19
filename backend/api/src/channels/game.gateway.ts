@@ -66,8 +66,9 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.game == socket.data.game)
-          socket.emit(event, socket.data.user.user_name, ...args);
+        if (player.game === socket.data.game)
+          console.log(socket.data.user.user_name);
+        socket.emit(event, socket.data.user.user_name, ...args);
       });
     } catch {}
   }
@@ -96,6 +97,7 @@ export class GameGateway
       match.status = MatchStatus.ENDED;
       this.matchService.saveMatch(match);
       this.emitGame(client.data, "gameAction", "FINISH", match.id);
+      client.data.match = null;
       return;
     }
     if (direction.x === 1 || direction.x === -1) {
@@ -268,11 +270,16 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const user = client.data.user;
     try {
-      const match: Matchs = client.data.match;
+      let match = client.data.match;
       if (match) {
+        match = this.matchService.getMatchsId(match.id);
         if (match.status === MatchStatus.PENDING)
           await this.matchService.deleteMatch(match.id);
-        else if (match.status === MatchStatus.STARTED) {
+        else if (
+          match.status === MatchStatus.STARTED &&
+          match.scoreFirstPlayer != 5 &&
+          match.scoreSecondPlayer != 5
+        ) {
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
             match.scoreSecondPlayer = 5;

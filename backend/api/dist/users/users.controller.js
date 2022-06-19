@@ -93,6 +93,7 @@ let UsersController = class UsersController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Return list of all existing users" }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
@@ -105,6 +106,7 @@ __decorate([
 ], UsersController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Get)("/ranklist"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Return all user in ranked order" }),
     (0, swagger_1.ApiOkResponse)({
         description: "Ok.",
@@ -344,6 +346,7 @@ __decorate([
 ], UsersController.prototype, "patchUser", null);
 __decorate([
     (0, common_1.Patch)("/updateRank"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({
         summary: "Update the rank for the specified user profile",
     }),

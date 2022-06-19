@@ -29,6 +29,7 @@ export class ChannelsController {
   /* ************************************************************************** */
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Return list of all existing channels" })
   GetAllChannel(@Query() filters: ChannelFilteDto): Promise<Channel[]> {
     // if (Object.keys(filters).length)
@@ -151,6 +152,7 @@ export class ChannelsController {
   /*                   DELETE                                                   */
   /* ************************************************************************** */
 
+  @UseGuards(JwtAuthGuard)
   @Delete("/:id")
   @ApiOperation({
     summary: "Delete a specified channel",
@@ -215,6 +217,7 @@ export class ChannelsController {
   /*                   PATCH                                                    */
   /* ************************************************************************** */
   @Patch("/:id")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Modify attribute of a specified channel",
   })

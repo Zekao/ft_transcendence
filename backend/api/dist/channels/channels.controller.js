@@ -77,6 +77,7 @@ let ChannelsController = class ChannelsController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: "Return list of all existing channels" }),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -201,6 +202,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChannelsController.prototype, "addUserToBanned", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)("/:id"),
     (0, swagger_1.ApiOperation)({
         summary: "Delete a specified channel",
@@ -264,6 +266,7 @@ __decorate([
 ], ChannelsController.prototype, "removeUserToBanned", null);
 __decorate([
     (0, common_1.Patch)("/:id"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({
         summary: "Modify attribute of a specified channel",
     }),
