@@ -69,6 +69,7 @@ export default Vue.extend({
   computed: {
     ...mapState({
       friend: (state: any): IUser => state.selectedUser,
+      matchDone: (state: any): boolean => state.matchDone,
       accessToken: (state: any): string => state.token.accessToken,
       userID: (state: any): string => state.user.authUser.id,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
@@ -118,6 +119,13 @@ export default Vue.extend({
       )
       // && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
+  },
+  watch: {
+    matchDone(value: boolean) {
+      if (!value) {
+        this.waitingGame = false
+      }
+    }
   },
   mounted() {
     this.socket = this.$nuxtSocket({
