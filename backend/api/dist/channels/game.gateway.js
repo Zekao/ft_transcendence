@@ -76,7 +76,7 @@ let GameGateway = class GameGateway {
                 return;
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
-                if (player.game == socket.data.game)
+                if (player.match.id == socket.data.match.id)
                     socket.emit(event, ...args);
             });
         }
