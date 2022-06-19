@@ -259,6 +259,7 @@ let GameGateway = class GameGateway {
                 else if (match.status === matchs_enum_1.MatchStatus.STARTED &&
                     match.scoreFirstPlayer != 5 &&
                     match.scoreSecondPlayer != 5) {
+                    console.log("TEST");
                     if (client.data.user === match.FirstPlayer) {
                         match.scoreFirstPlayer = 0;
                         match.scoreSecondPlayer = 5;

@@ -280,6 +280,7 @@ export class GameGateway
           match.scoreFirstPlayer != 5 &&
           match.scoreSecondPlayer != 5
         ) {
+          console.log("TEST");
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
             match.scoreSecondPlayer = 5;
