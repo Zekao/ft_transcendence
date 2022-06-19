@@ -87,7 +87,6 @@ __decorate([
 ], AuthController.prototype, "callbackfortytwo", null);
 __decorate([
     (0, common_1.Get)("/generate"),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({
         summary: "Generate amd create a random user",
     }),

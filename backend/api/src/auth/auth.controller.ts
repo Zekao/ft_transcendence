@@ -50,7 +50,6 @@ export class AuthController {
   }
 
   @Get("/generate")
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Generate amd create a random user",
   })
