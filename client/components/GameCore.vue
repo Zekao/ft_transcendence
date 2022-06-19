@@ -142,6 +142,8 @@ export default V.extend({
       this.context.fillText('THE GAME IS FINISHED', 370, 50)
     },
     moveBall() {
+      if (this.ball.x == 420 || this.ball.y == 400)
+        return ;
       this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI) // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
       this.context.fill()
       this.context.restore()
