@@ -20,11 +20,8 @@
           <v-avatar v-else>
             <v-img :src="getAvatarOne" />
           </v-avatar>
-          <v-btn> {{ getPlayerOne }} </v-btn>
+          <v-btn> {{ getPlayerOne }} - {{ getScoreOne }} </v-btn>
         </v-list-item-action>
-        <v-list-item-content class="justify-center">
-          {{ getScoreOne }} - {{ getScoreTwo }}
-        </v-list-item-content>
         <v-list-item-action class="justify-center align-center">
           <v-badge
             v-if="getScoreTwo > getScoreOne"
@@ -39,7 +36,7 @@
           <v-avatar v-else>
             <v-img :src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{ getPlayerTwo }} </v-btn>
+          <v-btn> {{ getScoreTwo }} - {{ getPlayerTwo }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
