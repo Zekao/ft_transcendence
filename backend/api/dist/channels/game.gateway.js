@@ -87,7 +87,7 @@ let GameGateway = class GameGateway {
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
         if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-            this.emitGame(client.data, "gameAction", "FINISH");
+            this.emitGame(client.data, "gameAction", "FINISH", match.id);
             return;
         }
         if (direction.x === 1 || direction.x === -1) {
@@ -106,7 +106,7 @@ let GameGateway = class GameGateway {
         direction = client.data.direction;
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
-                this.emitGame(client.data, "gameAction", "FINISH");
+                this.emitGame(client.data, "gameAction", "FINISH", match.id);
             }
             else {
                 velocity = 0.00005;
@@ -117,7 +117,7 @@ let GameGateway = class GameGateway {
         }
         else if (ball.x >= 850) {
             if (match.scoreFirstPlayer >= 5) {
-                this.emitGame(client.data, "gameAction", "FINISH");
+                this.emitGame(client.data, "gameAction", "FINISH", match.id);
             }
             else {
                 velocity = 0.00005;
