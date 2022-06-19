@@ -55,9 +55,10 @@ export class GameGateway
         } else {
           console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
-          client.data.match = this.matchService.getMatchsId(match.id, [
+          client.data.match = await this.matchService.getMatchsId(match.id, [
             { withUsers: true },
           ]);
+          console.log("NEW MATCH ID : ", client.data.match.id);
         }
       }
       if (message === "leave") {
@@ -233,15 +234,15 @@ export class GameGateway
     if (match) {
       match.status = MatchStatus.ENDED;
       if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
-        match.FirstPlayer.win++
-        match.SecondPlayer.loose++
+        match.FirstPlayer.win++;
+        match.SecondPlayer.loose++;
       }
       if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
-        match.FirstPlayer.loose++
-        match.SecondPlayer.win++
+        match.FirstPlayer.loose++;
+        match.SecondPlayer.win++;
       }
-      this.userService.saveUser(match.FirstPlayer)
-      this.userService.saveUser(match.SecondPlayer)
+      this.userService.saveUser(match.FirstPlayer);
+      this.userService.saveUser(match.SecondPlayer);
       this.matchService.saveMatch(match);
       this.emitGame(
         client.data,
@@ -392,9 +393,7 @@ export class GameGateway
       [{ withUsers: true }]
     );
     client.data.match = match;
-    console.log("MATCH ID", match.id);
     client.data.game = client.handshake.auth.game;
-    console.log("GAME ID", client.data.game);
     client.data.posPlayerOne = { x: 0, y: 250 };
     client.data.posPlayerTwo = { x: 850, y: 250 };
     client.data.posBall = { x: 420, y: 400, rad: 10 };
