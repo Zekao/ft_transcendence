@@ -33,7 +33,6 @@ export class MatchsController {
   @Get("/:id")
   @ApiOperation({ summary: "Return a match by id" })
   getMatchsId(@Param("id") id: string, @Request() req): Promise<Matchs> {
-    console.log(req.relation);
     return this.matchService.getMatchsId(id, [{ withUsers: true }]);
   }
 

@@ -28,7 +28,6 @@ let MatchsController = class MatchsController {
         return this.matchService.getMatchs();
     }
     getMatchsId(id, req) {
-        console.log(req.relation);
         return this.matchService.getMatchsId(id, [{ withUsers: true }]);
     }
     deleteUser(id) {

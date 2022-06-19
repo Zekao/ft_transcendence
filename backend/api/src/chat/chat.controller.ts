@@ -26,8 +26,11 @@ export class ChatController {
     @Request() req
   ): Promise<{ id: string; message: string }[]> {
     const user = await this.usersService.getUserId(id);
-    const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
-    return this.chatService.getHistory(chat);
+    try {
+      const chat = await this.chatService.FindTwoChat(user.id, req.user.id);
+      return this.chatService.getHistory(chat);
+    } catch (err) {}
+    return null;
   }
 
   /* ************************************************************************** */
