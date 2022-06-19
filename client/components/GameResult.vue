@@ -72,6 +72,30 @@ export default Vue.extend({
       selectedMatchId: (state: any) => state.selectedMatchId,
       matchDone: (state: any) => state.matchDone,
     }),
+    getPlayerOne() {
+      return this.match.FirstPlayer?.display_name || ''
+    },
+    getPlayerTwo() {
+      return this.match.SecondPlayer?.display_name || ''
+    },
+    getScoreOne() {
+      return this.match.scoreFirstPlayer || 0
+    },
+    getScoreTwo() {
+      return this.match.scoreSecondPlayer || 0
+    },
+    getAvatarOne() {
+      return (
+        'https://ft.localhost:4500/api/image/' +
+          this.match.FirstPlayer?.avatar || 'default.png'
+      )
+    },
+    getAvatarTwo() {
+      return (
+        'https://ft.localhost:4500/api/image/' +
+          this.match.SecondPlayer?.avatar || 'default.png'
+      )
+    },
   },
 
   watch: {
@@ -94,36 +118,6 @@ export default Vue.extend({
       this.$store.commit('MATCH_DONE', false)
       this.$store.commit('SET_VALUE', 1)
       this.$emit('next')
-    },
-
-    getPlayerOne() {
-      return this.match.FirstPlayer?.display_name || ''
-    },
-
-    getPlayerTwo() {
-      return this.match.SecondPlayer?.display_name || ''
-    },
-
-    getScoreOne() {
-      return this.match.scoreFirstPlayer || 0
-    },
-
-    getScoreTwo() {
-      return this.match.scoreSecondPlayer || 0
-    },
-
-    getAvatarOne() {
-      return (
-        'https://ft.localhost:4500/api/image/' +
-          this.match.FirstPlayer?.avatar || 'default.png'
-      )
-    },
-
-    getAvatarTwo() {
-      return (
-        'https://ft.localhost:4500/api/image/' +
-          this.match.SecondPlayer?.avatar || 'default.png'
-      )
     },
   },
 })
