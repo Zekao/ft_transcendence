@@ -45,6 +45,7 @@ export class GameGateway
         const findedMatch = await this.matchService.defineMatch(player);
         if (findedMatch.id) {
           console.log("FIND MATCH");
+          client.data.match = findedMatch;
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
@@ -66,7 +67,7 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.game == socket.data.game)
+        if (player.match === socket.data.match)
           socket.emit(event, socket.data.user.user_name, ...args);
       });
     } catch {}
