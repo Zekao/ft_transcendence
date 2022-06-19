@@ -270,8 +270,8 @@ export class GameGateway
     const user = client.data.user;
     try {
       let match = client.data.match;
-      match = this.matchService.getMatchsId(match.id);
       if (match) {
+        match = this.matchService.getMatchsId(match.id);
         if (match.status === MatchStatus.PENDING)
           await this.matchService.deleteMatch(match.id);
         else if (
