@@ -58,7 +58,7 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get('/matchs?status=PENDING')
+      const res = await this.$axios.$get('/matchs?status=STARTED')
       this.matches = res
     } catch (err: any) {
       if (err.response.status === 401) {
