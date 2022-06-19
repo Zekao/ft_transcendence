@@ -18,7 +18,7 @@ import { Matchs } from "src/matchs/matchs.entity";
     JwtModule.register({
       secret: "secretkey",
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: 86400,
       },
     }),
     TypeOrmModule.forFeature([User, Matchs]),
