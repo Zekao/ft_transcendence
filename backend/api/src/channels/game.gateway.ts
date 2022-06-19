@@ -394,7 +394,7 @@ export class GameGateway
     client.data.match = match;
     console.log("MATCH ID", match.id);
     client.data.game = client.handshake.auth.game;
-    console.log("GAME ID", game);
+    console.log("GAME ID", client.data.game);
     client.data.posPlayerOne = { x: 0, y: 250 };
     client.data.posPlayerTwo = { x: 850, y: 250 };
     client.data.posBall = { x: 420, y: 400, rad: 10 };
