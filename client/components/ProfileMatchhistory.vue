@@ -8,7 +8,8 @@
         outlined
         dense
         hide-details
-        class="mr-2"
+        class="mr-2" 
+        :rules="searchRules"
       />
       <v-btn outlined class="mr-2" @click="searchUserMatches"> Search </v-btn>
       <v-btn outlined @click="clearSearch"> Clear </v-btn>
@@ -84,7 +85,8 @@ export default Vue.extend({
 
   data: () => ({
     search: '',
-    selectedLogin: '',
+    selectedLogin: '', 
+    searchRules : [ (v: string ) => !!v || 'Login is required']
   }),
 
   async fetch() {
