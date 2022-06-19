@@ -103,7 +103,7 @@ let GameGateway = class GameGateway {
         this.emitGame(client.data, "gameAction", "moveBall", ball.x, ball.y);
         this.collisionDetect(client);
         ball = client.data.posBall;
-        console.log("BALLL: ", ball, "pTWO: ", pTwo);
+        direction = client.data.direction;
         if (ball.x <= 0) {
             if (match.scoreSecondPlayer >= 5) {
                 this.emitGame(client.data, "gameAction", "FINISH");
@@ -146,7 +146,6 @@ let GameGateway = class GameGateway {
         }
         if (velocity < 0.05)
             velocity += 0.00005;
-        velocity += 0.00005;
         this.saveAllData(client, direction, velocity, ball);
     }
     saveAllData(client, direction, velocity, ball) {
