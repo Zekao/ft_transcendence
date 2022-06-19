@@ -187,7 +187,6 @@ export default V.extend({
             if (data === 'moveBall') {
               this.ball.x = x
               this.ball.y = y
-              this.moveBall()
             } else if (data === 'FINISH') {
               this.endGame()
               this.$store.commit('MATCH_DONE', true)
