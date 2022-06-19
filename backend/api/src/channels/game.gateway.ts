@@ -44,12 +44,16 @@ export class GameGateway
       if (message === "join") {
         const findedMatch = await this.matchService.defineMatch(player);
         if (findedMatch.id) {
-          console.log("FIND MATCH");
+          client.data.match = this.matchService.getMatchsId(findedMatch.id, [
+            { withUsers: true },
+          ]);
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
-          client.data.match = match;
+          client.data.match = this.matchService.getMatchsId(match.id, [
+            { withUsers: true },
+          ]);
         }
       }
       if (message === "leave") {
@@ -66,9 +70,19 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.game === socket.data.game)
-          console.log(socket.data.user.user_name);
-        socket.emit(event, socket.data.user.user_name, ...args);
+        if (player.match.id === socket.data.match.id)
+          socket.emit(event, socket.data.user.user_name, ...args);
+      });
+    } catch {}
+  }
+
+  emitGame(player: any, event: string, ...args: any): void {
+    try {
+      if (!player.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (player.match.id == socket.data.match.id)
+          socket.emit(event, ...args);
       });
     } catch {}
   }
@@ -78,6 +92,7 @@ export class GameGateway
     const match: Matchs = client.data.match;
     const user = client.data.user;
 
+    if (match === null) client.disconnect();
     if (
       message == "updateBall" &&
       user.user_name === match.SecondPlayer.user_name
@@ -93,13 +108,6 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
-    if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
-      match.status = MatchStatus.ENDED;
-      this.matchService.saveMatch(match);
-      this.emitGame(client.data, "gameAction", "FINISH", match.id);
-      client.data.match = null;
-      return;
-    }
     if (direction.x === 1 || direction.x === -1) {
       while (direction.x <= 0.2 || direction.x >= 0.9) {
         const heading = this.randomNumberBetween(0, 2 * Math.PI);
@@ -116,11 +124,7 @@ export class GameGateway
     direction = client.data.direction;
     if (ball.x <= 0) {
       if (match.scoreSecondPlayer >= 5) {
-        match.status = MatchStatus.ENDED;
-        this.matchService.saveMatch(match);
-        this.emitGame(client.data, "gameAction", "FINISH", match.id);
-        client.data.match = null;
-        client.disconnect();
+        this.finishGame(client);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
@@ -129,11 +133,7 @@ export class GameGateway
       }
     } else if (ball.x >= 850) {
       if (match.scoreFirstPlayer >= 5) {
-        match.status = MatchStatus.ENDED;
-        this.matchService.saveMatch(match);
-        this.emitGame(client.data, "gameAction", "FINISH", match.id);
-        client.data.match = null;
-        client.disconnect();
+        this.finishGame(client);
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");
@@ -204,6 +204,18 @@ export class GameGateway
     this.saveAllData(client, direction, null, ball);
   }
 
+  finishGame(client: Socket) {
+    const match: Matchs = client.data.match;
+
+    if (match) {
+      match.status = MatchStatus.ENDED;
+      this.matchService.saveMatch(match);
+      this.emitGame(client.data, "gameAction", "FINISH", match.id);
+      client.data.match = null;
+      client.disconnect();
+    }
+  }
+
   randomNumberBetween(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
@@ -257,22 +269,14 @@ export class GameGateway
     } catch {}
   }
 
-  emitGame(player: any, event: string, ...args: any): void {
-    try {
-      if (!player.user) return;
-      const sockets: any[] = Array.from(this.server.sockets.values());
-      sockets.forEach((socket) => {
-        if (player.game == socket.data.game) socket.emit(event, ...args);
-      });
-    } catch {}
-  }
-
   async handleDisconnect(client: Socket) {
     const user = client.data.user;
     try {
       let match = client.data.match;
       if (match) {
-        match = this.matchService.getMatchsId(match.id);
+        match = await this.matchService.getMatchsId(match.id, [
+          { withUsers: true },
+        ]);
         if (match.status === MatchStatus.PENDING)
           await this.matchService.deleteMatch(match.id);
         else if (
