@@ -130,14 +130,14 @@
         </v-list-item>
       </v-list>
       <v-list v-else>
-        <v-list-group v-for="(user, i) in usersFiltered" :key="i">
+        <v-list-group v-for="user in usersFiltered" :key="user.id">
           <template #activator>
             <v-list-item-content>
               <v-list-item-title>{{ user.display_name }}</v-list-item-title>
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <MessageRoom :key="i" :user="user"></MessageRoom>
+            <MessageRoom :key="user.id" :user="user"></MessageRoom>
           </v-list-item>
         </v-list-group>
       </v-list>
