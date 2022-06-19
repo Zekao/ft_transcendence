@@ -194,6 +194,11 @@ export default V.extend({
               this.$emit('next')
             } else if (data === 'addOne') this.score.player1 += 1
             else if (data === 'addTwo') this.score.player2 += 1
+            else if (data === "Give up") {
+              this.context.clearRect(0, 0, 1080, 1920)
+              this.$store.commit('MATCH_DONE', true)
+              this.$emit('next')
+            }
           })
           setInterval(this.updateContent, 17)
       }

@@ -48,6 +48,8 @@ export class GameGateway
         if (findedMatch.id) {
           client.data.match = findedMatch;
           console.log("FIND A MATCH");
+          findedMatch.status = MatchStatus.STARTED;
+          this.matchService.saveMatch(findedMatch);
           this.emitReady(client.data, "wait", "ready", findedMatch.id);
         } else {
           console.log("CREATION OF THE MATCH");
@@ -267,11 +269,27 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const user = client.data.user;
     try {
-      if (
-        client.data.match &&
-        client.data.match.status === MatchStatus.PENDING
-      ) {
-        await this.matchService.deleteMatch(client.data.match.id);
+      const match: Matchs = client.data.match;
+      if (match) {
+        if (match.status === MatchStatus.PENDING)
+          await this.matchService.deleteMatch(match.id);
+        else if (match.status === MatchStatus.STARTED) {
+          if (client.data.user === match.FirstPlayer) {
+            match.scoreFirstPlayer = 0;
+            match.scoreSecondPlayer = 5;
+          } else {
+            match.scoreFirstPlayer = 5;
+            match.scoreSecondPlayer = 0;
+          }
+          match.status = MatchStatus.ENDED;
+          this.matchService.saveMatch(match);
+          this.emitGame(client.data, "gameAction", "Give up");
+        }
+      }
+      if (client.data.waitinglist) {
+        this.logger.log(
+          `Client disconnected from the WaitingList: ${client.id}`
+        );
       }
       if (user) {
         user.in_game = UserGameStatus.OUT_GAME;
@@ -285,14 +303,13 @@ export class GameGateway
       }
     } catch (err) {}
     console.log("OUT GAME");
-    this.logger.log(`Client disconnected: ${client.id}`);
+    this.logger.log(`Client disconnected from the Pong Game: ${client.id}`);
   }
 
   async isWaitinglist(client: Socket, user: User) {
     client.data.waitinglist = client.handshake.auth.waitinglist;
     if (client.data.waitinglist) {
-      console.log("CONNECTED TO SOCKET GAME");
-      this.logger.log(`Client connected: ${client.id}`);
+      this.logger.log(`Client connected to the WaitingList: ${client.id}`);
       return true;
     }
     return false;
@@ -314,8 +331,7 @@ export class GameGateway
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
       this.emitGame(client.data, "notification", client.data.user.id, "ingame");
-      console.log("CONNECTED TO THE PONG GAME");
-      this.logger.log(`Client connected: ${client.id}`);
+      this.logger.log(`Client connected to the Pong Game: ${client.id}`);
       return true;
     }
     return false;
