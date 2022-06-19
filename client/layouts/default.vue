@@ -208,6 +208,7 @@ export default Vue.extend({
     ],
     channelNameRules: [
       (v: string) => !!v || 'Name is required',
+      (v: string) => v.length >= 2 || 'Name must be greater than 1 character',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
       (v: string) =>
         v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null ||
