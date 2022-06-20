@@ -142,9 +142,7 @@ export default Vue.extend({
     },
 
     getAvatarPath(user: IUser): string {
-      return (
-        this.$config.imageUrl + user?.avatar || 'default.png'
-      )
+      return this.$config.imageUrl + user?.avatar || 'default.png'
     },
 
     clearSearch() {

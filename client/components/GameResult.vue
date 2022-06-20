@@ -83,14 +83,12 @@ export default Vue.extend({
     },
     getAvatarOne() {
       return (
-        this.$config.imageUrl +
-          this.match.FirstPlayer?.avatar || 'default.png'
+        this.$config.imageUrl + this.match.FirstPlayer?.avatar || 'default.png'
       )
     },
     getAvatarTwo() {
       return (
-        this.$config.imageUrl +
-          this.match.SecondPlayer?.avatar || 'default.png'
+        this.$config.imageUrl + this.match.SecondPlayer?.avatar || 'default.png'
       )
     },
   },
