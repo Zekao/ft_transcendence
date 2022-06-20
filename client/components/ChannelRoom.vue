@@ -378,7 +378,7 @@ export default Vue.extend({
     },
     emitMessageOnChannel() {
       const messageTextFormated = this.messageText.trim()
-      if (this.socket && messageTextFormated) {
+      if (this.socket && this.loggedIn && messageTextFormated) {
         this.socket.emit('channel', 'msg', messageTextFormated)
         this.messageText = ''
       }
