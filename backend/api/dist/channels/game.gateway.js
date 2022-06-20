@@ -123,7 +123,10 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "TWO");
-                this.emitGame(client.data, "gameAction", match.id, "addTwo");
+                client.data.match = this.matchService.getMatchsId(match.id, [
+                    { withUsers: true },
+                ]);
+                this.emitGame(client.data, "gameAction", match.id, "addTwo", client.data.match.scoreSecondPlayer);
                 this.resetBall(client);
             }
         }
@@ -134,7 +137,10 @@ let GameGateway = class GameGateway {
             else {
                 velocity = 0.00005;
                 this.matchService.addOnePointToPlayer(match, "ONE");
-                this.emitGame(client.data, "gameAction", match.id, "addOne");
+                client.data.match = this.matchService.getMatchsId(match.id, [
+                    { withUsers: true },
+                ]);
+                this.emitGame(client.data, "gameAction", match.id, "addOne", client.data.match.scoreFirstPlayer);
                 this.resetBall(client);
             }
         }
@@ -292,7 +298,6 @@ let GameGateway = class GameGateway {
             }
         }
         catch (err) { }
-        console.log("OUT GAME");
         this.logger.log(`Client disconnected from the Pong Game: ${client.id}`);
     }
     async isWaitinglist(client, user) {
