@@ -133,14 +133,16 @@ let MatchsService = class MatchsService {
         return await this.MatchsRepository.save(match);
     }
     async addOnePointToPlayer(id, player) {
+        let i = 0;
         if (player == "ONE") {
-            id.scoreFirstPlayer += 1;
+            i = id.scoreFirstPlayer += 1;
             await this.MatchsRepository.save(id);
         }
         else if (player == "TWO") {
-            id.scoreSecondPlayer += 1;
+            i = id.scoreSecondPlayer += 1;
             await this.MatchsRepository.save(id);
         }
+        return i;
     }
     async deleteMatch(id) {
         const found = await this.getMatchsId(id);

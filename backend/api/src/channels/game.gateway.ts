@@ -147,17 +147,8 @@ export class GameGateway
         this.finishGame(client);
       } else {
         velocity = 0.00005;
-        this.matchService.addOnePointToPlayer(match, "TWO");
-        client.data.match = this.matchService.getMatchsId(match.id, [
-          { withUsers: true },
-        ]);
-        this.emitGame(
-          client.data,
-          "gameAction",
-          match.id,
-          "addTwo",
-          client.data.match.scoreSecondPlayer
-        );
+        const i = await this.matchService.addOnePointToPlayer(match, "TWO");
+        this.emitGame(client.data, "gameAction", match.id, "addTwo", i);
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
@@ -165,17 +156,8 @@ export class GameGateway
         this.finishGame(client);
       } else {
         velocity = 0.00005;
-        this.matchService.addOnePointToPlayer(match, "ONE");
-        client.data.match = this.matchService.getMatchsId(match.id, [
-          { withUsers: true },
-        ]);
-        this.emitGame(
-          client.data,
-          "gameAction",
-          match.id,
-          "addOne",
-          client.data.match.scoreFirstPlayer
-        );
+        const i = await this.matchService.addOnePointToPlayer(match, "ONE");
+        this.emitGame(client.data, "gameAction", match.id, "addOne", i);
 
         this.resetBall(client);
       }
