@@ -193,14 +193,16 @@ let GameGateway = class GameGateway {
                 this.userService.getUserId(match.FirstPlayer.id),
                 this.userService.getUserId(match.SecondPlayer.id),
             ]);
+            console.log(match.scoreFirstPlayer > match.scoreSecondPlayer);
             if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
                 user1.win += 1;
                 user2.loose += 1;
             }
-            if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
+            else if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
                 user1.loose += 1;
                 user2.win += 1;
             }
+            console.log(match.scoreFirstPlayer < match.scoreSecondPlayer);
             this.userService.saveUser(user1);
             this.userService.saveUser(user2);
             this.matchService.saveMatch(match);
