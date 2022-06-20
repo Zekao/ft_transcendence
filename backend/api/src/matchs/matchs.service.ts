@@ -74,7 +74,11 @@ export class MatchsService {
     if (status) matchs = matchs.filter((channel) => channel.status === status);
     if (winner) matchs = matchs.filter((channel) => channel.winner === winner);
     if (!matchs) throw new NotFoundException(`Channel not found`);
-    return matchs;
+    const match = [];
+    for (const el of matchs) {
+      match.push(await this.getMatchsId(el.id, [{ withUsers: true }]));
+    }
+    return match;
   }
 
   async getMatchsId(
