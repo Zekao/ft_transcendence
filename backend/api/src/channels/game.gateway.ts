@@ -239,8 +239,8 @@ export class GameGateway
       match.status = MatchStatus.ENDED;
       this.matchService.saveMatch(match);
       this.emitGame(client.data, "gameAction", match.id, "FINISH");
-      client.data.match = null;
-      client.disconnect();
+      // client.data.match = null;
+      // client.disconnect();
     }
   }
 

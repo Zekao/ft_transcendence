@@ -196,8 +196,6 @@ let GameGateway = class GameGateway {
             match.status = matchs_enum_1.MatchStatus.ENDED;
             this.matchService.saveMatch(match);
             this.emitGame(client.data, "gameAction", match.id, "FINISH");
-            client.data.match = null;
-            client.disconnect();
         }
     }
     randomNumberBetween(min, max) {
