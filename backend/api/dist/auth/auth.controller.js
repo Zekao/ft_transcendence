@@ -52,11 +52,9 @@ let AuthController = class AuthController {
         const file = fs;
         file.writeFile("image/google/" + user + ".png", Test.qrcode.substring(22), { encoding: "base64" }, function (err) {
             if (err) {
-                console.log(err);
                 return false;
             }
             else {
-                console.log("The file was saved!");
                 return true;
             }
         });

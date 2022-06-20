@@ -78,7 +78,6 @@ export class ChatService {
       if (error.code == "23505") {
         throw new ConflictException("Chat already exist");
       } else {
-        console.log(error);
         throw new InternalServerErrorException();
       }
     }
@@ -90,7 +89,6 @@ export class ChatService {
       chat.second = user.id;
       await this.chatRepository.save(chat);
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException();
     }
     return chat;

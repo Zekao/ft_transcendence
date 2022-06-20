@@ -268,7 +268,6 @@ export default Vue.extend({
   },
 
   mounted() {
-    console.log(this.$config.dir)
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
     this.socket = this.$nuxtSocket({
       auth: {
