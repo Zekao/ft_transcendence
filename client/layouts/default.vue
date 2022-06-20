@@ -263,7 +263,7 @@ export default Vue.extend({
       )
     },
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return this.$config.imageUrl + this.avatar
     },
   },
 

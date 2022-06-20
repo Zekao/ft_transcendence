@@ -116,7 +116,7 @@ export default Vue.extend({
     },
     getAvatarPath(user: IUser): string {
       return (
-        'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
+        this.$config.imageUrl + user?.avatar || 'default.png'
       )
     },
     emitJoin() {
