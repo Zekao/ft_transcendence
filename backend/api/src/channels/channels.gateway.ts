@@ -226,7 +226,6 @@ export class ChannelsGateway
           id: "",
         }
       );
-      this.emitChannel(client.data, "notification", "update");
       this.emitChannel(
         client.data,
         "channel",
@@ -259,7 +258,6 @@ export class ChannelsGateway
           id: "",
         }
       );
-      this.emitChannel(client.data, "notification", "update");
       this.emitChannel(
         client.data,
         "channel",

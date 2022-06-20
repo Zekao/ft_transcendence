@@ -147,7 +147,6 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.emitChannel(client.data, "notification", "update");
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
@@ -164,7 +163,6 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.emitChannel(client.data, "notification", "update");
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
