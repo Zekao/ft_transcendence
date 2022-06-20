@@ -73,7 +73,7 @@
         <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
             <v-img
-              :src="`${$config.imageUrl}/google/${userName}.png`"
+              :src="`${$config.imageUrl}google/${userName}.png`"
             />
             <v-list-item>
               <v-otp-input
