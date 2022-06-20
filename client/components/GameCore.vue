@@ -167,8 +167,8 @@ export default V.extend({
           },
           path: '/api/socket.io/',
         } as any)
-        this.socket.on('move', (username1, username2, data, boolplayer) => {
-          if (this.username === username1 || this.username === username2) {
+        this.socket.on('move', (matchID, data, boolplayer) => {
+          if (this.selectedMatchId === matchID) {
             if (boolplayer === 1) {
               if (this.position.y !== data) this.position.y = data
             } else if (boolplayer === 2) {
@@ -176,8 +176,8 @@ export default V.extend({
             }
           }
         })
-        this.socket.on('gameAction', (username1, username2, data, x, y) => {
-          if (this.username === username1 || this.username === username2) {
+        this.socket.on('gameAction', (matchID, data, x, y) => {
+          if (this.selectedMatchId === matchID) {
             if (data === 'moveBall') {
               this.ball.x = x
               this.ball.y = y
