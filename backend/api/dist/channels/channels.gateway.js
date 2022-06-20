@@ -184,14 +184,20 @@ let ChannelsGateway = class ChannelsGateway {
         try {
             const channel = client.data.channel;
             const login = client.data.user.id;
+            const banned = await this.channelService.getChannelBanMembers(channel.id);
             if (message[0] === "msg") {
                 try {
-                    this.addToHistory(channel, login, message[1]);
                     const mutedUser = await this.channelService.getChannelMembers(channel.id, {
                         role: "muted",
                         user: "",
                         id: "",
                     });
+                    for (const el of banned) {
+                        if (el.id === login) {
+                            this.emitSingle(client.data, "channel", login, "You are ban");
+                            return;
+                        }
+                    }
                     for (const el of mutedUser) {
                         if (el.id === login) {
                             if ((await this.CanTalk(channel, login, new Date().getMinutes())) !=
@@ -203,6 +209,7 @@ let ChannelsGateway = class ChannelsGateway {
                             }
                         }
                     }
+                    this.addToHistory(channel, login, message[1]);
                     this.emitChannel(client.data, "channel", login, message[1]);
                 }
                 catch (err) { }
@@ -237,18 +244,11 @@ let ChannelsGateway = class ChannelsGateway {
             let blocked = false;
             if (!channel.user)
                 return;
-            const banned = await this.channelService.getChannelBanMembers(channel.channel.id);
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach(async (socket) => {
                 socket.data.user = await this.userService.getUserId(socket.data.user.id, [{ withBlocked: true }]);
                 if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
                     for (const el of socket.data.user.blockedUsers) {
-                        if (el.id === channel.user.id) {
-                            blocked = true;
-                            break;
-                        }
-                    }
-                    for (const el of banned) {
                         if (el.id === channel.user.id) {
                             blocked = true;
                             break;
@@ -281,17 +281,9 @@ let ChannelsGateway = class ChannelsGateway {
     async createOrAddUserToChannel(client) {
         try {
             const channel = await this.channelService.getChannelMembers(client.data.channel.id);
-            const bannedUser = await this.channelService.getChannelBanMembers(client.data.channel.id);
             for (const el of channel) {
                 if (el.id === client.data.user.id)
                     return;
-            }
-            for (const ban of bannedUser) {
-                if (ban.id === client.data.user.id) {
-                    this.emitSingle(client.data, "channel", client.data.user.id, "You are ban from this channel");
-                    client.disconnect();
-                    return;
-                }
             }
             await this.channelService.addUserToMember(client.data.user.id, client.data.channel.id, {
                 user: client.data.user.id,
