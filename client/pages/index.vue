@@ -36,10 +36,10 @@ export default Vue.extend({
 
   computed: {
     e1: {
-      get(): boolean {
+      get(): number {
         return this.$store.state.easyFix
       },
-      set(value: boolean) {
+      set(value: number) {
         this.$store.commit('SET_VALUE', value)
       },
     },
