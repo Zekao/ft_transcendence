@@ -357,12 +357,20 @@ export class ChannelsGateway
           socket.data.user.id,
           [{ withBlocked: true }]
         );
+        const banned = await this.channelService.getChannelBanMembers(
+          socket.data.channel.id
+        );
         if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
           for (const el of socket.data.user.blockedUsers) {
             if (el.id === channel.user.id) {
               blocked = true;
               break;
             }
+            for (const el of banned) {
+              if (el.id === socket.data.user.id) {
+                blocked = true;
+                break;
+              }
           }
           if (blocked === false) socket.emit(event, ...args);
           blocked = false;
