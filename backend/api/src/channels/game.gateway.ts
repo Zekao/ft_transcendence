@@ -373,20 +373,20 @@ export class GameGateway
   }
 
   async isInGame(client: Socket, user: User) {
-    const match: Matchs = await this.matchService.getMatchsId(
-      client.handshake.auth.game,
-      [{ withUsers: true }]
-    );
-    client.data.match = match;
     client.data.game = client.handshake.auth.game;
-    client.data.posPlayerOne = { x: 0, y: 250 };
-    client.data.posPlayerTwo = { x: 850, y: 250 };
-    client.data.posBall = { x: 420, y: 400, rad: 10 };
-    client.data.direction = { x: 1, y: 1 };
-    client.data.velocity = 0.00005;
-    match.status = MatchStatus.STARTED;
-    this.matchService.saveMatch(match);
     if (client.data.game) {
+      const match: Matchs = await this.matchService.getMatchsId(
+        client.handshake.auth.game,
+        [{ withUsers: true }]
+      );
+      client.data.match = match;
+      client.data.posPlayerOne = { x: 0, y: 250 };
+      client.data.posPlayerTwo = { x: 850, y: 250 };
+      client.data.posBall = { x: 420, y: 400, rad: 10 };
+      client.data.direction = { x: 1, y: 1 };
+      client.data.velocity = 0.00005;
+      match.status = MatchStatus.STARTED;
+      this.matchService.saveMatch(match);
       user.in_game = UserGameStatus.IN_GAME;
       this.userService.saveUser(user);
       this.emitGame(client.data, "notification", client.data.user.id, "ingame");
