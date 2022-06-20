@@ -247,13 +247,6 @@ let ChannelsGateway = class ChannelsGateway {
                             blocked = true;
                             break;
                         }
-                        for (const el of banned) {
-                            console.log("BANNED USER: ", banned);
-                            if (el.id === socket.data.user.id) {
-                                blocked = true;
-                                break;
-                            }
-                        }
                         if (blocked === false)
                             socket.emit(event, ...args);
                         blocked = false;

@@ -167,7 +167,12 @@ let ChannelsService = class ChannelsService {
     }
     async createChannel(id, channelsDto) {
         const owner = await this.UsersService.getUserId(id);
+        const channels = await this.getChannel();
         const { name, status, permissions, password } = channelsDto;
+        for (const channel of channels) {
+            if (channel.name === name)
+                throw new common_1.ConflictException(`Channel \`${name}' already exist`);
+        }
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
         const channel = this.ChannelsRepository.create({
