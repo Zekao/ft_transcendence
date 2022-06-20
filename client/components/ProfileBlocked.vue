@@ -4,21 +4,13 @@
     color="grey lighten-1"
     class="d-flex justify-center align-center ma-6 pa-4"
   >
-    <v-progress-circular
-      v-if="$fetchState.pending"
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-    <v-list v-else-if="$fetchState.error">
-      <v-list-item dense>Failed to load blocked user list.</v-list-item>
-    </v-list>
-    <v-list v-else-if="!authUserBlocked.length">
+    <v-list v-if="!authUserBlocked.length">
       <v-list-item dense>No user blocked yet.</v-list-item>
     </v-list>
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserBlocked" :key="i">
         <v-list-item-avatar>
-          <v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar" />
+          <v-img :src="$config.imageUrl + user.avatar" />
         </v-list-item-avatar>
         <v-list-item-content>
           {{ user.display_name }}
@@ -39,29 +31,47 @@ import { IUser } from '@/store/user'
 export default Vue.extend({
   name: 'ProfileBlocked',
 
-  // data: () => ({
-  //   authUserBlocked: [
-  //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-  //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/gamarcha.png', win: 2, loose: 1, rank: 9, status: '' },
-  //   ],
-  // }),
-
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthBlocked')
+    try {
+      await this.$store.dispatch('user/fetchAuthBlocked')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       authUserBlocked: (state: any): IUser[] => state.user.authUserBlocked,
     }),
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 2) return
+      try {
+        await this.$store.dispatch('user/fetchAuthBlocked')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
+    },
   },
 
   methods: {
     async unblocked(userID: string) {
       try {
         await this.$store.dispatch('user/deleteAuthBlocked', userID)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
   },

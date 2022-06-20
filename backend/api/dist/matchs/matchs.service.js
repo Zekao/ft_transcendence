@@ -60,7 +60,11 @@ let MatchsService = class MatchsService {
             matchs = matchs.filter((channel) => channel.winner === winner);
         if (!matchs)
             throw new common_1.NotFoundException(`Channel not found`);
-        return matchs;
+        const match = [];
+        for (const el of matchs) {
+            match.push(await this.getMatchsId(el.id, [{ withUsers: true }]));
+        }
+        return match;
     }
     async getMatchsId(id, RelationsPicker) {
         const relations = [];
@@ -111,11 +115,15 @@ let MatchsService = class MatchsService {
         let match = null;
         try {
             match = await this.getMatchs();
-            for (const el of match) {
-                if (el.status == matchs_enum_1.MatchStatus.PENDING && el.FirstPlayer != player.id) {
+            if (!match.length)
+                return null;
+            for (let el of match) {
+                el = await this.getMatchsId(el.id, [{ withUsers: true }]);
+                if (el.status === matchs_enum_1.MatchStatus.PENDING &&
+                    el.FirstPlayer.id != player.id) {
                     await this.addPlayerToMatch(player, el);
                     match.status = matchs_enum_1.MatchStatus.STARTED;
-                    this.MatchsRepository.save(el);
+                    await this.MatchsRepository.save(el);
                     return el;
                 }
             }

@@ -23,11 +23,10 @@ const users_service_1 = require("../../users/users.service");
 const auth_services_1 = require("../auth.services");
 let FortyTwoStrategy = class FortyTwoStrategy extends (0, passport_1.PassportStrategy)(passport_42_1.Strategy) {
     constructor(usersRepository, authService) {
-        console.log(process.env);
         super({
-            clientID: "56a35818a4307260d0d9cae57246e63197f2aa86ae7106c867724387cb0899c5",
-            clientSecret: "52d28d9ac2ba76d75e5a13258e6c17d194803909dafc2b371d9296fd20a9e7fe",
-            callbackURL: "https://ft.localhost:4500/login",
+            clientID: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            callbackURL: process.env.CALLBACK_URL,
         });
         this.usersRepository = usersRepository;
         this.authService = authService;

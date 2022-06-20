@@ -45,12 +45,15 @@ export default V.extend({
       speed: 0.00005,
     },
   }),
+
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
       selectedMatchId: (state: any) => state.selectedMatchId,
+      username: (state: any) => state.user.authUser.user_name,
       color: (state: any): string => state.user.authUser.color,
-      backgroundColor: (state: any): string => state.user.authUser.backgroundColor,
+      backgroundColor: (state: any): string =>
+        state.user.authUser.backgroundColor,
     }),
     height() {
       switch (this.$vuetify.breakpoint.name) {
@@ -82,7 +85,17 @@ export default V.extend({
     },
   },
   watch: {
-    selectedMatchId(value: string) {
+    async selectedMatchId(value: string) {
+      try {
+        const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
+        this.score.player1 = res.scoreFirstPlayer
+        this.score.player2 = res.scoreSecondPlayer
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
       this.socketInit(value)
     },
   },
@@ -143,8 +156,7 @@ export default V.extend({
       this.context.fillText('THE GAME IS FINISHED', 370, 50)
     },
     moveBall() {
-      if (this.ball.x === 420 || this.ball.y === 400)
-        return ;
+      if (this.ball.x === 420 || this.ball.y === 400) return
       this.context.arc(this.ball.x, this.ball.y, 15, 0, 2 * Math.PI) // TO PUT IN FUNCTION CALL WHEN DATA IS SEND
       this.context.fill()
       this.context.restore()
@@ -166,24 +178,17 @@ export default V.extend({
           },
           path: '/api/socket.io/',
         } as any)
-        this.socket.on('move', (data, boolplayer) => {
-          if (boolplayer === 1) {
-            if (this.position.y !== data) this.position.y = data
-            if (this.score.player1 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
-            }
-          } else if (boolplayer === 2) {
-            if (this.position2.y !== data) this.position2.y = data
-            else if (this.score.player2 >= 5) {
-              this.context.clearRect(0, 0, 1080, 1920)
-              this.$store.commit('MATCH_DONE', true)
-              this.$emit('next')
+        this.socket.on('move', (matchID, data, boolplayer) => {
+          if (this.selectedMatchId === matchID) {
+            if (boolplayer === 1) {
+              if (this.position.y !== data) this.position.y = data
+            } else if (boolplayer === 2) {
+              if (this.position2.y !== data) this.position2.y = data
             }
           }
-        }),
-          this.socket.on('gameAction', (data, x, y) => {
+        })
+        this.socket.on('gameAction', (matchID, data, x, y) => {
+          if (this.selectedMatchId === matchID) {
             if (data === 'moveBall') {
               this.ball.x = x
               this.ball.y = y
@@ -193,15 +198,16 @@ export default V.extend({
               this.$emit('next')
             } else if (data === 'addOne') this.score.player1 += 1
             else if (data === 'addTwo') this.score.player2 += 1
-            else if (data === "Give up") {
+            else if (data === 'Give up') {
               this.context.clearRect(0, 0, 1080, 1920)
               this.$store.commit('MATCH_DONE', true)
               this.$emit('next')
             }
-          })
-          setInterval(this.updateContent, 17)
+          }
+        })
+        setInterval(this.updateContent, 17)
       }
-    }
+    },
   },
 })
 </script>

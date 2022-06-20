@@ -19,19 +19,15 @@
       color="#00000000"
       class="d-flex justify-center align-center pa-4"
     >
-      <v-progress-circular
-        v-if="$fetchState.pending"
-        indeterminate
-        color="primary"
-      ></v-progress-circular>
-      <v-list v-else-if="$fetchState.error">
-        <v-list-item dense>Failed to load match history.</v-list-item>
-      </v-list>
-      <v-list v-else-if="!userMatches.length">
+      <v-list v-if="!userMatches.length">
         <v-list-item dense>No match yet.</v-list-item>
       </v-list>
       <v-list v-else width="40%">
-        <v-list-item v-for="(match, i) in userMatches" :key="i">
+        <v-list-item
+          v-for="(match, i) in userMatches"
+          :key="i"
+          class="justify-center align-center"
+        >
           <v-list-item-action class="justify-center align-center">
             <v-badge
               v-if="match.scoreFirstPlayer > match.scoreSecondPlayer"
@@ -46,11 +42,11 @@
             <v-avatar v-else>
               <v-img :src="getAvatarPath(match.FirstPlayer)" />
             </v-avatar>
-            <v-btn> {{ match.FirstPlayer.display_name }}</v-btn>
+            <v-btn>
+              {{ match.FirstPlayer.display_name }} -
+              {{ match.scoreFirstPlayer }}</v-btn
+            >
           </v-list-item-action>
-          <v-list-item-content class="justify-center">
-            {{ match.scoreFirstPlayer }} - {{ match.scoreSecondPlayer }}
-          </v-list-item-content>
           <v-list-item-action class="justify-center align-center">
             <v-badge
               v-if="match.scoreSecondPlayer > match.scoreFirstPlayer"
@@ -65,7 +61,10 @@
             <v-avatar v-else>
               <v-img :src="getAvatarPath(match.SecondPlayer)" />
             </v-avatar>
-            <v-btn> {{ match.SecondPlayer.display_name }} </v-btn>
+            <v-btn>
+              {{ match.scoreSecondPlayer }} -
+              {{ match.SecondPlayer.display_name }}
+            </v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -88,11 +87,19 @@ export default Vue.extend({
   }),
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthMatchs')
+    try {
+      await this.$store.dispatch('user/fetchAuthMatchs')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       users: (state: any): IUser[] => state.user.users,
       authUserMatches: (state: any): IMatch[] => state.user.authUserMatches,
       selectedUserMatches: (state: any): IMatch[] =>
@@ -105,6 +112,20 @@ export default Vue.extend({
     },
   },
 
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 3) return
+      try {
+        await this.$store.dispatch('user/fetchAuthMatchs')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
+    },
+  },
+
   methods: {
     async searchUserMatches() {
       const user = this.users.find((el) => el.display_name === this.search)
@@ -112,14 +133,17 @@ export default Vue.extend({
       try {
         await this.$store.dispatch('user/fetchMatchs', user.id)
         this.selectedLogin = this.search
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
     getAvatarPath(user: IUser): string {
       return (
-        'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
+        this.$config.imageUrl + user?.avatar || 'default.png'
       )
     },
 

@@ -58,13 +58,15 @@ export const mutations: MutationTree<UserState> = {
   },
   CREATE_AUTH_BLOCKED: (state, user: IUser) => {
     state.authUserBlocked.push(user)
+    state.authUserFriends = state.authUserFriends.filter(
+      (el) => el.id !== user.id
+    )
   },
   DELETE_AUTH_BLOCKED: (state, userID: string) => {
     state.authUserBlocked = state.authUserBlocked.filter(
       (el) => el.id !== userID
     )
   },
-
   FETCH_AUTH_MATCHES: (state, matches: IMatch[]) => {
     state.authUserMatches = matches
   },
@@ -76,6 +78,9 @@ export const mutations: MutationTree<UserState> = {
   },
   UPDATE_AUTH_AVATAR: (state, userAvatar: string) => {
     state.authUser.avatar = userAvatar + '#' + new Date().getTime()
+    state.users = state.users.map((el) =>
+      el.id === state.authUser.id ? state.authUser : el
+    )
   },
   UPDATE_AUTH: (state, user: IUser) => {
     state.authUser = user

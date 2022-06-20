@@ -28,7 +28,7 @@ AuthModule = __decorate([
             jwt_1.JwtModule.register({
                 secret: "secretkey",
                 signOptions: {
-                    expiresIn: 3600,
+                    expiresIn: 86400,
                 },
             }),
             typeorm_1.TypeOrmModule.forFeature([users_entity_1.User, matchs_entity_1.Matchs]),

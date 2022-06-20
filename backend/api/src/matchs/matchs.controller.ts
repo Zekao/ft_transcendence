@@ -6,12 +6,14 @@ import {
   Delete,
   Patch,
   Request,
+  UseGuards,
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { MatchsFilteDto } from "./dto/matchs-filter.dto";
 import { Matchs } from "./matchs.entity";
 import { MatchsService } from "./matchs.service";
 import { MatchDto } from "./dto/matchs.dto";
+import { JwtAuthGuard } from "../auth/guard/jwt.auth.guard";
 
 @ApiTags("matchs")
 @Controller("matchs")
@@ -23,6 +25,7 @@ export class MatchsController {
   /* ************************************************************************** */
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Return list of all existing matchs" })
   getMatchs(@Query() filters: MatchsFilteDto): Promise<Matchs[]> {
     if (Object.keys(filters).length)
@@ -31,9 +34,9 @@ export class MatchsController {
   }
 
   @Get("/:id")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: "Return a match by id" })
   getMatchsId(@Param("id") id: string, @Request() req): Promise<Matchs> {
-    console.log(req.relation);
     return this.matchService.getMatchsId(id, [{ withUsers: true }]);
   }
 
@@ -46,6 +49,7 @@ export class MatchsController {
   /* ************************************************************************** */
 
   @Delete("/:id")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Delete the specified matchs",
   })
@@ -58,6 +62,7 @@ export class MatchsController {
   /* ************************************************************************** */
 
   @Patch("/:id/edit")
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: "Modify attribute of a specified matchs",
   })

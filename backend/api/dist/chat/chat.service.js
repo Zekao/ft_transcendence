@@ -74,7 +74,6 @@ let ChatService = class ChatService {
                 throw new common_1.ConflictException("Chat already exist");
             }
             else {
-                console.log(error);
                 throw new common_1.InternalServerErrorException();
             }
         }
@@ -86,7 +85,6 @@ let ChatService = class ChatService {
             await this.chatRepository.save(chat);
         }
         catch (error) {
-            console.log(error);
             throw new common_1.InternalServerErrorException();
         }
         return chat;

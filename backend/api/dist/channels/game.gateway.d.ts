@@ -14,6 +14,7 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
     afterInit(server: Server): void;
     waitingList(client: Socket, message: string): Promise<void>;
     emitReady(player: any, event: string, ...args: any): void;
+    emitGame(player: any, event: string, ...args: any): void;
     GameAction(client: Socket, message: string): Promise<void>;
     updateBall(client: Socket): Promise<void>;
     saveAllData(client: Socket, direction: {
@@ -24,11 +25,11 @@ export declare class GameGateway implements OnGatewayInit, OnGatewayConnection, 
         y: number;
     }): void;
     collisionDetect(client: Socket): void;
+    finishGame(client: Socket): Promise<void>;
     randomNumberBetween(min: number, max: number): number;
     resetBall(client: Socket): void;
     gamecontrol(client: Socket, message: string): Promise<void>;
     saveDataOnAllSocket(player: any, pOne: any, pTwo: any): void;
-    emitGame(player: any, event: string, ...args: any): void;
     handleDisconnect(client: Socket): Promise<void>;
     isWaitinglist(client: Socket, user: User): Promise<boolean>;
     isInGame(client: Socket, user: User): Promise<boolean>;

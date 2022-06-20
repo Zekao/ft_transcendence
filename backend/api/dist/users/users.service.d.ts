@@ -47,6 +47,7 @@ export declare class UsersService {
     uploadFile(id: User, file: Express.Multer.File): Promise<{
         filename: string;
     }>;
+    addWinLoose(p1: string, p2: string, action: string): Promise<void>;
     deleteUser(id: string): Promise<boolean>;
     deleteAvatar(id: string): Promise<boolean>;
     deleteAvatarID(user: User): Promise<boolean>;

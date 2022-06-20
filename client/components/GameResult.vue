@@ -5,7 +5,7 @@
     class="d-flex justify-center align-center"
   >
     <v-list width="40%">
-      <v-list-item>
+      <v-list-item class="justify-center align-center">
         <v-list-item-action class="justify-center align-center">
           <v-badge
             v-if="getScoreOne > getScoreTwo"
@@ -20,11 +20,8 @@
           <v-avatar v-else>
             <v-img :src="getAvatarOne" />
           </v-avatar>
-          <v-btn> {{ getPlayerOne }} </v-btn>
+          <v-btn> {{ getPlayerOne }} - {{ getScoreOne }} </v-btn>
         </v-list-item-action>
-        <v-list-item-content class="justify-center">
-          {{ getScoreOne }} - {{ getScoreTwo }}
-        </v-list-item-content>
         <v-list-item-action class="justify-center align-center">
           <v-badge
             v-if="getScoreTwo > getScoreOne"
@@ -39,7 +36,7 @@
           <v-avatar v-else>
             <v-img :src="getAvatarTwo" />
           </v-avatar>
-          <v-btn> {{ getPlayerTwo }} </v-btn>
+          <v-btn> {{ getScoreTwo }} - {{ getPlayerTwo }} </v-btn>
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -86,13 +83,13 @@ export default Vue.extend({
     },
     getAvatarOne() {
       return (
-        'https://ft.localhost:4500/api/image/' +
+        this.$config.imageUrl +
           this.match.FirstPlayer?.avatar || 'default.png'
       )
     },
     getAvatarTwo() {
       return (
-        'https://ft.localhost:4500/api/image/' +
+        this.$config.imageUrl +
           this.match.SecondPlayer?.avatar || 'default.png'
       )
     },
@@ -104,9 +101,11 @@ export default Vue.extend({
         try {
           const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
           this.match = res
-          console.log(res)
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     },

@@ -31,6 +31,8 @@
             prepend-icon="mdi-account"
             required
             @input="setLoginInput"
+            v-on:keydown.enter.prevent="updateLogin"
+
           >
             <template #append-outer>
               <v-btn icon :disabled="!isLoginValid" @click="updateLogin">
@@ -73,7 +75,7 @@
         <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
             <v-img
-              :src="`https://ft.localhost:4500/api/image/google/${userName}.png`"
+              :src="`${$config.imageUrl}google/${userName}.png`"
             />
             <v-list-item>
               <v-otp-input
@@ -93,16 +95,20 @@
 </template>
 
 <script lang="ts">
+import { NuxtSocket } from 'nuxt-socket-io'
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
 export default Vue.extend({
   name: 'ProfileInfos',
+
   middleware: 'auth',
+
   data: () => ({
     isImageLoading: false,
     is2FADialog: false,
     loading: false,
+    socket: null as NuxtSocket | null,
     code: '',
     file: {} as Blob,
     isLoginValid: false,
@@ -121,26 +127,39 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      accessToken: (state: any): string => state.token.accessToken,
       userName: (state: any): string => state.user.authUser.user_name,
       login: (state: any): string => state.user.authUser.display_name || '',
       avatar: (state: any): string => state.user.authUser.avatar,
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
     }),
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return this.$config.imageUrl + this.avatar
     },
+  },
+
+  mounted() {
+    this.socket = this.$nuxtSocket({
+      auth: {
+        Authorization: this.accessToken,
+      },
+      path: '/api/socket.io/',
+    } as any)
   },
 
   methods: {
     async uploadImage() {
-      if (this.file) {
+      if ((this.file as any).name && (this.file as any).name.match(/.png$|.jpeg$|.jpg$/)) {
         const formData = new FormData()
         formData.append('image', this.file)
         try {
           await this.$store.dispatch('user/updateAuthAvatar', formData)
           this.file = {} as Blob
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     },
@@ -150,8 +169,12 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
-      } catch (err) {
-        console.log(err)
+        if (this.socket) this.socket.emit('notification', 'create')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -160,8 +183,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           TwoFA: !this.isTwoFactorAuth,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -171,8 +197,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           color: this.color,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -182,8 +211,11 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           backgroundColor: this.backgroundColor,
         })
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 
@@ -195,8 +227,11 @@ export default Vue.extend({
           this.isImageLoading = false
           this.is2FADialog = true
         }, 2000)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
 

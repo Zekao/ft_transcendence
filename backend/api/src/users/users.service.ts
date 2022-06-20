@@ -83,7 +83,8 @@ export class UsersService {
     }
     return matchesWithUser.filter(
       (match) =>
-        match.FirstPlayer.id === users.id || match.SecondPlayer.id === users.id
+        (match.FirstPlayer?.id || "") === users.id ||
+        (match.SecondPlayer?.id || "") === users.id
     );
   }
 
@@ -254,8 +255,8 @@ export class UsersService {
       rank: 0,
       ratio: 1,
       First_time: true,
-      color: '#ffffff',
-      backgroundColor: '#808080',
+      color: "#ffffff",
+      backgroundColor: "#808080",
       avatar: "default.png" + "?" + new Date().getTime(),
     });
     try {
@@ -318,7 +319,6 @@ export class UsersService {
       filename: file.filename,
     };
     const split = id.avatar.split("?");
-    console.log("aa");
     const name = split[split.length - 2];
     const extfile = extname(name);
     if (extfile != extname(file.filename)) {
@@ -328,6 +328,21 @@ export class UsersService {
     id.avatar = file.filename + "?" + new Date().getTime();
     await this.UserRepository.save(id);
     return response;
+  }
+
+  async addWinLoose(p1: string, p2: string, action: string) {
+    const player1 = await this.getUserId(p1);
+    const player2 = await this.getUserId(p2);
+
+    if (action == "PLAYER1") {
+      player1.win += 1;
+      player2.loose += 1;
+    } else if (action == "PLAYER2") {
+      player2.win += 1;
+      player1.loose += 1;
+    }
+    this.UserRepository.save(player1);
+    this.UserRepository.save(player2);
   }
 
   /* ************************************************************************** */
@@ -414,7 +429,16 @@ export class UsersService {
     const found = await this.getUserId(id);
     if (firstname) found.first_name = firstname;
     if (lastname) found.last_name = lastname;
-    if (display_name) found.display_name = display_name;
+    if (display_name) {
+      const users = await this.getUsers();
+      for (const user of users) {
+        if (user.display_name == display_name && user.id != id)
+          throw new ConflictException(
+            `Display name \`${display_name}' already used`
+          );
+      }
+      found.display_name = display_name;
+    }
     if (TwoFA != null) found.TwoFA = TwoFA;
     if (email) found.email = email;
     if (status) found.status = status;

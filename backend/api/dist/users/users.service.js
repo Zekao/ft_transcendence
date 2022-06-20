@@ -71,7 +71,11 @@ let UsersService = class UsersService {
         for (const match of matches) {
             matchesWithUser.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
-        return matchesWithUser.filter((match) => match.FirstPlayer.id === users.id || match.SecondPlayer.id === users.id);
+        return matchesWithUser.filter((match) => {
+            var _a, _b;
+            return (((_a = match.FirstPlayer) === null || _a === void 0 ? void 0 : _a.id) || "") === users.id ||
+                (((_b = match.SecondPlayer) === null || _b === void 0 ? void 0 : _b.id) || "") === users.id;
+        });
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);
@@ -221,8 +225,8 @@ let UsersService = class UsersService {
             rank: 0,
             ratio: 1,
             First_time: true,
-            color: '#ffffff',
-            backgroundColor: '#808080',
+            color: "#ffffff",
+            backgroundColor: "#808080",
             avatar: "default.png" + "?" + new Date().getTime(),
         });
         try {
@@ -285,7 +289,6 @@ let UsersService = class UsersService {
             filename: file.filename,
         };
         const split = id.avatar.split("?");
-        console.log("aa");
         const name = split[split.length - 2];
         const extfile = (0, path_1.extname)(name);
         if (extfile != (0, path_1.extname)(file.filename)) {
@@ -295,6 +298,20 @@ let UsersService = class UsersService {
         id.avatar = file.filename + "?" + new Date().getTime();
         await this.UserRepository.save(id);
         return response;
+    }
+    async addWinLoose(p1, p2, action) {
+        const player1 = await this.getUserId(p1);
+        const player2 = await this.getUserId(p2);
+        if (action == "PLAYER1") {
+            player1.win += 1;
+            player2.loose += 1;
+        }
+        else if (action == "PLAYER2") {
+            player2.win += 1;
+            player1.loose += 1;
+        }
+        this.UserRepository.save(player1);
+        this.UserRepository.save(player2);
     }
     async deleteUser(id) {
         const found = await this.getUserId(id);
@@ -357,8 +374,14 @@ let UsersService = class UsersService {
             found.first_name = firstname;
         if (lastname)
             found.last_name = lastname;
-        if (display_name)
+        if (display_name) {
+            const users = await this.getUsers();
+            for (const user of users) {
+                if (user.display_name == display_name && user.id != id)
+                    throw new common_1.ConflictException(`Display name \`${display_name}' already used`);
+            }
             found.display_name = display_name;
+        }
         if (TwoFA != null)
             found.TwoFA = TwoFA;
         if (email)

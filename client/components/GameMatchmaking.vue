@@ -22,18 +22,14 @@
         </v-btn>
 
         <v-avatar class="mr-2">
-          <v-img
-            :src="getAvatarPath(match.FirstPlayer)"
-          />
+          <v-img :src="getAvatarPath(match.FirstPlayer)" />
         </v-avatar>
         <v-btn class="mr-2">
           {{ getLogin(match.FirstPlayer) }}
         </v-btn>
 
         <v-avatar class="mr-2">
-          <v-img
-            :src="getAvatarPath(match.SecondPlayer)"
-          />
+          <v-img :src="getAvatarPath(match.SecondPlayer)" />
         </v-avatar>
         <v-btn>
           {{ getLogin(match.SecondPlayer) }}
@@ -62,17 +58,20 @@ export default Vue.extend({
 
   async fetch() {
     try {
-      const res = await this.$axios.$get('/matchs?status=PENDING')
+      const res = await this.$axios.$get('/matchs?status=STARTED')
       this.matches = res
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
     }
   },
 
   computed: {
     ...mapState({
       accessToken: (state: any): string => state.token.accessToken,
-      authUser: (state: any): IUser => state.user.authUser,
+      username: (state: any): string => state.user.authUser.user_name,
     }),
   },
 
@@ -85,25 +84,28 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('wait', async (userName, msg, matchID) => {
-      if (userName === this.authUser.user_name && msg === 'ready') {
-        this.$store.commit('SELECTED_MATCH_ID', matchID)
-        this.waiting = false
-        this.ready = true
-        this.$emit('next')
-      }
+    this.socket.on('wait', async (username1, username2, msg, matchID) => {
       if (msg === 'ready') {
+        if (this.username === username1 || this.username === username2) {
+          this.$store.commit('SELECTED_MATCH_ID', matchID)
+          this.waiting = false
+          this.ready = true
+          this.$emit('next')
+        }
         try {
           const res = await this.$axios.$get(`/matchs/${matchID}`)
           this.matches.push(res)
-        } catch (err) {
-          console.log(err)
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
         }
       }
     })
-    this.socket.on('wait', (msg, matchID) => {
-      if (msg === 'gameAction') {
-        this.matches = this.matches.filter(el => el.id !== matchID)
+    this.socket.on('gameAction', (matchID, msg) => {
+      if (msg === 'FINISH') {
+        this.matches = this.matches.filter((el) => el.id !== matchID)
       }
     })
   },
@@ -114,7 +116,7 @@ export default Vue.extend({
     },
     getAvatarPath(user: IUser): string {
       return (
-        'https://ft.localhost:4500/api/image/' + user?.avatar || 'default.png'
+        this.$config.imageUrl + user?.avatar || 'default.png'
       )
     },
     emitJoin() {
@@ -129,8 +131,11 @@ export default Vue.extend({
         this.socket.emit('action', 'leave')
       }
     },
-    gameWatcher(gameId: string) {
-      console.log(gameId)
+    gameWatcher(matchID: string) {
+      this.$store.commit('SELECTED_MATCH_ID', matchID)
+      this.waiting = false
+      this.ready = true
+      this.$emit('next')
     },
   },
 })

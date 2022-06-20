@@ -4,22 +4,14 @@
     color="grey lighten-1"
     class="d-flex justify-center align-center ma-6 pa-4"
   >
-    <v-progress-circular
-      v-if="$fetchState.pending"
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-    <v-list v-else-if="$fetchState.error">
-      <v-list-item dense>Failed to load friend list.</v-list-item>
-    </v-list>
-    <v-list v-else-if="!authUserFriends.length">
+    <v-list v-if="!authUserFriends.length">
       <v-list-item dense>No friends yet.</v-list-item>
     </v-list>
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i" class="my-2">
         <v-badge :color="colorStatus(user)" overlap class="mr-4">
           <v-avatar
-            ><v-img :src="'https://ft.localhost:4500/api/image/' + user.avatar"
+            ><v-img :src="$config.imageUrl + user.avatar"
           /></v-avatar>
         </v-badge>
         <v-btn @click="changeUser(user)">
@@ -41,18 +33,22 @@ export default Vue.extend({
 
   data: () => ({
     socket: null as NuxtSocket | null,
-    //   authUserFriends: [
-    //     { user_name: 'Test1', display_name: 'TEST1', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: 'ONLINE' },
-    //     { user_name: 'Test2', display_name: 'TEST2', avatar: 'https://ft.localhost:4500/api/image/default.png', win: 2, loose: 1, rank: 9, status: '' },
-    //   ],
   }),
 
   async fetch() {
-    await this.$store.dispatch('user/fetchAuthFriends')
+    try {
+      await this.$store.dispatch('user/fetchAuthFriends')
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
+    }
   },
 
   computed: {
     ...mapState({
+      componentSelected: (state: any): number => state.selectedComponent,
       accessToken: (state: any): string => state.token.accessToken,
       authUserFriends: (state: any): IUser[] => state.user.authUserFriends,
     }),
@@ -63,6 +59,20 @@ export default Vue.extend({
       set(value: boolean) {
         this.$store.commit('FRIEND_MENU', value)
       },
+    },
+  },
+
+  watch: {
+    async componentSelected(val: number) {
+      if (val !== 1) return
+      try {
+        await this.$store.dispatch('user/fetchAuthFriends')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
+      }
     },
   },
 

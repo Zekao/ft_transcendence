@@ -115,7 +115,11 @@
             </v-list-item-content>
           </template>
           <v-list-item class="px-0">
-            <ChannelRoom :key="i" :channel="channel"></ChannelRoom>
+            <ChannelRoom
+              :key="i"
+              :channel="channel"
+              @delete="deleteChannel"
+            ></ChannelRoom>
           </v-list-item>
         </v-list-group>
       </v-list>
@@ -204,6 +208,7 @@ export default Vue.extend({
     ],
     channelNameRules: [
       (v: string) => !!v || 'Name is required',
+      (v: string) => v.length >= 2 || 'Name must be greater than 1 character',
       (v: string) => v.length <= 24 || 'Name must be less than 24 characters',
       (v: string) =>
         v.match(/^[a-zA-Z][a-zA-Z0-9]*$/) !== null ||
@@ -228,8 +233,11 @@ export default Vue.extend({
         this.$store.dispatch('user/fetch'),
         this.$store.dispatch('user/fetchAuthBlocked'),
       ])
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      if (err.response.status === 401) {
+        this.$store.dispatch('logout')
+        this.$router.push('/login')
+      }
     }
   },
 
@@ -255,7 +263,7 @@ export default Vue.extend({
       )
     },
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return this.$config.imageUrl + this.avatar
     },
   },
 
@@ -275,7 +283,9 @@ export default Vue.extend({
         matchId: string,
         userName: string
       ) => {
-        if (authUserName === this.username && status === 'game') {
+        if (authUserName === 'update') {
+          this.$fetch()
+        } else if (authUserName === this.username && status === 'game') {
           this.invite = true
           this.inviteMatchId = matchId
           this.inviteUserName = userName
@@ -300,6 +310,8 @@ export default Vue.extend({
       return channelStatus.toUpperCase()
     },
     async createChannel() {
+      const channel = this.channels.find((el) => el.name === this.channelName)
+      if (channel) return
       try {
         const channel = {
           name: this.channelName,
@@ -311,9 +323,16 @@ export default Vue.extend({
               : 'Hello World!',
         } as IChannel
         await this.$store.dispatch('channel/create', channel)
-      } catch (err) {
-        console.log(err)
+        if (this.socket) this.socket.emit('notification', 'create')
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
+    },
+    deleteChannel() {
+      if (this.socket) this.socket.emit('notification', 'create')
     },
     acceptInvitation() {
       if (this.socket) {

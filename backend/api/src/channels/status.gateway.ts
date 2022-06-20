@@ -42,12 +42,10 @@ export class StatusGateway
     try {
       const user: User = client.data.user;
       if (message[0] === "invite") {
-        console.log("OKK");
         if (message[1]) {
           const invited = await this.userService.getUserId(message[1]);
           const match = await this.matchSevice.createMatch(invited.id);
           this.matchSevice.addPlayerToMatch(client.data.user, match);
-          console.log(message);
           this.emitNotif(
             client.data,
             "notification",
@@ -57,8 +55,7 @@ export class StatusGateway
             user.user_name
           );
         }
-      }
-      if (message[0] === "join") {
+      } else if (message[0] === "join") {
         const gameID = message[1];
         const match = await this.matchSevice.getMatchsId(gameID, [
           { withUsers: true },
@@ -70,10 +67,11 @@ export class StatusGateway
           "join",
           gameID
         );
-      }
-      if (message[0] === "deny") {
+      } else if (message[0] === "deny") {
         const gameID = message[1];
         this.matchSevice.deleteMatch(gameID);
+      } else if (message === "create") {
+        this.emitNotif(client.data, "notification", "update");
       }
     } catch {}
   }
@@ -105,6 +103,8 @@ export class StatusGateway
   isStatus(client: Socket, user: User) {
     user.status = UserStatus.ONLINE;
     this.userService.saveUser(user);
+    if (user.First_time == true)
+      this.emitNotif(client.data, "notification", "update");
     this.emitNotif(client.data, "notification", client.data.user.id, "connect");
     this.logger.log(`Client connected: ${client.id}`);
     return true;

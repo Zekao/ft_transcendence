@@ -113,7 +113,6 @@ export class ChannelsGateway
 
     try {
       const completeMessage = " is unmute";
-      console.log(channel.muteTime);
       await this.channelService.deleteChannelMute(
         client.data.user.id,
         channel.id,
@@ -358,12 +357,20 @@ export class ChannelsGateway
           socket.data.user.id,
           [{ withBlocked: true }]
         );
+        const banned = await this.channelService.getChannelBanMembers(
+          socket.data.channel.id
+        );
         if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
           for (const el of socket.data.user.blockedUsers) {
             if (el.id === channel.user.id) {
               blocked = true;
               break;
             }
+            for (const el of banned) {
+              if (el.id === socket.data.user.id) {
+                blocked = true;
+                break;
+              }
           }
           if (blocked === false) socket.emit(event, ...args);
           blocked = false;
@@ -395,8 +402,23 @@ export class ChannelsGateway
       const channel = await this.channelService.getChannelMembers(
         client.data.channel.id
       );
+      const bannedUser = await this.channelService.getChannelBanMembers(
+        client.data.channel.id
+      );
       for (const el of channel) {
         if (el.id === client.data.user.id) return;
+      }
+      for (const ban of bannedUser) {
+        if (ban.id === client.data.user.id) {
+          this.emitSingle(
+            client.data,
+            "channel",
+            client.data.user.id,
+            "You are ban from this channel"
+          );
+          client.disconnect();
+          return;
+        }
       }
       await this.channelService.addUserToMember(
         client.data.user.id,

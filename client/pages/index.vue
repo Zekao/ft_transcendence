@@ -1,5 +1,5 @@
 <template>
-  <v-stepper v-model="e1" height="100%" :key="index">
+  <v-stepper :key="index" v-model="e1" height="100%">
     <v-stepper-header>
       <v-stepper-step :complete="e1 > 1" step="1"> Matchmaking </v-stepper-step>
       <v-divider></v-divider>

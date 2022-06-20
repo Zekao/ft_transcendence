@@ -13,7 +13,6 @@ const auth: Middleware = async ({ $axios, $cookies, redirect, store }) => {
         .catch(() => redirect('/auth'))
     }
     store.commit('AUTH_SUCCESS', { accessToken })
-    console.log(res)
   } catch (err) {
     store.dispatch('logout')
     redirect('/login')

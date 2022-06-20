@@ -48,7 +48,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: 'https://ft.localhost:4500/api',
+    baseURL: process.env.BASE_URL,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -74,12 +74,13 @@ export default {
   build: {},
 
   server: {
-    port: 4500, // default : 3000
+    port: process.env.SERVER_PORT_FRONT, // default : 3000
     host: '0.0.0.0', // do not put localhost (only accessible from the host machine)
   },
 
   publicRuntimeConfig: {
-    serverLogin: 'https://ft.localhost:4500/api/auth/login',
+    serverLogin: process.env.SERVER_LOGIN,
+    imageUrl: process.env.IMAGE_URL,
   },
 
   io: {
@@ -87,7 +88,7 @@ export default {
     sockets: [
       {
         default: true,
-        url: 'https://ft.localhost:4500',
+        url: process.env.SOCKET_URL,
       },
     ],
   },

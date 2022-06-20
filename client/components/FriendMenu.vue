@@ -4,7 +4,7 @@
       <v-list-item class="justify-center">
         <v-avatar class="mr-4">
           <v-img
-            :src="'https://ft.localhost:4500/api/image/' + friend.avatar"
+            :src="$config.imageUrl + friend.avatar"
           />
         </v-avatar>
         <v-list-item-title> {{ friend.display_name }} </v-list-item-title>
@@ -83,28 +83,16 @@ export default Vue.extend({
         this.$store.commit('FRIEND_MENU', value)
       },
     },
-    // ImaGhost()
-    // {
-    //   console.log(this.friend)
-    //   if(!this.friend.id)
-    //   {
-    //     console.log(this.authUser)
-    //     this.friend = this.authUser
-    //   }
-    // },
-    // function who return true if friend id is the same as userID or false if not
     isMe(): boolean {
       // this.ImaGhost
       return this.friend.id === this.userID || !this.friend.id
     },
-    // function who return true if friend id is in authUserFriends or false if not
     isFriend(): boolean {
       return (
         this.authUserFriends.find((friend) => friend.id === this.friend.id) !==
         undefined
       )
     },
-    // function who return true if friend id is in authUserBlocked or false if not
     isBlockedByMe(): boolean {
       return (
         this.authUserBlocked.find((friend) => friend.id === this.friend.id) !==
@@ -117,7 +105,6 @@ export default Vue.extend({
         this.friend.in_game === 'IN_GAME' &&
         !this.isMe
       )
-      // && this.authUserBlocked.find((friend) => friend.id === this.friend.id) == undefined && !this.isBlockedByMe
     },
   },
   watch: {
@@ -136,7 +123,7 @@ export default Vue.extend({
     } as any)
     this.socket.on('notification', (userID, status) => {
       if (status === 'connect') {
-        const user = this.users.find(el => el.id === userID)
+        const user = this.users.find((el) => el.id === userID)
         if (user) {
           const newUser = { ...user }
           newUser.status = 'ONLINE'
@@ -148,7 +135,7 @@ export default Vue.extend({
           this.$store.commit('SELECTED_USER', user)
         }
       } else if (status === 'disconnect') {
-        const user = this.users.find(el => el.id === userID)
+        const user = this.users.find((el) => el.id === userID)
         if (user) {
           const newUser = { ...user }
           newUser.status = 'OFFLINE'
@@ -160,7 +147,7 @@ export default Vue.extend({
           this.$store.commit('SELECTED_USER', user)
         }
       } else if (status === 'ingame') {
-        const user = this.users.find(el => el.id === userID)
+        const user = this.users.find((el) => el.id === userID)
         if (user) {
           const newUser = { ...user }
           newUser.in_game = 'IN_GAME'
@@ -172,7 +159,7 @@ export default Vue.extend({
           this.$store.commit('SELECTED_USER', user)
         }
       } else if (status === 'outgame') {
-        const user = this.users.find(el => el.id === userID)
+        const user = this.users.find((el) => el.id === userID)
         if (user) {
           const newUser = { ...user }
           newUser.in_game = 'OUT_GAME'
@@ -190,30 +177,42 @@ export default Vue.extend({
     async block(userID: string) {
       try {
         await this.$store.dispatch('user/createAuthBlocked', userID)
-      } catch (error) {
-        console.log(error)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
     async unblocked(userID: string) {
       try {
         await this.$store.dispatch('user/deleteAuthBlocked', userID)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
     async addFriend(userID: string) {
       try {
         await this.$store.dispatch('user/createAuthFriend', userID)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
     // function remove friend from authUserFriends
     async removeFriend(userID: string) {
       try {
         await this.$store.dispatch('user/deleteAuthFriend', userID)
-      } catch (err) {
-        console.log(err)
+      } catch (err: any) {
+        if (err.response.status === 401) {
+          this.$store.dispatch('logout')
+          this.$router.push('/login')
+        }
       }
     },
     emitInvitation() {
