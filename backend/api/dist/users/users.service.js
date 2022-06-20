@@ -71,7 +71,11 @@ let UsersService = class UsersService {
         for (const match of matches) {
             matchesWithUser.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
-        return matchesWithUser.filter((match) => { var _a, _b; return (((_a = match.FirstPlayer) === null || _a === void 0 ? void 0 : _a.id) || '') === users.id || (((_b = match.SecondPlayer) === null || _b === void 0 ? void 0 : _b.id) || '') === users.id; });
+        return matchesWithUser.filter((match) => {
+            var _a, _b;
+            return (((_a = match.FirstPlayer) === null || _a === void 0 ? void 0 : _a.id) || "") === users.id ||
+                (((_b = match.SecondPlayer) === null || _b === void 0 ? void 0 : _b.id) || "") === users.id;
+        });
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);
@@ -294,6 +298,20 @@ let UsersService = class UsersService {
         id.avatar = file.filename + "?" + new Date().getTime();
         await this.UserRepository.save(id);
         return response;
+    }
+    async addWinLoose(p1, p2, action) {
+        const player1 = await this.getUserId(p1);
+        const player2 = await this.getUserId(p2);
+        if (action == "PLAYER1") {
+            player1.win += 1;
+            player2.loose += 1;
+        }
+        else if (action == "PLAYER2") {
+            player2.win += 1;
+            player1.loose += 1;
+        }
+        this.UserRepository.save(player1);
+        this.UserRepository.save(player2);
     }
     async deleteUser(id) {
         const found = await this.getUserId(id);
