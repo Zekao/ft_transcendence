@@ -31,6 +31,8 @@
             prepend-icon="mdi-account"
             required
             @input="setLoginInput"
+            v-on:keydown.enter.prevent="updateLogin"
+
           >
             <template #append-outer>
               <v-btn icon :disabled="!isLoginValid" @click="updateLogin">
