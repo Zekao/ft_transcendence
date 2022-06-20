@@ -103,7 +103,7 @@ export default Vue.extend({
         }
       }
     })
-    this.socket.on('gameAction', (msg, matchID) => {
+    this.socket.on('gameAction', (matchID, msg) => {
       if (msg === 'FINISH') {
         this.matches = this.matches.filter((el) => el.id !== matchID)
       }
@@ -131,8 +131,11 @@ export default Vue.extend({
         this.socket.emit('action', 'leave')
       }
     },
-    gameWatcher(gameId: string) {
-      console.log(gameId)
+    gameWatcher(matchID: string) {
+      this.$store.commit('SELECTED_MATCH_ID', matchID)
+      this.waiting = false
+      this.ready = true
+      this.$emit('next')
     },
   },
 })
