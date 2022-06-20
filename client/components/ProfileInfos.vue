@@ -42,20 +42,21 @@
           </v-text-field>
         </v-form>
       </v-list-item>
-      <v-list-item>
+      <v-list-item class="justify-center mb-1">
         <v-menu :close-on-content-click="false">
           <template #activator="{ on }">
-            <v-btn class="mr-2" v-on="on"> Player color </v-btn>
+            <v-btn x-large class="mr-2" v-on="on"> Player color </v-btn>
           </template>
           <v-color-picker v-model="color"></v-color-picker>
         </v-menu>
         <v-btn icon @click="updateColor">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-spacer />
+      </v-list-item>
+      <v-list-item class="justify-center">
         <v-menu :close-on-content-click="false">
           <template #activator="{ on }">
-            <v-btn v-on="on"> Game color </v-btn>
+            <v-btn x-large v-on="on"> Game color </v-btn>
           </template>
           <v-color-picker v-model="backgroundColor"></v-color-picker>
         </v-menu>
