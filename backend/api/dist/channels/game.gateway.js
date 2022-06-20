@@ -117,23 +117,27 @@ let GameGateway = class GameGateway {
         ball = client.data.posBall;
         direction = client.data.direction;
         if (ball.x <= 0) {
+            console.log("SCORE BEFORE FIRST PLAYER: ", match.scoreSecondPlayer);
             if (match.scoreSecondPlayer >= 5) {
                 this.finishGame(client);
             }
             else {
                 velocity = 0.00005;
-                await this.matchService.addOnePointToPlayer(match, "TWO");
+                this.matchService.addOnePointToPlayer(match, "TWO");
+                console.log("SCORE FIRST PLAYER: ", match.scoreSecondPlayer);
                 this.emitGame(client.data, "gameAction", match.id, "addTwo");
                 this.resetBall(client);
             }
         }
         else if (ball.x >= 850) {
+            console.log("SCORE BEFORE SECOND PLAYER: ", match.scoreSecondPlayer);
             if (match.scoreFirstPlayer >= 5) {
                 this.finishGame(client);
             }
             else {
                 velocity = 0.00005;
-                await this.matchService.addOnePointToPlayer(match, "ONE");
+                this.matchService.addOnePointToPlayer(match, "ONE");
+                console.log("SCORE SECOND PLAYER: ", match.scoreFirstPlayer);
                 this.emitGame(client.data, "gameAction", match.id, "addOne");
                 this.resetBall(client);
             }
