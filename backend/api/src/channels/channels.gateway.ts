@@ -154,6 +154,7 @@ export class ChannelsGateway
           id: "",
         }
       );
+      this.DisconnectClient(client.data, user);
       this.emitChannel(
         client.data,
         "channel",
@@ -168,6 +169,20 @@ export class ChannelsGateway
         err.response.message
       );
     }
+  }
+
+  DisconnectClient(channel: any, user: User, ...args: any): void {
+    try {
+      if (!channel.user) return;
+      const sockets: any[] = Array.from(this.server.sockets.values());
+      sockets.forEach((socket) => {
+        if (
+          channel.ConnectedChannel == socket.data.ConnectedChannel &&
+          socket.data.user.id === user.id
+        )
+          socket.disconnect();
+      });
+    } catch {}
   }
 
   async unbanPlayer(client: Socket, message: any) {
@@ -408,6 +423,7 @@ export class ChannelsGateway
             client.data.user.id,
             "You are ban from this channel"
           );
+          client.disconnect();
           return;
         }
       }

@@ -4,6 +4,7 @@ import { UsersService } from "../users/users.service";
 import { AuthService } from "src/auth/auth.services";
 import { ChannelsService } from "./channels.service";
 import { Channel } from "./channels.entity";
+import { User } from "../users/users.entity";
 export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private readonly userService;
     private readonly authService;
@@ -19,6 +20,7 @@ export declare class ChannelsGateway implements OnGatewayInit, OnGatewayConnecti
     mutePlayer(client: Socket, message: any): Promise<void>;
     unmutePlayer(client: Socket, message: any): Promise<void>;
     banPlayer(client: Socket, message: any): Promise<void>;
+    DisconnectClient(channel: any, user: User, ...args: any): void;
     unbanPlayer(client: Socket, message: any): Promise<void>;
     adminPlayer(client: Socket, message: any): Promise<void>;
     unadminPlayer(client: Socket, message: any): Promise<void>;
