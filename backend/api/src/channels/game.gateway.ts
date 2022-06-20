@@ -134,8 +134,7 @@ export class GameGateway
     this.emitGame(
       client.data,
       "gameAction",
-      match.FirstPlayer.user_name,
-      match.SecondPlayer.user_name,
+      match.id,
       "moveBall",
       ball.x,
       ball.y
@@ -149,13 +148,7 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "TWO");
-        this.emitGame(
-          client.data,
-          "gameAction",
-          match.FirstPlayer.user_name,
-          match.SecondPlayer.user_name,
-          "addTwo"
-        );
+        this.emitGame(client.data, "gameAction", match.id, "addTwo");
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
@@ -164,13 +157,7 @@ export class GameGateway
       } else {
         velocity = 0.00005;
         this.matchService.addOnePointToPlayer(match, "ONE");
-        this.emitGame(
-          client.data,
-          "gameAction",
-          match.FirstPlayer.user_name,
-          match.SecondPlayer.user_name,
-          "addOne"
-        );
+        this.emitGame(client.data, "gameAction", match.id, "addOne");
         this.resetBall(client);
       }
     }
@@ -243,14 +230,7 @@ export class GameGateway
     if (match) {
       match.status = MatchStatus.ENDED;
       this.matchService.saveMatch(match);
-      this.emitGame(
-        client.data,
-        "gameAction",
-        match.FirstPlayer.user_name,
-        match.SecondPlayer.user_name,
-        "FINISH",
-        match.id
-      );
+      this.emitGame(client.data, "gameAction", match.id, "FINISH");
       client.data.match = null;
       client.disconnect();
     }
@@ -284,25 +264,11 @@ export class GameGateway
       if (player.user_name == match.FirstPlayer.user_name) {
         if (message === "up" && pOne.y >= 0) pOne.y -= 13;
         else if (message === "down" && pOne.y <= 580) pOne.y += 13;
-        this.emitGame(
-          client.data,
-          "move",
-          match.FirstPlayer.user_name,
-          match.SecondPlayer.user_name,
-          pOne.y,
-          1
-        );
+        this.emitGame(client.data, "move", match.id, pOne.y, 1);
       } else {
         if (message === "up" && pTwo.y >= 0) pTwo.y -= 13;
         else if (message === "down" && pTwo.y <= 580) pTwo.y += 13;
-        this.emitGame(
-          client.data,
-          "move",
-          match.FirstPlayer.user_name,
-          match.SecondPlayer.user_name,
-          pTwo.y,
-          2
-        );
+        this.emitGame(client.data, "move", match.id, pTwo.y, 2);
       }
       client.data.posPlayerOne = pOne;
       client.data.posPlayerTwo = pTwo;
@@ -347,13 +313,7 @@ export class GameGateway
           }
           match.status = MatchStatus.ENDED;
           this.matchService.saveMatch(match);
-          this.emitGame(
-            client.data,
-            "gameAction",
-            match.FirstPlayer.user_name,
-            match.SecondPlayer.user_name,
-            "Give up"
-          );
+          this.emitGame(client.data, "gameAction", match.id, "Give up");
         }
       }
       if (client.data.waitinglist) {
