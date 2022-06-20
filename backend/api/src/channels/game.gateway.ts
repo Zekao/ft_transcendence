@@ -117,6 +117,10 @@ export class GameGateway
     const pOne = client.data.posPlayerOne;
     const pTwo = client.data.posPlayerTwo;
 
+    if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+      this.finishGame(client);
+      return;
+    }
     if (direction.x === 1 || direction.x === -1) {
       while (direction.x <= 0.2 || direction.x >= 0.9) {
         const heading = this.randomNumberBetween(0, 2 * Math.PI);
@@ -140,7 +144,7 @@ export class GameGateway
     ball = client.data.posBall;
     direction = client.data.direction;
     if (ball.x <= 0) {
-      if (match.scoreSecondPlayer >= 5 || match.scoreFirstPlayer >= 5) {
+      if (match.scoreSecondPlayer >= 5) {
         this.finishGame(client);
       } else {
         velocity = 0.00005;
@@ -155,7 +159,7 @@ export class GameGateway
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
-      if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+      if (match.scoreFirstPlayer >= 5) {
         this.finishGame(client);
       } else {
         velocity = 0.00005;
@@ -238,16 +242,7 @@ export class GameGateway
 
     if (match) {
       match.status = MatchStatus.ENDED;
-      if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
-        match.FirstPlayer.win += 1;
-        match.SecondPlayer.loose += 1;
-      } else if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
-        match.FirstPlayer.loose += 1;
-        match.SecondPlayer.win += 1;
-      }
-      await this.userService.saveUser(match.FirstPlayer);
-      await this.userService.saveUser(match.SecondPlayer);
-      await this.matchService.saveMatch(match);
+      this.matchService.saveMatch(match);
       this.emitGame(
         client.data,
         "gameAction",
