@@ -238,19 +238,15 @@ export class GameGateway
 
     if (match) {
       match.status = MatchStatus.ENDED;
-      const [user1, user2] = await Promise.all([
-        this.userService.getUserId(match.FirstPlayer.id),
-        this.userService.getUserId(match.SecondPlayer.id),
-      ]);
       if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
-        user1.win += 1;
-        user2.loose += 1;
+        match.FirstPlayer.win += 1;
+        match.SecondPlayer.loose += 1;
       } else if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
-        user1.loose += 1;
-        user2.win += 1;
+        match.FirstPlayer.loose += 1;
+        match.SecondPlayer.win += 1;
       }
-      await this.userService.saveUser(user1);
-      await this.userService.saveUser(user2);
+      await this.userService.saveUser(match.FirstPlayer);
+      await this.userService.saveUser(match.SecondPlayer);
       await this.matchService.saveMatch(match);
       this.emitGame(
         client.data,
