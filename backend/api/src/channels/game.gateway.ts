@@ -312,6 +312,14 @@ export class GameGateway
           this.matchService.saveMatch(match);
           this.emitGame(client.data, "gameAction", match.id, "Give up");
         }
+      } else if (
+        match.status === MatchStatus.STARTED &&
+        (match.scoreFirstPlayer == 5 || match.scoreSecondPlayer == 5) &&
+        (match.FirstPlayer.id === client.data.user.id ||
+          match.SecondPlayer.id === client.data.user.id)
+      ) {
+        match.status = MatchStatus.ENDED;
+        this.matchService.saveMatch(match);
       }
       if (client.data.waitinglist) {
         this.logger.log(
