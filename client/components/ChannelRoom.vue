@@ -303,12 +303,23 @@ export default Vue.extend({
       },
       path: '/api/socket.io/',
     } as any)
-    this.socket.on('channel', (id, message) => {
+    this.socket.on('channel', async (id, message) => {
       if (this.loggedIn) {
         this.messages.push({ id, message })
         this.$nextTick(() => {
           this.scrollToBottom()
         })
+      }
+      if (id === 'update') {
+        const admins = await this.$axios
+          .$get(`/channel/${this.channel.id}/members?role=admin`)
+          .catch((err) => {
+            if (err.response.status === 401) {
+              this.$store.dispatch('logout')
+              this.$router.push('/login')
+            }
+          })
+        this.admins = admins
       }
     })
   },
