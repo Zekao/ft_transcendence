@@ -147,7 +147,7 @@ export default Vue.extend({
 
   methods: {
     async uploadImage() {
-      if ((this.file as any).name) {
+      if ((this.file as any).name && (this.file as any).name.match(/.png$|.jpeg$|.jpg$/)) {
         const formData = new FormData()
         formData.append('image', this.file)
         try {

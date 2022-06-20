@@ -71,7 +71,7 @@ let UsersService = class UsersService {
         for (const match of matches) {
             matchesWithUser.push(await this.MatchsService.getMatchsId(match.id, [{ withUsers: true }]));
         }
-        return matchesWithUser.filter((match) => match.FirstPlayer.id === users.id || match.SecondPlayer.id === users.id);
+        return matchesWithUser.filter((match) => { var _a, _b; return (((_a = match.FirstPlayer) === null || _a === void 0 ? void 0 : _a.id) || '') === users.id || (((_b = match.SecondPlayer) === null || _b === void 0 ? void 0 : _b.id) || '') === users.id; });
     }
     async getBlocked(id) {
         const user = await this.getUserId(id, [{ withBlocked: true }]);
