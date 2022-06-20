@@ -263,12 +263,11 @@ export default Vue.extend({
       )
     },
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return this.$config.imageUrl + this.avatar
     },
   },
 
   mounted() {
-    console.log(this.$config.dir)
     if (this.$vuetify.breakpoint.mdAndUp) this.channelVisible = true
     this.socket = this.$nuxtSocket({
       auth: {

@@ -73,7 +73,7 @@
         <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
             <v-img
-              :src="`https://ft.localhost:4500/api/image/google/${userName}.png`"
+              :src="`${$config.imageUrl}/google/${userName}.png`"
             />
             <v-list-item>
               <v-otp-input
@@ -132,7 +132,7 @@ export default Vue.extend({
       isTwoFactorAuth: (state: any): boolean => state.user.authUser.TwoFA,
     }),
     imagePath(): string {
-      return 'https://ft.localhost:4500/api/image/' + this.avatar
+      return this.$config.imageUrl + this.avatar
     },
   },
 
