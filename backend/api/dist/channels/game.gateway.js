@@ -193,7 +193,6 @@ let GameGateway = class GameGateway {
                 this.userService.getUserId(match.FirstPlayer.id),
                 this.userService.getUserId(match.SecondPlayer.id),
             ]);
-            console.log(match.scoreFirstPlayer > match.scoreSecondPlayer);
             if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
                 user1.win += 1;
                 user2.loose += 1;
@@ -202,10 +201,9 @@ let GameGateway = class GameGateway {
                 user1.loose += 1;
                 user2.win += 1;
             }
-            console.log(match.scoreFirstPlayer < match.scoreSecondPlayer);
-            this.userService.saveUser(user1);
-            this.userService.saveUser(user2);
-            this.matchService.saveMatch(match);
+            await this.userService.saveUser(user1);
+            await this.userService.saveUser(user2);
+            await this.matchService.saveMatch(match);
             this.emitGame(client.data, "gameAction", match.FirstPlayer.user_name, match.SecondPlayer.user_name, "FINISH", match.id);
             client.data.match = null;
             client.disconnect();
