@@ -227,7 +227,7 @@ let GameGateway = class GameGateway {
                     pOne.y += 13;
                 this.emitGame(client.data, "move", match.id, pOne.y, 1);
             }
-            else {
+            else if (player.user_name == match.SecondPlayer.user_name) {
                 if (message === "up" && pTwo.y >= 0)
                     pTwo.y -= 13;
                 else if (message === "down" && pTwo.y <= 580)
@@ -266,7 +266,9 @@ let GameGateway = class GameGateway {
                     await this.matchService.deleteMatch(match.id);
                 else if (match.status === matchs_enum_1.MatchStatus.STARTED &&
                     match.scoreFirstPlayer != 5 &&
-                    match.scoreSecondPlayer != 5) {
+                    match.scoreSecondPlayer != 5 &&
+                    (match.FirstPlayer.id === client.data.user.id ||
+                        match.SecondPlayer.id === client.data.user.id)) {
                     if (client.data.user === match.FirstPlayer) {
                         match.scoreFirstPlayer = 0;
                         match.scoreSecondPlayer = 5;

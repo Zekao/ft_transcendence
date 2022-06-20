@@ -265,7 +265,7 @@ export class GameGateway
         if (message === "up" && pOne.y >= 0) pOne.y -= 13;
         else if (message === "down" && pOne.y <= 580) pOne.y += 13;
         this.emitGame(client.data, "move", match.id, pOne.y, 1);
-      } else {
+      } else if (player.user_name == match.SecondPlayer.user_name) {
         if (message === "up" && pTwo.y >= 0) pTwo.y -= 13;
         else if (message === "down" && pTwo.y <= 580) pTwo.y += 13;
         this.emitGame(client.data, "move", match.id, pTwo.y, 2);
@@ -292,7 +292,7 @@ export class GameGateway
   async handleDisconnect(client: Socket) {
     const user = client.data.user;
     try {
-      let match = client.data.match;
+      let match: Matchs = client.data.match;
       if (match) {
         match = await this.matchService.getMatchsId(match.id, [
           { withUsers: true },
@@ -302,7 +302,9 @@ export class GameGateway
         else if (
           match.status === MatchStatus.STARTED &&
           match.scoreFirstPlayer != 5 &&
-          match.scoreSecondPlayer != 5
+          match.scoreSecondPlayer != 5 &&
+          (match.FirstPlayer.id === client.data.user.id ||
+            match.SecondPlayer.id === client.data.user.id)
         ) {
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
