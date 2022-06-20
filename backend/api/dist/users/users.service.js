@@ -285,7 +285,6 @@ let UsersService = class UsersService {
             filename: file.filename,
         };
         const split = id.avatar.split("?");
-        console.log("aa");
         const name = split[split.length - 2];
         const extfile = (0, path_1.extname)(name);
         if (extfile != (0, path_1.extname)(file.filename)) {

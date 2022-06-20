@@ -60,7 +60,11 @@ let MatchsService = class MatchsService {
             matchs = matchs.filter((channel) => channel.winner === winner);
         if (!matchs)
             throw new common_1.NotFoundException(`Channel not found`);
-        return matchs;
+        const match = [];
+        for (const el of matchs) {
+            match.push(await this.getMatchsId(el.id, [{ withUsers: true }]));
+        }
+        return match;
     }
     async getMatchsId(id, RelationsPicker) {
         const relations = [];

@@ -113,7 +113,6 @@ export class ChannelsGateway
 
     try {
       const completeMessage = " is unmute";
-      console.log(channel.muteTime);
       await this.channelService.deleteChannelMute(
         client.data.user.id,
         channel.id,

@@ -97,10 +97,8 @@ export class AuthController {
       { encoding: "base64" },
       function (err) {
         if (err) {
-          console.log(err);
           return false;
         } else {
-          console.log("The file was saved!");
           return true;
         }
       }

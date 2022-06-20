@@ -43,10 +43,8 @@ export class GameGateway
       const player: User = client.data.user;
       if (message === "join") {
         const findedMatch = await this.matchService.defineMatch(player);
-        console.log("JOIN");
 
         if (findedMatch != null && findedMatch.id) {
-          console.log("FIND MATCH");
           client.data.match = this.matchService.getMatchsId(findedMatch.id, [
             { withUsers: true },
           ]);
@@ -59,19 +57,16 @@ export class GameGateway
             findedMatch.id
           );
         } else {
-          console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
           client.data.match = await this.matchService.getMatchsId(match.id, [
             { withUsers: true },
           ]);
-          console.log("NEW MATCH ID : ", client.data.match.id);
         }
       }
       if (message === "leave") {
         if (client.data.match)
           await this.matchService.deleteMatch(client.data.match.id);
         client.data.match = null;
-        console.log("LEAVE THE WAITING LIST MATCH");
       }
     } catch {}
   }
@@ -147,7 +142,7 @@ export class GameGateway
         this.finishGame(client);
       } else {
         velocity = 0.00005;
-        await this.matchService.addOnePointToPlayer(match, "TWO");
+        this.matchService.addOnePointToPlayer(match, "TWO");
         this.emitGame(client.data, "gameAction", match.id, "addTwo");
         this.resetBall(client);
       }
@@ -156,7 +151,7 @@ export class GameGateway
         this.finishGame(client);
       } else {
         velocity = 0.00005;
-        await this.matchService.addOnePointToPlayer(match, "ONE");
+        this.matchService.addOnePointToPlayer(match, "ONE");
         this.emitGame(client.data, "gameAction", match.id, "addOne");
         this.resetBall(client);
       }
@@ -347,7 +342,6 @@ export class GameGateway
   }
 
   async isInGame(client: Socket, user: User) {
-    console.log("CLIENT: ", client.handshake.auth.game);
     const match: Matchs = await this.matchService.getMatchsId(
       client.handshake.auth.game,
       [{ withUsers: true }]

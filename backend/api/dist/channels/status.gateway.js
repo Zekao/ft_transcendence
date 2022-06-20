@@ -31,12 +31,10 @@ let StatusGateway = class StatusGateway {
         try {
             const user = client.data.user;
             if (message[0] === "invite") {
-                console.log("OKK");
                 if (message[1]) {
                     const invited = await this.userService.getUserId(message[1]);
                     const match = await this.matchSevice.createMatch(invited.id);
                     this.matchSevice.addPlayerToMatch(client.data.user, match);
-                    console.log(message);
                     this.emitNotif(client.data, "notification", invited.user_name, "game", match.id, user.user_name);
                 }
             }
