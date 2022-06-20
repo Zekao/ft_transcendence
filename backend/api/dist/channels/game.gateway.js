@@ -256,7 +256,6 @@ let GameGateway = class GameGateway {
         catch (_a) { }
     }
     async handleDisconnect(client) {
-        const user = client.data.user;
         try {
             let match = client.data.match;
             if (match) {
@@ -295,6 +294,7 @@ let GameGateway = class GameGateway {
             if (client.data.waitinglist) {
                 this.logger.log(`Client disconnected from the WaitingList: ${client.id}`);
             }
+            const user = client.data.user;
             if (user) {
                 user.in_game = users_enum_1.UserGameStatus.OUT_GAME;
                 this.userService.saveUser(user);

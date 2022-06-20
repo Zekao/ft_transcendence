@@ -298,7 +298,6 @@ export class GameGateway
   }
 
   async handleDisconnect(client: Socket) {
-    const user = client.data.user;
     try {
       let match: Matchs = client.data.match;
       if (match) {
@@ -349,6 +348,7 @@ export class GameGateway
           `Client disconnected from the WaitingList: ${client.id}`
         );
       }
+      const user = client.data.user;
       if (user) {
         user.in_game = UserGameStatus.OUT_GAME;
         this.userService.saveUser(user);
