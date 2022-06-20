@@ -126,6 +126,11 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
+            await this.channelService.addUserToMember(client.data.user.id, channel.id, {
+                user: user.display_name,
+                role: "",
+                id: "",
+            });
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {

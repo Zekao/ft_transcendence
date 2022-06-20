@@ -185,6 +185,15 @@ export class ChannelsGateway
           id: "",
         }
       );
+      await this.channelService.addUserToMember(
+        client.data.user.id,
+        channel.id,
+        {
+          user: user.display_name,
+          role: "",
+          id: "",
+        }
+      );
       this.emitChannel(
         client.data,
         "channel",
