@@ -11,6 +11,7 @@
 import V from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
+import { IMatch } from '~/store/match'
 
 export default V.extend({
   // <p>
@@ -45,6 +46,7 @@ export default V.extend({
       speed: 0.00005,
     },
   }),
+
   computed: {
     ...mapState({
       accessToken: (state: any) => state.token.accessToken,
@@ -84,8 +86,18 @@ export default V.extend({
     },
   },
   watch: {
-    selectedMatchId(value: string) {
+    async selectedMatchId(value: string) {
       this.socketInit(value)
+      try {
+          const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
+          this.score.player1 = res.scoreFirstPlayer
+          this.score.player2 = res.scoreSecondPlayer
+        } catch (err: any) {
+          if (err.response.status === 401) {
+            this.$store.dispatch('logout')
+            this.$router.push('/login')
+          }
+        }
     },
   },
   mounted() {
