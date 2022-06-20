@@ -98,6 +98,10 @@ let GameGateway = class GameGateway {
         const match = client.data.match;
         const pOne = client.data.posPlayerOne;
         const pTwo = client.data.posPlayerTwo;
+        if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+            this.finishGame(client);
+            return;
+        }
         if (direction.x === 1 || direction.x === -1) {
             while (direction.x <= 0.2 || direction.x >= 0.9) {
                 const heading = this.randomNumberBetween(0, 2 * Math.PI);
@@ -113,7 +117,7 @@ let GameGateway = class GameGateway {
         ball = client.data.posBall;
         direction = client.data.direction;
         if (ball.x <= 0) {
-            if (match.scoreSecondPlayer >= 5 || match.scoreFirstPlayer >= 5) {
+            if (match.scoreSecondPlayer >= 5) {
                 this.finishGame(client);
             }
             else {
@@ -124,7 +128,7 @@ let GameGateway = class GameGateway {
             }
         }
         else if (ball.x >= 850) {
-            if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
+            if (match.scoreFirstPlayer >= 5) {
                 this.finishGame(client);
             }
             else {
