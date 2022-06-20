@@ -351,9 +351,9 @@ export class ChannelsGateway
     try {
       let blocked = false;
       if (!channel.user) return;
-      // const banned = await this.channelService.getChannelBanMembers(
-      //   channel.data.channel.id
-      // );
+      const banned = await this.channelService.getChannelBanMembers(
+        channel.channel.id
+      );
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach(async (socket) => {
         socket.data.user = await this.userService.getUserId(
@@ -367,13 +367,12 @@ export class ChannelsGateway
               break;
             }
           }
-          // for (const el of banned) {
-          //   console.log("BANNED USER: ", banned);
-          //   if (el.id === socket.data.user.id) {
-          //     blocked = true;
-          //     break;
-          //   }
-          // }
+          for (const el of banned) {
+            if (el.id === channel.user.id) {
+              blocked = true;
+              break;
+            }
+          }
           if (blocked === false) socket.emit(event, ...args);
           blocked = false;
         }

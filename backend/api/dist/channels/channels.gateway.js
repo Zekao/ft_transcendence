@@ -237,11 +237,18 @@ let ChannelsGateway = class ChannelsGateway {
             let blocked = false;
             if (!channel.user)
                 return;
+            const banned = await this.channelService.getChannelBanMembers(channel.channel.id);
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach(async (socket) => {
                 socket.data.user = await this.userService.getUserId(socket.data.user.id, [{ withBlocked: true }]);
                 if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
                     for (const el of socket.data.user.blockedUsers) {
+                        if (el.id === channel.user.id) {
+                            blocked = true;
+                            break;
+                        }
+                    }
+                    for (const el of banned) {
                         if (el.id === channel.user.id) {
                             blocked = true;
                             break;
