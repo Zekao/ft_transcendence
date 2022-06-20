@@ -314,7 +314,7 @@ let GameGateway = class GameGateway {
         client.data.game = client.handshake.auth.game;
         if (client.data.game) {
             const match = await this.matchService.getMatchsId(client.handshake.auth.game, [{ withUsers: true }]);
-            if (match.status != matchs_enum_1.MatchStatus.ENDED) {
+            if (match) {
                 client.data.match = match;
                 client.data.posPlayerOne = { x: 0, y: 250 };
                 client.data.posPlayerTwo = { x: 850, y: 250 };

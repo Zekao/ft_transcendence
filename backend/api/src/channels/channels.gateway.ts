@@ -232,6 +232,7 @@ export class ChannelsGateway
         client.data.user.id,
         completeMessage
       );
+      // this.emitChannel(client.data, "")
     } catch (err) {
       this.emitSingle(
         client.data,

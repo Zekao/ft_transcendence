@@ -377,7 +377,7 @@ export class GameGateway
         client.handshake.auth.game,
         [{ withUsers: true }]
       );
-      if (match.status != MatchStatus.ENDED) {
+      if (match) {
         client.data.match = match;
         client.data.posPlayerOne = { x: 0, y: 250 };
         client.data.posPlayerTwo = { x: 850, y: 250 };
