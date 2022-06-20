@@ -158,7 +158,6 @@ export class GameGateway
         velocity = 0.00005;
         const i = await this.matchService.addOnePointToPlayer(match, "ONE");
         this.emitGame(client.data, "gameAction", match.id, "addOne", i);
-
         this.resetBall(client);
       }
     }
