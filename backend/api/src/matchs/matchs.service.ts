@@ -162,15 +162,13 @@ export class MatchsService {
   }
 
   async addOnePointToPlayer(id: Matchs, player: string) {
-    let i = 0;
     if (player == "ONE") {
-      i = id.scoreFirstPlayer += 1;
+      id.scoreFirstPlayer += 1;
       await this.MatchsRepository.save(id);
     } else if (player == "TWO") {
-      i = id.scoreSecondPlayer += 1;
+      id.scoreSecondPlayer += 1;
       await this.MatchsRepository.save(id);
     }
-    return i;
   }
 
   /* ************************************************************************** */

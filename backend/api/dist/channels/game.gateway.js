@@ -122,8 +122,8 @@ let GameGateway = class GameGateway {
             }
             else {
                 velocity = 0.00005;
-                const i = await this.matchService.addOnePointToPlayer(match, "TWO");
-                this.emitGame(client.data, "gameAction", match.id, "addTwo", i);
+                await this.matchService.addOnePointToPlayer(match, "TWO");
+                this.emitGame(client.data, "gameAction", match.id, "addTwo");
                 this.resetBall(client);
             }
         }
@@ -133,8 +133,8 @@ let GameGateway = class GameGateway {
             }
             else {
                 velocity = 0.00005;
-                const i = await this.matchService.addOnePointToPlayer(match, "ONE");
-                this.emitGame(client.data, "gameAction", match.id, "addOne", i);
+                await this.matchService.addOnePointToPlayer(match, "ONE");
+                this.emitGame(client.data, "gameAction", match.id, "addOne");
                 this.resetBall(client);
             }
         }

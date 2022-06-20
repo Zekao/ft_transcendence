@@ -18,7 +18,7 @@ export declare class MatchsService {
     addPlayerToMatch(player: User, match: Matchs): Promise<Matchs>;
     defineMatch(player: User): Promise<Matchs>;
     saveMatch(match: Matchs): Promise<Matchs>;
-    addOnePointToPlayer(id: Matchs, player: string): Promise<number>;
+    addOnePointToPlayer(id: Matchs, player: string): Promise<void>;
     deleteMatch(id: string): Promise<boolean>;
     editMatch(id: string, matchDto: MatchDto): Promise<Matchs>;
 }
