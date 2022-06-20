@@ -50,13 +50,21 @@ export class GameGateway
           client.data.match = this.matchService.getMatchsId(findedMatch.id, [
             { withUsers: true },
           ]);
-          this.emitReady(client.data, "wait", "ready", findedMatch.id);
+          this.emitReady(
+            client.data,
+            "wait",
+            findedMatch.FirstPlayer.user_name,
+            findedMatch.SecondPlayer.user_name,
+            "ready",
+            findedMatch.id
+          );
         } else {
           console.log("CREATION OF THE MATCH");
           const match = await this.matchService.createMatch(player.id);
-          client.data.match = this.matchService.getMatchsId(match.id, [
+          client.data.match = await this.matchService.getMatchsId(match.id, [
             { withUsers: true },
           ]);
+          console.log("NEW MATCH ID : ", client.data.match.id);
         }
       }
       if (message === "leave") {
@@ -73,8 +81,7 @@ export class GameGateway
       if (!player.user) return;
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach((socket) => {
-        if (player.match.id === socket.data.match.id)
-          socket.emit(event, socket.data.user.user_name, ...args);
+        socket.emit(event, ...args);
       });
     } catch {}
   }
@@ -231,23 +238,20 @@ export class GameGateway
 
     if (match) {
       match.status = MatchStatus.ENDED;
-      const [ user1, user2 ] = await Promise.all([
+      const [user1, user2] = await Promise.all([
         this.userService.getUserId(match.FirstPlayer.id),
         this.userService.getUserId(match.SecondPlayer.id),
-      ])
-      console.log(match.scoreFirstPlayer > match.scoreSecondPlayer)
+      ]);
       if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
-        user1.win++
-        user2.loose++
+        user1.win += 1;
+        user2.loose += 1;
+      } else if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
+        user1.loose += 1;
+        user2.win += 1;
       }
-      console.log(match.scoreFirstPlayer < match.scoreSecondPlayer)
-      if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
-        user1.loose++
-        user2.win++
-      }
-      this.userService.saveUser(user1)
-      this.userService.saveUser(user2)
-      this.matchService.saveMatch(match);
+      await this.userService.saveUser(user1);
+      await this.userService.saveUser(user2);
+      await this.matchService.saveMatch(match);
       this.emitGame(
         client.data,
         "gameAction",
