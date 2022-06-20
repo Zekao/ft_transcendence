@@ -3,9 +3,7 @@
     <v-list>
       <v-list-item class="justify-center">
         <v-avatar class="mr-4">
-          <v-img
-            :src="$config.imageUrl + friend.avatar"
-          />
+          <v-img :src="$config.imageUrl + friend.avatar" />
         </v-avatar>
         <v-list-item-title> {{ friend.display_name }} </v-list-item-title>
       </v-list-item>

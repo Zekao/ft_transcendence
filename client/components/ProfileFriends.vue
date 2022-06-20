@@ -10,9 +10,7 @@
     <v-list v-else>
       <v-list-item v-for="(user, i) in authUserFriends" :key="i" class="my-2">
         <v-badge :color="colorStatus(user)" overlap class="mr-4">
-          <v-avatar
-            ><v-img :src="$config.imageUrl + user.avatar"
-          /></v-avatar>
+          <v-avatar><v-img :src="$config.imageUrl + user.avatar" /></v-avatar>
         </v-badge>
         <v-btn @click="changeUser(user)">
           {{ user.display_name }}

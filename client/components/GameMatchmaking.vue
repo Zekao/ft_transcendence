@@ -115,9 +115,7 @@ export default Vue.extend({
       return user?.display_name || ''
     },
     getAvatarPath(user: IUser): string {
-      return (
-        this.$config.imageUrl + user?.avatar || 'default.png'
-      )
+      return this.$config.imageUrl + user?.avatar || 'default.png'
     },
     emitJoin() {
       if (this.socket) {

@@ -32,7 +32,6 @@
             required
             @input="setLoginInput"
             @keydown.enter.prevent="updateLogin"
-
           >
             <template #append-outer>
               <v-btn icon :disabled="!isLoginValid" @click="updateLogin">
@@ -75,9 +74,7 @@
         </v-btn>
         <v-dialog v-model="is2FADialog" width="40%">
           <v-card>
-            <v-img
-              :src="`${$config.imageUrl}google/${userName}.png`"
-            />
+            <v-img :src="`${$config.imageUrl}google/${userName}.png`" />
             <v-list-item>
               <v-otp-input
                 v-model="code"
@@ -150,7 +147,10 @@ export default Vue.extend({
 
   methods: {
     async uploadImage() {
-      if ((this.file as any).name && (this.file as any).name.match(/.png$|.jpeg$|.jpg$/)) {
+      if (
+        (this.file as any).name &&
+        (this.file as any).name.match(/.png$|.jpeg$|.jpg$/)
+      ) {
         const formData = new FormData()
         formData.append('image', this.file)
         try {
