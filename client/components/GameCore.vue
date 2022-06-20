@@ -87,16 +87,16 @@ export default V.extend({
   },
   watch: {
     async selectedMatchId(value: string) {
-      try {
-          const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
-          this.score.player1 = res.scoreFirstPlayer
-          this.score.player2 = res.scoreSecondPlayer
-        } catch (err: any) {
-          if (err.response.status === 401) {
-            this.$store.dispatch('logout')
-            this.$router.push('/login')
-          }
-        }
+      // try {
+      //   const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
+      //   this.score.player1 = res.scoreFirstPlayer
+      //   this.score.player2 = res.scoreSecondPlayer
+      // } catch (err: any) {
+      //   if (err.response.status === 401) {
+      //     this.$store.dispatch('logout')
+      //     this.$router.push('/login')
+      //   }
+      // }
       this.socketInit(value)
     },
   },
