@@ -79,6 +79,7 @@ export default {
   },
 
   publicRuntimeConfig: {
+    dir: process.env.DIR,
     serverLogin: 'https://ft.localhost:4500/api/auth/login',
   },
 
