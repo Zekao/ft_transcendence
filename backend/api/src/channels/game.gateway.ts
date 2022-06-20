@@ -314,6 +314,8 @@ export class GameGateway
           (match.FirstPlayer.id === client.data.user.id ||
             match.SecondPlayer.id === client.data.user.id)
         ) {
+          match.status = MatchStatus.ENDED;
+          this.matchService.saveMatch(match);
           if (client.data.user === match.FirstPlayer) {
             match.scoreFirstPlayer = 0;
             match.scoreSecondPlayer = 5;
@@ -331,8 +333,6 @@ export class GameGateway
               "PLAYER1"
             );
           }
-          match.status = MatchStatus.ENDED;
-          this.matchService.saveMatch(match);
           this.emitGame(client.data, "gameAction", match.id, "Give up");
         }
       } else if (

@@ -110,26 +110,11 @@ let ChannelsGateway = class ChannelsGateway {
                 role: "",
                 id: "",
             });
-            this.DisconnectClient(client.data, user);
             this.emitChannel(client.data, "channel", client.data.user.id, completeMessage);
         }
         catch (err) {
             this.emitSingle(client.data, "channel", client.data.user.id, err.response.message);
         }
-    }
-    DisconnectClient(channel, user, ...args) {
-        try {
-            if (!channel.user)
-                return;
-            const sockets = Array.from(this.server.sockets.values());
-            sockets.forEach((socket) => {
-                if (channel.ConnectedChannel == socket.data.ConnectedChannel &&
-                    socket.data.user.id === user.id) {
-                    socket.disconnect();
-                }
-            });
-        }
-        catch (_a) { }
     }
     async unbanPlayer(client, message) {
         const channel = client.data.channel;
