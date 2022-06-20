@@ -93,6 +93,7 @@
 </template>
 
 <script lang="ts">
+import { NuxtSocket } from 'nuxt-socket-io'
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
@@ -105,6 +106,7 @@ export default Vue.extend({
     isImageLoading: false,
     is2FADialog: false,
     loading: false,
+    socket: null as NuxtSocket | null,
     code: '',
     file: {} as Blob,
     isLoginValid: false,
@@ -123,6 +125,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState({
+      accessToken: (state: any): string => state.token.accessToken,
       userName: (state: any): string => state.user.authUser.user_name,
       login: (state: any): string => state.user.authUser.display_name || '',
       avatar: (state: any): string => state.user.authUser.avatar,
@@ -131,6 +134,15 @@ export default Vue.extend({
     imagePath(): string {
       return 'https://ft.localhost:4500/api/image/' + this.avatar
     },
+  },
+
+  mounted() {
+    this.socket = this.$nuxtSocket({
+      auth: {
+        Authorization: this.accessToken,
+      },
+      path: '/api/socket.io/',
+    } as any)
   },
 
   methods: {
@@ -155,6 +167,7 @@ export default Vue.extend({
         await this.$store.dispatch('user/updateAuth', {
           display_name: this.newLogin,
         })
+        if (this.socket) this.socket.emit('notification', 'create')
       } catch (err: any) {
         if (err.response.status === 401) {
           this.$store.dispatch('logout')
