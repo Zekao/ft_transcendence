@@ -304,12 +304,6 @@ export default Vue.extend({
       path: '/api/socket.io/',
     } as any)
     this.socket.on('channel', async (id, message) => {
-      if (this.loggedIn) {
-        this.messages.push({ id, message })
-        this.$nextTick(() => {
-          this.scrollToBottom()
-        })
-      }
       if (id === 'update') {
         const admins = await this.$axios
           .$get(`/channel/${this.channel.id}/members?role=admin`)
@@ -320,6 +314,11 @@ export default Vue.extend({
             }
           })
         this.admins = admins
+      } else if (this.loggedIn) {
+        this.messages.push({ id, message })
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
       }
     })
   },
