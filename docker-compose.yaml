@@ -16,10 +16,6 @@ services:
   reverse-proxy:
     image: "traefik:v2.4"
     command:
-      # Set log level and enable API
-      - "--api.insecure=true"
-      # Disable SSL verification on backend
-      - "--serverstransport.insecureskipverify=true"
       # Route
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -39,7 +35,6 @@ services:
     ports:
       - "4499:80"
       - "4500:443"
-      - "8080:8080"
     restart: unless-stopped
 
       # *******************FRONTEND*******************
@@ -50,7 +45,8 @@ services:
     entrypoint: |
       /bin/sh -c "
         yarn install;
-        yarn dev --dotenv /.env
+        yarn build --dotenv /.env;
+        yarn start
       "
     volumes:
       - ./client:/usr/src/app
@@ -72,7 +68,7 @@ services:
     image: backend:latest
     build:
       context: ./backend/api
-    entrypoint: ["npm", "run", "start:dev"]
+    entrypoint: ["npm", "run", "start"]
     volumes:
       - ./backend/api:/usr/src/app
       - /usr/src/app/node_modules
@@ -101,8 +97,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_DB: ${DB_DATABASE_NAME}
-    ports:
-      - 5432:5432
     volumes:
       - database:/var/lib/postgresql/data
 
