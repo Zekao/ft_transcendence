@@ -11,7 +11,6 @@
 import V from 'vue'
 import { mapState } from 'vuex'
 import { NuxtSocket } from 'nuxt-socket-io'
-import { IMatch } from '~/store/match'
 
 export default V.extend({
   // <p>
