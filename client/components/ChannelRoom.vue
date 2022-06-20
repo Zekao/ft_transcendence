@@ -245,7 +245,7 @@ export default Vue.extend({
       const [owners, admins, history] = await Promise.all([
         this.$axios.$get(`/channel/${this.channel.id}/members?role=owner`),
         this.$axios.$get(`/channel/${this.channel.id}/members?role=admin`),
-        await this.$axios.$get(`/channel/${this.channel.id}/history`),
+        this.$axios.$get(`/channel/${this.channel.id}/history`),
       ])
       this.owner = owners[0]
       this.admins = admins
