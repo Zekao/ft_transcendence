@@ -193,10 +193,12 @@ let GameGateway = class GameGateway {
                 this.userService.getUserId(match.FirstPlayer.id),
                 this.userService.getUserId(match.SecondPlayer.id),
             ]);
+            console.log(match.scoreFirstPlayer > match.scoreSecondPlayer);
             if (match.scoreFirstPlayer > match.scoreSecondPlayer) {
                 user1.win++;
                 user2.loose++;
             }
+            console.log(match.scoreFirstPlayer < match.scoreSecondPlayer);
             if (match.scoreFirstPlayer < match.scoreSecondPlayer) {
                 user1.loose++;
                 user2.win++;
