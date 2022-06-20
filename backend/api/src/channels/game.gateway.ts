@@ -140,7 +140,7 @@ export class GameGateway
     ball = client.data.posBall;
     direction = client.data.direction;
     if (ball.x <= 0) {
-      if (match.scoreSecondPlayer >= 5) {
+      if (match.scoreSecondPlayer >= 5 || match.scoreFirstPlayer >= 5) {
         this.finishGame(client);
       } else {
         velocity = 0.00005;
@@ -155,7 +155,7 @@ export class GameGateway
         this.resetBall(client);
       }
     } else if (ball.x >= 850) {
-      if (match.scoreFirstPlayer >= 5) {
+      if (match.scoreFirstPlayer >= 5 || match.scoreSecondPlayer >= 5) {
         this.finishGame(client);
       } else {
         velocity = 0.00005;
