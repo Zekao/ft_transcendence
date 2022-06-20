@@ -179,8 +179,9 @@ export class ChannelsGateway
         if (
           channel.ConnectedChannel == socket.data.ConnectedChannel &&
           socket.data.user.id === user.id
-        )
+        ) {
           socket.disconnect();
+        }
       });
     } catch {}
   }

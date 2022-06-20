@@ -124,8 +124,9 @@ let ChannelsGateway = class ChannelsGateway {
             const sockets = Array.from(this.server.sockets.values());
             sockets.forEach((socket) => {
                 if (channel.ConnectedChannel == socket.data.ConnectedChannel &&
-                    socket.data.user.id === user.id)
+                    socket.data.user.id === user.id) {
                     socket.disconnect();
+                }
             });
         }
         catch (_a) { }
