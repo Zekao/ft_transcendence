@@ -351,14 +351,14 @@ export class ChannelsGateway
     try {
       let blocked = false;
       if (!channel.user) return;
+      const banned = await this.channelService.getChannelBanMembers(
+        channel.data.channel.id
+      );
       const sockets: any[] = Array.from(this.server.sockets.values());
       sockets.forEach(async (socket) => {
         socket.data.user = await this.userService.getUserId(
           socket.data.user.id,
           [{ withBlocked: true }]
-        );
-        const banned = await this.channelService.getChannelBanMembers(
-          socket.data.channel.id
         );
         if (channel.ConnectedChannel === socket.data.ConnectedChannel) {
           for (const el of socket.data.user.blockedUsers) {
