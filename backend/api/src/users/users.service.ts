@@ -83,7 +83,7 @@ export class UsersService {
     }
     return matchesWithUser.filter(
       (match) =>
-        match.FirstPlayer.id === users.id || match.SecondPlayer.id === users.id
+        (match.FirstPlayer?.id || '') === users.id || (match.SecondPlayer?.id || '') === users.id
     );
   }
 
