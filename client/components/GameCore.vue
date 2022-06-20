@@ -87,7 +87,6 @@ export default V.extend({
   },
   watch: {
     async selectedMatchId(value: string) {
-      this.socketInit(value)
       try {
           const res = await this.$axios.$get(`/matchs/${this.selectedMatchId}`)
           this.score.player1 = res.scoreFirstPlayer
@@ -98,6 +97,7 @@ export default V.extend({
             this.$router.push('/login')
           }
         }
+      this.socketInit(value)
     },
   },
   mounted() {
