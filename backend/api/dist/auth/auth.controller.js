@@ -27,9 +27,6 @@ let AuthController = class AuthController {
     callbackfortytwo(req) {
         return this.authService.GenerateJwtToken(req.user._json.id);
     }
-    generateRandom() {
-        return this.authService.generateRandomUser();
-    }
     async verifyGToken(body) {
         try {
             if (this.authService.verifyJwtToken(body.gtoken))
@@ -83,15 +80,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "callbackfortytwo", null);
-__decorate([
-    (0, common_1.Get)("/generate"),
-    (0, swagger_1.ApiOperation)({
-        summary: "Generate amd create a random user",
-    }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "generateRandom", null);
 __decorate([
     (0, common_1.Post)("/qrcode/verify"),
     (0, swagger_1.ApiOperation)({

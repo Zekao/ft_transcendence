@@ -49,13 +49,13 @@ export class AuthController {
     return this.authService.GenerateJwtToken(req.user._json.id);
   }
 
-  @Get("/generate")
-  @ApiOperation({
-    summary: "Generate amd create a random user",
-  })
-  generateRandom(): Promise<{ accessToken; firstime }> {
-    return this.authService.generateRandomUser();
-  }
+  // @Get("/generate")
+  // @ApiOperation({
+  //   summary: "Generate amd create a random user",
+  // })
+  // generateRandom(): Promise<{ accessToken; firstime }> {
+  //   return this.authService.generateRandomUser();
+  // }
 
   @Post("/qrcode/verify")
   @ApiOperation({
