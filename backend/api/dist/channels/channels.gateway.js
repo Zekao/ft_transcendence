@@ -274,9 +274,17 @@ let ChannelsGateway = class ChannelsGateway {
     async createOrAddUserToChannel(client) {
         try {
             const channel = await this.channelService.getChannelMembers(client.data.channel.id);
+            const bannedUser = await this.channelService.getChannelBanMembers(client.data.channel.id);
             for (const el of channel) {
                 if (el.id === client.data.user.id)
                     return;
+            }
+            for (const ban of bannedUser) {
+                if (ban.id === client.data.user.id) {
+                    this.emitSingle(client.data, "channel", client.data.user.id, "You are ban from this channel");
+                    client.disconnect();
+                    return;
+                }
             }
             await this.channelService.addUserToMember(client.data.user.id, client.data.channel.id, {
                 user: client.data.user.id,

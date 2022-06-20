@@ -83,7 +83,8 @@ export class UsersService {
     }
     return matchesWithUser.filter(
       (match) =>
-        (match.FirstPlayer?.id || '') === users.id || (match.SecondPlayer?.id || '') === users.id
+        (match.FirstPlayer?.id || "") === users.id ||
+        (match.SecondPlayer?.id || "") === users.id
     );
   }
 
@@ -327,6 +328,21 @@ export class UsersService {
     id.avatar = file.filename + "?" + new Date().getTime();
     await this.UserRepository.save(id);
     return response;
+  }
+
+  async addWinLoose(p1: string, p2: string, action: string) {
+    const player1 = await this.getUserId(p1);
+    const player2 = await this.getUserId(p2);
+
+    if (action == "PLAYER1") {
+      player1.win += 1;
+      player2.loose += 1;
+    } else if (action == "PLAYER2") {
+      player2.win += 1;
+      player1.loose += 1;
+    }
+    this.UserRepository.save(player1);
+    this.UserRepository.save(player2);
   }
 
   /* ************************************************************************** */
