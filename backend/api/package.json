@@ -36,7 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
-    "multer": "^1.4.4-lts.1",
+    "multer": "^1.4.5-lts.1",
     "node-base64-image": "^2.0.4",
     "passport": "^0.5.3",
     "passport-42": "^1.2.6",
