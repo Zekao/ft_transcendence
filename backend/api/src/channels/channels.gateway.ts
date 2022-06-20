@@ -226,13 +226,13 @@ export class ChannelsGateway
           id: "",
         }
       );
-      this.emitChannel(client.data, "notification", "update");
       this.emitChannel(
         client.data,
         "channel",
         client.data.user.id,
         completeMessage
       );
+      this.emitChannel(client.data, "channel", "update");
     } catch (err) {
       this.emitSingle(
         client.data,
@@ -250,7 +250,7 @@ export class ChannelsGateway
     try {
       const completeMessage =
         user.display_name + " is not more an admin of this channel";
-        await this.channelService.deleteChannelAdmin(
+      await this.channelService.deleteChannelAdmin(
         client.data.user.id,
         channel.id,
         {
@@ -259,7 +259,7 @@ export class ChannelsGateway
           id: "",
         }
       );
-      this.emitChannel(client.data, "notification", "update");
+      this.emitChannel(client.data, "channel", "update");
       this.emitChannel(
         client.data,
         "channel",
