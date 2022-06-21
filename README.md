@@ -1,9 +1,10 @@
 # ft_transcendence
-ft_transcendence is the last 42 comon core projet.
+ft_transcendence is the last 42 common core projet.
 
-He have for objectif to learn web development on typescript language with different
-framework like nestjs for backend or vuejs for frontend. This project has realize
-in team of 3 to 5 people
+
+With this project, we will learn web developement in typescript with different frameworks
+such as nestjs for the backend and vuejs for the frontend.
+This project has to be made in team between 3 and 5 students.
 
 # Table of contents
 1. [Installation](#installation)
@@ -32,36 +33,43 @@ sudo docker–compose --version
 
 ## Usage
 
-First start or don't rebuild containers images
+⚠️ Please change CLIENT_ID and CLIENT_SECRET with your own credentials in the .env file ⚠️
+```env
+CLIENT_ID= YOUR UID
+CLIENT_SECRET= YOUR TOKEN
+CALLBACK_URL= WEBSITE WHERE YOU WANT TO HOST
+```
+
+Start containers with --build flag
 ```bash
 make
 ```
-Rebuild containers images
+Start containers without --build flag
 ```bash
-make re
+make up
+```
+Show logs of containers (you can choose one in particular)
+```bash
+docker-compose logs <container name>
 ```
 Stop running containers
 ```bash
 make down
 ```
-Show currents containers's status
+Stop running containers and delete volume
 ```bash
-make ps
-```
-Show logs of a containers (api by default)
-```bash
-make logs C=<container name>
-```
-Execute in front a container
-```bash
-make exec C=<container name>
+make delete
 ```
 Remove containers's images
 ```
-make rm
+make clean
 ```
 
 ## Authors
+
+#### Gaëtan Marchal
+42 login: [gamarcha](https://profile.intra.42.fr/users/gamarcha)
+contact: gamarcha@student.42.fr
 
 #### Lucas Sehairi
 42 login: [lusehair](https://profile.intra.42.fr/users/lusehair)
@@ -85,7 +93,6 @@ contact: robriard@student.42.fr
 
 ## Project status
 
-🚧 In progress
-[SWAGGER](https://pong-wars.cyberduck.blog/docs/#/)
+Done ✅
 
-
+[![emaugale's 42 ft_transcendence Score](https://badge42.vercel.app/api/v2/cl180j5x4000609mclltm1fox/project/2621106)](https://github.com/Zekao)
